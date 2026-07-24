@@ -1,0 +1,646 @@
+openapi: 3.1.0
+info:
+  title: Configuration alertRules teams API
+  version: 1.0.0
+servers:
+- url: https://test.api.solvimon.com
+  description: The TEST environment for our API
+- url: https://api.solvimon.com
+  description: The live environment for our API
+tags:
+- name: teams
+paths:
+  /v{version}/teams:
+    get:
+      operationId: getTeams
+      summary: Get a list of all teams
+      tags:
+      - teams
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: limit
+        in: query
+        description: The amount of records shown in the list
+        required: false
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: The page which is going to be shown
+        required: false
+        schema:
+          type: integer
+      - name: order_by
+        in: query
+        description: The parameter by which the response is ordered.
+        required: false
+        schema:
+          type: string
+      - name: order_direction
+        in: query
+        description: The order direction by which the response is ordered.
+        required: false
+        schema:
+          type: string
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TeamRepresentation'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      operationId: postTeams
+      summary: Create a team
+      tags:
+      - teams
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamRepresentation'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TeamRepresentationCreateRequest'
+  /v{version}/teams/{resourceId}:
+    get:
+      operationId: getTeamsByResourceId
+      summary: Get a team by id
+      tags:
+      - teams
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TeamRepresentation'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /v{version}/teams/{resourceId}/memberships:
+    post:
+      operationId: postTeamsByResourceIdMemberships
+      summary: Add an account membership for a team
+      tags:
+      - teams
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource for which the action is posted.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccountMembershipRepresentation'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountMembershipRepresentationCreateRequest'
+components:
+  schemas:
+    ApiErrorResourceType:
+      type: string
+      enum:
+      - CUSTOMER
+      - CUSTOM_FIELD
+      - PLATFORM
+      - PLATFORM_UPTODATE
+      - METER
+      - METER_VALUE
+      - METER_PROPERTY
+      - METER_VALUE_CALCULATION
+      - INGEST_DATA
+      - METER_DATA
+      - CHARGE_DATA
+      - PERSIST_DATA
+      - ADJUSTMENT_DATA
+      - PRODUCT_CATEGORY
+      - PRODUCT
+      - PRODUCT_ITEM
+      - PRICING
+      - PRICING_GROUP
+      - PRICING_ITEM
+      - PRICING_ITEM_CONFIG
+      - PRICING_PLAN_SUBSCRIPTION
+      - PRICING_PLAN_SUBSCRIPTION_GROUP
+      - PRICING_PLAN_SCHEDULE
+      - PRICING_PLAN
+      - PRICING_PLAN_VERSION
+      - QUOTE
+      - QUOTE_VERSION
+      - QUOTE_TEMPLATE
+      - API_KEY
+      - USER
+      - ROLE
+      - PROXY_USER
+      - EXTERNAL_CREDENTIALS
+      - TOKEN
+      - INVOICE
+      - E_INVOICE
+      - PDF
+      - BILLING_ENTITY
+      - FEATURE
+      - MEMBERSHIP
+      - PAYMENT
+      - PAYMENT_ACCEPTOR
+      - PAYMENT_METHOD
+      - PAYMENT_METHOD_OPTIONS
+      - PAYMENT_SCHEDULE
+      - PAYMENT_REQUEST
+      - INTEGRATION
+      - WEBHOOK
+      - FILE
+      - FILE_PROCESSING_SETTINGS
+      - TEAM
+      - DOWNLOAD_URL
+      - CSV_REPORT
+      - REPORT
+      - REPORT_GENERATE_REQUEST
+      - REPORT_CONFIGURATION
+      - REPORT_SUBSCRIPTION
+      - REPORT_DEFINITION
+      - ACCOUNT_GROUP
+      - ENTITY
+      - EVENT_TRACE
+      - EVENT_TRACE_LINK
+      - PRICING_CATEGORY
+      - CONTACT
+      - ALERT_RULE
+      - ALERT
+      - AUDIT_RECORD
+      - PORTAL_URL
+      - AUTHENTICATION_PROVIDER
+      - REPROCESS
+      - APPROVAL_POLICY
+      - APPROVAL_REQUEST
+      - BULK_ACTION
+      - COUPON
+      - PROMOTION_CODE
+      - WALLET
+      - WALLET_TYPE
+      - WALLET_GRANT
+      - WORKFLOW
+      - WORKFLOW_TRIGGER
+      - WORKFLOW_ACTION
+      - CREDIT_TYPE
+      - SIGNATURE_REQUEST
+      - ATTACHMENT
+      - DOCUMENT
+      title: ApiErrorResourceType
+    AccountMembershipRepresentationType:
+      type: string
+      enum:
+      - ADMIN
+      - USER
+      - PARTNER
+      description: The type of this membership
+      title: AccountMembershipRepresentationType
+    Role:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+          description: Unique identifier for the role
+        name:
+          type: string
+          description: The name of the role
+        description:
+          type: string
+          description: The description of the role
+        entity_id:
+          type:
+          - string
+          - 'null'
+          description: When present the role is created for/by this entity
+        child_role_ids:
+          type: array
+          items:
+            type: string
+          description: Child roles for this role
+        child_roles:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/RoleChildRolesItems'
+          description: Child roles, with a max depth of 2
+      title: Role
+    AccountMembershipRepresentationCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+          description: The id of this account membership
+        account_id:
+          type: string
+          description: The id of the account that this membership is for
+        account_reference:
+          type:
+          - string
+          - 'null'
+          description: The reference of the account that this membership is for
+        environment:
+          type:
+          - string
+          - 'null'
+          description: The environment that this membership is for
+        account:
+          oneOf:
+          - $ref: '#/components/schemas/AccountRepresentation'
+          - type: 'null'
+          description: The account that this membership is for
+        type:
+          $ref: '#/components/schemas/AccountMembershipRepresentationCreateRequestType'
+          description: The type of this membership
+        role_ids:
+          type: array
+          items:
+            type: string
+          description: The roles assigned through this membership
+        roles:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Role'
+          description: The roles that belong to this membership
+      title: AccountMembershipRepresentationCreateRequest
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    TeamRepresentationCreateRequest:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The id of the team
+        entity_id:
+          type:
+          - string
+          - 'null'
+          description: The id of the entity that this team belongs to
+        name:
+          type: string
+          description: The name of the team
+        account_memberships:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/AccountMembershipRepresentationCreateRequest'
+          description: The account memberships of this team
+      title: TeamRepresentationCreateRequest
+    TeamRepresentation:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The id of the team
+        entity_id:
+          type:
+          - string
+          - 'null'
+          description: The id of the entity that this team belongs to
+        name:
+          type: string
+          description: The name of the team
+        account_memberships:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/AccountMembershipRepresentation'
+          description: The account memberships of this team
+      title: TeamRepresentation
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    RoleChildRolesItems:
+      type: object
+      properties: {}
+      title: RoleChildRolesItems
+    AccountMembershipRepresentationCreateRequestType:
+      type: string
+      enum:
+      - ADMIN
+      - USER
+      - PARTNER
+      description: The type of this membership
+      title: AccountMembershipRepresentationCreateRequestType
+    AccountRepresentation:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The id of the account
+        reference:
+          type: string
+          description: The reference of the account
+        account_type_code:
+          type: string
+          description: The type code of the account
+        environment:
+          type: string
+          description: The environment of this account
+        account_group_id:
+          type: string
+          description: The id of the account group that this account is associated with
+        parent_id:
+          type:
+          - string
+          - 'null'
+          description: The id of the parent account of this account
+        platform_id:
+          type:
+          - string
+          - 'null'
+          description: The id of the platform that this account belongs to
+      title: AccountRepresentation
+    AccountMembershipRepresentation:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+          description: The id of this account membership
+        account_id:
+          type: string
+          description: The id of the account that this membership is for
+        account_reference:
+          type:
+          - string
+          - 'null'
+          description: The reference of the account that this membership is for
+        environment:
+          type:
+          - string
+          - 'null'
+          description: The environment that this membership is for
+        account:
+          oneOf:
+          - $ref: '#/components/schemas/AccountRepresentation'
+          - type: 'null'
+          description: The account that this membership is for
+        type:
+          $ref: '#/components/schemas/AccountMembershipRepresentationType'
+          description: The type of this membership
+        role_ids:
+          type: array
+          items:
+            type: string
+          description: The roles assigned through this membership
+        roles:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Role'
+          description: The roles that belong to this membership
+      title: AccountMembershipRepresentation
+  securitySchemes:
+    API-Key:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+    JWT-Authentication:
+      type: http
+      scheme: bearer

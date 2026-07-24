@@ -1,0 +1,936 @@
+openapi: 3.1.0
+info:
+  title: Configuration alertRules customFields API
+  version: 1.0.0
+servers:
+- url: https://test.api.solvimon.com
+  description: The TEST environment for our API
+- url: https://api.solvimon.com
+  description: The live environment for our API
+tags:
+- name: customFields
+paths:
+  /v{version}/custom-fields:
+    get:
+      operationId: getCustomFields
+      summary: Get all custom fields
+      description: Requires the CUSTOM_FIELD.VIEW permission.
+      tags:
+      - customFields
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resource_type
+        in: query
+        description: The resource type of the custom field
+        required: false
+        schema:
+          type: string
+      - name: reference
+        in: query
+        description: The reference of the custom field
+        required: false
+        schema:
+          type: string
+      - name: integration_id
+        in: query
+        description: The ID of the custom field integration
+        required: false
+        schema:
+          type: string
+      - name: order_by
+        in: query
+        description: The parameter by which the response is ordered
+        required: false
+        schema:
+          type: string
+      - name: order_direction
+        in: query
+        description: The order direction by which the response is ordered
+        required: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: The amount of records shown in the list
+        required: false
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: The page which is going to be shown
+        required: false
+        schema:
+          type: integer
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomFieldResponseWrapper'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      operationId: postCustomFields
+      summary: Create a custom field for a customer
+      description: Requires the CUSTOM_FIELD.CREATE permission.
+      tags:
+      - customFields
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomField'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomFieldCreateRequest'
+  /v{version}/custom-fields/{resourceId}:
+    get:
+      operationId: getCustomFieldsByResourceId
+      summary: Get a custom field by ID
+      description: Requires the CUSTOM_FIELD.VIEW permission.
+      tags:
+      - customFields
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomField'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    delete:
+      operationId: deleteCustomFieldsByResourceId
+      summary: Delete a custom field
+      description: Requires the CUSTOM_FIELD.DELETE permission.
+      tags:
+      - customFields
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomField'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    patch:
+      operationId: patchCustomFieldsByResourceId
+      summary: Update the custom field
+      description: Requires the CUSTOM_FIELD.UPDATE permission.
+      tags:
+      - customFields
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomField'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomFieldUpdateRequest'
+components:
+  schemas:
+    ApiErrorResourceType:
+      type: string
+      enum:
+      - CUSTOMER
+      - CUSTOM_FIELD
+      - PLATFORM
+      - PLATFORM_UPTODATE
+      - METER
+      - METER_VALUE
+      - METER_PROPERTY
+      - METER_VALUE_CALCULATION
+      - INGEST_DATA
+      - METER_DATA
+      - CHARGE_DATA
+      - PERSIST_DATA
+      - ADJUSTMENT_DATA
+      - PRODUCT_CATEGORY
+      - PRODUCT
+      - PRODUCT_ITEM
+      - PRICING
+      - PRICING_GROUP
+      - PRICING_ITEM
+      - PRICING_ITEM_CONFIG
+      - PRICING_PLAN_SUBSCRIPTION
+      - PRICING_PLAN_SUBSCRIPTION_GROUP
+      - PRICING_PLAN_SCHEDULE
+      - PRICING_PLAN
+      - PRICING_PLAN_VERSION
+      - QUOTE
+      - QUOTE_VERSION
+      - QUOTE_TEMPLATE
+      - API_KEY
+      - USER
+      - ROLE
+      - PROXY_USER
+      - EXTERNAL_CREDENTIALS
+      - TOKEN
+      - INVOICE
+      - E_INVOICE
+      - PDF
+      - BILLING_ENTITY
+      - FEATURE
+      - MEMBERSHIP
+      - PAYMENT
+      - PAYMENT_ACCEPTOR
+      - PAYMENT_METHOD
+      - PAYMENT_METHOD_OPTIONS
+      - PAYMENT_SCHEDULE
+      - PAYMENT_REQUEST
+      - INTEGRATION
+      - WEBHOOK
+      - FILE
+      - FILE_PROCESSING_SETTINGS
+      - TEAM
+      - DOWNLOAD_URL
+      - CSV_REPORT
+      - REPORT
+      - REPORT_GENERATE_REQUEST
+      - REPORT_CONFIGURATION
+      - REPORT_SUBSCRIPTION
+      - REPORT_DEFINITION
+      - ACCOUNT_GROUP
+      - ENTITY
+      - EVENT_TRACE
+      - EVENT_TRACE_LINK
+      - PRICING_CATEGORY
+      - CONTACT
+      - ALERT_RULE
+      - ALERT
+      - AUDIT_RECORD
+      - PORTAL_URL
+      - AUTHENTICATION_PROVIDER
+      - REPROCESS
+      - APPROVAL_POLICY
+      - APPROVAL_REQUEST
+      - BULK_ACTION
+      - COUPON
+      - PROMOTION_CODE
+      - WALLET
+      - WALLET_TYPE
+      - WALLET_GRANT
+      - WORKFLOW
+      - WORKFLOW_TRIGGER
+      - WORKFLOW_ACTION
+      - CREDIT_TYPE
+      - SIGNATURE_REQUEST
+      - ATTACHMENT
+      - DOCUMENT
+      title: ApiErrorResourceType
+    CustomFieldCreateRequestType:
+      type: string
+      enum:
+      - STRING
+      - NUMBER
+      - BOOLEAN
+      - ENUM
+      title: CustomFieldCreateRequestType
+    CustomFieldCreateRequestResourceType:
+      type: string
+      enum:
+      - PLATFORM
+      - CUSTOMER
+      - BILLING_ENTITY
+      - METER
+      - METER_VALUE
+      - METER_PROPERTY
+      - METER_VALUE_CALCULATION
+      - PRODUCT
+      - PRODUCT_ITEM
+      - PRODUCT_CATEGORY
+      - PRICING
+      - PRICING_ITEM
+      - PRICING_ITEM_CONFIG
+      - PRICING_ITEM_SUMMARY
+      - METER_VALUE_CALCULATION_SUMMARY
+      - PRICING_PLAN
+      - PRICING_PLAN_VERSION
+      - PRICING_PLAN_SUBSCRIPTION
+      - PRICING_PLAN_SCHEDULE
+      - QUOTE
+      - QUOTE_VERSION
+      - CONTACT
+      - CUSTOM_FIELD
+      - REQUEST_REFERENCE
+      - METER_DATA
+      - CHARGE_DATA
+      - ADJUSTMENT_DATA
+      - PERSIST_DATA
+      - INVOICE
+      - INVOICE_PAYMENT_ATTEMPT
+      - PAYMENT_ACCEPTOR
+      - PAYMENT_SCHEDULE
+      - PAYMENT_REQUEST
+      - FEATURE
+      - ALERT_RULE
+      - ALERT
+      - USER
+      - MEMBERSHIP
+      - TEAM
+      - ENTITY
+      - ACCOUNT_GROUP
+      - AUDIT
+      - WEBHOOK
+      - REPORT_SUBSCRIPTION
+      - REPORT_CONFIGURATION
+      title: CustomFieldCreateRequestResourceType
+    CustomFieldUpdateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          $ref: '#/components/schemas/CustomFieldUpdateRequestResourceType'
+        multiple_values:
+          type:
+          - boolean
+          - 'null'
+        unique_value:
+          type:
+          - boolean
+          - 'null'
+        copy_value_to_invoice:
+          type:
+          - boolean
+          - 'null'
+        integration_id:
+          type: string
+          description: The resource ID of the integration.
+        integration_reference:
+          type: string
+          description: The reference of the integration.
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/CustomFieldUpdateRequestType'
+          - type: 'null'
+        enum_values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+      title: CustomFieldUpdateRequest
+    CustomFieldCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          $ref: '#/components/schemas/CustomFieldCreateRequestResourceType'
+        multiple_values:
+          type:
+          - boolean
+          - 'null'
+        unique_value:
+          type:
+          - boolean
+          - 'null'
+        copy_value_to_invoice:
+          type:
+          - boolean
+          - 'null'
+        integration_id:
+          type: string
+          description: The resource ID of the integration.
+        integration_reference:
+          type: string
+          description: The reference of the integration.
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/CustomFieldCreateRequestType'
+          - type: 'null'
+        enum_values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+      required:
+      - reference
+      - resource_type
+      title: CustomFieldCreateRequest
+    CustomFieldUpdateRequestResourceType:
+      type: string
+      enum:
+      - PLATFORM
+      - CUSTOMER
+      - BILLING_ENTITY
+      - METER
+      - METER_VALUE
+      - METER_PROPERTY
+      - METER_VALUE_CALCULATION
+      - PRODUCT
+      - PRODUCT_ITEM
+      - PRODUCT_CATEGORY
+      - PRICING
+      - PRICING_ITEM
+      - PRICING_ITEM_CONFIG
+      - PRICING_ITEM_SUMMARY
+      - METER_VALUE_CALCULATION_SUMMARY
+      - PRICING_PLAN
+      - PRICING_PLAN_VERSION
+      - PRICING_PLAN_SUBSCRIPTION
+      - PRICING_PLAN_SCHEDULE
+      - QUOTE
+      - QUOTE_VERSION
+      - CONTACT
+      - CUSTOM_FIELD
+      - REQUEST_REFERENCE
+      - METER_DATA
+      - CHARGE_DATA
+      - ADJUSTMENT_DATA
+      - PERSIST_DATA
+      - INVOICE
+      - INVOICE_PAYMENT_ATTEMPT
+      - PAYMENT_ACCEPTOR
+      - PAYMENT_SCHEDULE
+      - PAYMENT_REQUEST
+      - FEATURE
+      - ALERT_RULE
+      - ALERT
+      - USER
+      - MEMBERSHIP
+      - TEAM
+      - ENTITY
+      - ACCOUNT_GROUP
+      - AUDIT
+      - WEBHOOK
+      - REPORT_SUBSCRIPTION
+      - REPORT_CONFIGURATION
+      title: CustomFieldUpdateRequestResourceType
+    CustomFieldResourceType:
+      type: string
+      enum:
+      - PLATFORM
+      - CUSTOMER
+      - BILLING_ENTITY
+      - METER
+      - METER_VALUE
+      - METER_PROPERTY
+      - METER_VALUE_CALCULATION
+      - PRODUCT
+      - PRODUCT_ITEM
+      - PRODUCT_CATEGORY
+      - PRICING
+      - PRICING_ITEM
+      - PRICING_ITEM_CONFIG
+      - PRICING_ITEM_SUMMARY
+      - METER_VALUE_CALCULATION_SUMMARY
+      - PRICING_PLAN
+      - PRICING_PLAN_VERSION
+      - PRICING_PLAN_SUBSCRIPTION
+      - PRICING_PLAN_SCHEDULE
+      - QUOTE
+      - QUOTE_VERSION
+      - CONTACT
+      - CUSTOM_FIELD
+      - REQUEST_REFERENCE
+      - METER_DATA
+      - CHARGE_DATA
+      - ADJUSTMENT_DATA
+      - PERSIST_DATA
+      - INVOICE
+      - INVOICE_PAYMENT_ATTEMPT
+      - PAYMENT_ACCEPTOR
+      - PAYMENT_SCHEDULE
+      - PAYMENT_REQUEST
+      - FEATURE
+      - ALERT_RULE
+      - ALERT
+      - USER
+      - MEMBERSHIP
+      - TEAM
+      - ENTITY
+      - ACCOUNT_GROUP
+      - AUDIT
+      - WEBHOOK
+      - REPORT_SUBSCRIPTION
+      - REPORT_CONFIGURATION
+      title: CustomFieldResourceType
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    CustomFieldResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomField'
+        page:
+          type:
+          - integer
+          - 'null'
+        limit:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      - links
+      title: CustomFieldResponseWrapper
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    PaginationLinks:
+      type: object
+      properties:
+        first:
+          type:
+          - string
+          - 'null'
+        previous:
+          type:
+          - string
+          - 'null'
+        current:
+          type:
+          - string
+          - 'null'
+        next:
+          type:
+          - string
+          - 'null'
+      title: PaginationLinks
+    CustomFieldType:
+      type: string
+      enum:
+      - STRING
+      - NUMBER
+      - BOOLEAN
+      - ENUM
+      title: CustomFieldType
+    CustomFieldUpdateRequestType:
+      type: string
+      enum:
+      - STRING
+      - NUMBER
+      - BOOLEAN
+      - ENUM
+      title: CustomFieldUpdateRequestType
+    CustomField:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          $ref: '#/components/schemas/CustomFieldResourceType'
+        multiple_values:
+          type:
+          - boolean
+          - 'null'
+        unique_value:
+          type:
+          - boolean
+          - 'null'
+        copy_value_to_invoice:
+          type:
+          - boolean
+          - 'null'
+        integration_id:
+          type: string
+          description: The resource ID of the integration.
+        integration_reference:
+          type: string
+          description: The reference of the integration.
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/CustomFieldType'
+          - type: 'null'
+        enum_values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+      title: CustomField
+  securitySchemes:
+    API-Key:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+    JWT-Authentication:
+      type: http
+      scheme: bearer

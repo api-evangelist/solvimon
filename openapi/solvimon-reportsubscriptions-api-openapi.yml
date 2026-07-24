@@ -1,0 +1,1114 @@
+openapi: 3.1.0
+info:
+  title: Configuration alertRules reportSubscriptions API
+  version: 1.0.0
+servers:
+- url: https://test.api.solvimon.com
+  description: The TEST environment for our API
+- url: https://api.solvimon.com
+  description: The live environment for our API
+tags:
+- name: reportSubscriptions
+paths:
+  /v{version}/report-subscriptions:
+    get:
+      operationId: getReportSubscriptions
+      summary: Get all ReportSubscriptions
+      description: Requires the REPORT_SUBSCRIPTION.VIEW permission.
+      tags:
+      - reportSubscriptions
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: limit
+        in: query
+        description: The amount of records shown in the list
+        required: false
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: The page which is going to be shown
+        required: false
+        schema:
+          type: integer
+      - name: order_by
+        in: query
+        description: The parameter by which the response is ordered.
+        required: false
+        schema:
+          type: string
+      - name: order_direction
+        in: query
+        description: The order direction by which the response is ordered.
+        required: false
+        schema:
+          type: string
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportSubscriptionResponseWrapper'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      operationId: postReportSubscriptions
+      summary: Create a report subscription
+      description: Requires the REPORT_SUBSCRIPTION.CREATE permission.
+      tags:
+      - reportSubscriptions
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportSubscription'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportSubscriptionCreateRequest'
+  /v{version}/report-subscriptions/{resourceId}:
+    get:
+      operationId: getReportSubscriptionsByResourceId
+      summary: Get ReportSubscription
+      description: Requires the REPORT_SUBSCRIPTION.VIEW permission.
+      tags:
+      - reportSubscriptions
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportSubscription'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    delete:
+      operationId: deleteReportSubscriptionsByResourceId
+      summary: Delete ReportSubscription
+      description: Requires the REPORT_SUBSCRIPTION.DELETE permission.
+      tags:
+      - reportSubscriptions
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportSubscription'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    patch:
+      operationId: patchReportSubscriptionsByResourceId
+      summary: Update ReportSubscription
+      description: Requires the REPORT_SUBSCRIPTION.UPDATE permission.
+      tags:
+      - reportSubscriptions
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportSubscription'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportSubscriptionUpdateRequest'
+  /v{version}/report-subscriptions/{resourceId}/trigger:
+    post:
+      operationId: postReportSubscriptionsByResourceIdTrigger
+      summary: Trigger ReportSubscription by resourceId
+      description: Requires the REPORT_GENERATE_REQUEST.CREATE permission.
+      tags:
+      - reportSubscriptions
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource for which the action is posted.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportGenerateRequest'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TriggerReportRequestCreateRequest'
+components:
+  schemas:
+    ExportReportLocation:
+      type: object
+      properties:
+        integration_id:
+          type: string
+          description: Resource ID of type INTEGRATION
+        variant:
+          $ref: '#/components/schemas/ExportReportLocationVariant'
+        stream_name:
+          type:
+          - string
+          - 'null'
+        bigquery:
+          $ref: '#/components/schemas/ExportReportLocationBigQueryDetails'
+        s3:
+          $ref: '#/components/schemas/ExportReportLocationS3Details'
+        gcs:
+          $ref: '#/components/schemas/ExportReportLocationGcsDetails'
+      title: ExportReportLocation
+    ReportSubscriptionTrigger:
+      type: string
+      enum:
+      - INVOICE_TO_FINAL
+      title: ReportSubscriptionTrigger
+    ReportGenerateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        customer_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOMER
+        invoice_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type INVOICE
+        generate_at:
+          type: string
+          format: date-time
+        report_code:
+          $ref: '#/components/schemas/ReportGenerateRequestReportCode'
+        parameter_values:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReportParameterValue'
+        status:
+          type:
+          - string
+          - 'null'
+        report_subscription_id:
+          type:
+          - string
+          - 'null'
+        report_configuration_id:
+          type: string
+          description: Resource ID of type REPORT_CONFIGURATION
+        run_type:
+          type:
+          - string
+          - 'null'
+        export_location:
+          $ref: '#/components/schemas/ExportReportLocation'
+      title: ReportGenerateRequest
+    ExportReportLocationGcsDetailsFormatType:
+      type: string
+      enum:
+      - CSV
+      - PARQUET
+      title: ExportReportLocationGcsDetailsFormatType
+    ReportSubscriptionUpdateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        report_configuration_id:
+          type: string
+          description: Resource ID of type REPORT_CONFIGURATION
+        report_code:
+          type:
+          - string
+          - 'null'
+        format:
+          $ref: '#/components/schemas/ReportSubscriptionUpdateRequestFormat'
+        trigger:
+          oneOf:
+          - $ref: '#/components/schemas/ReportSubscriptionUpdateRequestTrigger'
+          - type: 'null'
+        schedule:
+          $ref: '#/components/schemas/ReportSubscriptionScheduleUpdateRequest'
+        active:
+          type: boolean
+        export_location:
+          $ref: '#/components/schemas/ExportReportLocationUpdateRequest'
+        parameter_values:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReportParameterValueUpdateRequest'
+      title: ReportSubscriptionUpdateRequest
+    ReportSubscriptionScheduleDayOfWeek:
+      type: string
+      enum:
+      - MONDAY
+      - TUESDAY
+      - WEDNESDAY
+      - THURSDAY
+      - FRIDAY
+      - SATURDAY
+      - SUNDAY
+      title: ReportSubscriptionScheduleDayOfWeek
+    ReportSubscriptionCreateRequestFormat:
+      type: string
+      enum:
+      - CSV
+      title: ReportSubscriptionCreateRequestFormat
+    ReportParameterValueCreateRequestName:
+      type: string
+      enum:
+      - report_date
+      - from_date
+      - to_date
+      - updated_to_final_from_date
+      - updated_to_final_to_date
+      - meter
+      - meter_id
+      - customer_id
+      - invoice_id
+      - statuses
+      title: ReportParameterValueCreateRequestName
+    ReportParameterValue:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/ReportParameterValueName'
+        value:
+          type: string
+      title: ReportParameterValue
+    ReportParameterValueName:
+      type: string
+      enum:
+      - report_date
+      - from_date
+      - to_date
+      - updated_to_final_from_date
+      - updated_to_final_to_date
+      - meter
+      - meter_id
+      - customer_id
+      - invoice_id
+      - statuses
+      title: ReportParameterValueName
+    ExportReportLocationVariant:
+      type: string
+      enum:
+      - BIGQUERY
+      - S3
+      - GCS
+      - SNOWFLAKE
+      title: ExportReportLocationVariant
+    ExportReportLocationS3Details:
+      type: object
+      properties:
+        bucket_path:
+          type: string
+        path_format:
+          type: string
+        format_type:
+          $ref: '#/components/schemas/ExportReportLocationS3DetailsFormatType'
+      title: ExportReportLocationS3Details
+    ReportParameterValueUpdateRequest:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/ReportParameterValueUpdateRequestName'
+        value:
+          type: string
+      title: ReportParameterValueUpdateRequest
+    ReportSubscriptionCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        report_configuration_id:
+          type: string
+          description: Resource ID of type REPORT_CONFIGURATION
+        report_code:
+          type:
+          - string
+          - 'null'
+        format:
+          $ref: '#/components/schemas/ReportSubscriptionCreateRequestFormat'
+        trigger:
+          oneOf:
+          - $ref: '#/components/schemas/ReportSubscriptionCreateRequestTrigger'
+          - type: 'null'
+        schedule:
+          $ref: '#/components/schemas/ReportSubscriptionScheduleCreateRequest'
+        active:
+          type: boolean
+        export_location:
+          $ref: '#/components/schemas/ExportReportLocationCreateRequest'
+        parameter_values:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReportParameterValueCreateRequest'
+      required:
+      - report_configuration_id
+      title: ReportSubscriptionCreateRequest
+    ExportReportLocationS3DetailsFormatType:
+      type: string
+      enum:
+      - CSV
+      - PARQUET
+      title: ExportReportLocationS3DetailsFormatType
+    ReportSubscriptionScheduleUpdateRequest:
+      type: object
+      properties:
+        time_of_day:
+          type:
+          - integer
+          - 'null'
+        day_of_week:
+          oneOf:
+          - $ref: '#/components/schemas/ReportSubscriptionScheduleUpdateRequestDayOfWeek'
+          - type: 'null'
+        day_of_month:
+          type:
+          - integer
+          - 'null'
+      title: ReportSubscriptionScheduleUpdateRequest
+    ReportParameterValueCreateRequest:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/ReportParameterValueCreateRequestName'
+        value:
+          type: string
+      title: ReportParameterValueCreateRequest
+    ReportSubscriptionFormat:
+      type: string
+      enum:
+      - CSV
+      title: ReportSubscriptionFormat
+    ReportSubscriptionResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReportSubscription'
+        limit:
+          type:
+          - integer
+          - 'null'
+        page:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      - links
+      title: ReportSubscriptionResponseWrapper
+    ExportReportLocationCreateRequestVariant:
+      type: string
+      enum:
+      - BIGQUERY
+      - S3
+      - GCS
+      - SNOWFLAKE
+      title: ExportReportLocationCreateRequestVariant
+    ReportSubscriptionSchedule:
+      type: object
+      properties:
+        time_of_day:
+          type:
+          - integer
+          - 'null'
+        day_of_week:
+          oneOf:
+          - $ref: '#/components/schemas/ReportSubscriptionScheduleDayOfWeek'
+          - type: 'null'
+        day_of_month:
+          type:
+          - integer
+          - 'null'
+      title: ReportSubscriptionSchedule
+    ExportReportLocationUpdateRequest:
+      type: object
+      properties:
+        integration_id:
+          type: string
+          description: Resource ID of type INTEGRATION
+        variant:
+          $ref: '#/components/schemas/ExportReportLocationUpdateRequestVariant'
+        stream_name:
+          type:
+          - string
+          - 'null'
+        bigquery:
+          $ref: '#/components/schemas/ExportReportLocationBigQueryDetails'
+        s3:
+          $ref: '#/components/schemas/ExportReportLocationS3Details'
+        gcs:
+          $ref: '#/components/schemas/ExportReportLocationGcsDetails'
+      title: ExportReportLocationUpdateRequest
+    ExportReportLocationBigQueryDetails:
+      type: object
+      properties:
+        dataset_id:
+          type: string
+      title: ExportReportLocationBigQueryDetails
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    ReportSubscriptionUpdateRequestFormat:
+      type: string
+      enum:
+      - CSV
+      title: ReportSubscriptionUpdateRequestFormat
+    ExportReportLocationCreateRequest:
+      type: object
+      properties:
+        integration_id:
+          type: string
+          description: Resource ID of type INTEGRATION
+        variant:
+          $ref: '#/components/schemas/ExportReportLocationCreateRequestVariant'
+        stream_name:
+          type:
+          - string
+          - 'null'
+        bigquery:
+          $ref: '#/components/schemas/ExportReportLocationBigQueryDetails'
+        s3:
+          $ref: '#/components/schemas/ExportReportLocationS3Details'
+        gcs:
+          $ref: '#/components/schemas/ExportReportLocationGcsDetails'
+      title: ExportReportLocationCreateRequest
+    ApiErrorResourceType:
+      type: string
+      enum:
+      - CUSTOMER
+      - CUSTOM_FIELD
+      - PLATFORM
+      - PLATFORM_UPTODATE
+      - METER
+      - METER_VALUE
+      - METER_PROPERTY
+      - METER_VALUE_CALCULATION
+      - INGEST_DATA
+      - METER_DATA
+      - CHARGE_DATA
+      - PERSIST_DATA
+      - ADJUSTMENT_DATA
+      - PRODUCT_CATEGORY
+      - PRODUCT
+      - PRODUCT_ITEM
+      - PRICING
+      - PRICING_GROUP
+      - PRICING_ITEM
+      - PRICING_ITEM_CONFIG
+      - PRICING_PLAN_SUBSCRIPTION
+      - PRICING_PLAN_SUBSCRIPTION_GROUP
+      - PRICING_PLAN_SCHEDULE
+      - PRICING_PLAN
+      - PRICING_PLAN_VERSION
+      - QUOTE
+      - QUOTE_VERSION
+      - QUOTE_TEMPLATE
+      - API_KEY
+      - USER
+      - ROLE
+      - PROXY_USER
+      - EXTERNAL_CREDENTIALS
+      - TOKEN
+      - INVOICE
+      - E_INVOICE
+      - PDF
+      - BILLING_ENTITY
+      - FEATURE
+      - MEMBERSHIP
+      - PAYMENT
+      - PAYMENT_ACCEPTOR
+      - PAYMENT_METHOD
+      - PAYMENT_METHOD_OPTIONS
+      - PAYMENT_SCHEDULE
+      - PAYMENT_REQUEST
+      - INTEGRATION
+      - WEBHOOK
+      - FILE
+      - FILE_PROCESSING_SETTINGS
+      - TEAM
+      - DOWNLOAD_URL
+      - CSV_REPORT
+      - REPORT
+      - REPORT_GENERATE_REQUEST
+      - REPORT_CONFIGURATION
+      - REPORT_SUBSCRIPTION
+      - REPORT_DEFINITION
+      - ACCOUNT_GROUP
+      - ENTITY
+      - EVENT_TRACE
+      - EVENT_TRACE_LINK
+      - PRICING_CATEGORY
+      - CONTACT
+      - ALERT_RULE
+      - ALERT
+      - AUDIT_RECORD
+      - PORTAL_URL
+      - AUTHENTICATION_PROVIDER
+      - REPROCESS
+      - APPROVAL_POLICY
+      - APPROVAL_REQUEST
+      - BULK_ACTION
+      - COUPON
+      - PROMOTION_CODE
+      - WALLET
+      - WALLET_TYPE
+      - WALLET_GRANT
+      - WORKFLOW
+      - WORKFLOW_TRIGGER
+      - WORKFLOW_ACTION
+      - CREDIT_TYPE
+      - SIGNATURE_REQUEST
+      - ATTACHMENT
+      - DOCUMENT
+      title: ApiErrorResourceType
+    ExportReportLocationUpdateRequestVariant:
+      type: string
+      enum:
+      - BIGQUERY
+      - S3
+      - GCS
+      - SNOWFLAKE
+      title: ExportReportLocationUpdateRequestVariant
+    ReportSubscriptionScheduleCreateRequest:
+      type: object
+      properties:
+        time_of_day:
+          type:
+          - integer
+          - 'null'
+        day_of_week:
+          oneOf:
+          - $ref: '#/components/schemas/ReportSubscriptionScheduleCreateRequestDayOfWeek'
+          - type: 'null'
+        day_of_month:
+          type:
+          - integer
+          - 'null'
+      title: ReportSubscriptionScheduleCreateRequest
+    ReportGenerateRequestReportCode:
+      type: string
+      enum:
+      - INVOICE
+      - INVOICE_USAGE
+      - INVOICE_HEADER
+      - INVOICE_LINE
+      - INVOICE_TAX
+      - INVOICE_COMMITMENT
+      - CHILD_PARENT_BREAKDOWN
+      - CHILD_PARENT_BREAKDOWN_PLATFORM
+      - NOT_MATCHED_METER_DATA
+      - DUPLICATE_METER_DATA
+      - METERING
+      - CUSTOMER
+      - PRODUCT
+      - PRICING_PLAN_SUBSCRIPTION
+      - PAYMENT
+      - PRICING
+      - REVENUE_RECOGNITION
+      - CLAUSES
+      title: ReportGenerateRequestReportCode
+    TriggerReportRequestCreateRequest:
+      type: object
+      properties:
+        parameter_values:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReportParameterValueCreateRequest'
+      title: TriggerReportRequestCreateRequest
+    ReportParameterValueUpdateRequestName:
+      type: string
+      enum:
+      - report_date
+      - from_date
+      - to_date
+      - updated_to_final_from_date
+      - updated_to_final_to_date
+      - meter
+      - meter_id
+      - customer_id
+      - invoice_id
+      - statuses
+      title: ReportParameterValueUpdateRequestName
+    ReportSubscriptionUpdateRequestTrigger:
+      type: string
+      enum:
+      - INVOICE_TO_FINAL
+      title: ReportSubscriptionUpdateRequestTrigger
+    ReportSubscriptionCreateRequestTrigger:
+      type: string
+      enum:
+      - INVOICE_TO_FINAL
+      title: ReportSubscriptionCreateRequestTrigger
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    ReportSubscriptionScheduleCreateRequestDayOfWeek:
+      type: string
+      enum:
+      - MONDAY
+      - TUESDAY
+      - WEDNESDAY
+      - THURSDAY
+      - FRIDAY
+      - SATURDAY
+      - SUNDAY
+      title: ReportSubscriptionScheduleCreateRequestDayOfWeek
+    ReportSubscription:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        report_configuration_id:
+          type: string
+          description: Resource ID of type REPORT_CONFIGURATION
+        report_code:
+          type:
+          - string
+          - 'null'
+        format:
+          $ref: '#/components/schemas/ReportSubscriptionFormat'
+        trigger:
+          oneOf:
+          - $ref: '#/components/schemas/ReportSubscriptionTrigger'
+          - type: 'null'
+        schedule:
+          $ref: '#/components/schemas/ReportSubscriptionSchedule'
+        active:
+          type: boolean
+        export_location:
+          $ref: '#/components/schemas/ExportReportLocation'
+        parameter_values:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReportParameterValue'
+      title: ReportSubscription
+    PaginationLinks:
+      type: object
+      properties:
+        first:
+          type:
+          - string
+          - 'null'
+        previous:
+          type:
+          - string
+          - 'null'
+        current:
+          type:
+          - string
+          - 'null'
+        next:
+          type:
+          - string
+          - 'null'
+      title: PaginationLinks
+    ReportSubscriptionScheduleUpdateRequestDayOfWeek:
+      type: string
+      enum:
+      - MONDAY
+      - TUESDAY
+      - WEDNESDAY
+      - THURSDAY
+      - FRIDAY
+      - SATURDAY
+      - SUNDAY
+      title: ReportSubscriptionScheduleUpdateRequestDayOfWeek
+    ExportReportLocationGcsDetails:
+      type: object
+      properties:
+        bucket_path:
+          type: string
+        path_format:
+          type: string
+        format_type:
+          $ref: '#/components/schemas/ExportReportLocationGcsDetailsFormatType'
+      title: ExportReportLocationGcsDetails
+  securitySchemes:
+    API-Key:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+    JWT-Authentication:
+      type: http
+      scheme: bearer

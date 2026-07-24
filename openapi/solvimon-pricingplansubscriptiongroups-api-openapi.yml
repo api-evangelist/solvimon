@@ -1,0 +1,1782 @@
+openapi: 3.1.0
+info:
+  title: Configuration alertRules pricingPlanSubscriptionGroups API
+  version: 1.0.0
+servers:
+- url: https://test.api.solvimon.com
+  description: The TEST environment for our API
+- url: https://api.solvimon.com
+  description: The live environment for our API
+tags:
+- name: pricingPlanSubscriptionGroups
+paths:
+  /v{version}/pricing-plan-subscription-groups:
+    get:
+      operationId: getPricingPlanSubscriptionGroups
+      summary: Get a list of pricing plan subscription groups
+      description: Requires the PRICING_PLAN_SUBSCRIPTION_GROUP.VIEW permission.
+      tags:
+      - pricingPlanSubscriptionGroups
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: owner_customer_id
+        in: query
+        description: The id of the customer that owns this pricing plan subscription group
+        required: false
+        schema:
+          type: string
+      - name: start_at
+        in: query
+        description: Range filter for the start_at of the first schedule in the pricing plan subscription (ISO-8601).
+        required: false
+        schema:
+          type: string
+      - name: created_at
+        in: query
+        description: Range filter for the created_at in the pricing plan subscription (ISO-8601).
+        required: false
+        schema:
+          type: string
+      - name: page
+        in: query
+        description: The page which is going to be shown
+        required: false
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: The amount of records shown in the list
+        required: false
+        schema:
+          type: integer
+      - name: order_by
+        in: query
+        description: The parameter by which the response is ordered.
+        required: false
+        schema:
+          type: string
+      - name: order_direction
+        in: query
+        description: The order direction by which the response is ordered.
+        required: false
+        schema:
+          type: string
+      - name: expand[]
+        in: query
+        description: The id fields of the resources that are going to be expanded.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PricingPlanSubscriptionGroupResponseWrapper'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      operationId: postPricingPlanSubscriptionGroups
+      summary: Create a pricing plan subscription group
+      description: Requires the PRICING_PLAN_SUBSCRIPTION_GROUP.CREATE permission.
+      tags:
+      - pricingPlanSubscriptionGroups
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PricingPlanSubscriptionGroup'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PricingPlanSubscriptionGroupCreateRequest'
+  /v{version}/pricing-plan-subscription-groups/{resourceId}:
+    get:
+      operationId: getPricingPlanSubscriptionGroupsByResourceId
+      summary: Get a pricing plan subscription group by its ID
+      description: Requires the PRICING_PLAN_SUBSCRIPTION_GROUP.VIEW permission.
+      tags:
+      - pricingPlanSubscriptionGroups
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PricingPlanSubscriptionGroup'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    delete:
+      operationId: deletePricingPlanSubscriptionGroupsByResourceId
+      summary: Delete a pricing plan subscription group by its ID
+      description: Requires the PRICING_PLAN_SUBSCRIPTION_GROUP.DELETE permission.
+      tags:
+      - pricingPlanSubscriptionGroups
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PricingPlanSubscriptionGroup'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    patch:
+      operationId: patchPricingPlanSubscriptionGroupsByResourceId
+      summary: Update a pricing plan subscription group by its ID
+      description: Requires the PRICING_PLAN_SUBSCRIPTION_GROUP.UPDATE permission.
+      tags:
+      - pricingPlanSubscriptionGroups
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PricingPlanSubscriptionGroup'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PricingPlanSubscriptionGroupUpdateRequest'
+components:
+  schemas:
+    PricingPlanSubscriptionGroup:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+          description: Unique reference for this subscription group
+        name:
+          type:
+          - string
+          - 'null'
+          description: Optional name for this subscription group
+        description:
+          type:
+          - string
+          - 'null'
+          description: Optional description for this subscription group
+        owner_customer_id:
+          type:
+          - string
+          - 'null'
+          description: When provided, this subscription group can only be used for the customer that is linked to this ID and children of that customer
+        owner_customer:
+          oneOf:
+          - $ref: '#/components/schemas/Customer'
+          - type: 'null'
+        pricing_plan_subscription_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+      title: PricingPlanSubscriptionGroup
+    IndividualCreateRequest:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/Name'
+        residential_address:
+          $ref: '#/components/schemas/Address'
+      title: IndividualCreateRequest
+    TaxIdValidationValid:
+      type: string
+      enum:
+      - VALID
+      - NOT_VALID
+      - UNKNOWN
+      title: TaxIdValidationValid
+    TaxIdValidation:
+      type: object
+      properties:
+        id:
+          type: string
+        validation_date:
+          type: string
+        source:
+          type: string
+        valid:
+          $ref: '#/components/schemas/TaxIdValidationValid'
+        message:
+          type:
+          - string
+          - 'null'
+      title: TaxIdValidation
+    NotificationChannel:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/NotificationChannelType'
+          description: The channel type to use.
+        enabled:
+          type:
+          - boolean
+          - 'null'
+          description: Whether the channel is enabled for the notification type.
+      title: NotificationChannel
+    CustomFieldValue:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOM_FIELD
+        reference:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+        values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        integration_details:
+          oneOf:
+          - $ref: '#/components/schemas/IntegrationDetails'
+          - type: 'null'
+        integration_id:
+          type: string
+          description: The resource ID of the integration linked to the custom field
+      title: CustomFieldValue
+    Address:
+      type: object
+      properties:
+        line1:
+          type:
+          - string
+          - 'null'
+        line2:
+          type:
+          - string
+          - 'null'
+        city:
+          type:
+          - string
+          - 'null'
+        postal_code:
+          type:
+          - string
+          - 'null'
+        state:
+          type:
+          - string
+          - 'null'
+        country:
+          oneOf:
+          - $ref: '#/components/schemas/AddressCountry'
+          - type: 'null'
+      title: Address
+    PricingPlanSubscriptionSelectorRuleField:
+      type: string
+      enum:
+      - BILLING_ENTITY_REGISTERED_ADDRESS_COUNTRY
+      - PRICING_PLAN_REFERENCE
+      title: PricingPlanSubscriptionSelectorRuleField
+    PricingPlanSubscriptionGroupResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PricingPlanSubscriptionGroup'
+        page:
+          type:
+          - integer
+          - 'null'
+        limit:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      - links
+      title: PricingPlanSubscriptionGroupResponseWrapper
+    CustomerCreateRequestRolesItems:
+      type: string
+      enum:
+      - DEFAULT
+      - NON_PROCESSING
+      - SELF_BILLING
+      - SELLER
+      - PROCESSING_ONLY
+      title: CustomerCreateRequestRolesItems
+    LinkedIntegration:
+      type: object
+      properties:
+        id:
+          type: string
+        link_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/LinkDetail'
+      title: LinkedIntegration
+    TaxId:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/TaxIdType'
+          - type: 'null'
+          description: Optional tax id type, indicates which type of tax the number is for
+        display_name:
+          type:
+          - string
+          - 'null'
+          description: User-friendly display name
+        tax_id_validation_result:
+          $ref: '#/components/schemas/TaxIdValidation'
+      title: TaxId
+    IntegrationDetails:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+        payment_gateway_variant:
+          $ref: '#/components/schemas/IntegrationDetailsPaymentGatewayVariant'
+        adyen:
+          $ref: '#/components/schemas/AdyenIntegrationDetails'
+        stripe:
+          $ref: '#/components/schemas/StripeIntegrationDetails'
+      title: IntegrationDetails
+    CustomerCreateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      - CLOSED
+      title: CustomerCreateRequestStatus
+    CustomerCreateRequestType:
+      type: string
+      enum:
+      - ORGANIZATION
+      - INDIVIDUAL
+      description: The type of customer entity.
+      title: CustomerCreateRequestType
+    NotificationPreferenceCreateRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/NotificationPreferenceCreateRequestType'
+          description: The notification type to configure.
+        channels:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/NotificationChannel'
+          description: The channels for this notification type.
+      title: NotificationPreferenceCreateRequest
+    Individual:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/Name'
+        residential_address:
+          $ref: '#/components/schemas/Address'
+      title: Individual
+    PricingPlanSubscriptionGroupUpdateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+          description: Unique reference for this subscription group
+        name:
+          type:
+          - string
+          - 'null'
+          description: Optional name for this subscription group
+        description:
+          type:
+          - string
+          - 'null'
+          description: Optional description for this subscription group
+        owner_customer_id:
+          type:
+          - string
+          - 'null'
+          description: When provided, this subscription group can only be used for the customer that is linked to this ID and children of that customer
+        owner_customer:
+          oneOf:
+          - $ref: '#/components/schemas/Customer'
+          - type: 'null'
+        pricing_plan_subscription_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+      title: PricingPlanSubscriptionGroupUpdateRequest
+    Customer:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        parent_customer_id:
+          type:
+          - string
+          - 'null'
+          description: The parent of the customer. Only returned when there is a single parent.
+        parent_customer_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: A list of parents of the customer. Will also be returned if there is a single parent.
+        reference:
+          type: string
+          description: A custom reference assigned to the customer.
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/CustomerStatus'
+          - type: 'null'
+        timezone:
+          type:
+          - string
+          - 'null'
+        type:
+          $ref: '#/components/schemas/CustomerType'
+          description: The type of customer entity.
+        email:
+          type: string
+          description: The email of the customer.
+        notification_preferences:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/NotificationPreference'
+          description: Notification preferences for customer-related communications.
+        locale:
+          type:
+          - string
+          - 'null'
+          description: The locale of the customer. Format is language-country (like en-US).
+        individual:
+          $ref: '#/components/schemas/Individual'
+          description: Additional description of the individual customer type.
+        organization:
+          $ref: '#/components/schemas/Organization'
+          description: Additional description of the organization customer type.
+        custom_fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomFieldValue'
+        processing_only:
+          type:
+          - boolean
+          - 'null'
+        pricing_plan_subscription_selector:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelector'
+          description: Settings to influence dynamically the subscription to use for the ingest data.
+        linked_integrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/LinkedIntegration'
+        roles:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomerRolesItems'
+        seller_details:
+          $ref: '#/components/schemas/CustomerSellerDetails'
+      title: Customer
+    StripeIntegrationDetails:
+      type: object
+      properties:
+        payment_method_id:
+          type: string
+      title: StripeIntegrationDetails
+    NotificationPreference:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/NotificationPreferenceType'
+          description: The notification type to configure.
+        channels:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/NotificationChannel'
+          description: The channels for this notification type.
+      title: NotificationPreference
+    CustomerType:
+      type: string
+      enum:
+      - ORGANIZATION
+      - INDIVIDUAL
+      description: The type of customer entity.
+      title: CustomerType
+    LinkedIntegrationCreateRequest:
+      type: object
+      properties:
+        id:
+          type: string
+        link_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/LinkDetail'
+      title: LinkedIntegrationCreateRequest
+    CustomerRolesItems:
+      type: string
+      enum:
+      - DEFAULT
+      - NON_PROCESSING
+      - SELF_BILLING
+      - SELLER
+      - PROCESSING_ONLY
+      title: CustomerRolesItems
+    PricingPlanSubscriptionSelectorRuleType:
+      type: string
+      enum:
+      - EQUALS
+      - NOT_EQUALS
+      - IN
+      - NOT_IN
+      - GREATER_THAN
+      - GREATER_THAN_OR_EQUALS
+      - LESS_THAN
+      - LESS_THAN_OR_EQUALS
+      - EMPTY
+      - NOT_EMPTY
+      - CONTAINS
+      - NOT_CONTAINS
+      title: PricingPlanSubscriptionSelectorRuleType
+    CustomerStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      - CLOSED
+      title: CustomerStatus
+    PricingPlanSubscriptionSelectorDataField:
+      type: string
+      enum:
+      - BILLING_ENTITY_REGISTERED_ADDRESS_COUNTRY
+      - PRICING_PLAN_REFERENCE
+      title: PricingPlanSubscriptionSelectorDataField
+    OrganizationCreateRequest:
+      type: object
+      properties:
+        legal_name:
+          type: string
+        tax_id:
+          type:
+          - string
+          - 'null'
+          description: Tax Id used for tax purposes of the organization
+        tax_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaxId'
+          description: Tax Ids used for tax purposes of the organization
+        registration_number:
+          type:
+          - string
+          - 'null'
+        tax_exempt:
+          type:
+          - boolean
+          - 'null'
+        tax_exempt_note:
+          type:
+          - string
+          - 'null'
+        registered_address:
+          $ref: '#/components/schemas/Address'
+        tax_registrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaxRegistration'
+          description: Extra tax registrations for the customer
+      title: OrganizationCreateRequest
+    PricingPlanSubscriptionSelectorFilterType:
+      type: string
+      enum:
+      - EQUALS
+      - NOT_EQUALS
+      - IN
+      - NOT_IN
+      - GREATER_THAN
+      - GREATER_THAN_OR_EQUALS
+      - LESS_THAN
+      - LESS_THAN_OR_EQUALS
+      - EMPTY
+      - NOT_EMPTY
+      - CONTAINS
+      - NOT_CONTAINS
+      title: PricingPlanSubscriptionSelectorFilterType
+    IntegrationDetailsPaymentGatewayVariant:
+      type: string
+      enum:
+      - ADYEN
+      - STRIPE
+      title: IntegrationDetailsPaymentGatewayVariant
+    Name:
+      type: object
+      properties:
+        first_name:
+          type:
+          - string
+          - 'null'
+        last_name:
+          type:
+          - string
+          - 'null'
+        infix:
+          type:
+          - string
+          - 'null'
+      title: Name
+    TaxRegistration:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The id of this tax registration
+        description:
+          type:
+          - string
+          - 'null'
+          description: The description of this tax registration
+        tax_id:
+          type:
+          - string
+          - 'null'
+          description: The tax id of this tax registration, e.g. a TIN, VAT id or other tax number
+        tax_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaxId'
+          description: Tax IDs used for tax purposes of the tax registration, e.g. TINs, VAT ids, or other tax number
+        registration_number:
+          type:
+          - string
+          - 'null'
+          description: The registration number of this tax registration, e.g. a company registration number
+        registered_address:
+          $ref: '#/components/schemas/Address'
+          description: The address of this tax registration, if different from the billing entity. Currently, only the address will be used for tax calculations
+      title: TaxRegistration
+    PricingPlanSubscriptionSelectorFilterField:
+      type: string
+      enum:
+      - BILLING_ENTITY_REGISTERED_ADDRESS_COUNTRY
+      - PRICING_PLAN_REFERENCE
+      title: PricingPlanSubscriptionSelectorFilterField
+    CustomerCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        parent_customer_id:
+          type:
+          - string
+          - 'null'
+          description: The parent of the customer. Only returned when there is a single parent.
+        parent_customer_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: A list of parents of the customer. Will also be returned if there is a single parent.
+        reference:
+          type: string
+          description: A custom reference assigned to the customer.
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/CustomerCreateRequestStatus'
+          - type: 'null'
+        timezone:
+          type:
+          - string
+          - 'null'
+        type:
+          $ref: '#/components/schemas/CustomerCreateRequestType'
+          description: The type of customer entity.
+        email:
+          type: string
+          description: The email of the customer.
+        notification_preferences:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/NotificationPreferenceCreateRequest'
+          description: Notification preferences for customer-related communications.
+        locale:
+          type:
+          - string
+          - 'null'
+          description: The locale of the customer. Format is language-country (like en-US).
+        individual:
+          $ref: '#/components/schemas/IndividualCreateRequest'
+          description: Additional description of the individual customer type.
+        organization:
+          $ref: '#/components/schemas/OrganizationCreateRequest'
+          description: Additional description of the organization customer type.
+        custom_fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomFieldValueCreateRequest'
+        processing_only:
+          type:
+          - boolean
+          - 'null'
+        pricing_plan_subscription_selector:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorCreateRequest'
+          description: Settings to influence dynamically the subscription to use for the ingest data.
+        linked_integrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/LinkedIntegrationCreateRequest'
+        roles:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomerCreateRequestRolesItems'
+        seller_details:
+          $ref: '#/components/schemas/CustomerSellerDetailsCreateRequest'
+      required:
+      - type
+      title: CustomerCreateRequest
+    CustomFieldValueCreateRequest:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOM_FIELD
+        reference:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+        values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        integration_details:
+          oneOf:
+          - $ref: '#/components/schemas/IntegrationDetails'
+          - type: 'null'
+        integration_id:
+          type: string
+          description: The resource ID of the integration linked to the custom field
+      title: CustomFieldValueCreateRequest
+    NotificationPreferenceType:
+      type: string
+      enum:
+      - INVOICE
+      description: The notification type to configure.
+      title: NotificationPreferenceType
+    PricingPlanSubscriptionSelector:
+      type: object
+      properties:
+        data:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorData'
+        rules:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorRule'
+        filters:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFilter'
+        fallback:
+          oneOf:
+          - $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFallback'
+          - type: 'null'
+          description: The fallback logic what to do when no subscription is found. By default it is LATEST
+      title: PricingPlanSubscriptionSelector
+    LinkDetail:
+      type: object
+      properties:
+        url:
+          type:
+          - string
+          - 'null'
+        custom_field_name:
+          type:
+          - string
+          - 'null'
+      title: LinkDetail
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    CustomerSellerDetailsCreateRequest:
+      type: object
+      properties:
+        default_billing_entity_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type BILLING_ENTITY
+      title: CustomerSellerDetailsCreateRequest
+    PricingPlanSubscriptionGroupCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+          description: Unique reference for this subscription group
+        name:
+          type:
+          - string
+          - 'null'
+          description: Optional name for this subscription group
+        description:
+          type:
+          - string
+          - 'null'
+          description: Optional description for this subscription group
+        owner_customer_id:
+          type:
+          - string
+          - 'null'
+          description: When provided, this subscription group can only be used for the customer that is linked to this ID and children of that customer
+        owner_customer:
+          oneOf:
+          - $ref: '#/components/schemas/CustomerCreateRequest'
+          - type: 'null'
+        pricing_plan_subscription_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+      required:
+      - reference
+      title: PricingPlanSubscriptionGroupCreateRequest
+    PricingPlanSubscriptionSelectorData:
+      type: object
+      properties:
+        field:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorDataField'
+        value:
+          type: string
+      title: PricingPlanSubscriptionSelectorData
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    TaxIdType:
+      type: string
+      enum:
+      - GENERIC_TAX_ID
+      - AU_GST
+      - CA_GST_HST
+      - CA_PST
+      - CA_PST_BC
+      - CA_PST_MB
+      - CA_PST_SK
+      - CA_QST
+      description: Optional tax id type, indicates which type of tax the number is for
+      title: TaxIdType
+    PricingPlanSubscriptionSelectorCreateRequestFallback:
+      type: string
+      enum:
+      - LATEST
+      - NONE
+      description: The fallback logic what to do when no subscription is found. By default it is LATEST
+      title: PricingPlanSubscriptionSelectorCreateRequestFallback
+    PricingPlanSubscriptionSelectorFilter:
+      type: object
+      properties:
+        field:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFilterField'
+        type:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFilterType'
+        value:
+          type: string
+      title: PricingPlanSubscriptionSelectorFilter
+    PricingPlanSubscriptionSelectorCreateRequest:
+      type: object
+      properties:
+        data:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorData'
+        rules:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorRule'
+        filters:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFilter'
+        fallback:
+          oneOf:
+          - $ref: '#/components/schemas/PricingPlanSubscriptionSelectorCreateRequestFallback'
+          - type: 'null'
+          description: The fallback logic what to do when no subscription is found. By default it is LATEST
+      title: PricingPlanSubscriptionSelectorCreateRequest
+    AddressCountry:
+      type: string
+      enum:
+      - AD
+      - AE
+      - AF
+      - AG
+      - AI
+      - AL
+      - AM
+      - AO
+      - AQ
+      - AR
+      - AS
+      - AT
+      - AU
+      - AW
+      - AX
+      - AZ
+      - BA
+      - BB
+      - BD
+      - BE
+      - BF
+      - BG
+      - BH
+      - BI
+      - BJ
+      - BL
+      - BM
+      - BN
+      - BO
+      - BQ
+      - BR
+      - BS
+      - BT
+      - BV
+      - BW
+      - BY
+      - BZ
+      - CA
+      - CC
+      - CD
+      - CF
+      - CG
+      - CH
+      - CI
+      - CK
+      - CL
+      - CM
+      - CN
+      - CO
+      - CR
+      - CU
+      - CV
+      - CW
+      - CX
+      - CY
+      - CZ
+      - DE
+      - DJ
+      - DK
+      - DM
+      - DO
+      - DZ
+      - EC
+      - EE
+      - EG
+      - EH
+      - ER
+      - ES
+      - ET
+      - FI
+      - FJ
+      - FK
+      - FM
+      - FO
+      - FR
+      - GA
+      - GB
+      - GD
+      - GE
+      - GF
+      - GG
+      - GH
+      - GI
+      - GL
+      - GM
+      - GN
+      - GP
+      - GQ
+      - GR
+      - GS
+      - GT
+      - GU
+      - GW
+      - GY
+      - HK
+      - HM
+      - HN
+      - HR
+      - HT
+      - HU
+      - ID
+      - IE
+      - IL
+      - IM
+      - IN
+      - IO
+      - IQ
+      - IR
+      - IS
+      - IT
+      - JE
+      - JM
+      - JO
+      - JP
+      - KE
+      - KG
+      - KH
+      - KI
+      - KM
+      - KN
+      - KP
+      - KR
+      - KW
+      - KY
+      - KZ
+      - LA
+      - LB
+      - LC
+      - LI
+      - LK
+      - LR
+      - LS
+      - LT
+      - LU
+      - LV
+      - LY
+      - MA
+      - MC
+      - MD
+      - ME
+      - MF
+      - MG
+      - MH
+      - MK
+      - ML
+      - MM
+      - MN
+      - MO
+      - MP
+      - MQ
+      - MR
+      - MS
+      - MT
+      - MU
+      - MV
+      - MW
+      - MX
+      - MY
+      - MZ
+      - NA
+      - NC
+      - NE
+      - NF
+      - NG
+      - NI
+      - NL
+      - 'NO'
+      - NP
+      - NR
+      - NU
+      - NZ
+      - OM
+      - PA
+      - PE
+      - PF
+      - PG
+      - PH
+      - PK
+      - PL
+      - PM
+      - PN
+      - PR
+      - PS
+      - PT
+      - PW
+      - PY
+      - QA
+      - RE
+      - RO
+      - RS
+      - RU
+      - RW
+      - SA
+      - SB
+      - SC
+      - SD
+      - SE
+      - SG
+      - SH
+      - SI
+      - SJ
+      - SK
+      - SL
+      - SM
+      - SN
+      - SO
+      - SR
+      - SS
+      - ST
+      - SV
+      - SX
+      - SY
+      - SZ
+      - TC
+      - TD
+      - TF
+      - TG
+      - TH
+      - TJ
+      - TK
+      - TL
+      - TM
+      - TN
+      - TO
+      - TR
+      - TT
+      - TV
+      - TW
+      - TZ
+      - UA
+      - UG
+      - US
+      - UY
+      - UZ
+      - VA
+      - VC
+      - VE
+      - VG
+      - VI
+      - VN
+      - VU
+      - WF
+      - WS
+      - YE
+      - YT
+      - ZA
+      - ZM
+      - ZW
+      title: AddressCountry
+    PricingPlanSubscriptionSelectorRule:
+      type: object
+      properties:
+        field:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorRuleField'
+        type:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorRuleType'
+      title: PricingPlanSubscriptionSelectorRule
+    ApiErrorResourceType:
+      type: string
+      enum:
+      - CUSTOMER
+      - CUSTOM_FIELD
+      - PLATFORM
+      - PLATFORM_UPTODATE
+      - METER
+      - METER_VALUE
+      - METER_PROPERTY
+      - METER_VALUE_CALCULATION
+      - INGEST_DATA
+      - METER_DATA
+      - CHARGE_DATA
+      - PERSIST_DATA
+      - ADJUSTMENT_DATA
+      - PRODUCT_CATEGORY
+      - PRODUCT
+      - PRODUCT_ITEM
+      - PRICING
+      - PRICING_GROUP
+      - PRICING_ITEM
+      - PRICING_ITEM_CONFIG
+      - PRICING_PLAN_SUBSCRIPTION
+      - PRICING_PLAN_SUBSCRIPTION_GROUP
+      - PRICING_PLAN_SCHEDULE
+      - PRICING_PLAN
+      - PRICING_PLAN_VERSION
+      - QUOTE
+      - QUOTE_VERSION
+      - QUOTE_TEMPLATE
+      - API_KEY
+      - USER
+      - ROLE
+      - PROXY_USER
+      - EXTERNAL_CREDENTIALS
+      - TOKEN
+      - INVOICE
+      - E_INVOICE
+      - PDF
+      - BILLING_ENTITY
+      - FEATURE
+      - MEMBERSHIP
+      - PAYMENT
+      - PAYMENT_ACCEPTOR
+      - PAYMENT_METHOD
+      - PAYMENT_METHOD_OPTIONS
+      - PAYMENT_SCHEDULE
+      - PAYMENT_REQUEST
+      - INTEGRATION
+      - WEBHOOK
+      - FILE
+      - FILE_PROCESSING_SETTINGS
+      - TEAM
+      - DOWNLOAD_URL
+      - CSV_REPORT
+      - REPORT
+      - REPORT_GENERATE_REQUEST
+      - REPORT_CONFIGURATION
+      - REPORT_SUBSCRIPTION
+      - REPORT_DEFINITION
+      - ACCOUNT_GROUP
+      - ENTITY
+      - EVENT_TRACE
+      - EVENT_TRACE_LINK
+      - PRICING_CATEGORY
+      - CONTACT
+      - ALERT_RULE
+      - ALERT
+      - AUDIT_RECORD
+      - PORTAL_URL
+      - AUTHENTICATION_PROVIDER
+      - REPROCESS
+      - APPROVAL_POLICY
+      - APPROVAL_REQUEST
+      - BULK_ACTION
+      - COUPON
+      - PROMOTION_CODE
+      - WALLET
+      - WALLET_TYPE
+      - WALLET_GRANT
+      - WORKFLOW
+      - WORKFLOW_TRIGGER
+      - WORKFLOW_ACTION
+      - CREDIT_TYPE
+      - SIGNATURE_REQUEST
+      - ATTACHMENT
+      - DOCUMENT
+      title: ApiErrorResourceType
+    NotificationPreferenceCreateRequestType:
+      type: string
+      enum:
+      - INVOICE
+      description: The notification type to configure.
+      title: NotificationPreferenceCreateRequestType
+    AdyenIntegrationDetails:
+      type: object
+      properties:
+        recurring_detail_reference:
+          type: string
+      title: AdyenIntegrationDetails
+    Organization:
+      type: object
+      properties:
+        legal_name:
+          type: string
+        tax_id:
+          type:
+          - string
+          - 'null'
+          description: Tax Id used for tax purposes of the organization
+        tax_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaxId'
+          description: Tax Ids used for tax purposes of the organization
+        registration_number:
+          type:
+          - string
+          - 'null'
+        tax_exempt:
+          type:
+          - boolean
+          - 'null'
+        tax_exempt_note:
+          type:
+          - string
+          - 'null'
+        registered_address:
+          $ref: '#/components/schemas/Address'
+        tax_registrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaxRegistration'
+          description: Extra tax registrations for the customer
+      title: Organization
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    CustomerSellerDetails:
+      type: object
+      properties:
+        default_billing_entity_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type BILLING_ENTITY
+      title: CustomerSellerDetails
+    PaginationLinks:
+      type: object
+      properties:
+        first:
+          type:
+          - string
+          - 'null'
+        previous:
+          type:
+          - string
+          - 'null'
+        current:
+          type:
+          - string
+          - 'null'
+        next:
+          type:
+          - string
+          - 'null'
+      title: PaginationLinks
+    PricingPlanSubscriptionSelectorFallback:
+      type: string
+      enum:
+      - LATEST
+      - NONE
+      description: The fallback logic what to do when no subscription is found. By default it is LATEST
+      title: PricingPlanSubscriptionSelectorFallback
+    NotificationChannelType:
+      type: string
+      enum:
+      - EMAIL
+      description: The channel type to use.
+      title: NotificationChannelType
+  securitySchemes:
+    API-Key:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+    JWT-Authentication:
+      type: http
+      scheme: bearer

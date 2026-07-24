@@ -1,0 +1,1524 @@
+openapi: 3.1.0
+info:
+  title: Configuration alertRules quoteTemplates API
+  version: 1.0.0
+servers:
+- url: https://test.api.solvimon.com
+  description: The TEST environment for our API
+- url: https://api.solvimon.com
+  description: The live environment for our API
+tags:
+- name: quoteTemplates
+paths:
+  /v{version}/quote-templates:
+    get:
+      operationId: getQuoteTemplates
+      summary: Get a list of all quote templates
+      description: Requires the QUOTE.TEMPLATE.VIEW permission.
+      tags:
+      - quoteTemplates
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: statuses[]
+        in: query
+        description: Filter quote templates based on status(es)
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: limit
+        in: query
+        description: The amount of records shown in the list
+        required: false
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: The page which is going to be shown
+        required: false
+        schema:
+          type: integer
+      - name: order_by
+        in: query
+        description: The parameter by which the response is ordered.
+        required: false
+        schema:
+          type: string
+      - name: order_direction
+        in: query
+        description: The order direction by which the response is ordered.
+        required: false
+        schema:
+          type: string
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuoteTemplateResponseWrapper'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      operationId: postQuoteTemplates
+      summary: Create a quote template
+      description: Requires the QUOTE.TEMPLATE.CREATE permission.
+      tags:
+      - quoteTemplates
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuoteTemplate'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuoteTemplateCreateRequest'
+  /v{version}/quote-templates/{resourceIdOrReference}:
+    get:
+      operationId: getQuoteTemplatesByResourceIdOrReference
+      summary: Get a quote template by resource ID or reference
+      description: Requires the QUOTE.TEMPLATE.VIEW permission.
+      tags:
+      - quoteTemplates
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceIdOrReference
+        in: path
+        description: The ID or reference of the resource.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuoteTemplate'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    patch:
+      operationId: patchQuoteTemplatesByResourceIdOrReference
+      summary: Update a quote template
+      description: Requires the QUOTE.TEMPLATE.UPDATE permission.
+      tags:
+      - quoteTemplates
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceIdOrReference
+        in: path
+        description: The ID or reference of the resource.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuoteTemplate'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuoteTemplateUpdateRequest'
+  /v{version}/quote-templates/{resourceIdOrReference}/activate:
+    post:
+      operationId: postQuoteTemplatesByResourceIdOrReferenceActivate
+      summary: Activate a quote template
+      description: Transitions a quote template to ACTIVE so it can be instantiated. Requires the QUOTE.TEMPLATE.UPDATE permission.
+      tags:
+      - quoteTemplates
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceIdOrReference
+        in: path
+        description: The ID or reference of the resource.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuoteTemplate'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /v{version}/quote-templates/{resourceIdOrReference}/archive:
+    post:
+      operationId: postQuoteTemplatesByResourceIdOrReferenceArchive
+      summary: Archive a quote template
+      description: Transitions a quote template to ARCHIVED. Archived quote templates can no longer be instantiated. Requires the QUOTE.TEMPLATE.UPDATE permission.
+      tags:
+      - quoteTemplates
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceIdOrReference
+        in: path
+        description: The ID or reference of the resource.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuoteTemplate'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+components:
+  schemas:
+    PricingPlanSubscriptionTemplateUpdateRequestBillingCurrency:
+      type: string
+      enum:
+      - AED
+      - AFN
+      - ALL
+      - AMD
+      - ANG
+      - AOA
+      - ARS
+      - AUD
+      - AWG
+      - AZN
+      - BAM
+      - BBD
+      - BDT
+      - BGN
+      - BHD
+      - BIF
+      - BMD
+      - BND
+      - BOB
+      - BRL
+      - BSD
+      - BTN
+      - BWP
+      - BYN
+      - BZD
+      - CAD
+      - CDF
+      - CHF
+      - CLF
+      - CLP
+      - CNY
+      - COP
+      - CRC
+      - CUC
+      - CUP
+      - CVE
+      - CZK
+      - DJF
+      - DKK
+      - DOP
+      - DZD
+      - EGP
+      - ERN
+      - ETB
+      - EUR
+      - FJD
+      - FKP
+      - GBP
+      - GEL
+      - GHS
+      - GIP
+      - GMD
+      - GNF
+      - GTQ
+      - GYD
+      - HKD
+      - HNL
+      - HRK
+      - HTG
+      - HUF
+      - IDR
+      - ILS
+      - INR
+      - IQD
+      - IRR
+      - ISK
+      - JMD
+      - JOD
+      - JPY
+      - KES
+      - KGS
+      - KHR
+      - KMF
+      - KPW
+      - KRW
+      - KWD
+      - KYD
+      - KZT
+      - LAK
+      - LBP
+      - LKR
+      - LRD
+      - LSL
+      - LYD
+      - MAD
+      - MDL
+      - MGA
+      - MKD
+      - MMK
+      - MNT
+      - MOP
+      - MRO
+      - MRU
+      - MUR
+      - MVR
+      - MWK
+      - MXN
+      - MXV
+      - MYR
+      - MZN
+      - NAD
+      - NGN
+      - NIO
+      - NOK
+      - NPR
+      - NZD
+      - OMR
+      - PAB
+      - PEN
+      - PGK
+      - PHP
+      - PKR
+      - PLN
+      - PYG
+      - QAR
+      - RON
+      - RSD
+      - RUB
+      - RWF
+      - SAR
+      - SBD
+      - SCR
+      - SDG
+      - SEK
+      - SGD
+      - SHP
+      - SLE
+      - SOS
+      - SRD
+      - SSP
+      - STN
+      - SVC
+      - SYP
+      - SZL
+      - THB
+      - TJS
+      - TMT
+      - TND
+      - TOP
+      - TRY
+      - TTD
+      - TWD
+      - TZS
+      - UAH
+      - UGX
+      - USD
+      - USN
+      - UYI
+      - UYU
+      - UZS
+      - VEF
+      - VES
+      - VND
+      - VUV
+      - WST
+      - XAF
+      - XAG
+      - XAU
+      - XBA
+      - XBB
+      - XBC
+      - XBD
+      - XCD
+      - XDR
+      - XOF
+      - XPD
+      - XPF
+      - XPT
+      - XSU
+      - XTS
+      - XUA
+      - XXX
+      - YER
+      - ZAR
+      - ZMW
+      - ZWL
+      description: Alphabetic currency code representing the type of currency used for the pricing.
+      title: PricingPlanSubscriptionTemplateUpdateRequestBillingCurrency
+    QuoteVersionTemplateUpdateRequest:
+      type: object
+      properties:
+        content:
+          $ref: '#/components/schemas/QuoteVersionContent'
+          description: Content of the quote version.
+        document_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Documents attached to the quote version.
+      title: QuoteVersionTemplateUpdateRequest
+    QuoteTemplateStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      description: The status of the template
+      title: QuoteTemplateStatus
+    QuoteVersionContentType:
+      type: string
+      enum:
+      - DEFAULT
+      - TIPTAP
+      description: The type of content used by the quote version.
+      title: QuoteVersionContentType
+    Period:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/PeriodType'
+        value:
+          type:
+          - integer
+          - 'null'
+      title: Period
+    PricingPlanSubscriptionTemplateBillingCurrency:
+      type: string
+      enum:
+      - AED
+      - AFN
+      - ALL
+      - AMD
+      - ANG
+      - AOA
+      - ARS
+      - AUD
+      - AWG
+      - AZN
+      - BAM
+      - BBD
+      - BDT
+      - BGN
+      - BHD
+      - BIF
+      - BMD
+      - BND
+      - BOB
+      - BRL
+      - BSD
+      - BTN
+      - BWP
+      - BYN
+      - BZD
+      - CAD
+      - CDF
+      - CHF
+      - CLF
+      - CLP
+      - CNY
+      - COP
+      - CRC
+      - CUC
+      - CUP
+      - CVE
+      - CZK
+      - DJF
+      - DKK
+      - DOP
+      - DZD
+      - EGP
+      - ERN
+      - ETB
+      - EUR
+      - FJD
+      - FKP
+      - GBP
+      - GEL
+      - GHS
+      - GIP
+      - GMD
+      - GNF
+      - GTQ
+      - GYD
+      - HKD
+      - HNL
+      - HRK
+      - HTG
+      - HUF
+      - IDR
+      - ILS
+      - INR
+      - IQD
+      - IRR
+      - ISK
+      - JMD
+      - JOD
+      - JPY
+      - KES
+      - KGS
+      - KHR
+      - KMF
+      - KPW
+      - KRW
+      - KWD
+      - KYD
+      - KZT
+      - LAK
+      - LBP
+      - LKR
+      - LRD
+      - LSL
+      - LYD
+      - MAD
+      - MDL
+      - MGA
+      - MKD
+      - MMK
+      - MNT
+      - MOP
+      - MRO
+      - MRU
+      - MUR
+      - MVR
+      - MWK
+      - MXN
+      - MXV
+      - MYR
+      - MZN
+      - NAD
+      - NGN
+      - NIO
+      - NOK
+      - NPR
+      - NZD
+      - OMR
+      - PAB
+      - PEN
+      - PGK
+      - PHP
+      - PKR
+      - PLN
+      - PYG
+      - QAR
+      - RON
+      - RSD
+      - RUB
+      - RWF
+      - SAR
+      - SBD
+      - SCR
+      - SDG
+      - SEK
+      - SGD
+      - SHP
+      - SLE
+      - SOS
+      - SRD
+      - SSP
+      - STN
+      - SVC
+      - SYP
+      - SZL
+      - THB
+      - TJS
+      - TMT
+      - TND
+      - TOP
+      - TRY
+      - TTD
+      - TWD
+      - TZS
+      - UAH
+      - UGX
+      - USD
+      - USN
+      - UYI
+      - UYU
+      - UZS
+      - VEF
+      - VES
+      - VND
+      - VUV
+      - WST
+      - XAF
+      - XAG
+      - XAU
+      - XBA
+      - XBB
+      - XBC
+      - XBD
+      - XCD
+      - XDR
+      - XOF
+      - XPD
+      - XPF
+      - XPT
+      - XSU
+      - XTS
+      - XUA
+      - XXX
+      - YER
+      - ZAR
+      - ZMW
+      - ZWL
+      description: Alphabetic currency code representing the type of currency used for the pricing.
+      title: PricingPlanSubscriptionTemplateBillingCurrency
+    PricingPlanScheduleTemplateCreateRequest:
+      type: object
+      properties:
+        pricing_plan_version_id:
+          type:
+          - string
+          - 'null'
+          description: The resource ID of the pricing plan version.
+      title: PricingPlanScheduleTemplateCreateRequest
+    PricingPlanSubscriptionTemplate:
+      type: object
+      properties:
+        billing_currency:
+          oneOf:
+          - $ref: '#/components/schemas/PricingPlanSubscriptionTemplateBillingCurrency'
+          - type: 'null'
+          description: Alphabetic currency code representing the type of currency used for the pricing.
+        initial_term:
+          $ref: '#/components/schemas/Period'
+          description: The initial term for the agreement.
+        renewal_term:
+          $ref: '#/components/schemas/Period'
+          description: The renewal term after the initial term.
+        auto_renewal:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates whether the subscription renews automatically.
+      title: PricingPlanSubscriptionTemplate
+    QuoteTemplateResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuoteTemplate'
+        page:
+          type:
+          - integer
+          - 'null'
+        limit:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      title: QuoteTemplateResponseWrapper
+    QuoteTemplateUpdateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      description: The status of the template
+      title: QuoteTemplateUpdateRequestStatus
+    PricingPlanSubscriptionTemplateUpdateRequest:
+      type: object
+      properties:
+        billing_currency:
+          oneOf:
+          - $ref: '#/components/schemas/PricingPlanSubscriptionTemplateUpdateRequestBillingCurrency'
+          - type: 'null'
+          description: Alphabetic currency code representing the type of currency used for the pricing.
+        initial_term:
+          $ref: '#/components/schemas/Period'
+          description: The initial term for the agreement.
+        renewal_term:
+          $ref: '#/components/schemas/Period'
+          description: The renewal term after the initial term.
+        auto_renewal:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates whether the subscription renews automatically.
+      title: PricingPlanSubscriptionTemplateUpdateRequest
+    QuoteVersionTemplate:
+      type: object
+      properties:
+        content:
+          $ref: '#/components/schemas/QuoteVersionContent'
+          description: Content of the quote version.
+        document_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Documents attached to the quote version.
+      title: QuoteVersionTemplate
+    PeriodType:
+      type: string
+      enum:
+      - DAY
+      - WEEK
+      - MONTH
+      - YEAR
+      title: PeriodType
+    QuoteVersionTemplateCreateRequest:
+      type: object
+      properties:
+        content:
+          $ref: '#/components/schemas/QuoteVersionContent'
+          description: Content of the quote version.
+        document_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Documents attached to the quote version.
+      title: QuoteVersionTemplateCreateRequest
+    QuoteTemplateCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        name:
+          type: string
+          description: Name of the template.
+        reference:
+          type: string
+          description: A custom reference assigned to the template.
+        description:
+          type:
+          - string
+          - 'null'
+          description: Description of the template.
+        status:
+          $ref: '#/components/schemas/QuoteTemplateCreateRequestStatus'
+          description: The status of the template
+        pricing_plan_subscription:
+          $ref: '#/components/schemas/PricingPlanSubscriptionTemplateCreateRequest'
+          description: Template used to define the subscription made for quotes made from this template.
+        pricing_plan_schedule:
+          $ref: '#/components/schemas/PricingPlanScheduleTemplateCreateRequest'
+          description: Template used to select the schedule associated to quotes made from this template.
+        quote_version:
+          $ref: '#/components/schemas/QuoteVersionTemplateCreateRequest'
+          description: Template used to create the initial quote body for quotes made from this template.
+        created_at:
+          type:
+          - string
+          - 'null'
+        updated_at:
+          type:
+          - string
+          - 'null'
+      required:
+      - name
+      - reference
+      title: QuoteTemplateCreateRequest
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    QuoteVersionDefaultContent:
+      type: object
+      properties:
+        header:
+          type:
+          - string
+          - 'null'
+          description: Text shown above the pricing plan.
+        footer:
+          type:
+          - string
+          - 'null'
+          description: Text shown below the pricing plan.
+      title: QuoteVersionDefaultContent
+    QuoteVersionContent:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/QuoteVersionContentType'
+          description: The type of content used by the quote version.
+        default:
+          $ref: '#/components/schemas/QuoteVersionDefaultContent'
+          description: If type is DEFAULT, the content of the quote version.
+        tiptap:
+          type:
+          - string
+          - 'null'
+          description: If type is TIPTAP, the content of the quote version, stringified JSON following the ProseMirror schema.
+      title: QuoteVersionContent
+    PricingPlanSubscriptionTemplateCreateRequest:
+      type: object
+      properties:
+        billing_currency:
+          oneOf:
+          - $ref: '#/components/schemas/PricingPlanSubscriptionTemplateCreateRequestBillingCurrency'
+          - type: 'null'
+          description: Alphabetic currency code representing the type of currency used for the pricing.
+        initial_term:
+          $ref: '#/components/schemas/Period'
+          description: The initial term for the agreement.
+        renewal_term:
+          $ref: '#/components/schemas/Period'
+          description: The renewal term after the initial term.
+        auto_renewal:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates whether the subscription renews automatically.
+      title: PricingPlanSubscriptionTemplateCreateRequest
+    ApiErrorResourceType:
+      type: string
+      enum:
+      - CUSTOMER
+      - CUSTOM_FIELD
+      - PLATFORM
+      - PLATFORM_UPTODATE
+      - METER
+      - METER_VALUE
+      - METER_PROPERTY
+      - METER_VALUE_CALCULATION
+      - INGEST_DATA
+      - METER_DATA
+      - CHARGE_DATA
+      - PERSIST_DATA
+      - ADJUSTMENT_DATA
+      - PRODUCT_CATEGORY
+      - PRODUCT
+      - PRODUCT_ITEM
+      - PRICING
+      - PRICING_GROUP
+      - PRICING_ITEM
+      - PRICING_ITEM_CONFIG
+      - PRICING_PLAN_SUBSCRIPTION
+      - PRICING_PLAN_SUBSCRIPTION_GROUP
+      - PRICING_PLAN_SCHEDULE
+      - PRICING_PLAN
+      - PRICING_PLAN_VERSION
+      - QUOTE
+      - QUOTE_VERSION
+      - QUOTE_TEMPLATE
+      - API_KEY
+      - USER
+      - ROLE
+      - PROXY_USER
+      - EXTERNAL_CREDENTIALS
+      - TOKEN
+      - INVOICE
+      - E_INVOICE
+      - PDF
+      - BILLING_ENTITY
+      - FEATURE
+      - MEMBERSHIP
+      - PAYMENT
+      - PAYMENT_ACCEPTOR
+      - PAYMENT_METHOD
+      - PAYMENT_METHOD_OPTIONS
+      - PAYMENT_SCHEDULE
+      - PAYMENT_REQUEST
+      - INTEGRATION
+      - WEBHOOK
+      - FILE
+      - FILE_PROCESSING_SETTINGS
+      - TEAM
+      - DOWNLOAD_URL
+      - CSV_REPORT
+      - REPORT
+      - REPORT_GENERATE_REQUEST
+      - REPORT_CONFIGURATION
+      - REPORT_SUBSCRIPTION
+      - REPORT_DEFINITION
+      - ACCOUNT_GROUP
+      - ENTITY
+      - EVENT_TRACE
+      - EVENT_TRACE_LINK
+      - PRICING_CATEGORY
+      - CONTACT
+      - ALERT_RULE
+      - ALERT
+      - AUDIT_RECORD
+      - PORTAL_URL
+      - AUTHENTICATION_PROVIDER
+      - REPROCESS
+      - APPROVAL_POLICY
+      - APPROVAL_REQUEST
+      - BULK_ACTION
+      - COUPON
+      - PROMOTION_CODE
+      - WALLET
+      - WALLET_TYPE
+      - WALLET_GRANT
+      - WORKFLOW
+      - WORKFLOW_TRIGGER
+      - WORKFLOW_ACTION
+      - CREDIT_TYPE
+      - SIGNATURE_REQUEST
+      - ATTACHMENT
+      - DOCUMENT
+      title: ApiErrorResourceType
+    QuoteTemplate:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        name:
+          type: string
+          description: Name of the template.
+        reference:
+          type: string
+          description: A custom reference assigned to the template.
+        description:
+          type:
+          - string
+          - 'null'
+          description: Description of the template.
+        status:
+          $ref: '#/components/schemas/QuoteTemplateStatus'
+          description: The status of the template
+        pricing_plan_subscription:
+          $ref: '#/components/schemas/PricingPlanSubscriptionTemplate'
+          description: Template used to define the subscription made for quotes made from this template.
+        pricing_plan_schedule:
+          $ref: '#/components/schemas/PricingPlanScheduleTemplate'
+          description: Template used to select the schedule associated to quotes made from this template.
+        quote_version:
+          $ref: '#/components/schemas/QuoteVersionTemplate'
+          description: Template used to create the initial quote body for quotes made from this template.
+        created_at:
+          type:
+          - string
+          - 'null'
+        updated_at:
+          type:
+          - string
+          - 'null'
+      title: QuoteTemplate
+    QuoteTemplateCreateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      description: The status of the template
+      title: QuoteTemplateCreateRequestStatus
+    PricingPlanScheduleTemplateUpdateRequest:
+      type: object
+      properties:
+        pricing_plan_version_id:
+          type:
+          - string
+          - 'null'
+          description: The resource ID of the pricing plan version.
+      title: PricingPlanScheduleTemplateUpdateRequest
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    QuoteTemplateUpdateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        name:
+          type: string
+          description: Name of the template.
+        reference:
+          type: string
+          description: A custom reference assigned to the template.
+        description:
+          type:
+          - string
+          - 'null'
+          description: Description of the template.
+        status:
+          $ref: '#/components/schemas/QuoteTemplateUpdateRequestStatus'
+          description: The status of the template
+        pricing_plan_subscription:
+          $ref: '#/components/schemas/PricingPlanSubscriptionTemplateUpdateRequest'
+          description: Template used to define the subscription made for quotes made from this template.
+        pricing_plan_schedule:
+          $ref: '#/components/schemas/PricingPlanScheduleTemplateUpdateRequest'
+          description: Template used to select the schedule associated to quotes made from this template.
+        quote_version:
+          $ref: '#/components/schemas/QuoteVersionTemplateUpdateRequest'
+          description: Template used to create the initial quote body for quotes made from this template.
+        created_at:
+          type:
+          - string
+          - 'null'
+        updated_at:
+          type:
+          - string
+          - 'null'
+      title: QuoteTemplateUpdateRequest
+    PaginationLinks:
+      type: object
+      properties:
+        first:
+          type:
+          - string
+          - 'null'
+        previous:
+          type:
+          - string
+          - 'null'
+        current:
+          type:
+          - string
+          - 'null'
+        next:
+          type:
+          - string
+          - 'null'
+      title: PaginationLinks
+    PricingPlanScheduleTemplate:
+      type: object
+      properties:
+        pricing_plan_version_id:
+          type:
+          - string
+          - 'null'
+          description: The resource ID of the pricing plan version.
+      title: PricingPlanScheduleTemplate
+    PricingPlanSubscriptionTemplateCreateRequestBillingCurrency:
+      type: string
+      enum:
+      - AED
+      - AFN
+      - ALL
+      - AMD
+      - ANG
+      - AOA
+      - ARS
+      - AUD
+      - AWG
+      - AZN
+      - BAM
+      - BBD
+      - BDT
+      - BGN
+      - BHD
+      - BIF
+      - BMD
+      - BND
+      - BOB
+      - BRL
+      - BSD
+      - BTN
+      - BWP
+      - BYN
+      - BZD
+      - CAD
+      - CDF
+      - CHF
+      - CLF
+      - CLP
+      - CNY
+      - COP
+      - CRC
+      - CUC
+      - CUP
+      - CVE
+      - CZK
+      - DJF
+      - DKK
+      - DOP
+      - DZD
+      - EGP
+      - ERN
+      - ETB
+      - EUR
+      - FJD
+      - FKP
+      - GBP
+      - GEL
+      - GHS
+      - GIP
+      - GMD
+      - GNF
+      - GTQ
+      - GYD
+      - HKD
+      - HNL
+      - HRK
+      - HTG
+      - HUF
+      - IDR
+      - ILS
+      - INR
+      - IQD
+      - IRR
+      - ISK
+      - JMD
+      - JOD
+      - JPY
+      - KES
+      - KGS
+      - KHR
+      - KMF
+      - KPW
+      - KRW
+      - KWD
+      - KYD
+      - KZT
+      - LAK
+      - LBP
+      - LKR
+      - LRD
+      - LSL
+      - LYD
+      - MAD
+      - MDL
+      - MGA
+      - MKD
+      - MMK
+      - MNT
+      - MOP
+      - MRO
+      - MRU
+      - MUR
+      - MVR
+      - MWK
+      - MXN
+      - MXV
+      - MYR
+      - MZN
+      - NAD
+      - NGN
+      - NIO
+      - NOK
+      - NPR
+      - NZD
+      - OMR
+      - PAB
+      - PEN
+      - PGK
+      - PHP
+      - PKR
+      - PLN
+      - PYG
+      - QAR
+      - RON
+      - RSD
+      - RUB
+      - RWF
+      - SAR
+      - SBD
+      - SCR
+      - SDG
+      - SEK
+      - SGD
+      - SHP
+      - SLE
+      - SOS
+      - SRD
+      - SSP
+      - STN
+      - SVC
+      - SYP
+      - SZL
+      - THB
+      - TJS
+      - TMT
+      - TND
+      - TOP
+      - TRY
+      - TTD
+      - TWD
+      - TZS
+      - UAH
+      - UGX
+      - USD
+      - USN
+      - UYI
+      - UYU
+      - UZS
+      - VEF
+      - VES
+      - VND
+      - VUV
+      - WST
+      - XAF
+      - XAG
+      - XAU
+      - XBA
+      - XBB
+      - XBC
+      - XBD
+      - XCD
+      - XDR
+      - XOF
+      - XPD
+      - XPF
+      - XPT
+      - XSU
+      - XTS
+      - XUA
+      - XXX
+      - YER
+      - ZAR
+      - ZMW
+      - ZWL
+      description: Alphabetic currency code representing the type of currency used for the pricing.
+      title: PricingPlanSubscriptionTemplateCreateRequestBillingCurrency
+  securitySchemes:
+    API-Key:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+    JWT-Authentication:
+      type: http
+      scheme: bearer

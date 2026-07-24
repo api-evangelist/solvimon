@@ -1,0 +1,978 @@
+openapi: 3.1.0
+info:
+  title: Configuration alertRules files API
+  version: 1.0.0
+servers:
+- url: https://test.api.solvimon.com
+  description: The TEST environment for our API
+- url: https://api.solvimon.com
+  description: The live environment for our API
+tags:
+- name: files
+paths:
+  /v{version}/files:
+    get:
+      operationId: getFiles
+      summary: Get a list of files
+      description: Requires the FILE.VIEW permission.
+      tags:
+      - files
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: limit
+        in: query
+        description: The amount of records shown in the list
+        required: false
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: The page which is going to be shown
+        required: false
+        schema:
+          type: integer
+      - name: order_by
+        in: query
+        description: The parameter by which the response is ordered.
+        required: false
+        schema:
+          type: string
+      - name: order_direction
+        in: query
+        description: The order direction by which the response is ordered.
+        required: false
+        schema:
+          type: string
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileResponseWrapper'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      operationId: postFiles
+      summary: Create a file
+      description: Requires the FILE.METER_DATA.CREATE permission.
+      tags:
+      - files
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/File'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FileCreateRequest'
+  /v{version}/files/{resourceId}/lines:
+    get:
+      operationId: getFilesByResourceIdLines
+      summary: Get the file lines of a file by the files ID
+      description: Requires the FILE.VIEW permission.
+      tags:
+      - files
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: limit
+        in: query
+        description: The amount of records shown in the list
+        required: false
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: The page which is going to be shown
+        required: false
+        schema:
+          type: integer
+      - name: status
+        in: query
+        description: The status by which the resource will be filtered.
+        required: false
+        schema:
+          type: string
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileLineResponseWrapper'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /v{version}/files/{resourceId}:
+    get:
+      operationId: getFilesByResourceId
+      summary: Get a file by its ID
+      description: Requires the FILE.VIEW permission.
+      tags:
+      - files
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/File'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    patch:
+      operationId: patchFilesByResourceId
+      summary: Update a file
+      description: Requires the FILE.METER_DATA.UPDATE permission.
+      tags:
+      - files
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/File'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FileUpdateRequest'
+components:
+  schemas:
+    FileMeterDataUpdateRequest:
+      type: object
+      properties:
+        meter_id:
+          type:
+          - string
+          - 'null'
+        override_ingest_timestamp:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      title: FileMeterDataUpdateRequest
+    FileType:
+      type: string
+      enum:
+      - METER_DATA
+      title: FileType
+    FileLineStatus:
+      type: string
+      enum:
+      - IMPORTED
+      - ERROR
+      - DONE
+      - SKIPPED
+      title: FileLineStatus
+    FileCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        file_name:
+          type: string
+        created_at:
+          type:
+          - string
+          - 'null'
+        status:
+          $ref: '#/components/schemas/FileCreateRequestStatus'
+        type:
+          $ref: '#/components/schemas/FileCreateRequestType'
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        customer_id:
+          type:
+          - string
+          - 'null'
+        processing_type:
+          oneOf:
+          - $ref: '#/components/schemas/FileCreateRequestProcessingType'
+          - type: 'null'
+        file_processing_settings_id:
+          type:
+          - string
+          - 'null'
+        meter_data:
+          $ref: '#/components/schemas/FileMeterDataCreateRequest'
+        content_type:
+          type: string
+        content:
+          type: string
+          description: The content of the file, BASE64 encoded
+        column_headers:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        number_of_lines:
+          type: integer
+          format: int64
+        message:
+          type:
+          - string
+          - 'null'
+        download_settings:
+          $ref: '#/components/schemas/FileDownloadSettingsCreateRequest'
+      required:
+      - reference
+      - file_name
+      - type
+      - processing_type
+      - content
+      title: FileCreateRequest
+    FileUpdateRequestProcessingType:
+      type: string
+      enum:
+      - DEFAULT
+      - SETTINGS
+      - CUSTOM
+      title: FileUpdateRequestProcessingType
+    FileResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
+        page:
+          type:
+          - integer
+          - 'null'
+        limit:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      title: FileResponseWrapper
+    FileUpdateRequestStatus:
+      type: string
+      enum:
+      - CREATED
+      - TO_BE_DOWNLOADED
+      - DOWNLOADING
+      - DOWNLOADED
+      - UPLOADED
+      - IMPORTING
+      - IMPORTED
+      - TO_BE_PROCESSED
+      - PROCESSING
+      - ERROR
+      - DONE
+      title: FileUpdateRequestStatus
+    FileCreateRequestStatus:
+      type: string
+      enum:
+      - CREATED
+      - TO_BE_DOWNLOADED
+      - DOWNLOADING
+      - DOWNLOADED
+      - UPLOADED
+      - IMPORTING
+      - IMPORTED
+      - TO_BE_PROCESSED
+      - PROCESSING
+      - ERROR
+      - DONE
+      title: FileCreateRequestStatus
+    FileUpdateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        file_name:
+          type: string
+        created_at:
+          type:
+          - string
+          - 'null'
+        status:
+          $ref: '#/components/schemas/FileUpdateRequestStatus'
+        type:
+          $ref: '#/components/schemas/FileUpdateRequestType'
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        customer_id:
+          type:
+          - string
+          - 'null'
+        processing_type:
+          oneOf:
+          - $ref: '#/components/schemas/FileUpdateRequestProcessingType'
+          - type: 'null'
+        file_processing_settings_id:
+          type:
+          - string
+          - 'null'
+        meter_data:
+          $ref: '#/components/schemas/FileMeterDataUpdateRequest'
+        content_type:
+          type: string
+        content:
+          type: string
+          description: The content of the file, BASE64 encoded
+        column_headers:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        number_of_lines:
+          type: integer
+          format: int64
+        message:
+          type:
+          - string
+          - 'null'
+        download_settings:
+          $ref: '#/components/schemas/FileDownloadSettingsUpdateRequest'
+      title: FileUpdateRequest
+    File:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        file_name:
+          type: string
+        created_at:
+          type:
+          - string
+          - 'null'
+        status:
+          $ref: '#/components/schemas/FileStatus'
+        type:
+          $ref: '#/components/schemas/FileType'
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        customer_id:
+          type:
+          - string
+          - 'null'
+        processing_type:
+          oneOf:
+          - $ref: '#/components/schemas/FileProcessingType'
+          - type: 'null'
+        file_processing_settings_id:
+          type:
+          - string
+          - 'null'
+        meter_data:
+          $ref: '#/components/schemas/FileMeterData'
+        content_type:
+          type: string
+        content:
+          type: string
+          description: The content of the file, BASE64 encoded
+        column_headers:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        number_of_lines:
+          type: integer
+          format: int64
+        message:
+          type:
+          - string
+          - 'null'
+        download_settings:
+          $ref: '#/components/schemas/FileDownloadSettings'
+      title: File
+    FileDownloadSettingsUpdateRequest:
+      type: object
+      properties:
+        external_location:
+          type: string
+      title: FileDownloadSettingsUpdateRequest
+    FileCreateRequestProcessingType:
+      type: string
+      enum:
+      - DEFAULT
+      - SETTINGS
+      - CUSTOM
+      title: FileCreateRequestProcessingType
+    FileLineResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileLine'
+        page:
+          type:
+          - integer
+          - 'null'
+        limit:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      title: FileLineResponseWrapper
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    FileCreateRequestType:
+      type: string
+      enum:
+      - METER_DATA
+      title: FileCreateRequestType
+    FileMeterData:
+      type: object
+      properties:
+        meter_id:
+          type:
+          - string
+          - 'null'
+        override_ingest_timestamp:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      title: FileMeterData
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    FileMeterDataCreateRequest:
+      type: object
+      properties:
+        meter_id:
+          type:
+          - string
+          - 'null'
+        override_ingest_timestamp:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      title: FileMeterDataCreateRequest
+    FileProcessingType:
+      type: string
+      enum:
+      - DEFAULT
+      - SETTINGS
+      - CUSTOM
+      title: FileProcessingType
+    ApiErrorResourceType:
+      type: string
+      enum:
+      - CUSTOMER
+      - CUSTOM_FIELD
+      - PLATFORM
+      - PLATFORM_UPTODATE
+      - METER
+      - METER_VALUE
+      - METER_PROPERTY
+      - METER_VALUE_CALCULATION
+      - INGEST_DATA
+      - METER_DATA
+      - CHARGE_DATA
+      - PERSIST_DATA
+      - ADJUSTMENT_DATA
+      - PRODUCT_CATEGORY
+      - PRODUCT
+      - PRODUCT_ITEM
+      - PRICING
+      - PRICING_GROUP
+      - PRICING_ITEM
+      - PRICING_ITEM_CONFIG
+      - PRICING_PLAN_SUBSCRIPTION
+      - PRICING_PLAN_SUBSCRIPTION_GROUP
+      - PRICING_PLAN_SCHEDULE
+      - PRICING_PLAN
+      - PRICING_PLAN_VERSION
+      - QUOTE
+      - QUOTE_VERSION
+      - QUOTE_TEMPLATE
+      - API_KEY
+      - USER
+      - ROLE
+      - PROXY_USER
+      - EXTERNAL_CREDENTIALS
+      - TOKEN
+      - INVOICE
+      - E_INVOICE
+      - PDF
+      - BILLING_ENTITY
+      - FEATURE
+      - MEMBERSHIP
+      - PAYMENT
+      - PAYMENT_ACCEPTOR
+      - PAYMENT_METHOD
+      - PAYMENT_METHOD_OPTIONS
+      - PAYMENT_SCHEDULE
+      - PAYMENT_REQUEST
+      - INTEGRATION
+      - WEBHOOK
+      - FILE
+      - FILE_PROCESSING_SETTINGS
+      - TEAM
+      - DOWNLOAD_URL
+      - CSV_REPORT
+      - REPORT
+      - REPORT_GENERATE_REQUEST
+      - REPORT_CONFIGURATION
+      - REPORT_SUBSCRIPTION
+      - REPORT_DEFINITION
+      - ACCOUNT_GROUP
+      - ENTITY
+      - EVENT_TRACE
+      - EVENT_TRACE_LINK
+      - PRICING_CATEGORY
+      - CONTACT
+      - ALERT_RULE
+      - ALERT
+      - AUDIT_RECORD
+      - PORTAL_URL
+      - AUTHENTICATION_PROVIDER
+      - REPROCESS
+      - APPROVAL_POLICY
+      - APPROVAL_REQUEST
+      - BULK_ACTION
+      - COUPON
+      - PROMOTION_CODE
+      - WALLET
+      - WALLET_TYPE
+      - WALLET_GRANT
+      - WORKFLOW
+      - WORKFLOW_TRIGGER
+      - WORKFLOW_ACTION
+      - CREDIT_TYPE
+      - SIGNATURE_REQUEST
+      - ATTACHMENT
+      - DOCUMENT
+      title: ApiErrorResourceType
+    FileDownloadSettings:
+      type: object
+      properties:
+        external_location:
+          type: string
+      title: FileDownloadSettings
+    FileLine:
+      type: object
+      properties:
+        file_id:
+          type: string
+          description: Resource ID of type FILE
+        line_item_number:
+          type: integer
+          format: int64
+        data:
+          type: string
+        status:
+          $ref: '#/components/schemas/FileLineStatus'
+        message:
+          type: string
+      title: FileLine
+    FileDownloadSettingsCreateRequest:
+      type: object
+      properties:
+        external_location:
+          type: string
+      title: FileDownloadSettingsCreateRequest
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    FileUpdateRequestType:
+      type: string
+      enum:
+      - METER_DATA
+      title: FileUpdateRequestType
+    PaginationLinks:
+      type: object
+      properties:
+        first:
+          type:
+          - string
+          - 'null'
+        previous:
+          type:
+          - string
+          - 'null'
+        current:
+          type:
+          - string
+          - 'null'
+        next:
+          type:
+          - string
+          - 'null'
+      title: PaginationLinks
+    FileStatus:
+      type: string
+      enum:
+      - CREATED
+      - TO_BE_DOWNLOADED
+      - DOWNLOADING
+      - DOWNLOADED
+      - UPLOADED
+      - IMPORTING
+      - IMPORTED
+      - TO_BE_PROCESSED
+      - PROCESSING
+      - ERROR
+      - DONE
+      title: FileStatus
+  securitySchemes:
+    API-Key:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+    JWT-Authentication:
+      type: http
+      scheme: bearer

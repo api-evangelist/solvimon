@@ -1,0 +1,785 @@
+openapi: 3.1.0
+info:
+  title: Configuration alertRules authentication API
+  version: 1.0.0
+servers:
+- url: https://test.api.solvimon.com
+  description: The TEST environment for our API
+- url: https://api.solvimon.com
+  description: The live environment for our API
+tags:
+- name: authentication
+paths:
+  /v{version}/oauth/token:
+    post:
+      operationId: postOauthToken
+      summary: Obtain token for provided credentials
+      tags:
+      - authentication
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JwtToken'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OAuthCredentialRequestCreateRequest'
+  /v{version}/oauth/demo-token:
+    post:
+      operationId: postOauthDemoToken
+      summary: Obtain token for read-only demo access
+      tags:
+      - authentication
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JwtToken'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CaptchaRequestCreateRequest'
+  /v{version}/oauth/sandbox-token:
+    post:
+      operationId: postOauthSandboxToken
+      summary: Obtain short-lived token for sandbox platform provisioning
+      tags:
+      - authentication
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JwtToken'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CaptchaRequestCreateRequest'
+  /v{version}/oauth/refresh-token:
+    post:
+      operationId: postOauthRefreshToken
+      summary: Obtain new token with refresh-token
+      tags:
+      - authentication
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JwtToken'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /v{version}/oauth/logout:
+    post:
+      operationId: postOauthLogout
+      summary: Log user out
+      tags:
+      - authentication
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Authentication_postOauthLogout_Response_200'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /v{version}/oauth/request-password-reset:
+    post:
+      operationId: postOauthRequestPasswordReset
+      summary: Request user password reset
+      tags:
+      - authentication
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Authentication_postOauthRequestPasswordReset_Response_200'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PasswordResetRequestCreateRequest'
+  /v{version}/oauth/reset-password:
+    post:
+      operationId: postOauthResetPassword
+      summary: Reset password
+      tags:
+      - authentication
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordCreateRequest'
+  /v{version}/oauth/activate-user:
+    post:
+      operationId: postOauthActivateUser
+      summary: Activate User
+      tags:
+      - authentication
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordCreateRequest'
+  /v{version}/oauth/callback:
+    post:
+      operationId: postOauthCallback
+      summary: SSO authentication callback
+      tags:
+      - authentication
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JwtToken'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OAuthCallbackCreateRequest'
+components:
+  schemas:
+    UserStatus:
+      type: string
+      enum:
+      - INVITED
+      - INVITE_REVOKED
+      - ACTIVE
+      - INACTIVE
+      description: Indicates whether the user is active
+      title: UserStatus
+    Authentication_postOauthRequestPasswordReset_Response_200:
+      type: object
+      properties: {}
+      description: Empty response body
+      title: Authentication_postOauthRequestPasswordReset_Response_200
+    Authentication_postOauthLogout_Response_200:
+      type: object
+      properties: {}
+      description: Empty response body
+      title: Authentication_postOauthLogout_Response_200
+    PasswordResetRequestCreateRequest:
+      type: object
+      properties:
+        email:
+          type: string
+      title: PasswordResetRequestCreateRequest
+    OAuthCallbackCreateRequest:
+      type: object
+      properties:
+        code:
+          type: string
+        redirect_uri:
+          type: string
+        state:
+          type:
+          - string
+          - 'null'
+      required:
+      - code
+      - redirect_uri
+      - state
+      title: OAuthCallbackCreateRequest
+    OAuthCredentialRequestCreateRequest:
+      type: object
+      properties:
+        username:
+          type:
+          - string
+          - 'null'
+        password:
+          type:
+          - string
+          - 'null'
+        token_alias:
+          type:
+          - string
+          - 'null'
+      title: OAuthCredentialRequestCreateRequest
+    ResetPasswordCreateRequest:
+      type: object
+      properties:
+        token:
+          type: string
+        new_password:
+          type: string
+      title: ResetPasswordCreateRequest
+    RoleChildRolesItems:
+      type: object
+      properties: {}
+      title: RoleChildRolesItems
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    AccountRepresentation:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The id of the account
+        reference:
+          type: string
+          description: The reference of the account
+        account_type_code:
+          type: string
+          description: The type code of the account
+        environment:
+          type: string
+          description: The environment of this account
+        account_group_id:
+          type: string
+          description: The id of the account group that this account is associated with
+        parent_id:
+          type:
+          - string
+          - 'null'
+          description: The id of the parent account of this account
+        platform_id:
+          type:
+          - string
+          - 'null'
+          description: The id of the platform that this account belongs to
+      title: AccountRepresentation
+    JwtToken:
+      type: object
+      properties:
+        issued_at:
+          type:
+          - string
+          - 'null'
+        access_token:
+          type: string
+        expires_in:
+          type: integer
+          format: int64
+        expires_at:
+          type:
+          - string
+          - 'null'
+        token_type:
+          type: string
+        scope:
+          type:
+          - string
+          - 'null'
+        id_token:
+          type:
+          - string
+          - 'null'
+      title: JwtToken
+    User:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+          description: The id of the user
+        entity_id:
+          type:
+          - string
+          - 'null'
+          description: The entity id of the entity that this user belongs to
+        created_at:
+          type:
+          - string
+          - 'null'
+          description: The date when this user was created
+        active:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates whether the user is active
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/UserStatus'
+          - type: 'null'
+          description: Indicates whether the user is active
+        account_memberships:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/AccountMembershipRepresentation'
+          description: The account memberships that this user has
+        team_memberships:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TeamMemberRepresentation'
+          description: The team memberships that this user has
+        username:
+          type: string
+          description: The email of the user
+        password:
+          type:
+          - string
+          - 'null'
+          description: The password of the user. Should have a minimum of 8 characters, of which one is a number and one is a capital letter
+        invite_expired:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates whether the invite sent to the user is expired
+      title: User
+    ApiErrorResourceType:
+      type: string
+      enum:
+      - CUSTOMER
+      - CUSTOM_FIELD
+      - PLATFORM
+      - PLATFORM_UPTODATE
+      - METER
+      - METER_VALUE
+      - METER_PROPERTY
+      - METER_VALUE_CALCULATION
+      - INGEST_DATA
+      - METER_DATA
+      - CHARGE_DATA
+      - PERSIST_DATA
+      - ADJUSTMENT_DATA
+      - PRODUCT_CATEGORY
+      - PRODUCT
+      - PRODUCT_ITEM
+      - PRICING
+      - PRICING_GROUP
+      - PRICING_ITEM
+      - PRICING_ITEM_CONFIG
+      - PRICING_PLAN_SUBSCRIPTION
+      - PRICING_PLAN_SUBSCRIPTION_GROUP
+      - PRICING_PLAN_SCHEDULE
+      - PRICING_PLAN
+      - PRICING_PLAN_VERSION
+      - QUOTE
+      - QUOTE_VERSION
+      - QUOTE_TEMPLATE
+      - API_KEY
+      - USER
+      - ROLE
+      - PROXY_USER
+      - EXTERNAL_CREDENTIALS
+      - TOKEN
+      - INVOICE
+      - E_INVOICE
+      - PDF
+      - BILLING_ENTITY
+      - FEATURE
+      - MEMBERSHIP
+      - PAYMENT
+      - PAYMENT_ACCEPTOR
+      - PAYMENT_METHOD
+      - PAYMENT_METHOD_OPTIONS
+      - PAYMENT_SCHEDULE
+      - PAYMENT_REQUEST
+      - INTEGRATION
+      - WEBHOOK
+      - FILE
+      - FILE_PROCESSING_SETTINGS
+      - TEAM
+      - DOWNLOAD_URL
+      - CSV_REPORT
+      - REPORT
+      - REPORT_GENERATE_REQUEST
+      - REPORT_CONFIGURATION
+      - REPORT_SUBSCRIPTION
+      - REPORT_DEFINITION
+      - ACCOUNT_GROUP
+      - ENTITY
+      - EVENT_TRACE
+      - EVENT_TRACE_LINK
+      - PRICING_CATEGORY
+      - CONTACT
+      - ALERT_RULE
+      - ALERT
+      - AUDIT_RECORD
+      - PORTAL_URL
+      - AUTHENTICATION_PROVIDER
+      - REPROCESS
+      - APPROVAL_POLICY
+      - APPROVAL_REQUEST
+      - BULK_ACTION
+      - COUPON
+      - PROMOTION_CODE
+      - WALLET
+      - WALLET_TYPE
+      - WALLET_GRANT
+      - WORKFLOW
+      - WORKFLOW_TRIGGER
+      - WORKFLOW_ACTION
+      - CREDIT_TYPE
+      - SIGNATURE_REQUEST
+      - ATTACHMENT
+      - DOCUMENT
+      title: ApiErrorResourceType
+    AccountMembershipRepresentationType:
+      type: string
+      enum:
+      - ADMIN
+      - USER
+      - PARTNER
+      description: The type of this membership
+      title: AccountMembershipRepresentationType
+    CaptchaRequestCreateRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        captcha_token:
+          type: string
+      required:
+      - email
+      - captcha_token
+      title: CaptchaRequestCreateRequest
+    Role:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+          description: Unique identifier for the role
+        name:
+          type: string
+          description: The name of the role
+        description:
+          type: string
+          description: The description of the role
+        entity_id:
+          type:
+          - string
+          - 'null'
+          description: When present the role is created for/by this entity
+        child_role_ids:
+          type: array
+          items:
+            type: string
+          description: Child roles for this role
+        child_roles:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/RoleChildRolesItems'
+          description: Child roles, with a max depth of 2
+      title: Role
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    TeamMemberRepresentation:
+      type: object
+      properties:
+        team_id:
+          type:
+          - string
+          - 'null'
+          description: The id of this team membership
+        start_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: The start date from when this membership is valid
+        end_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: The end date till which this membership is valid
+        account_memberships:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/AccountMembershipRepresentation'
+      title: TeamMemberRepresentation
+    AccountMembershipRepresentation:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+          description: The id of this account membership
+        account_id:
+          type: string
+          description: The id of the account that this membership is for
+        account_reference:
+          type:
+          - string
+          - 'null'
+          description: The reference of the account that this membership is for
+        environment:
+          type:
+          - string
+          - 'null'
+          description: The environment that this membership is for
+        account:
+          oneOf:
+          - $ref: '#/components/schemas/AccountRepresentation'
+          - type: 'null'
+          description: The account that this membership is for
+        type:
+          $ref: '#/components/schemas/AccountMembershipRepresentationType'
+          description: The type of this membership
+        role_ids:
+          type: array
+          items:
+            type: string
+          description: The roles assigned through this membership
+        roles:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Role'
+          description: The roles that belong to this membership
+      title: AccountMembershipRepresentation
+  securitySchemes:
+    API-Key:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+    JWT-Authentication:
+      type: http
+      scheme: bearer

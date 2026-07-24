@@ -1,0 +1,3012 @@
+openapi: 3.1.0
+info:
+  title: Configuration alertRules productItems API
+  version: 1.0.0
+servers:
+- url: https://test.api.solvimon.com
+  description: The TEST environment for our API
+- url: https://api.solvimon.com
+  description: The live environment for our API
+tags:
+- name: productItems
+paths:
+  /v{version}/product-items:
+    get:
+      operationId: getProductItems
+      summary: Get a list of all product items
+      description: Requires the PRODUCT_ITEM.VIEW permission.
+      tags:
+      - productItems
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: expand[]
+        in: query
+        description: The id fields of the resources that are going to be expanded.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: limit
+        in: query
+        description: The amount of records shown in the list
+        required: false
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: The page which is going to be shown
+        required: false
+        schema:
+          type: integer
+      - name: order_by
+        in: query
+        description: The parameter by which the response is ordered.
+        required: false
+        schema:
+          type: string
+      - name: order_direction
+        in: query
+        description: The order direction by which the response is ordered.
+        required: false
+        schema:
+          type: string
+      - name: product_id
+        in: query
+        description: Filter products items based on product id.
+        required: false
+        schema:
+          type: string
+      - name: customer_id
+        in: query
+        description: The resource id of the customer.
+        required: false
+        schema:
+          type: string
+      - name: custom_field
+        in: query
+        description: Filter product items based on a custom field, formatted as reference:value.
+        required: false
+        schema:
+          type: string
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductItemResponseWrapper'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      operationId: postProductItems
+      summary: Create a product item
+      description: Requires the PRODUCT_ITEM.CREATE permission.
+      tags:
+      - productItems
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductItem'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductItemCreateRequest'
+    put:
+      operationId: putProductItems
+      summary: Update or create a product item (upsert)
+      description: Requires the PRODUCT_ITEM.CREATE or PRODUCT_ITEM.UPDATE permission.
+      tags:
+      - productItems
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: identifier_field
+        in: query
+        description: Which field to use to identify whether the resource exists or not
+        required: false
+        schema:
+          type: string
+      - name: custom_field_reference
+        in: query
+        description: Which custom field to use to identify whether the resource exists or not
+        required: false
+        schema:
+          type: string
+      - name: field_actions
+        in: query
+        description: The list of actions for specific fields.
+        required: false
+        schema:
+          type: object
+          additionalProperties:
+            type: string
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductItem'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductItemCreateRequest'
+  /v{version}/product-items/{resourceIdOrReference}:
+    get:
+      operationId: getProductItemsByResourceIdOrReference
+      summary: Get a product item
+      description: Requires the PRODUCT_ITEM.VIEW permission.
+      tags:
+      - productItems
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceIdOrReference
+        in: path
+        description: The ID or reference of the resource.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: expand[]
+        in: query
+        description: The id fields of the resources that are going to be expanded.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductItem'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    delete:
+      operationId: deleteProductItemsByResourceIdOrReference
+      summary: Delete a product item
+      description: Requires the PRODUCT_ITEM.DELETE permission.
+      tags:
+      - productItems
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceIdOrReference
+        in: path
+        description: The ID or reference of the resource.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductItem'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    patch:
+      operationId: patchProductItemsByResourceIdOrReference
+      summary: Update a product item
+      description: Requires the PRODUCT_ITEM.UPDATE permission.
+      tags:
+      - productItems
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceIdOrReference
+        in: path
+        description: The ID or reference of the resource.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductItem'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductItemUpdateRequest'
+  /v{version}/product-items/{resourceIdOrReference}/activate:
+    post:
+      operationId: postProductItemsByResourceIdOrReferenceActivate
+      summary: Activate a product item
+      description: Requires the PRODUCT_ITEM.ACTIVATE permission.
+      tags:
+      - productItems
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceIdOrReference
+        in: path
+        description: The ID or reference of the resource.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductItem'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /v{version}/product-items/{resourceIdOrReference}/deprecate:
+    post:
+      operationId: postProductItemsByResourceIdOrReferenceDeprecate
+      summary: Deprecate a product item
+      description: Requires the PRODUCT_ITEM.DEPRECATE permission.
+      tags:
+      - productItems
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceIdOrReference
+        in: path
+        description: The ID or reference of the resource.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductItem'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /v{version}/product-items/{resourceIdOrReference}/archive:
+    post:
+      operationId: postProductItemsByResourceIdOrReferenceArchive
+      summary: Archive a product item
+      description: Requires the PRODUCT_ITEM.ARCHIVE permission.
+      tags:
+      - productItems
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceIdOrReference
+        in: path
+        description: The ID or reference of the resource.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductItem'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /v{version}/product-items/search:
+    post:
+      operationId: postProductItemsSearch
+      summary: Search product items.
+      description: Requires the PRODUCT_ITEM.VIEW permission.
+      tags:
+      - productItems
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: expand[]
+        in: query
+        description: The id fields of the resources that are going to be expanded.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: limit
+        in: query
+        description: The amount of records shown in the list
+        required: false
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: The page which is going to be shown
+        required: false
+        schema:
+          type: integer
+      - name: order_by
+        in: query
+        description: The parameter by which the response is ordered. default = name
+        required: false
+        schema:
+          type: string
+      - name: order_direction
+        in: query
+        description: The parameter for the response ordering direction (asc, desc) default asc
+        required: false
+        schema:
+          type: string
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductItemResponseWrapper'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchCreateRequest'
+components:
+  schemas:
+    UnitNameUpdateRequest:
+      type: object
+      properties:
+        singular:
+          type: string
+        plural:
+          type:
+          - string
+          - 'null'
+      title: UnitNameUpdateRequest
+    MeterPropertyUpdateRequestType:
+      type: string
+      enum:
+      - NUMBER
+      - ENUM
+      - STRING
+      description: The type of the meter property.
+      title: MeterPropertyUpdateRequestType
+    ProductItemUsageBasedUpdateRequest:
+      type: object
+      properties:
+        meter_value_calculation_id:
+          type:
+          - string
+          - 'null'
+          description: The linked meter value calculation
+        meter_value_calculation:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueCalculation'
+          - type: 'null'
+        tiering_meter_value_calculation_id:
+          type:
+          - string
+          - 'null'
+          description: The optional alternative linked meter value calculation for tiering
+        tiering_meter_value_calculation:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueCalculation'
+          - type: 'null'
+        report_meter_value_calculation_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Optional reporting meter value calculations.
+        conditions:
+          $ref: '#/components/schemas/MeterConditions'
+          description: Optional conditions.
+      title: ProductItemUsageBasedUpdateRequest
+    MeterPropertyConditionComparator:
+      type: string
+      enum:
+      - EQUALS
+      - NOT_EQUALS
+      - IN
+      - NOT_IN
+      - GREATER_THAN
+      - GREATER_THAN_OR_EQUALS
+      - LESS_THAN
+      - LESS_THAN_OR_EQUALS
+      - EMPTY
+      - NOT_EMPTY
+      - CONTAINS
+      - NOT_CONTAINS
+      title: MeterPropertyConditionComparator
+    LinkedIntegration:
+      type: object
+      properties:
+        id:
+          type: string
+        link_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/LinkDetail'
+      title: LinkedIntegration
+    IntegrationDetails:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+        payment_gateway_variant:
+          $ref: '#/components/schemas/IntegrationDetailsPaymentGatewayVariant'
+        adyen:
+          $ref: '#/components/schemas/AdyenIntegrationDetails'
+        stripe:
+          $ref: '#/components/schemas/StripeIntegrationDetails'
+      title: IntegrationDetails
+    MeterValueCreateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the meter value indicating the activity and the ability to update properties.
+      title: MeterValueCreateRequestStatus
+    MeterStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the meter indicating the activity of the meter and the ability to update properties.
+      title: MeterStatus
+    MeterMeterValueCreateRequest:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type METER_VALUE
+        object:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValue'
+          - type: 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+        required:
+          type:
+          - boolean
+          - 'null'
+      title: MeterMeterValueCreateRequest
+    ProductStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the product.
+      title: ProductStatus
+    ProductItemModelType:
+      type: string
+      enum:
+      - USAGE_BASED
+      - USAGE_BASED_CONVERSION
+      - RECURRING
+      - ONE_OFF
+      - PER_SEAT
+      - CREDITS
+      title: ProductItemModelType
+    MeterCreateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the meter indicating the activity of the meter and the ability to update properties.
+      title: MeterCreateRequestStatus
+    ProductItemCredits:
+      type: object
+      properties:
+        credit_type_id:
+          type:
+          - string
+          - 'null'
+          description: The linked meter value calculation
+        credit_type:
+          oneOf:
+          - $ref: '#/components/schemas/CreditType'
+          - type: 'null'
+      title: ProductItemCredits
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    SelectionRuleFieldCreateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type:
+          - string
+          - 'null'
+      title: SelectionRuleFieldCreateRequest
+    CreditType:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/CreditTypeStatus'
+          - type: 'null'
+        name:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        unit_name:
+          $ref: '#/components/schemas/UnitName'
+        created_at:
+          type:
+          - string
+          - 'null'
+        updated_at:
+          type:
+          - string
+          - 'null'
+      title: CreditType
+    ProductCreateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the product.
+      title: ProductCreateRequestStatus
+    ProductTaxCategory:
+      type: string
+      enum:
+      - STANDARD
+      - NO_TAX
+      - EXEMPT
+      description: The default tax category applied to the product.
+      title: ProductTaxCategory
+    Product:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        category_id:
+          type: string
+          description: The resource ID of the product category, that belongs to the product.
+        category:
+          oneOf:
+          - $ref: '#/components/schemas/ProductCategory'
+          - type: 'null'
+        parent_product_id:
+          type:
+          - string
+          - 'null'
+          description: The resource ID of the original product, to which the product will belong to.
+        name:
+          type: string
+        reference:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/ProductStatus'
+          - type: 'null'
+          description: The status of the product.
+        product_type:
+          $ref: '#/components/schemas/ProductProductType'
+        tax_category:
+          oneOf:
+          - $ref: '#/components/schemas/ProductTaxCategory'
+          - type: 'null'
+          description: The default tax category applied to the product.
+        features:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FeatureResourceReference'
+          description: The features associated with the product.
+        custom_fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomFieldValue'
+        display_order:
+          type:
+          - integer
+          - 'null'
+          description: Determines the order in which products are displayed on overview pages and invoices. The lowest number gets the highest priority.
+        linked_integrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/LinkedIntegration'
+        billing_entity_id:
+          type:
+          - string
+          - 'null'
+          description: The resource ID of the billing entity linked to this product.
+        customer_id:
+          type:
+          - string
+          - 'null'
+      title: Product
+    MeterPropertyUpdateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        status:
+          $ref: '#/components/schemas/MeterPropertyUpdateRequestStatus'
+          description: The status of the meter property indicating the activity and the ability to update properties.
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/MeterPropertyUpdateRequestType'
+          - type: 'null'
+          description: The type of the meter property.
+        enum_values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: The list of available ENUM values.
+      title: MeterPropertyUpdateRequest
+    ProductUpdateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the product.
+      title: ProductUpdateRequestStatus
+    ProductCategoryTaxCategory:
+      type: string
+      enum:
+      - STANDARD
+      - NO_TAX
+      - EXEMPT
+      description: The default tax category applied to the products in the product category.
+      title: ProductCategoryTaxCategory
+    ProductCreateRequestProductType:
+      type: string
+      enum:
+      - DEFAULT
+      - ADDON
+      title: ProductCreateRequestProductType
+    CustomFieldValue:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOM_FIELD
+        reference:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+        values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        integration_details:
+          oneOf:
+          - $ref: '#/components/schemas/IntegrationDetails'
+          - type: 'null'
+        integration_id:
+          type: string
+          description: The resource ID of the integration linked to the custom field
+      title: CustomFieldValue
+    MeterValueCalculationUpdateRequestCalculationType:
+      type: string
+      enum:
+      - SUM
+      - MAX
+      - MIN
+      - AVERAGE
+      - UNIQUE
+      description: The type of calculation used for this billable metric.
+      title: MeterValueCalculationUpdateRequestCalculationType
+    UnitNameCreateRequest:
+      type: object
+      properties:
+        singular:
+          type: string
+        plural:
+          type:
+          - string
+          - 'null'
+      title: UnitNameCreateRequest
+    FilterFieldCreateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        reference:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+        values:
+          type: array
+          items:
+            type: string
+      title: FilterFieldCreateRequest
+    MeterValueUpdateRequestType:
+      type: string
+      enum:
+      - NUMBER
+      - AMOUNT
+      description: The type of the meter value.
+      title: MeterValueUpdateRequestType
+    ProductUpdateRequestTaxCategory:
+      type: string
+      enum:
+      - STANDARD
+      - NO_TAX
+      - EXEMPT
+      description: The default tax category applied to the product.
+      title: ProductUpdateRequestTaxCategory
+    ProductItemUpdateRequestModelType:
+      type: string
+      enum:
+      - USAGE_BASED
+      - USAGE_BASED_CONVERSION
+      - RECURRING
+      - ONE_OFF
+      - PER_SEAT
+      - CREDITS
+      title: ProductItemUpdateRequestModelType
+    ProductCreateRequestTaxCategory:
+      type: string
+      enum:
+      - STANDARD
+      - NO_TAX
+      - EXEMPT
+      description: The default tax category applied to the product.
+      title: ProductCreateRequestTaxCategory
+    MeterValueUpdateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the meter value indicating the activity and the ability to update properties.
+      title: MeterValueUpdateRequestStatus
+    IntegrationDetailsPaymentGatewayVariant:
+      type: string
+      enum:
+      - ADYEN
+      - STRIPE
+      title: IntegrationDetailsPaymentGatewayVariant
+    MeterProperty:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        status:
+          $ref: '#/components/schemas/MeterPropertyStatus'
+          description: The status of the meter property indicating the activity and the ability to update properties.
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/MeterPropertyType'
+          - type: 'null'
+          description: The type of the meter property.
+        enum_values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: The list of available ENUM values.
+      title: MeterProperty
+    Meter:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/MeterStatus'
+          - type: 'null'
+          description: The status of the meter indicating the activity of the meter and the ability to update properties.
+        meter_values:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/MeterMeterValue'
+          description: The values used as input to calculate billable units, used in the meter.
+        meter_properties:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/MeterMeterProperty'
+          description: The properties that provide information to give context to an event, used in the meter.
+      title: Meter
+    CreditTypeStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - INACTIVE
+      - DEPRECATED
+      - ARCHIVED
+      title: CreditTypeStatus
+    ProductUpdateRequestProductType:
+      type: string
+      enum:
+      - DEFAULT
+      - ADDON
+      title: ProductUpdateRequestProductType
+    UnitName:
+      type: object
+      properties:
+        singular:
+          type: string
+        plural:
+          type:
+          - string
+          - 'null'
+      title: UnitName
+    ProductItemUpdateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        product_id:
+          type:
+          - string
+          - 'null'
+          description: The resource ID of the product, that belongs to the product item.
+        product:
+          oneOf:
+          - $ref: '#/components/schemas/ProductUpdateRequest'
+          - type: 'null'
+        name:
+          type:
+          - string
+          - 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/ProductItemUpdateRequestStatus'
+          - type: 'null'
+        reference:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/ProductItemUpdateRequestType'
+          - type: 'null'
+          description: The type of the product item.
+        model_type:
+          oneOf:
+          - $ref: '#/components/schemas/ProductItemUpdateRequestModelType'
+          - type: 'null'
+        usage_based:
+          $ref: '#/components/schemas/ProductItemUsageBasedUpdateRequest'
+          description: Additional settings in case of a USAGE_BASED type.
+        credits:
+          $ref: '#/components/schemas/ProductItemCreditsUpdateRequest'
+          description: Additional settings in case of a CREDITS type.
+        meter_value_calculation_id:
+          type:
+          - string
+          - 'null'
+          description: The linked meter value calculation, in case of a USAGE_BASED charge type.
+        meter_value_calculation:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueCalculationUpdateRequest'
+          - type: 'null'
+        report_meter_value_calculation_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Optional reporting meter value calculations, in case of a USAGE_BASED charge type.
+        tax_category:
+          oneOf:
+          - $ref: '#/components/schemas/ProductItemUpdateRequestTaxCategory'
+          - type: 'null'
+          description: The default tax category applied to the product item.
+        display_order:
+          type:
+          - integer
+          - 'null'
+        unit_name:
+          $ref: '#/components/schemas/UnitNameUpdateRequest'
+        custom_fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomFieldValueUpdateRequest'
+          description: Custom fields associated to this product item
+        customer_id:
+          type:
+          - string
+          - 'null'
+      title: ProductItemUpdateRequest
+    MeterValueCalculationCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        calculation_type:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueCalculationCreateRequestCalculationType'
+          - type: 'null'
+          description: The type of calculation used for this billable metric.
+        persist:
+          type:
+          - boolean
+          - 'null'
+          description: Indicate if the data of the billable metric must be persisted to the next billing period of the schedule (default is false).
+        meter_id:
+          type:
+          - string
+          - 'null'
+          description: The ID of the meter.
+        meter:
+          oneOf:
+          - $ref: '#/components/schemas/MeterCreateRequest'
+          - type: 'null'
+        meter_value_id:
+          type:
+          - string
+          - 'null'
+          description: The ID of the meter value.
+        meter_value:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueCreateRequest'
+          - type: 'null'
+        meter_property_id:
+          type:
+          - string
+          - 'null'
+          description: The ID of the meter property.
+        meter_property:
+          oneOf:
+          - $ref: '#/components/schemas/MeterPropertyCreateRequest'
+          - type: 'null'
+      required:
+      - reference
+      - calculation_type
+      - meter_id
+      title: MeterValueCalculationCreateRequest
+    MeterValueCreateRequestType:
+      type: string
+      enum:
+      - NUMBER
+      - AMOUNT
+      description: The type of the meter value.
+      title: MeterValueCreateRequestType
+    MeterConditions:
+      type: object
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+        meter_properties:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/MeterPropertyCondition'
+        expression:
+          $ref: '#/components/schemas/MeterConditionExpression'
+      title: MeterConditions
+    MeterMeterProperty:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type METER_PROPERTY
+        object:
+          oneOf:
+          - $ref: '#/components/schemas/MeterProperty'
+          - type: 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+        required:
+          type:
+          - boolean
+          - 'null'
+      title: MeterMeterProperty
+    AdyenIntegrationDetails:
+      type: object
+      properties:
+        recurring_detail_reference:
+          type: string
+      title: AdyenIntegrationDetails
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    ProductItem:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        product_id:
+          type:
+          - string
+          - 'null'
+          description: The resource ID of the product, that belongs to the product item.
+        product:
+          oneOf:
+          - $ref: '#/components/schemas/Product'
+          - type: 'null'
+        name:
+          type:
+          - string
+          - 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/ProductItemStatus'
+          - type: 'null'
+        reference:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/ProductItemType'
+          - type: 'null'
+          description: The type of the product item.
+        model_type:
+          oneOf:
+          - $ref: '#/components/schemas/ProductItemModelType'
+          - type: 'null'
+        usage_based:
+          $ref: '#/components/schemas/ProductItemUsageBased'
+          description: Additional settings in case of a USAGE_BASED type.
+        credits:
+          $ref: '#/components/schemas/ProductItemCredits'
+          description: Additional settings in case of a CREDITS type.
+        meter_value_calculation_id:
+          type:
+          - string
+          - 'null'
+          description: The linked meter value calculation, in case of a USAGE_BASED charge type.
+        meter_value_calculation:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueCalculation'
+          - type: 'null'
+        report_meter_value_calculation_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Optional reporting meter value calculations, in case of a USAGE_BASED charge type.
+        tax_category:
+          oneOf:
+          - $ref: '#/components/schemas/ProductItemTaxCategory'
+          - type: 'null'
+          description: The default tax category applied to the product item.
+        display_order:
+          type:
+          - integer
+          - 'null'
+        unit_name:
+          $ref: '#/components/schemas/UnitName'
+        custom_fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomFieldValue'
+          description: Custom fields associated to this product item
+        customer_id:
+          type:
+          - string
+          - 'null'
+      title: ProductItem
+    ProductItemCreateRequestType:
+      type: string
+      enum:
+      - REVENUE
+      - DEDUCTION
+      description: The type of the product item.
+      title: ProductItemCreateRequestType
+    ProductItemCreateRequestTaxCategory:
+      type: string
+      enum:
+      - STANDARD
+      - NO_TAX
+      - EXEMPT
+      description: The default tax category applied to the product item.
+      title: ProductItemCreateRequestTaxCategory
+    ProductUpdateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        category_id:
+          type: string
+          description: The resource ID of the product category, that belongs to the product.
+        category:
+          oneOf:
+          - $ref: '#/components/schemas/ProductCategory'
+          - type: 'null'
+        parent_product_id:
+          type:
+          - string
+          - 'null'
+          description: The resource ID of the original product, to which the product will belong to.
+        name:
+          type: string
+        reference:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/ProductUpdateRequestStatus'
+          - type: 'null'
+          description: The status of the product.
+        product_type:
+          $ref: '#/components/schemas/ProductUpdateRequestProductType'
+        tax_category:
+          oneOf:
+          - $ref: '#/components/schemas/ProductUpdateRequestTaxCategory'
+          - type: 'null'
+          description: The default tax category applied to the product.
+        features:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FeatureResourceReference'
+          description: The features associated with the product.
+        custom_fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomFieldValue'
+        display_order:
+          type:
+          - integer
+          - 'null'
+          description: Determines the order in which products are displayed on overview pages and invoices. The lowest number gets the highest priority.
+        linked_integrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/LinkedIntegration'
+        billing_entity_id:
+          type:
+          - string
+          - 'null'
+          description: The resource ID of the billing entity linked to this product.
+        customer_id:
+          type:
+          - string
+          - 'null'
+      title: ProductUpdateRequest
+    FeatureResourceReference:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The ID of the feature.
+        reference:
+          type: string
+          description: The reference of the feature.
+      title: FeatureResourceReference
+    MeterPropertyCreateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the meter property indicating the activity and the ability to update properties.
+      title: MeterPropertyCreateRequestStatus
+    MeterCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/MeterCreateRequestStatus'
+          - type: 'null'
+          description: The status of the meter indicating the activity of the meter and the ability to update properties.
+        meter_values:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/MeterMeterValueCreateRequest'
+          description: The values used as input to calculate billable units, used in the meter.
+        meter_properties:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/MeterMeterPropertyCreateRequest'
+          description: The properties that provide information to give context to an event, used in the meter.
+      required:
+      - reference
+      title: MeterCreateRequest
+    MeterConditionOperand:
+      type: object
+      properties:
+        meter_property:
+          $ref: '#/components/schemas/MeterPropertyCondition'
+        expression:
+          oneOf:
+          - $ref: '#/components/schemas/MeterConditionOperandExpression'
+          - type: 'null'
+      title: MeterConditionOperand
+    MeterPropertyCondition:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type METER_PROPERTY
+        reference:
+          type:
+          - string
+          - 'null'
+        meter_property:
+          oneOf:
+          - $ref: '#/components/schemas/MeterProperty'
+          - type: 'null'
+        value:
+          type:
+          - string
+          - 'null'
+        values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        comparator:
+          $ref: '#/components/schemas/MeterPropertyConditionComparator'
+      title: MeterPropertyCondition
+    ProductItemCreateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      title: ProductItemCreateRequestStatus
+    SearchCreateRequest:
+      type: object
+      properties:
+        search_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchFieldCreateRequest'
+        filter_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/FilterFieldCreateRequest'
+        selection_rule_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/SelectionRuleFieldCreateRequest'
+      title: SearchCreateRequest
+    ProductItemUpdateRequestType:
+      type: string
+      enum:
+      - REVENUE
+      - DEDUCTION
+      description: The type of the product item.
+      title: ProductItemUpdateRequestType
+    MeterValueType:
+      type: string
+      enum:
+      - NUMBER
+      - AMOUNT
+      description: The type of the meter value.
+      title: MeterValueType
+    ProductItemCreditsCreateRequest:
+      type: object
+      properties:
+        credit_type_id:
+          type:
+          - string
+          - 'null'
+          description: The linked meter value calculation
+        credit_type:
+          oneOf:
+          - $ref: '#/components/schemas/CreditType'
+          - type: 'null'
+      title: ProductItemCreditsCreateRequest
+    ProductItemUsageBasedCreateRequest:
+      type: object
+      properties:
+        meter_value_calculation_id:
+          type:
+          - string
+          - 'null'
+          description: The linked meter value calculation
+        meter_value_calculation:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueCalculation'
+          - type: 'null'
+        tiering_meter_value_calculation_id:
+          type:
+          - string
+          - 'null'
+          description: The optional alternative linked meter value calculation for tiering
+        tiering_meter_value_calculation:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueCalculation'
+          - type: 'null'
+        report_meter_value_calculation_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Optional reporting meter value calculations.
+        conditions:
+          $ref: '#/components/schemas/MeterConditions'
+          description: Optional conditions.
+      title: ProductItemUsageBasedCreateRequest
+    ProductCategory:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        name:
+          type: string
+        reference:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        tax_category:
+          oneOf:
+          - $ref: '#/components/schemas/ProductCategoryTaxCategory'
+          - type: 'null'
+          description: The default tax category applied to the products in the product category.
+        display_order:
+          type:
+          - integer
+          - 'null'
+        customer_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOMER
+      title: ProductCategory
+    MeterValueUpdateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueUpdateRequestStatus'
+          - type: 'null'
+          description: The status of the meter value indicating the activity and the ability to update properties.
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueUpdateRequestType'
+          - type: 'null'
+          description: The type of the meter value.
+      title: MeterValueUpdateRequest
+    StripeIntegrationDetails:
+      type: object
+      properties:
+        payment_method_id:
+          type: string
+      title: StripeIntegrationDetails
+    ProductCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        category_id:
+          type: string
+          description: The resource ID of the product category, that belongs to the product.
+        category:
+          oneOf:
+          - $ref: '#/components/schemas/ProductCategory'
+          - type: 'null'
+        parent_product_id:
+          type:
+          - string
+          - 'null'
+          description: The resource ID of the original product, to which the product will belong to.
+        name:
+          type: string
+        reference:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/ProductCreateRequestStatus'
+          - type: 'null'
+          description: The status of the product.
+        product_type:
+          $ref: '#/components/schemas/ProductCreateRequestProductType'
+        tax_category:
+          oneOf:
+          - $ref: '#/components/schemas/ProductCreateRequestTaxCategory'
+          - type: 'null'
+          description: The default tax category applied to the product.
+        features:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FeatureResourceReference'
+          description: The features associated with the product.
+        custom_fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomFieldValue'
+        display_order:
+          type:
+          - integer
+          - 'null'
+          description: Determines the order in which products are displayed on overview pages and invoices. The lowest number gets the highest priority.
+        linked_integrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/LinkedIntegration'
+        billing_entity_id:
+          type:
+          - string
+          - 'null'
+          description: The resource ID of the billing entity linked to this product.
+        customer_id:
+          type:
+          - string
+          - 'null'
+      title: ProductCreateRequest
+    MeterValueCalculation:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        calculation_type:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueCalculationCalculationType'
+          - type: 'null'
+          description: The type of calculation used for this billable metric.
+        persist:
+          type:
+          - boolean
+          - 'null'
+          description: Indicate if the data of the billable metric must be persisted to the next billing period of the schedule (default is false).
+        meter_id:
+          type:
+          - string
+          - 'null'
+          description: The ID of the meter.
+        meter:
+          oneOf:
+          - $ref: '#/components/schemas/Meter'
+          - type: 'null'
+        meter_value_id:
+          type:
+          - string
+          - 'null'
+          description: The ID of the meter value.
+        meter_value:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValue'
+          - type: 'null'
+        meter_property_id:
+          type:
+          - string
+          - 'null'
+          description: The ID of the meter property.
+        meter_property:
+          oneOf:
+          - $ref: '#/components/schemas/MeterProperty'
+          - type: 'null'
+      title: MeterValueCalculation
+    ProductItemCreditsUpdateRequest:
+      type: object
+      properties:
+        credit_type_id:
+          type:
+          - string
+          - 'null'
+          description: The linked meter value calculation
+        credit_type:
+          oneOf:
+          - $ref: '#/components/schemas/CreditType'
+          - type: 'null'
+      title: ProductItemCreditsUpdateRequest
+    CustomFieldValueCreateRequest:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOM_FIELD
+        reference:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+        values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        integration_details:
+          oneOf:
+          - $ref: '#/components/schemas/IntegrationDetails'
+          - type: 'null'
+        integration_id:
+          type: string
+          description: The resource ID of the integration linked to the custom field
+      title: CustomFieldValueCreateRequest
+    MeterConditionExpressionOperator:
+      type: string
+      enum:
+      - AND
+      - OR
+      - XOR
+      title: MeterConditionExpressionOperator
+    MeterPropertyCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        status:
+          $ref: '#/components/schemas/MeterPropertyCreateRequestStatus'
+          description: The status of the meter property indicating the activity and the ability to update properties.
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/MeterPropertyCreateRequestType'
+          - type: 'null'
+          description: The type of the meter property.
+        enum_values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: The list of available ENUM values.
+      required:
+      - reference
+      - name
+      - type
+      title: MeterPropertyCreateRequest
+    MeterUpdateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/MeterUpdateRequestStatus'
+          - type: 'null'
+          description: The status of the meter indicating the activity of the meter and the ability to update properties.
+        meter_values:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/MeterMeterValueUpdateRequest'
+          description: The values used as input to calculate billable units, used in the meter.
+        meter_properties:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/MeterMeterPropertyUpdateRequest'
+          description: The properties that provide information to give context to an event, used in the meter.
+      title: MeterUpdateRequest
+    ProductItemUpdateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      title: ProductItemUpdateRequestStatus
+    ProductItemType:
+      type: string
+      enum:
+      - REVENUE
+      - DEDUCTION
+      description: The type of the product item.
+      title: ProductItemType
+    PaginationLinks:
+      type: object
+      properties:
+        first:
+          type:
+          - string
+          - 'null'
+        previous:
+          type:
+          - string
+          - 'null'
+        current:
+          type:
+          - string
+          - 'null'
+        next:
+          type:
+          - string
+          - 'null'
+      title: PaginationLinks
+    ProductItemUpdateRequestTaxCategory:
+      type: string
+      enum:
+      - STANDARD
+      - NO_TAX
+      - EXEMPT
+      description: The default tax category applied to the product item.
+      title: ProductItemUpdateRequestTaxCategory
+    MeterUpdateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the meter indicating the activity of the meter and the ability to update properties.
+      title: MeterUpdateRequestStatus
+    MeterMeterPropertyUpdateRequest:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type METER_PROPERTY
+        object:
+          oneOf:
+          - $ref: '#/components/schemas/MeterProperty'
+          - type: 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+        required:
+          type:
+          - boolean
+          - 'null'
+      title: MeterMeterPropertyUpdateRequest
+    ProductItemStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      title: ProductItemStatus
+    MeterPropertyType:
+      type: string
+      enum:
+      - NUMBER
+      - ENUM
+      - STRING
+      description: The type of the meter property.
+      title: MeterPropertyType
+    MeterValueCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueCreateRequestStatus'
+          - type: 'null'
+          description: The status of the meter value indicating the activity and the ability to update properties.
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueCreateRequestType'
+          - type: 'null'
+          description: The type of the meter value.
+      required:
+      - reference
+      - name
+      - type
+      title: MeterValueCreateRequest
+    MeterValueCalculationCreateRequestCalculationType:
+      type: string
+      enum:
+      - SUM
+      - MAX
+      - MIN
+      - AVERAGE
+      - UNIQUE
+      description: The type of calculation used for this billable metric.
+      title: MeterValueCalculationCreateRequestCalculationType
+    MeterPropertyStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the meter property indicating the activity and the ability to update properties.
+      title: MeterPropertyStatus
+    MeterPropertyUpdateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the meter property indicating the activity and the ability to update properties.
+      title: MeterPropertyUpdateRequestStatus
+    ProductItemCreateRequestModelType:
+      type: string
+      enum:
+      - USAGE_BASED
+      - USAGE_BASED_CONVERSION
+      - RECURRING
+      - ONE_OFF
+      - PER_SEAT
+      - CREDITS
+      title: ProductItemCreateRequestModelType
+    ProductItemTaxCategory:
+      type: string
+      enum:
+      - STANDARD
+      - NO_TAX
+      - EXEMPT
+      description: The default tax category applied to the product item.
+      title: ProductItemTaxCategory
+    ProductItemResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductItem'
+        limit:
+          type:
+          - integer
+          - 'null'
+        page:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      - links
+      title: ProductItemResponseWrapper
+    ProductItemCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        product_id:
+          type:
+          - string
+          - 'null'
+          description: The resource ID of the product, that belongs to the product item.
+        product:
+          oneOf:
+          - $ref: '#/components/schemas/ProductCreateRequest'
+          - type: 'null'
+        name:
+          type:
+          - string
+          - 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/ProductItemCreateRequestStatus'
+          - type: 'null'
+        reference:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/ProductItemCreateRequestType'
+          - type: 'null'
+          description: The type of the product item.
+        model_type:
+          oneOf:
+          - $ref: '#/components/schemas/ProductItemCreateRequestModelType'
+          - type: 'null'
+        usage_based:
+          $ref: '#/components/schemas/ProductItemUsageBasedCreateRequest'
+          description: Additional settings in case of a USAGE_BASED type.
+        credits:
+          $ref: '#/components/schemas/ProductItemCreditsCreateRequest'
+          description: Additional settings in case of a CREDITS type.
+        meter_value_calculation_id:
+          type:
+          - string
+          - 'null'
+          description: The linked meter value calculation, in case of a USAGE_BASED charge type.
+        meter_value_calculation:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueCalculationCreateRequest'
+          - type: 'null'
+        report_meter_value_calculation_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Optional reporting meter value calculations, in case of a USAGE_BASED charge type.
+        tax_category:
+          oneOf:
+          - $ref: '#/components/schemas/ProductItemCreateRequestTaxCategory'
+          - type: 'null'
+          description: The default tax category applied to the product item.
+        display_order:
+          type:
+          - integer
+          - 'null'
+        unit_name:
+          $ref: '#/components/schemas/UnitNameCreateRequest'
+        custom_fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomFieldValueCreateRequest'
+          description: Custom fields associated to this product item
+        customer_id:
+          type:
+          - string
+          - 'null'
+      required:
+      - product_id
+      - name
+      - reference
+      - model_type
+      title: ProductItemCreateRequest
+    LinkDetail:
+      type: object
+      properties:
+        url:
+          type:
+          - string
+          - 'null'
+        custom_field_name:
+          type:
+          - string
+          - 'null'
+      title: LinkDetail
+    MeterConditionExpression:
+      type: object
+      properties:
+        operator:
+          $ref: '#/components/schemas/MeterConditionExpressionOperator'
+        operands:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/MeterConditionOperand'
+      title: MeterConditionExpression
+    ProductItemUsageBased:
+      type: object
+      properties:
+        meter_value_calculation_id:
+          type:
+          - string
+          - 'null'
+          description: The linked meter value calculation
+        meter_value_calculation:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueCalculation'
+          - type: 'null'
+        tiering_meter_value_calculation_id:
+          type:
+          - string
+          - 'null'
+          description: The optional alternative linked meter value calculation for tiering
+        tiering_meter_value_calculation:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueCalculation'
+          - type: 'null'
+        report_meter_value_calculation_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Optional reporting meter value calculations.
+        conditions:
+          $ref: '#/components/schemas/MeterConditions'
+          description: Optional conditions.
+      title: ProductItemUsageBased
+    MeterConditionOperandExpression:
+      type: object
+      properties: {}
+      title: MeterConditionOperandExpression
+    MeterValueStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the meter value indicating the activity and the ability to update properties.
+      title: MeterValueStatus
+    CustomFieldValueUpdateRequest:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOM_FIELD
+        reference:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+        values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        integration_details:
+          oneOf:
+          - $ref: '#/components/schemas/IntegrationDetails'
+          - type: 'null'
+        integration_id:
+          type: string
+          description: The resource ID of the integration linked to the custom field
+      title: CustomFieldValueUpdateRequest
+    ApiErrorResourceType:
+      type: string
+      enum:
+      - CUSTOMER
+      - CUSTOM_FIELD
+      - PLATFORM
+      - PLATFORM_UPTODATE
+      - METER
+      - METER_VALUE
+      - METER_PROPERTY
+      - METER_VALUE_CALCULATION
+      - INGEST_DATA
+      - METER_DATA
+      - CHARGE_DATA
+      - PERSIST_DATA
+      - ADJUSTMENT_DATA
+      - PRODUCT_CATEGORY
+      - PRODUCT
+      - PRODUCT_ITEM
+      - PRICING
+      - PRICING_GROUP
+      - PRICING_ITEM
+      - PRICING_ITEM_CONFIG
+      - PRICING_PLAN_SUBSCRIPTION
+      - PRICING_PLAN_SUBSCRIPTION_GROUP
+      - PRICING_PLAN_SCHEDULE
+      - PRICING_PLAN
+      - PRICING_PLAN_VERSION
+      - QUOTE
+      - QUOTE_VERSION
+      - QUOTE_TEMPLATE
+      - API_KEY
+      - USER
+      - ROLE
+      - PROXY_USER
+      - EXTERNAL_CREDENTIALS
+      - TOKEN
+      - INVOICE
+      - E_INVOICE
+      - PDF
+      - BILLING_ENTITY
+      - FEATURE
+      - MEMBERSHIP
+      - PAYMENT
+      - PAYMENT_ACCEPTOR
+      - PAYMENT_METHOD
+      - PAYMENT_METHOD_OPTIONS
+      - PAYMENT_SCHEDULE
+      - PAYMENT_REQUEST
+      - INTEGRATION
+      - WEBHOOK
+      - FILE
+      - FILE_PROCESSING_SETTINGS
+      - TEAM
+      - DOWNLOAD_URL
+      - CSV_REPORT
+      - REPORT
+      - REPORT_GENERATE_REQUEST
+      - REPORT_CONFIGURATION
+      - REPORT_SUBSCRIPTION
+      - REPORT_DEFINITION
+      - ACCOUNT_GROUP
+      - ENTITY
+      - EVENT_TRACE
+      - EVENT_TRACE_LINK
+      - PRICING_CATEGORY
+      - CONTACT
+      - ALERT_RULE
+      - ALERT
+      - AUDIT_RECORD
+      - PORTAL_URL
+      - AUTHENTICATION_PROVIDER
+      - REPROCESS
+      - APPROVAL_POLICY
+      - APPROVAL_REQUEST
+      - BULK_ACTION
+      - COUPON
+      - PROMOTION_CODE
+      - WALLET
+      - WALLET_TYPE
+      - WALLET_GRANT
+      - WORKFLOW
+      - WORKFLOW_TRIGGER
+      - WORKFLOW_ACTION
+      - CREDIT_TYPE
+      - SIGNATURE_REQUEST
+      - ATTACHMENT
+      - DOCUMENT
+      title: ApiErrorResourceType
+    MeterMeterValue:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type METER_VALUE
+        object:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValue'
+          - type: 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+        required:
+          type:
+          - boolean
+          - 'null'
+      title: MeterMeterValue
+    MeterPropertyCreateRequestType:
+      type: string
+      enum:
+      - NUMBER
+      - ENUM
+      - STRING
+      description: The type of the meter property.
+      title: MeterPropertyCreateRequestType
+    MeterValueCalculationUpdateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        calculation_type:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueCalculationUpdateRequestCalculationType'
+          - type: 'null'
+          description: The type of calculation used for this billable metric.
+        persist:
+          type:
+          - boolean
+          - 'null'
+          description: Indicate if the data of the billable metric must be persisted to the next billing period of the schedule (default is false).
+        meter_id:
+          type:
+          - string
+          - 'null'
+          description: The ID of the meter.
+        meter:
+          oneOf:
+          - $ref: '#/components/schemas/MeterUpdateRequest'
+          - type: 'null'
+        meter_value_id:
+          type:
+          - string
+          - 'null'
+          description: The ID of the meter value.
+        meter_value:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueUpdateRequest'
+          - type: 'null'
+        meter_property_id:
+          type:
+          - string
+          - 'null'
+          description: The ID of the meter property.
+        meter_property:
+          oneOf:
+          - $ref: '#/components/schemas/MeterPropertyUpdateRequest'
+          - type: 'null'
+      title: MeterValueCalculationUpdateRequest
+    MeterMeterPropertyCreateRequest:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type METER_PROPERTY
+        object:
+          oneOf:
+          - $ref: '#/components/schemas/MeterProperty'
+          - type: 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+        required:
+          type:
+          - boolean
+          - 'null'
+      title: MeterMeterPropertyCreateRequest
+    MeterMeterValueUpdateRequest:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type METER_VALUE
+        object:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValue'
+          - type: 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+        required:
+          type:
+          - boolean
+          - 'null'
+      title: MeterMeterValueUpdateRequest
+    MeterValueCalculationCalculationType:
+      type: string
+      enum:
+      - SUM
+      - MAX
+      - MIN
+      - AVERAGE
+      - UNIQUE
+      description: The type of calculation used for this billable metric.
+      title: MeterValueCalculationCalculationType
+    MeterValue:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueStatus'
+          - type: 'null'
+          description: The status of the meter value indicating the activity and the ability to update properties.
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueType'
+          - type: 'null'
+          description: The type of the meter value.
+      title: MeterValue
+    ProductProductType:
+      type: string
+      enum:
+      - DEFAULT
+      - ADDON
+      title: ProductProductType
+    SearchFieldCreateRequest:
+      type: object
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+        value:
+          type: string
+        wildcard_start:
+          type: boolean
+        wildcard_end:
+          type: boolean
+        ignore_case:
+          type: boolean
+      title: SearchFieldCreateRequest
+  securitySchemes:
+    API-Key:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+    JWT-Authentication:
+      type: http
+      scheme: bearer

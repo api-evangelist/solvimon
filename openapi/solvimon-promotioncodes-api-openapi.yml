@@ -1,0 +1,7476 @@
+openapi: 3.1.0
+info:
+  title: Configuration alertRules promotionCodes API
+  version: 1.0.0
+servers:
+- url: https://test.api.solvimon.com
+  description: The TEST environment for our API
+- url: https://api.solvimon.com
+  description: The live environment for our API
+tags:
+- name: promotionCodes
+paths:
+  /v{version}/promotion-codes:
+    get:
+      operationId: getPromotionCodes
+      summary: Get promotion codes
+      description: Requires the PROMOTION_CODE.VIEW permission.
+      tags:
+      - promotionCodes
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: coupon_id
+        in: query
+        description: Filter by coupon id.
+        required: false
+        schema:
+          type: string
+      - name: statuses[]
+        in: query
+        description: Filter by promotion code status.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: expand[]
+        in: query
+        description: The id fields of the resources that are going to be expanded.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: limit
+        in: query
+        description: The amount of records shown in the list.
+        required: false
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: The page which is going to be shown.
+        required: false
+        schema:
+          type: integer
+      - name: order_by
+        in: query
+        description: The parameter by which the response is ordered.
+        required: false
+        schema:
+          type: string
+      - name: order_direction
+        in: query
+        description: The order direction by which the response is ordered.
+        required: false
+        schema:
+          type: string
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromotionCodeResponseWrapper'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      operationId: postPromotionCodes
+      summary: Create a promotion code
+      description: Requires the PROMOTION_CODE.CREATE permission.
+      tags:
+      - promotionCodes
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromotionCode'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PromotionCodeCreateRequest'
+  /v{version}/promotion-codes/{resourceIdOrReference}:
+    get:
+      operationId: getPromotionCodesByResourceIdOrReference
+      summary: Get a promotion code
+      description: Requires the PROMOTION_CODE.VIEW permission.
+      tags:
+      - promotionCodes
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceIdOrReference
+        in: path
+        description: The ID or reference of the resource.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: expand[]
+        in: query
+        description: The id fields of the resources that are going to be expanded.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromotionCode'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /v{version}/promotion-codes/{resourceIdOrReference}/redemptions:
+    get:
+      operationId: getPromotionCodesByResourceIdOrReferenceRedemptions
+      summary: Get a list of promotion code redemptions
+      description: Requires the PROMOTION_CODE.VIEW permission.
+      tags:
+      - promotionCodes
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceIdOrReference
+        in: path
+        description: The id of the promotion code or the code itself.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: customer_id
+        in: query
+        description: Filter by customer id.
+        required: false
+        schema:
+          type: string
+      - name: pricing_plan_subscription_id
+        in: query
+        description: Filter by pricing plan subscription id.
+        required: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: The amount of records shown in the list.
+        required: false
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: The page which is going to be shown.
+        required: false
+        schema:
+          type: integer
+      - name: order_by
+        in: query
+        description: The parameter by which the response is ordered.
+        required: false
+        schema:
+          type: string
+      - name: order_direction
+        in: query
+        description: The order direction by which the response is ordered.
+        required: false
+        schema:
+          type: string
+      - name: expand[]
+        in: query
+        description: The id fields of the resources that are going to be expanded.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CouponRedemptionResponseWrapper'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /v{version}/promotion-codes/{resourceIdOrReference}/activate:
+    post:
+      operationId: postPromotionCodesByResourceIdOrReferenceActivate
+      summary: Activate a promotion code
+      tags:
+      - promotionCodes
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceIdOrReference
+        in: path
+        description: The ID or reference of the resource.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromotionCode'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /v{version}/promotion-codes/{resourceIdOrReference}/deactivate:
+    post:
+      operationId: postPromotionCodesByResourceIdOrReferenceDeactivate
+      summary: Deactivate a promotion code
+      tags:
+      - promotionCodes
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceIdOrReference
+        in: path
+        description: The ID or reference of the resource.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromotionCode'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /v{version}/promotion-codes/{resourceIdOrReference}/deprecate:
+    post:
+      operationId: postPromotionCodesByResourceIdOrReferenceDeprecate
+      summary: Deprecate a promotion code
+      tags:
+      - promotionCodes
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceIdOrReference
+        in: path
+        description: The ID or reference of the resource.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromotionCode'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /v{version}/promotion-codes/{resourceIdOrReference}/archive:
+    post:
+      operationId: postPromotionCodesByResourceIdOrReferenceArchive
+      summary: Archive a promotion code
+      tags:
+      - promotionCodes
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceIdOrReference
+        in: path
+        description: The ID or reference of the resource.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PromotionCode'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+components:
+  schemas:
+    EInvoicingMapping:
+      type: object
+      properties:
+        target:
+          type: string
+          description: The target field for a UBL Invoice
+        source:
+          type:
+          - string
+          - 'null'
+          description: The source field from a Solvimon Invoice
+        description:
+          type:
+          - string
+          - 'null'
+          description: Optional description for the mapping
+      title: EInvoicingMapping
+    TaxIdValidationValid:
+      type: string
+      enum:
+      - VALID
+      - NOT_VALID
+      - UNKNOWN
+      title: TaxIdValidationValid
+    PromotionCodeResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PromotionCode'
+        limit:
+          type:
+          - integer
+          - 'null'
+        page:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      - links
+      title: PromotionCodeResponseWrapper
+    TaxIdValidation:
+      type: object
+      properties:
+        id:
+          type: string
+        validation_date:
+          type: string
+        source:
+          type: string
+        valid:
+          $ref: '#/components/schemas/TaxIdValidationValid'
+        message:
+          type:
+          - string
+          - 'null'
+      title: TaxIdValidation
+    AppliedCoupon:
+      type: object
+      properties:
+        id:
+          type: string
+        coupon_name:
+          type:
+          - string
+          - 'null'
+        promotion_code_resource_id:
+          type:
+          - string
+          - 'null'
+        promotion_code:
+          type:
+          - string
+          - 'null'
+        discount:
+          oneOf:
+          - $ref: '#/components/schemas/Discount'
+          - type: 'null'
+      title: AppliedCoupon
+    PricingItemConfigPricingType:
+      type: string
+      enum:
+      - FLAT
+      - FLAT_TOP_UP
+      - TIERED
+      - TIERED_TOP_UP
+      - TOP_TIERED
+      - STAIR_STEP
+      - STAIR_STEP_TOP_UP
+      - FIXED
+      - PASS_THROUGH
+      - NONE
+      title: PricingItemConfigPricingType
+    ConfiguredMeterValueIncludedVolume:
+      type: object
+      properties:
+        pricing_item_config_id:
+          type: string
+          description: Resource ID of type PRICING_ITEM_CONFIG
+        number:
+          type:
+          - string
+          - 'null'
+        amount:
+          $ref: '#/components/schemas/Amount'
+        start_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        end_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        reset_type:
+          type:
+          - string
+          - 'null'
+      title: ConfiguredMeterValueIncludedVolume
+    WalletTypeCreditCreditsGrant:
+      type: object
+      properties:
+        credit_type_id:
+          type: string
+          description: The credit type for wallets of wallet type.
+      title: WalletTypeCreditCreditsGrant
+    PricingPlanVersionSelectorType:
+      type: string
+      enum:
+      - LATEST
+      - VERSION
+      description: The type of the selector to determine pricing plan version (by default LATEST).
+      title: PricingPlanVersionSelectorType
+    MeterPropertyConditionComparator:
+      type: string
+      enum:
+      - EQUALS
+      - NOT_EQUALS
+      - IN
+      - NOT_IN
+      - GREATER_THAN
+      - GREATER_THAN_OR_EQUALS
+      - LESS_THAN
+      - LESS_THAN_OR_EQUALS
+      - EMPTY
+      - NOT_EMPTY
+      - CONTAINS
+      - NOT_CONTAINS
+      title: MeterPropertyConditionComparator
+    LinkedIntegration:
+      type: object
+      properties:
+        id:
+          type: string
+        link_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/LinkDetail'
+      title: LinkedIntegration
+    AdyenPaymentGatewayIntegrationOwnership:
+      type: string
+      enum:
+      - PLATFORM
+      - SYSTEM
+      title: AdyenPaymentGatewayIntegrationOwnership
+    IntegrationDetails:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+        payment_gateway_variant:
+          $ref: '#/components/schemas/IntegrationDetailsPaymentGatewayVariant'
+        adyen:
+          $ref: '#/components/schemas/AdyenIntegrationDetails'
+        stripe:
+          $ref: '#/components/schemas/StripeIntegrationDetails'
+      title: IntegrationDetails
+    WalletTypeCreditAmountGrantTaxCategory:
+      type: string
+      enum:
+      - STANDARD
+      - NO_TAX
+      - EXEMPT
+      description: The tax category to for what the wallet can be applied to.
+      title: WalletTypeCreditAmountGrantTaxCategory
+    BankAccountType:
+      type: string
+      enum:
+      - IBAN
+      - BIC_AND_ACCOUNT_NUMBER
+      - ACCOUNT_NUMBER_AND_BIC
+      - US_BANK_ACCOUNT
+      - US_LOCAL
+      - UK_LOCAL
+      - BR_LOCAL
+      - AR_LOCAL
+      - MX_LOCAL
+      description: Determines what fields should be present in the bank account node.
+      title: BankAccountType
+    PaymentGatewayPaymentAcceptor:
+      type: object
+      properties:
+        integration_id:
+          type: string
+          description: Resource ID of type INTEGRATION
+        integration:
+          oneOf:
+          - $ref: '#/components/schemas/Integration'
+          - type: 'null'
+        store_payment_method:
+          type:
+          - boolean
+          - 'null'
+        auto_charge_payment_method:
+          type:
+          - boolean
+          - 'null'
+        collection_type:
+          $ref: '#/components/schemas/PaymentGatewayPaymentAcceptorCollectionType'
+        link:
+          $ref: '#/components/schemas/PaymentGatewayPaymentAcceptorLink'
+        adyen:
+          $ref: '#/components/schemas/PaymentGatewayPaymentAcceptorAdyen'
+      title: PaymentGatewayPaymentAcceptor
+    PaymentAcceptorCustomRedirect:
+      type: object
+      properties:
+        url:
+          type:
+          - string
+          - 'null'
+      title: PaymentAcceptorCustomRedirect
+    MeterStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the meter indicating the activity of the meter and the ability to update properties.
+      title: MeterStatus
+    PricingPlanSubscriptionSelectorRuleType:
+      type: string
+      enum:
+      - EQUALS
+      - NOT_EQUALS
+      - IN
+      - NOT_IN
+      - GREATER_THAN
+      - GREATER_THAN_OR_EQUALS
+      - LESS_THAN
+      - LESS_THAN_OR_EQUALS
+      - EMPTY
+      - NOT_EMPTY
+      - CONTAINS
+      - NOT_CONTAINS
+      title: PricingPlanSubscriptionSelectorRuleType
+    Integration:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+          description: A custom reference assigned to the integration.
+        name:
+          type: string
+          description: A custom name assigned to the integration.
+        description:
+          type: string
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/IntegrationStatus'
+          - type: 'null'
+          description: The status of the integration.
+        message:
+          type:
+          - string
+          - 'null'
+          description: The message associated with the status of the integration.
+        type:
+          $ref: '#/components/schemas/IntegrationType'
+          description: The type of integration.
+        authentication:
+          $ref: '#/components/schemas/AuthenticationSettings'
+          description: The authentication information used for the integration
+        payment_gateway:
+          $ref: '#/components/schemas/PaymentGatewayIntegration'
+        e_invoicing:
+          $ref: '#/components/schemas/EInvoicingIntegration'
+          description: Integration to do eInvoicing
+        data_export:
+          $ref: '#/components/schemas/DataExportIntegration'
+        tax_calculation:
+          $ref: '#/components/schemas/TaxCalculationIntegration'
+          description: Integration to calculate tax
+        linked_resources_configurations:
+          type: array
+          items:
+            $ref: '#/components/schemas/IntegrationLinkedResourceConfiguration'
+          description: Details from the resources configurations from Solvimon linked to external integration system
+        email_provider:
+          $ref: '#/components/schemas/EmailProviderIntegration'
+          description: Email provider integration settings. Applicable when the integration type is EMAIL_PROVIDER.
+      title: Integration
+    PricingItemConfigWalletGrant:
+      type: object
+      properties:
+        wallet_type_id:
+          type: string
+          description: Resource ID of type WALLET_TYPE
+        wallet_type:
+          oneOf:
+          - $ref: '#/components/schemas/WalletType'
+          - type: 'null'
+        amount_grant:
+          $ref: '#/components/schemas/PricingItemConfigWalletGrantAmountGrant'
+        credits_grant:
+          $ref: '#/components/schemas/PricingItemConfigWalletGrantCreditsGrant'
+        expiry_policy:
+          $ref: '#/components/schemas/PricingItemConfigWalletGrantExpiryPolicy'
+      title: PricingItemConfigWalletGrant
+    PricingPlanSubscriptionSelectorDataField:
+      type: string
+      enum:
+      - BILLING_ENTITY_REGISTERED_ADDRESS_COUNTRY
+      - PRICING_PLAN_REFERENCE
+      title: PricingPlanSubscriptionSelectorDataField
+    PricingItemBillingPeriodConfig:
+      type: object
+      properties:
+        billing_period:
+          $ref: '#/components/schemas/Period'
+        configs:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingItemConfig'
+      title: PricingItemBillingPeriodConfig
+    PricingPlanSchedule:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/PricingPlanScheduleType'
+          - type: 'null'
+          description: The type of the pricing plan schedule.
+        pricing_plan_subscription_id:
+          type: string
+          description: Resource ID of type PRICING_PLAN_SUBSCRIPTION
+        pricing_plan_id:
+          type:
+          - string
+          - 'null'
+          description: The resource ID of the pricing plan.
+        pricing_plan_version_id:
+          type:
+          - string
+          - 'null'
+          description: The resource ID of the pricing plan version.
+        pricing_plan_version_selector:
+          $ref: '#/components/schemas/PricingPlanVersionSelector'
+          description: Instead of the pricing_plan_version_id, during creation, a selector can be submitted to determine the pricing plan version.
+        start_at:
+          type: string
+          format: date-time
+        end_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        pricing_currency:
+          oneOf:
+          - $ref: '#/components/schemas/PricingPlanSchedulePricingCurrency'
+          - type: 'null'
+          description: The default alphabetic currency code representing the type of currency used for the pricing.
+        billing_period:
+          $ref: '#/components/schemas/Period'
+        entitlements:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Entitlement'
+        discount:
+          $ref: '#/components/schemas/Discount'
+        markup:
+          $ref: '#/components/schemas/Markup'
+        commitment:
+          $ref: '#/components/schemas/Commitment'
+        promotion_codes:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        coupon_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        coupon_discount:
+          oneOf:
+          - $ref: '#/components/schemas/Discount'
+          - type: 'null'
+        coupons:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/AppliedCoupon'
+        seats_values:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ConfiguredMeterValue'
+        included_volumes:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ConfiguredMeterValueIncludedVolume'
+        enabled_pricings:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/EnabledPricing'
+        override_pricings:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Pricing'
+        pricing_categories:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingCategory'
+          description: Pricing defined directly on this schedule, in addition to (or instead of) a linked pricing plan version / rate-card.
+        combined_pricing_plan_version:
+          oneOf:
+          - $ref: '#/components/schemas/PricingPlanVersion'
+          - type: 'null'
+        realign_invoice_date_to_pricing_plan_schedule_start_at:
+          type:
+          - boolean
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+      title: PricingPlanSchedule
+    PricingPlanVersionSelector:
+      type: object
+      properties:
+        pricing_plan_id:
+          type:
+          - string
+          - 'null'
+          description: The ID of the pricing plan.
+        pricing_plan_reference:
+          type:
+          - string
+          - 'null'
+          description: Or the reference of the pricing plan.
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/PricingPlanVersionSelectorType'
+          - type: 'null'
+          description: The type of the selector to determine pricing plan version (by default LATEST).
+        version:
+          type:
+          - integer
+          - 'null'
+          description: The specific version of the pricing plan version, in case of type VERSION
+      title: PricingPlanVersionSelector
+    EInvoiceFileFormat:
+      type: object
+      properties:
+        type:
+          type:
+          - string
+          - 'null'
+          description: The format of the eInvoice that can be downloaded
+        description:
+          type:
+          - string
+          - 'null'
+      title: EInvoiceFileFormat
+    ProductStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the product.
+      title: ProductStatus
+    WalletTypeStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - INACTIVE
+      - DEPRECATED
+      - ARCHIVED
+      title: WalletTypeStatus
+    BigQuery:
+      type: object
+      properties:
+        project_id:
+          type: string
+        dataset_id:
+          type: string
+        dataset_location:
+          type: string
+        gcs_bucket_name:
+          type: string
+        gcs_hmac_key_access_id:
+          type: string
+        gcs_hmac_key_secret:
+          type: string
+      title: BigQuery
+    PricingItemConfigConditionsConfigsItems:
+      type: object
+      properties: {}
+      title: PricingItemConfigConditionsConfigsItems
+    TaxRegistration:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The id of this tax registration
+        description:
+          type:
+          - string
+          - 'null'
+          description: The description of this tax registration
+        tax_id:
+          type:
+          - string
+          - 'null'
+          description: The tax id of this tax registration, e.g. a TIN, VAT id or other tax number
+        tax_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaxId'
+          description: Tax IDs used for tax purposes of the tax registration, e.g. TINs, VAT ids, or other tax number
+        registration_number:
+          type:
+          - string
+          - 'null'
+          description: The registration number of this tax registration, e.g. a company registration number
+        registered_address:
+          $ref: '#/components/schemas/Address'
+          description: The address of this tax registration, if different from the billing entity. Currently, only the address will be used for tax calculations
+      title: TaxRegistration
+    PricingPlanSubscriptionSelector:
+      type: object
+      properties:
+        data:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorData'
+        rules:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorRule'
+        filters:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFilter'
+        fallback:
+          oneOf:
+          - $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFallback'
+          - type: 'null'
+          description: The fallback logic what to do when no subscription is found. By default it is LATEST
+      title: PricingPlanSubscriptionSelector
+    PricingPlanSubscriptionSelectorFilterField:
+      type: string
+      enum:
+      - BILLING_ENTITY_REGISTERED_ADDRESS_COUNTRY
+      - PRICING_PLAN_REFERENCE
+      title: PricingPlanSubscriptionSelectorFilterField
+    ProductItemModelType:
+      type: string
+      enum:
+      - USAGE_BASED
+      - USAGE_BASED_CONVERSION
+      - RECURRING
+      - ONE_OFF
+      - PER_SEAT
+      - CREDITS
+      title: ProductItemModelType
+    NextInvoice:
+      type: object
+      properties:
+        invoice_date:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        invoice_id:
+          type:
+          - string
+          - 'null'
+      title: NextInvoice
+    LegalEntityManagerDetails:
+      type: object
+      properties:
+        authentication:
+          $ref: '#/components/schemas/AuthenticationSettings'
+      title: LegalEntityManagerDetails
+    PricingPlanSubscriptionBillingTime:
+      type: string
+      enum:
+      - EXACT
+      - CALENDAR
+      description: The moment the invoices for the subscription should be created. If not set, the default platform value will be taken.
+      title: PricingPlanSubscriptionBillingTime
+    S3:
+      type: object
+      properties:
+        bucket_name:
+          type: string
+        bucket_path:
+          type: string
+        bucket_region:
+          type: string
+        authentication_type:
+          oneOf:
+          - $ref: '#/components/schemas/S3AuthenticationType'
+          - type: 'null'
+        role_arn:
+          type:
+          - string
+          - 'null'
+        external_id:
+          type:
+          - string
+          - 'null'
+      title: S3
+    PricingItemConfigWalletGrantCreditsGrant:
+      type: object
+      properties:
+        credits:
+          $ref: '#/components/schemas/Credits'
+        conversion:
+          type:
+          - string
+          - 'null'
+      title: PricingItemConfigWalletGrantCreditsGrant
+    ProductItemCredits:
+      type: object
+      properties:
+        credit_type_id:
+          type:
+          - string
+          - 'null'
+          description: The linked meter value calculation
+        credit_type:
+          oneOf:
+          - $ref: '#/components/schemas/CreditType'
+          - type: 'null'
+      title: ProductItemCredits
+    CouponRedemption:
+      type: object
+      properties:
+        coupon_id:
+          type:
+          - string
+          - 'null'
+        promotion_code_details:
+          oneOf:
+          - $ref: '#/components/schemas/PromotionCodeDetails'
+          - type: 'null'
+        redeemed_at:
+          type:
+          - string
+          - 'null'
+        customer_id:
+          type:
+          - string
+          - 'null'
+        customer:
+          oneOf:
+          - $ref: '#/components/schemas/Customer'
+          - type: 'null'
+        pricing_plan_subscription_id:
+          type:
+          - string
+          - 'null'
+        pricing_plan_subscription:
+          oneOf:
+          - $ref: '#/components/schemas/PricingPlanSubscription'
+          - type: 'null'
+      title: CouponRedemption
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    MailgunEmailProvider:
+      type: object
+      properties:
+        domain:
+          type: string
+          description: Mailgun sending domain used for this email provider integration.
+        region:
+          oneOf:
+          - $ref: '#/components/schemas/MailgunEmailProviderRegion'
+          - type: 'null'
+          description: Mailgun region for the configured domain.
+        plan:
+          type:
+          - string
+          - 'null'
+          description: Optional Mailgun plan stored with the integration.
+      title: MailgunEmailProvider
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    StripePaymentGatewayIntegration:
+      type: object
+      properties:
+        public_key:
+          type: string
+        signing_secret:
+          type:
+          - string
+          - 'null'
+      title: StripePaymentGatewayIntegration
+    BRLocal:
+      type: object
+      properties:
+        branch:
+          type:
+          - string
+          - 'null'
+          description: Identifier of the bank branch (agência)
+        account_number:
+          type:
+          - string
+          - 'null'
+          description: A bank account number if IBAN is not used, in Brazil known as a conta
+        bic:
+          type:
+          - string
+          - 'null'
+          description: The ISO 9362 Business Identifier Code (BIC) of the bank account
+      title: BRLocal
+    CouponRedemptionResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CouponRedemption'
+        limit:
+          type:
+          - integer
+          - 'null'
+        page:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      - links
+      title: CouponRedemptionResponseWrapper
+    PricingItemConfigCommitment:
+      type: object
+      properties:
+        ids:
+          type: array
+          items:
+            type: string
+          description: List of resource IDs each referencing an pricing item configuration.
+        meter_value_calculation:
+          $ref: '#/components/schemas/MeterValueCalculationCommitment'
+          description: When the implicit link to a product item offers a connection to a meter value calculation a commitment of either count or number can be set.
+        start_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: Moment the invoice commitment starts, this is greater or equal to the start of the schedule
+        end_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: Moment the invoice commitment ends, this is before the end of the schedule
+        amount:
+          $ref: '#/components/schemas/Amount'
+          description: The minimum amount that will be set on the invoice for this commitment, either an amount or meter_value_calculation is set.
+      title: PricingItemConfigCommitment
+    PricingPlanSubscriptionSelectorRule:
+      type: object
+      properties:
+        field:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorRuleField'
+        type:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorRuleType'
+      title: PricingPlanSubscriptionSelectorRule
+    CreditType:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/CreditTypeStatus'
+          - type: 'null'
+        name:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        unit_name:
+          $ref: '#/components/schemas/UnitName'
+        created_at:
+          type:
+          - string
+          - 'null'
+        updated_at:
+          type:
+          - string
+          - 'null'
+      title: CreditType
+    PricingItemConfigType:
+      type: string
+      enum:
+      - FLAT
+      - FLAT_TOP_UP
+      - TIERED
+      - TIERED_TOP_UP
+      - TOP_TIERED
+      - STAIR_STEP
+      - STAIR_STEP_TOP_UP
+      - FIXED
+      - PASS_THROUGH
+      - NONE
+      title: PricingItemConfigType
+    PricingGroup:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        pricing_plan_version_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type PRICING_PLAN_VERSION
+        pricing_plan_schedule_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type PRICING_PLAN_SCHEDULE
+        name:
+          type:
+          - string
+          - 'null'
+        product_type:
+          oneOf:
+          - $ref: '#/components/schemas/PricingGroupProductType'
+          - type: 'null'
+        selection_constraint:
+          oneOf:
+          - $ref: '#/components/schemas/PricingGroupSelectionConstraint'
+          - type: 'null'
+        display_order:
+          type:
+          - integer
+          - 'null'
+        pricings:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Pricing'
+      title: PricingGroup
+    PromotionCode:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        code_format:
+          type: string
+        code:
+          type: string
+        coupon_id:
+          type: string
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/PromotionCodeStatus'
+          - type: 'null'
+        limited_to:
+          $ref: '#/components/schemas/PromotionCodeLimitedTo'
+        start_at:
+          type:
+          - string
+          - 'null'
+        end_at:
+          type:
+          - string
+          - 'null'
+        maximum_redemptions:
+          type:
+          - integer
+          - 'null'
+        number_of_redemptions:
+          type:
+          - integer
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        updated_at:
+          type:
+          - string
+          - 'null'
+      title: PromotionCode
+    PricingItemConfigDetailsPricingType:
+      type: string
+      enum:
+      - FLAT
+      - FLAT_TOP_UP
+      - TIERED
+      - TIERED_TOP_UP
+      - TOP_TIERED
+      - STAIR_STEP
+      - STAIR_STEP_TOP_UP
+      - FIXED
+      - PASS_THROUGH
+      - NONE
+      title: PricingItemConfigDetailsPricingType
+    BillingEntityDefaultBillingCurrencySelectorItems:
+      type: string
+      enum:
+      - AED
+      - AFN
+      - ALL
+      - AMD
+      - ANG
+      - AOA
+      - ARS
+      - AUD
+      - AWG
+      - AZN
+      - BAM
+      - BBD
+      - BDT
+      - BGN
+      - BHD
+      - BIF
+      - BMD
+      - BND
+      - BOB
+      - BRL
+      - BSD
+      - BTN
+      - BWP
+      - BYN
+      - BZD
+      - CAD
+      - CDF
+      - CHF
+      - CLF
+      - CLP
+      - CNY
+      - COP
+      - CRC
+      - CUC
+      - CUP
+      - CVE
+      - CZK
+      - DJF
+      - DKK
+      - DOP
+      - DZD
+      - EGP
+      - ERN
+      - ETB
+      - EUR
+      - FJD
+      - FKP
+      - GBP
+      - GEL
+      - GHS
+      - GIP
+      - GMD
+      - GNF
+      - GTQ
+      - GYD
+      - HKD
+      - HNL
+      - HRK
+      - HTG
+      - HUF
+      - IDR
+      - ILS
+      - INR
+      - IQD
+      - IRR
+      - ISK
+      - JMD
+      - JOD
+      - JPY
+      - KES
+      - KGS
+      - KHR
+      - KMF
+      - KPW
+      - KRW
+      - KWD
+      - KYD
+      - KZT
+      - LAK
+      - LBP
+      - LKR
+      - LRD
+      - LSL
+      - LYD
+      - MAD
+      - MDL
+      - MGA
+      - MKD
+      - MMK
+      - MNT
+      - MOP
+      - MRO
+      - MRU
+      - MUR
+      - MVR
+      - MWK
+      - MXN
+      - MXV
+      - MYR
+      - MZN
+      - NAD
+      - NGN
+      - NIO
+      - NOK
+      - NPR
+      - NZD
+      - OMR
+      - PAB
+      - PEN
+      - PGK
+      - PHP
+      - PKR
+      - PLN
+      - PYG
+      - QAR
+      - RON
+      - RSD
+      - RUB
+      - RWF
+      - SAR
+      - SBD
+      - SCR
+      - SDG
+      - SEK
+      - SGD
+      - SHP
+      - SLE
+      - SOS
+      - SRD
+      - SSP
+      - STN
+      - SVC
+      - SYP
+      - SZL
+      - THB
+      - TJS
+      - TMT
+      - TND
+      - TOP
+      - TRY
+      - TTD
+      - TWD
+      - TZS
+      - UAH
+      - UGX
+      - USD
+      - USN
+      - UYI
+      - UYU
+      - UZS
+      - VEF
+      - VES
+      - VND
+      - VUV
+      - WST
+      - XAF
+      - XAG
+      - XAU
+      - XBA
+      - XBB
+      - XBC
+      - XBD
+      - XCD
+      - XDR
+      - XOF
+      - XPD
+      - XPF
+      - XPT
+      - XSU
+      - XTS
+      - XUA
+      - XXX
+      - YER
+      - ZAR
+      - ZMW
+      - ZWL
+      title: BillingEntityDefaultBillingCurrencySelectorItems
+    PricingItemPricingCurrencyConfigCurrency:
+      type: string
+      enum:
+      - AED
+      - AFN
+      - ALL
+      - AMD
+      - ANG
+      - AOA
+      - ARS
+      - AUD
+      - AWG
+      - AZN
+      - BAM
+      - BBD
+      - BDT
+      - BGN
+      - BHD
+      - BIF
+      - BMD
+      - BND
+      - BOB
+      - BRL
+      - BSD
+      - BTN
+      - BWP
+      - BYN
+      - BZD
+      - CAD
+      - CDF
+      - CHF
+      - CLF
+      - CLP
+      - CNY
+      - COP
+      - CRC
+      - CUC
+      - CUP
+      - CVE
+      - CZK
+      - DJF
+      - DKK
+      - DOP
+      - DZD
+      - EGP
+      - ERN
+      - ETB
+      - EUR
+      - FJD
+      - FKP
+      - GBP
+      - GEL
+      - GHS
+      - GIP
+      - GMD
+      - GNF
+      - GTQ
+      - GYD
+      - HKD
+      - HNL
+      - HRK
+      - HTG
+      - HUF
+      - IDR
+      - ILS
+      - INR
+      - IQD
+      - IRR
+      - ISK
+      - JMD
+      - JOD
+      - JPY
+      - KES
+      - KGS
+      - KHR
+      - KMF
+      - KPW
+      - KRW
+      - KWD
+      - KYD
+      - KZT
+      - LAK
+      - LBP
+      - LKR
+      - LRD
+      - LSL
+      - LYD
+      - MAD
+      - MDL
+      - MGA
+      - MKD
+      - MMK
+      - MNT
+      - MOP
+      - MRO
+      - MRU
+      - MUR
+      - MVR
+      - MWK
+      - MXN
+      - MXV
+      - MYR
+      - MZN
+      - NAD
+      - NGN
+      - NIO
+      - NOK
+      - NPR
+      - NZD
+      - OMR
+      - PAB
+      - PEN
+      - PGK
+      - PHP
+      - PKR
+      - PLN
+      - PYG
+      - QAR
+      - RON
+      - RSD
+      - RUB
+      - RWF
+      - SAR
+      - SBD
+      - SCR
+      - SDG
+      - SEK
+      - SGD
+      - SHP
+      - SLE
+      - SOS
+      - SRD
+      - SSP
+      - STN
+      - SVC
+      - SYP
+      - SZL
+      - THB
+      - TJS
+      - TMT
+      - TND
+      - TOP
+      - TRY
+      - TTD
+      - TWD
+      - TZS
+      - UAH
+      - UGX
+      - USD
+      - USN
+      - UYI
+      - UYU
+      - UZS
+      - VEF
+      - VES
+      - VND
+      - VUV
+      - WST
+      - XAF
+      - XAG
+      - XAU
+      - XBA
+      - XBB
+      - XBC
+      - XBD
+      - XCD
+      - XDR
+      - XOF
+      - XPD
+      - XPF
+      - XPT
+      - XSU
+      - XTS
+      - XUA
+      - XXX
+      - YER
+      - ZAR
+      - ZMW
+      - ZWL
+      title: PricingItemPricingCurrencyConfigCurrency
+    PricingPlanSubscriptionVariant:
+      type: string
+      enum:
+      - DEFAULT
+      - FORWARD_BILLING
+      - SELF_BILLING
+      - SELLER
+      title: PricingPlanSubscriptionVariant
+    ProductTaxCategory:
+      type: string
+      enum:
+      - STANDARD
+      - NO_TAX
+      - EXEMPT
+      description: The default tax category applied to the product.
+      title: ProductTaxCategory
+    Product:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        category_id:
+          type: string
+          description: The resource ID of the product category, that belongs to the product.
+        category:
+          oneOf:
+          - $ref: '#/components/schemas/ProductCategory'
+          - type: 'null'
+        parent_product_id:
+          type:
+          - string
+          - 'null'
+          description: The resource ID of the original product, to which the product will belong to.
+        name:
+          type: string
+        reference:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/ProductStatus'
+          - type: 'null'
+          description: The status of the product.
+        product_type:
+          $ref: '#/components/schemas/ProductProductType'
+        tax_category:
+          oneOf:
+          - $ref: '#/components/schemas/ProductTaxCategory'
+          - type: 'null'
+          description: The default tax category applied to the product.
+        features:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FeatureResourceReference'
+          description: The features associated with the product.
+        custom_fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomFieldValue'
+        display_order:
+          type:
+          - integer
+          - 'null'
+          description: Determines the order in which products are displayed on overview pages and invoices. The lowest number gets the highest priority.
+        linked_integrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/LinkedIntegration'
+        billing_entity_id:
+          type:
+          - string
+          - 'null'
+          description: The resource ID of the billing entity linked to this product.
+        customer_id:
+          type:
+          - string
+          - 'null'
+      title: Product
+    PricingItemConfigBand:
+      type: object
+      properties:
+        amount:
+          $ref: '#/components/schemas/Amount'
+        percentage:
+          type:
+          - string
+          - 'null'
+        credits:
+          $ref: '#/components/schemas/Credits'
+        fixed_amount:
+          $ref: '#/components/schemas/Amount'
+        maximum_amount:
+          $ref: '#/components/schemas/Amount'
+        minimum_amount:
+          $ref: '#/components/schemas/Amount'
+        maximum_number:
+          type:
+          - string
+          - 'null'
+        minimum_number:
+          type:
+          - string
+          - 'null'
+        block_size:
+          $ref: '#/components/schemas/PricingItemConfigMeterValue'
+        tier_top_bound:
+          $ref: '#/components/schemas/PricingItemConfigMeterValue'
+      title: PricingItemConfigBand
+    PricingItemConfigOriginalPricingItemConfig:
+      type: object
+      properties: {}
+      description: This property creates a circular reference in the `PricingItemConfig` schema. If you experience any issues with OpenAPI tools related to these circular references, you can try removing this property from the specification.
+      title: PricingItemConfigOriginalPricingItemConfig
+    PricingPlanSubscriptionSelectorFallback:
+      type: string
+      enum:
+      - LATEST
+      - NONE
+      description: The fallback logic what to do when no subscription is found. By default it is LATEST
+      title: PricingPlanSubscriptionSelectorFallback
+    PricingDiscount:
+      type: object
+      properties:
+        ids:
+          type: array
+          items:
+            type: string
+          description: Resource ID of type PRICING
+        start_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        end_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        amount:
+          $ref: '#/components/schemas/Amount'
+        percentage:
+          type:
+          - string
+          - 'null'
+        condition:
+          $ref: '#/components/schemas/DiscountCondition'
+      title: PricingDiscount
+    PricingItemConfigSplitPricing:
+      type: object
+      properties:
+        meter_properties:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/MeterPropertySplitPricing'
+      title: PricingItemConfigSplitPricing
+    NotificationChannelType:
+      type: string
+      enum:
+      - EMAIL
+      description: The channel type to use.
+      title: NotificationChannelType
+    ProductCategoryTaxCategory:
+      type: string
+      enum:
+      - STANDARD
+      - NO_TAX
+      - EXEMPT
+      description: The default tax category applied to the products in the product category.
+      title: ProductCategoryTaxCategory
+    PaymentAcceptorStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      title: PaymentAcceptorStatus
+    MailgunEmailProviderRegion:
+      type: string
+      enum:
+      - US
+      - EU
+      description: Mailgun region for the configured domain.
+      title: MailgunEmailProviderRegion
+    CustomTaxCodeField:
+      type: string
+      enum:
+      - INVOICE_COMMITMENT
+      - PRODUCT_FALLBACK
+      description: The field to use a custom code for
+      title: CustomTaxCodeField
+    UsLocalAccountType:
+      type: string
+      enum:
+      - CHECKING
+      - SAVINGS
+      description: The bank account type.
+      title: UsLocalAccountType
+    MeterValueCalculationCommitment:
+      type: object
+      properties:
+        number:
+          type:
+          - string
+          - 'null'
+          description: The minimum number of events that are to be invoiced.
+        amount:
+          $ref: '#/components/schemas/Amount'
+          description: The minimum amount to be invoiced.
+      title: MeterValueCalculationCommitment
+    ClientCredentials:
+      type: object
+      properties:
+        client_id:
+          type: string
+        client_secret:
+          type: string
+      title: ClientCredentials
+    TemplatePricingPlanSubscriptionAllowPromotionCodes:
+      type: string
+      enum:
+      - NONE
+      - SINGLE
+      title: TemplatePricingPlanSubscriptionAllowPromotionCodes
+    CustomFieldValue:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOM_FIELD
+        reference:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+        values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        integration_details:
+          oneOf:
+          - $ref: '#/components/schemas/IntegrationDetails'
+          - type: 'null'
+        integration_id:
+          type: string
+          description: The resource ID of the integration linked to the custom field
+      title: CustomFieldValue
+    TotalDiscount:
+      type: object
+      properties:
+        start_at:
+          type:
+          - string
+          - 'null'
+        end_at:
+          type:
+          - string
+          - 'null'
+        amount:
+          $ref: '#/components/schemas/Amount'
+        percentage:
+          type:
+          - string
+          - 'null'
+        coupon_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type COUPON
+        promotion_code_details:
+          oneOf:
+          - $ref: '#/components/schemas/PromotionCodeDetails'
+          - type: 'null'
+        condition:
+          $ref: '#/components/schemas/DiscountCondition'
+      title: TotalDiscount
+    PricingPlanSubscriptionSelectorRuleField:
+      type: string
+      enum:
+      - BILLING_ENTITY_REGISTERED_ADDRESS_COUNTRY
+      - PRICING_PLAN_REFERENCE
+      title: PricingPlanSubscriptionSelectorRuleField
+    SelectionRuleType:
+      type: string
+      enum:
+      - RESOURCE
+      title: SelectionRuleType
+    PromotionCodeLimitedTo:
+      type: object
+      properties:
+        customer_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        customers:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Customer'
+      title: PromotionCodeLimitedTo
+    PricingPlanSubscriptionBillingCurrency:
+      type: string
+      enum:
+      - AED
+      - AFN
+      - ALL
+      - AMD
+      - ANG
+      - AOA
+      - ARS
+      - AUD
+      - AWG
+      - AZN
+      - BAM
+      - BBD
+      - BDT
+      - BGN
+      - BHD
+      - BIF
+      - BMD
+      - BND
+      - BOB
+      - BRL
+      - BSD
+      - BTN
+      - BWP
+      - BYN
+      - BZD
+      - CAD
+      - CDF
+      - CHF
+      - CLF
+      - CLP
+      - CNY
+      - COP
+      - CRC
+      - CUC
+      - CUP
+      - CVE
+      - CZK
+      - DJF
+      - DKK
+      - DOP
+      - DZD
+      - EGP
+      - ERN
+      - ETB
+      - EUR
+      - FJD
+      - FKP
+      - GBP
+      - GEL
+      - GHS
+      - GIP
+      - GMD
+      - GNF
+      - GTQ
+      - GYD
+      - HKD
+      - HNL
+      - HRK
+      - HTG
+      - HUF
+      - IDR
+      - ILS
+      - INR
+      - IQD
+      - IRR
+      - ISK
+      - JMD
+      - JOD
+      - JPY
+      - KES
+      - KGS
+      - KHR
+      - KMF
+      - KPW
+      - KRW
+      - KWD
+      - KYD
+      - KZT
+      - LAK
+      - LBP
+      - LKR
+      - LRD
+      - LSL
+      - LYD
+      - MAD
+      - MDL
+      - MGA
+      - MKD
+      - MMK
+      - MNT
+      - MOP
+      - MRO
+      - MRU
+      - MUR
+      - MVR
+      - MWK
+      - MXN
+      - MXV
+      - MYR
+      - MZN
+      - NAD
+      - NGN
+      - NIO
+      - NOK
+      - NPR
+      - NZD
+      - OMR
+      - PAB
+      - PEN
+      - PGK
+      - PHP
+      - PKR
+      - PLN
+      - PYG
+      - QAR
+      - RON
+      - RSD
+      - RUB
+      - RWF
+      - SAR
+      - SBD
+      - SCR
+      - SDG
+      - SEK
+      - SGD
+      - SHP
+      - SLE
+      - SOS
+      - SRD
+      - SSP
+      - STN
+      - SVC
+      - SYP
+      - SZL
+      - THB
+      - TJS
+      - TMT
+      - TND
+      - TOP
+      - TRY
+      - TTD
+      - TWD
+      - TZS
+      - UAH
+      - UGX
+      - USD
+      - USN
+      - UYI
+      - UYU
+      - UZS
+      - VEF
+      - VES
+      - VND
+      - VUV
+      - WST
+      - XAF
+      - XAG
+      - XAU
+      - XBA
+      - XBB
+      - XBC
+      - XBD
+      - XCD
+      - XDR
+      - XOF
+      - XPD
+      - XPF
+      - XPT
+      - XSU
+      - XTS
+      - XUA
+      - XXX
+      - YER
+      - ZAR
+      - ZMW
+      - ZWL
+      description: The alphabetic currency code representing the type of currency used for billing. If not set, the default (platform) value will be taken.
+      title: PricingPlanSubscriptionBillingCurrency
+    DueDate:
+      type: object
+      properties:
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/DueDateType'
+          - type: 'null'
+        period:
+          $ref: '#/components/schemas/Period'
+      title: DueDate
+    WalletType:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        name:
+          type: string
+        reference:
+          type: string
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/WalletTypeStatus'
+          - type: 'null'
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/WalletTypeType'
+          - type: 'null'
+        credit:
+          $ref: '#/components/schemas/WalletTypeCredit'
+        balance:
+          $ref: '#/components/schemas/WalletTypeBalance'
+        created_at:
+          type:
+          - string
+          - 'null'
+        updated_at:
+          type:
+          - string
+          - 'null'
+      title: WalletType
+    SelectionRule:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/SelectionRuleType'
+        resource:
+          $ref: '#/components/schemas/SelectionRuleResource'
+      title: SelectionRule
+    Individual:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/Name'
+        residential_address:
+          $ref: '#/components/schemas/Address'
+      title: Individual
+    MeterPropertySplitPricing:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type METER_PROPERTY
+        reference:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+        meter_property:
+          oneOf:
+          - $ref: '#/components/schemas/MeterProperty'
+          - type: 'null'
+      title: MeterPropertySplitPricing
+    TaxCalculationIntegration:
+      type: object
+      properties:
+        billing_entity_id:
+          type: string
+          description: The id of the billing entity for which this integration is used
+        variant:
+          $ref: '#/components/schemas/TaxCalculationIntegrationVariant'
+          description: The variant that provides the tax calculation
+        ava_tax:
+          $ref: '#/components/schemas/AvaTaxCalculationIntegration'
+          description: Details for an AvaTax integration
+        custom_tax_codes:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomTaxCode'
+          description: 'Optional: custom codes that are used to link specific taxes to the tax calculation (e.g. commitments, missing product codes, etc.)'
+        enable_tax_filing:
+          type: boolean
+          description: Determines whether invoices will be sent to the tax integration, or just calculations
+      title: TaxCalculationIntegration
+    PricingProductType:
+      type: string
+      enum:
+      - DEFAULT
+      - ADDON
+      title: PricingProductType
+    CustomerType:
+      type: string
+      enum:
+      - ORGANIZATION
+      - INDIVIDUAL
+      description: The type of customer entity.
+      title: CustomerType
+    InactivePeriodType:
+      type: string
+      enum:
+      - CANCEL
+      - UPGRADE
+      title: InactivePeriodType
+    USLocal:
+      type: object
+      properties:
+        account_number:
+          type:
+          - string
+          - 'null'
+          description: A bank account number if IBAN is not used, e.g a USA or UK bank account number
+        account_type:
+          oneOf:
+          - $ref: '#/components/schemas/UsLocalAccountType'
+          - type: 'null'
+          description: The bank account type.
+        bank_code:
+          type:
+          - string
+          - 'null'
+          description: A bank code that's used to identify the bank that this account belongs to
+        routing_number:
+          type:
+          - string
+          - 'null'
+          description: The 9-digit code that identifies a specific financial institution for transactions in the USA.
+      title: USLocal
+    PeriodType:
+      type: string
+      enum:
+      - DAY
+      - WEEK
+      - MONTH
+      - YEAR
+      title: PeriodType
+    CustomerRolesItems:
+      type: string
+      enum:
+      - DEFAULT
+      - NON_PROCESSING
+      - SELF_BILLING
+      - SELLER
+      - PROCESSING_ONLY
+      title: CustomerRolesItems
+    PricingOverride:
+      type: string
+      enum:
+      - ALL
+      - SPECIFIC
+      title: PricingOverride
+    ConfiguredMeterValue:
+      type: object
+      properties:
+        pricing_item_config_id:
+          type: string
+          description: Resource ID of type PRICING_ITEM_CONFIG
+        number:
+          type:
+          - string
+          - 'null'
+        amount:
+          $ref: '#/components/schemas/Amount'
+        start_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        set_start_at_to_now:
+          type:
+          - boolean
+          - 'null'
+        end_at:
+          type:
+          - string
+          - 'null'
+      title: ConfiguredMeterValue
+    EInvoicingConditionGroup:
+      type: object
+      properties:
+        conditions:
+          type: array
+          items:
+            $ref: '#/components/schemas/EInvoicingCondition'
+          description: Conditions that determine whether this conditionGroup matches the invoice. All conditions need to match for the group to match
+      title: EInvoicingConditionGroup
+    UKLocal:
+      type: object
+      properties:
+        account_number:
+          type:
+          - string
+          - 'null'
+          description: A bank account number if IBAN is not used, e.g a USA or UK bank account number
+        sort_code:
+          type:
+          - string
+          - 'null'
+      title: UKLocal
+    DiscountCondition:
+      type: object
+      properties:
+        comparator:
+          $ref: '#/components/schemas/DiscountConditionComparator'
+        value:
+          $ref: '#/components/schemas/DiscountConditionValue'
+      title: DiscountCondition
+    IntegrationDetailsPaymentGatewayVariant:
+      type: string
+      enum:
+      - ADYEN
+      - STRIPE
+      title: IntegrationDetailsPaymentGatewayVariant
+    AdyenAutoRescue:
+      type: object
+      properties:
+        enabled:
+          type:
+          - boolean
+          - 'null'
+        period:
+          $ref: '#/components/schemas/Period'
+      title: AdyenAutoRescue
+    MeterProperty:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        status:
+          $ref: '#/components/schemas/MeterPropertyStatus'
+          description: The status of the meter property indicating the activity and the ability to update properties.
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/MeterPropertyType'
+          - type: 'null'
+          description: The type of the meter property.
+        enum_values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: The list of available ENUM values.
+      title: MeterProperty
+    Meter:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/MeterStatus'
+          - type: 'null'
+          description: The status of the meter indicating the activity of the meter and the ability to update properties.
+        meter_values:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/MeterMeterValue'
+          description: The values used as input to calculate billable units, used in the meter.
+        meter_properties:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/MeterMeterProperty'
+          description: The properties that provide information to give context to an event, used in the meter.
+      title: Meter
+    CreditTypeStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - INACTIVE
+      - DEPRECATED
+      - ARCHIVED
+      title: CreditTypeStatus
+    PricingPlanScheduleType:
+      type: string
+      enum:
+      - TRIAL
+      - DEFAULT
+      description: The type of the pricing plan schedule.
+      title: PricingPlanScheduleType
+    IntegrationLinkedResourceConfiguration:
+      type: object
+      properties:
+        resource_type:
+          type: string
+        link_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/IntegrationLinkDetail'
+      title: IntegrationLinkedResourceConfiguration
+    Snowflake:
+      type: object
+      properties:
+        host:
+          type:
+          - string
+          - 'null'
+        role:
+          type:
+          - string
+          - 'null'
+        warehouse:
+          type:
+          - string
+          - 'null'
+        database:
+          type:
+          - string
+          - 'null'
+        schema:
+          type:
+          - string
+          - 'null'
+      title: Snowflake
+    BankAccountAccountType:
+      type: string
+      enum:
+      - CHECKING
+      - SAVINGS
+      description: The bank account type.
+      title: BankAccountAccountType
+    UnitName:
+      type: object
+      properties:
+        singular:
+          type: string
+        plural:
+          type:
+          - string
+          - 'null'
+      title: UnitName
+    EmailProviderIntegration:
+      type: object
+      properties:
+        variant:
+          $ref: '#/components/schemas/EmailProviderIntegrationVariant'
+          description: The variant of email provider integration.
+        mailgun:
+          $ref: '#/components/schemas/MailgunEmailProvider'
+          description: Mailgun-specific provider settings. Applicable when variant is MAILGUN.
+        delivery_window:
+          $ref: '#/components/schemas/Period'
+          description: Optional delivery window configuration that limits when outbound emails may be sent.
+        use_localized_templates:
+          type:
+          - boolean
+          - 'null'
+          description: Whether localized email templates should be selected based on customer or request locale when available.
+      title: EmailProviderIntegration
+    PricingItemConfigWalletGrantExpiryPolicy:
+      type: object
+      properties:
+        expiry_period:
+          $ref: '#/components/schemas/Period'
+      title: PricingItemConfigWalletGrantExpiryPolicy
+    WalletTypeCreditGrantType:
+      type: string
+      enum:
+      - CREDITS
+      - AMOUNT
+      title: WalletTypeCreditGrantType
+    DiscountConditionValue:
+      type: object
+      properties:
+        amount:
+          $ref: '#/components/schemas/Amount'
+      title: DiscountConditionValue
+    Feature:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/FeatureType'
+          - type: 'null'
+          description: The indication of the type of feature associated with the pricing plan.
+        enum_values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: If the feature type is ENUM, these fields provide additional information on the values used.
+        meter_value_calculation_id:
+          type:
+          - string
+          - 'null'
+          description: The linked meter value calculation
+        meter_value_calculation:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueCalculation'
+          - type: 'null'
+      title: Feature
+    MeterConditions:
+      type: object
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+        meter_properties:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/MeterPropertyCondition'
+        expression:
+          $ref: '#/components/schemas/MeterConditionExpression'
+      title: MeterConditions
+    MeterMeterProperty:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type METER_PROPERTY
+        object:
+          oneOf:
+          - $ref: '#/components/schemas/MeterProperty'
+          - type: 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+        required:
+          type:
+          - boolean
+          - 'null'
+      title: MeterMeterProperty
+    PricingItemConfigMarkup:
+      type: object
+      properties:
+        ids:
+          type: array
+          items:
+            type: string
+          description: Resource ID of type PRICING_ITEM_CONFIG
+        start_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        end_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        amount:
+          $ref: '#/components/schemas/Amount'
+        percentage:
+          type:
+          - string
+          - 'null'
+      title: PricingItemConfigMarkup
+    AdyenIntegrationDetails:
+      type: object
+      properties:
+        recurring_detail_reference:
+          type: string
+      title: AdyenIntegrationDetails
+    EInvoicingIntegrationProcessor:
+      type: string
+      enum:
+      - AVALARA
+      title: EInvoicingIntegrationProcessor
+    AccountNumberAndBic:
+      type: object
+      properties:
+        account_number:
+          type:
+          - string
+          - 'null'
+          description: A bank account number if IBAN is not used, e.g a USA or UK bank account number
+        bank_code:
+          type:
+          - string
+          - 'null'
+          description: A bank code that's used to identify the bank that this account belongs to
+        bic:
+          type:
+          - string
+          - 'null'
+          description: The ISO 9362 Business Identifier Code (BIC) of the bank account
+      title: AccountNumberAndBic
+    DataExportIntegrationVariant:
+      type: string
+      enum:
+      - S3
+      - BIGQUERY
+      - GCS
+      - SNOWFLAKE
+      description: The variant of payment integration.
+      title: DataExportIntegrationVariant
+    SelectionRuleResourceType:
+      type: string
+      enum:
+      - PLATFORM
+      - CUSTOMER
+      - BILLING_ENTITY
+      - METER
+      - METER_VALUE
+      - METER_PROPERTY
+      - METER_VALUE_CALCULATION
+      - PRODUCT
+      - PRODUCT_ITEM
+      - PRODUCT_CATEGORY
+      - PRICING
+      - PRICING_ITEM
+      - PRICING_ITEM_CONFIG
+      - PRICING_ITEM_SUMMARY
+      - METER_VALUE_CALCULATION_SUMMARY
+      - PRICING_PLAN
+      - PRICING_PLAN_VERSION
+      - PRICING_PLAN_SUBSCRIPTION
+      - PRICING_PLAN_SCHEDULE
+      - QUOTE
+      - QUOTE_VERSION
+      - CONTACT
+      - CUSTOM_FIELD
+      - REQUEST_REFERENCE
+      - METER_DATA
+      - CHARGE_DATA
+      - ADJUSTMENT_DATA
+      - PERSIST_DATA
+      - INVOICE
+      - INVOICE_PAYMENT_ATTEMPT
+      - PAYMENT_ACCEPTOR
+      - PAYMENT_SCHEDULE
+      - PAYMENT_REQUEST
+      - FEATURE
+      - ALERT_RULE
+      - ALERT
+      - USER
+      - MEMBERSHIP
+      - TEAM
+      - ENTITY
+      - ACCOUNT_GROUP
+      - AUDIT
+      - WEBHOOK
+      - REPORT_SUBSCRIPTION
+      - REPORT_CONFIGURATION
+      title: SelectionRuleResourceType
+    DataExportIntegration:
+      type: object
+      properties:
+        variant:
+          $ref: '#/components/schemas/DataExportIntegrationVariant'
+          description: The variant of payment integration.
+        s3:
+          $ref: '#/components/schemas/S3'
+        bigquery:
+          $ref: '#/components/schemas/BigQuery'
+        gcs:
+          $ref: '#/components/schemas/Gcs'
+        snowflake:
+          $ref: '#/components/schemas/Snowflake'
+        transport_type:
+          type:
+          - string
+          - 'null'
+      title: DataExportIntegration
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    PricingPlanSubscription:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        updated_at:
+          type:
+          - string
+          - 'null'
+        activated_at:
+          type:
+          - string
+          - 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/PricingPlanSubscriptionStatus'
+          - type: 'null'
+          description: The status of the subscription.
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        purchase_order_number:
+          type:
+          - string
+          - 'null'
+          description: The uniquely assigned purchase order number.
+        customer_id:
+          type: string
+          description: The ID of the customer.
+        customer_reference:
+          type: string
+          description: The reference of the customer.
+        customer:
+          oneOf:
+          - $ref: '#/components/schemas/Customer'
+          - type: 'null'
+        billing_entity_id:
+          type:
+          - string
+          - 'null'
+          description: The resource ID of the billing entity that is assigned to the subscription. If not set, the default platform value will be taken.
+        billing_entity_reference:
+          type:
+          - string
+          - 'null'
+          description: The reference of the billing entity that is assigned to the subscription. If not set, the default platform value will be taken.
+        billing_entity:
+          oneOf:
+          - $ref: '#/components/schemas/BillingEntity'
+          - type: 'null'
+        billing_period:
+          $ref: '#/components/schemas/Period'
+          description: The period of the invoice. If not set, the default (platform) value will be taken.
+        billing_currency:
+          $ref: '#/components/schemas/PricingPlanSubscriptionBillingCurrency'
+          description: The alphabetic currency code representing the type of currency used for billing. If not set, the default (platform) value will be taken.
+        due_date_configuration:
+          $ref: '#/components/schemas/DueDate'
+          description: The configuration of the due date of the invoices in the subscriptions. If not set, the default (platform) value will be taken.
+        initial_term:
+          $ref: '#/components/schemas/Period'
+          description: The initial term for the agreement.
+        renewal_term:
+          $ref: '#/components/schemas/Period'
+          description: The renewal term after the initial term.
+        auto_renewal:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates if the subscription renews automatically.
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/PricingPlanSubscriptionType'
+          - type: 'null'
+        variant:
+          $ref: '#/components/schemas/PricingPlanSubscriptionVariant'
+        billing_time:
+          oneOf:
+          - $ref: '#/components/schemas/PricingPlanSubscriptionBillingTime'
+          - type: 'null'
+          description: The moment the invoices for the subscription should be created. If not set, the default platform value will be taken.
+        combine:
+          type:
+          - boolean
+          - 'null'
+          description: Indication whether invoices of different subscriptions should be combined, if possible. If not set, the default platform value will be taken.
+        quote_version_id:
+          type:
+          - string
+          - 'null'
+          description: The reference to the version of the quote where the subscription is linked to.
+        upgraded_from_pricing_plan_subscription_id:
+          type:
+          - string
+          - 'null'
+          description: The resource ID of the subscription that this subscription is upgraded from.
+        upgraded_to_pricing_plan_subscription_id:
+          type:
+          - string
+          - 'null'
+          description: The resource ID of the subscription that this subscription is upgraded to.
+        payment_acceptor_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: The resource ID(s) of the specific payment acceptors for the subscription
+        payment_acceptors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PaymentAcceptor'
+        pricing_plan_schedule_infos:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingPlanScheduleInfo'
+        description:
+          type:
+          - string
+          - 'null'
+        custom_fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomFieldValue'
+        init_invoice_on_hold:
+          type: boolean
+        payment_method_id:
+          type: string
+          description: The ID of the payment method to be used to pay for invoices of this subscription.
+        pricing_plan_subscription_group_id:
+          type:
+          - string
+          - 'null'
+          description: The resource ID of the pricing plan subscription group where the subscription is part of
+        pricing_plan_subscription_group:
+          oneOf:
+          - $ref: '#/components/schemas/PricingPlanSubscriptionGroup'
+          - type: 'null'
+        forward_customer_id:
+          type:
+          - string
+          - 'null'
+          description: The reference to the customer that needs to be used for the invoice (for FORWARD_BILLING)
+        forward_customer:
+          oneOf:
+          - $ref: '#/components/schemas/Customer'
+          - type: 'null'
+        inactive_periods:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/InactivePeriod'
+        display_invoice_sub_lines_per_processing_only_customer:
+          type:
+          - boolean
+          - 'null'
+        replicate_meter_data_ingest_to_parent:
+          type:
+          - boolean
+          - 'null'
+        sales_tax_percentage:
+          type:
+          - string
+          - 'null'
+          description: Sales tax for this subscription. If provided, it will override the tax for all items on the invoice. Mandatory for US to US billing when there's no external tax integration. Optional otherwise
+        next_invoice:
+          oneOf:
+          - $ref: '#/components/schemas/NextInvoice'
+          - type: 'null'
+        template:
+          $ref: '#/components/schemas/TemplatePricingPlanSubscription'
+          description: The configuration fields that can be used when having a template subscription.
+        linked_integrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/LinkedIntegration'
+        seller_details:
+          $ref: '#/components/schemas/SellerDetails'
+      title: PricingPlanSubscription
+    ProductItem:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        product_id:
+          type:
+          - string
+          - 'null'
+          description: The resource ID of the product, that belongs to the product item.
+        product:
+          oneOf:
+          - $ref: '#/components/schemas/Product'
+          - type: 'null'
+        name:
+          type:
+          - string
+          - 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/ProductItemStatus'
+          - type: 'null'
+        reference:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/ProductItemType'
+          - type: 'null'
+          description: The type of the product item.
+        model_type:
+          oneOf:
+          - $ref: '#/components/schemas/ProductItemModelType'
+          - type: 'null'
+        usage_based:
+          $ref: '#/components/schemas/ProductItemUsageBased'
+          description: Additional settings in case of a USAGE_BASED type.
+        credits:
+          $ref: '#/components/schemas/ProductItemCredits'
+          description: Additional settings in case of a CREDITS type.
+        meter_value_calculation_id:
+          type:
+          - string
+          - 'null'
+          description: The linked meter value calculation, in case of a USAGE_BASED charge type.
+        meter_value_calculation:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueCalculation'
+          - type: 'null'
+        report_meter_value_calculation_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Optional reporting meter value calculations, in case of a USAGE_BASED charge type.
+        tax_category:
+          oneOf:
+          - $ref: '#/components/schemas/ProductItemTaxCategory'
+          - type: 'null'
+          description: The default tax category applied to the product item.
+        display_order:
+          type:
+          - integer
+          - 'null'
+        unit_name:
+          $ref: '#/components/schemas/UnitName'
+        custom_fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomFieldValue'
+          description: Custom fields associated to this product item
+        customer_id:
+          type:
+          - string
+          - 'null'
+      title: ProductItem
+    FeatureType:
+      type: string
+      enum:
+      - SWITCH
+      - NUMBER
+      - ENUM
+      - AMOUNT
+      - STRING
+      description: The indication of the type of feature associated with the pricing plan.
+      title: FeatureType
+    PricingItemConfigDiscount:
+      type: object
+      properties:
+        ids:
+          type: array
+          items:
+            type: string
+          description: Resource ID of type PRICING_ITEM_CONFIG
+        start_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        end_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        amount:
+          $ref: '#/components/schemas/Amount'
+        percentage:
+          type:
+          - string
+          - 'null'
+        condition:
+          $ref: '#/components/schemas/DiscountCondition'
+      title: PricingItemConfigDiscount
+    PricingPlanSchedulePricingCurrency:
+      type: string
+      enum:
+      - AED
+      - AFN
+      - ALL
+      - AMD
+      - ANG
+      - AOA
+      - ARS
+      - AUD
+      - AWG
+      - AZN
+      - BAM
+      - BBD
+      - BDT
+      - BGN
+      - BHD
+      - BIF
+      - BMD
+      - BND
+      - BOB
+      - BRL
+      - BSD
+      - BTN
+      - BWP
+      - BYN
+      - BZD
+      - CAD
+      - CDF
+      - CHF
+      - CLF
+      - CLP
+      - CNY
+      - COP
+      - CRC
+      - CUC
+      - CUP
+      - CVE
+      - CZK
+      - DJF
+      - DKK
+      - DOP
+      - DZD
+      - EGP
+      - ERN
+      - ETB
+      - EUR
+      - FJD
+      - FKP
+      - GBP
+      - GEL
+      - GHS
+      - GIP
+      - GMD
+      - GNF
+      - GTQ
+      - GYD
+      - HKD
+      - HNL
+      - HRK
+      - HTG
+      - HUF
+      - IDR
+      - ILS
+      - INR
+      - IQD
+      - IRR
+      - ISK
+      - JMD
+      - JOD
+      - JPY
+      - KES
+      - KGS
+      - KHR
+      - KMF
+      - KPW
+      - KRW
+      - KWD
+      - KYD
+      - KZT
+      - LAK
+      - LBP
+      - LKR
+      - LRD
+      - LSL
+      - LYD
+      - MAD
+      - MDL
+      - MGA
+      - MKD
+      - MMK
+      - MNT
+      - MOP
+      - MRO
+      - MRU
+      - MUR
+      - MVR
+      - MWK
+      - MXN
+      - MXV
+      - MYR
+      - MZN
+      - NAD
+      - NGN
+      - NIO
+      - NOK
+      - NPR
+      - NZD
+      - OMR
+      - PAB
+      - PEN
+      - PGK
+      - PHP
+      - PKR
+      - PLN
+      - PYG
+      - QAR
+      - RON
+      - RSD
+      - RUB
+      - RWF
+      - SAR
+      - SBD
+      - SCR
+      - SDG
+      - SEK
+      - SGD
+      - SHP
+      - SLE
+      - SOS
+      - SRD
+      - SSP
+      - STN
+      - SVC
+      - SYP
+      - SZL
+      - THB
+      - TJS
+      - TMT
+      - TND
+      - TOP
+      - TRY
+      - TTD
+      - TWD
+      - TZS
+      - UAH
+      - UGX
+      - USD
+      - USN
+      - UYI
+      - UYU
+      - UZS
+      - VEF
+      - VES
+      - VND
+      - VUV
+      - WST
+      - XAF
+      - XAG
+      - XAU
+      - XBA
+      - XBB
+      - XBC
+      - XBD
+      - XCD
+      - XDR
+      - XOF
+      - XPD
+      - XPF
+      - XPT
+      - XSU
+      - XTS
+      - XUA
+      - XXX
+      - YER
+      - ZAR
+      - ZMW
+      - ZWL
+      description: The default alphabetic currency code representing the type of currency used for the pricing.
+      title: PricingPlanSchedulePricingCurrency
+    FeatureResourceReference:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The ID of the feature.
+        reference:
+          type: string
+          description: The reference of the feature.
+      title: FeatureResourceReference
+    PaymentGatewayPaymentAcceptorAdyen:
+      type: object
+      properties:
+        auto_rescue:
+          $ref: '#/components/schemas/AdyenAutoRescue'
+        merchant_account:
+          type:
+          - string
+          - 'null'
+        allowed_payment_methods:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+      title: PaymentGatewayPaymentAcceptorAdyen
+    AmountCurrency:
+      type: string
+      enum:
+      - AED
+      - AFN
+      - ALL
+      - AMD
+      - ANG
+      - AOA
+      - ARS
+      - AUD
+      - AWG
+      - AZN
+      - BAM
+      - BBD
+      - BDT
+      - BGN
+      - BHD
+      - BIF
+      - BMD
+      - BND
+      - BOB
+      - BRL
+      - BSD
+      - BTN
+      - BWP
+      - BYN
+      - BZD
+      - CAD
+      - CDF
+      - CHF
+      - CLF
+      - CLP
+      - CNY
+      - COP
+      - CRC
+      - CUC
+      - CUP
+      - CVE
+      - CZK
+      - DJF
+      - DKK
+      - DOP
+      - DZD
+      - EGP
+      - ERN
+      - ETB
+      - EUR
+      - FJD
+      - FKP
+      - GBP
+      - GEL
+      - GHS
+      - GIP
+      - GMD
+      - GNF
+      - GTQ
+      - GYD
+      - HKD
+      - HNL
+      - HRK
+      - HTG
+      - HUF
+      - IDR
+      - ILS
+      - INR
+      - IQD
+      - IRR
+      - ISK
+      - JMD
+      - JOD
+      - JPY
+      - KES
+      - KGS
+      - KHR
+      - KMF
+      - KPW
+      - KRW
+      - KWD
+      - KYD
+      - KZT
+      - LAK
+      - LBP
+      - LKR
+      - LRD
+      - LSL
+      - LYD
+      - MAD
+      - MDL
+      - MGA
+      - MKD
+      - MMK
+      - MNT
+      - MOP
+      - MRO
+      - MRU
+      - MUR
+      - MVR
+      - MWK
+      - MXN
+      - MXV
+      - MYR
+      - MZN
+      - NAD
+      - NGN
+      - NIO
+      - NOK
+      - NPR
+      - NZD
+      - OMR
+      - PAB
+      - PEN
+      - PGK
+      - PHP
+      - PKR
+      - PLN
+      - PYG
+      - QAR
+      - RON
+      - RSD
+      - RUB
+      - RWF
+      - SAR
+      - SBD
+      - SCR
+      - SDG
+      - SEK
+      - SGD
+      - SHP
+      - SLE
+      - SOS
+      - SRD
+      - SSP
+      - STN
+      - SVC
+      - SYP
+      - SZL
+      - THB
+      - TJS
+      - TMT
+      - TND
+      - TOP
+      - TRY
+      - TTD
+      - TWD
+      - TZS
+      - UAH
+      - UGX
+      - USD
+      - USN
+      - UYI
+      - UYU
+      - UZS
+      - VEF
+      - VES
+      - VND
+      - VUV
+      - WST
+      - XAF
+      - XAG
+      - XAU
+      - XBA
+      - XBB
+      - XBC
+      - XBD
+      - XCD
+      - XDR
+      - XOF
+      - XPD
+      - XPF
+      - XPT
+      - XSU
+      - XTS
+      - XUA
+      - XXX
+      - YER
+      - ZAR
+      - ZMW
+      - ZWL
+      title: AmountCurrency
+    WalletTypeType:
+      type: string
+      enum:
+      - CREDIT
+      - BALANCE
+      title: WalletTypeType
+    MeterConditionOperand:
+      type: object
+      properties:
+        meter_property:
+          $ref: '#/components/schemas/MeterPropertyCondition'
+        expression:
+          oneOf:
+          - $ref: '#/components/schemas/MeterConditionOperandExpression'
+          - type: 'null'
+      title: MeterConditionOperand
+    BillingPeriodOption:
+      type: object
+      properties:
+        period:
+          $ref: '#/components/schemas/Period'
+        description:
+          type:
+          - string
+          - 'null'
+      title: BillingPeriodOption
+    PricingItemConfigConditions:
+      type: object
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+        meter_properties:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/MeterPropertyCondition'
+        configs:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingItemConfigConditionsConfigsItems'
+      title: PricingItemConfigConditions
+    WalletTypeBalance:
+      type: object
+      properties:
+        default_currency:
+          type: string
+          description: The default currency for the wallet.
+      title: WalletTypeBalance
+    NotificationChannel:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/NotificationChannelType'
+          description: The channel type to use.
+        enabled:
+          type:
+          - boolean
+          - 'null'
+          description: Whether the channel is enabled for the notification type.
+      title: NotificationChannel
+    BillingEntity:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        status:
+          type:
+          - string
+          - 'null'
+        timezone:
+          type:
+          - string
+          - 'null'
+        legal_name:
+          type:
+          - string
+          - 'null'
+          description: The legal name of the billing entity.
+        tax_id:
+          type:
+          - string
+          - 'null'
+          description: The ID used for tax purposes of the billing entity.
+        tax_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaxId'
+          description: Tax IDs used for tax purposes of the billing entity
+        registration_number:
+          type:
+          - string
+          - 'null'
+          description: The registration number of the billing entity.
+        registered_address:
+          $ref: '#/components/schemas/Address'
+          description: The address associated with the billing entity.
+        email:
+          type:
+          - string
+          - 'null'
+          description: The email address of the billing entity.
+        tax_settings:
+          $ref: '#/components/schemas/TaxSettings'
+          description: Customise tax settings for this Billing Entity
+        tax_registrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaxRegistration'
+          description: Extra tax registrations for this billing entity
+        custom_fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomFieldValue'
+        default_customer_country_selector:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/BillingEntityDefaultCustomerCountrySelectorItems'
+        default_billing_currency_selector:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/BillingEntityDefaultBillingCurrencySelectorItems'
+        linked_integrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/LinkedIntegration'
+      title: BillingEntity
+    EInvoicingMandate:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the mandate
+        country:
+          type:
+          - string
+          - 'null'
+          description: The country that this mandate belongs to
+        mappings:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/EInvoicingMapping'
+          description: The mappings that are used for this Mandate. If not provided, all mappings will be default. If provided, will be merged with defaults
+        condition_groups:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/EInvoicingConditionGroup'
+          description: The condition groups that are used for this mandate. If provided, no defaults will be used. The mandate applies if 1 conditionGroup applies
+        include_pdf_in_einvoice:
+          type:
+          - boolean
+          - 'null'
+          description: Whether the PDF should be included in the submitted eInvoice payload when supported
+        supported_file_formats:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/EInvoiceFileFormat'
+          description: The file formats in which eInvoices for this mandate can be downloaded
+      title: EInvoicingMandate
+    MeterPropertyCondition:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type METER_PROPERTY
+        reference:
+          type:
+          - string
+          - 'null'
+        meter_property:
+          oneOf:
+          - $ref: '#/components/schemas/MeterProperty'
+          - type: 'null'
+        value:
+          type:
+          - string
+          - 'null'
+        values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        comparator:
+          $ref: '#/components/schemas/MeterPropertyConditionComparator'
+      title: MeterPropertyCondition
+    Address:
+      type: object
+      properties:
+        line1:
+          type:
+          - string
+          - 'null'
+        line2:
+          type:
+          - string
+          - 'null'
+        city:
+          type:
+          - string
+          - 'null'
+        postal_code:
+          type:
+          - string
+          - 'null'
+        state:
+          type:
+          - string
+          - 'null'
+        country:
+          oneOf:
+          - $ref: '#/components/schemas/AddressCountry'
+          - type: 'null'
+      title: Address
+    TaxCalculationIntegrationVariant:
+      type: string
+      enum:
+      - AVATAX
+      description: The variant that provides the tax calculation
+      title: TaxCalculationIntegrationVariant
+    PricingPlanPricingCurrenciesItems:
+      type: string
+      enum:
+      - AED
+      - AFN
+      - ALL
+      - AMD
+      - ANG
+      - AOA
+      - ARS
+      - AUD
+      - AWG
+      - AZN
+      - BAM
+      - BBD
+      - BDT
+      - BGN
+      - BHD
+      - BIF
+      - BMD
+      - BND
+      - BOB
+      - BRL
+      - BSD
+      - BTN
+      - BWP
+      - BYN
+      - BZD
+      - CAD
+      - CDF
+      - CHF
+      - CLF
+      - CLP
+      - CNY
+      - COP
+      - CRC
+      - CUC
+      - CUP
+      - CVE
+      - CZK
+      - DJF
+      - DKK
+      - DOP
+      - DZD
+      - EGP
+      - ERN
+      - ETB
+      - EUR
+      - FJD
+      - FKP
+      - GBP
+      - GEL
+      - GHS
+      - GIP
+      - GMD
+      - GNF
+      - GTQ
+      - GYD
+      - HKD
+      - HNL
+      - HRK
+      - HTG
+      - HUF
+      - IDR
+      - ILS
+      - INR
+      - IQD
+      - IRR
+      - ISK
+      - JMD
+      - JOD
+      - JPY
+      - KES
+      - KGS
+      - KHR
+      - KMF
+      - KPW
+      - KRW
+      - KWD
+      - KYD
+      - KZT
+      - LAK
+      - LBP
+      - LKR
+      - LRD
+      - LSL
+      - LYD
+      - MAD
+      - MDL
+      - MGA
+      - MKD
+      - MMK
+      - MNT
+      - MOP
+      - MRO
+      - MRU
+      - MUR
+      - MVR
+      - MWK
+      - MXN
+      - MXV
+      - MYR
+      - MZN
+      - NAD
+      - NGN
+      - NIO
+      - NOK
+      - NPR
+      - NZD
+      - OMR
+      - PAB
+      - PEN
+      - PGK
+      - PHP
+      - PKR
+      - PLN
+      - PYG
+      - QAR
+      - RON
+      - RSD
+      - RUB
+      - RWF
+      - SAR
+      - SBD
+      - SCR
+      - SDG
+      - SEK
+      - SGD
+      - SHP
+      - SLE
+      - SOS
+      - SRD
+      - SSP
+      - STN
+      - SVC
+      - SYP
+      - SZL
+      - THB
+      - TJS
+      - TMT
+      - TND
+      - TOP
+      - TRY
+      - TTD
+      - TWD
+      - TZS
+      - UAH
+      - UGX
+      - USD
+      - USN
+      - UYI
+      - UYU
+      - UZS
+      - VEF
+      - VES
+      - VND
+      - VUV
+      - WST
+      - XAF
+      - XAG
+      - XAU
+      - XBA
+      - XBB
+      - XBC
+      - XBD
+      - XCD
+      - XDR
+      - XOF
+      - XPD
+      - XPF
+      - XPT
+      - XSU
+      - XTS
+      - XUA
+      - XXX
+      - YER
+      - ZAR
+      - ZMW
+      - ZWL
+      description: The default alphabetic currency code representing the type of currency that can be used for the pricings.
+      title: PricingPlanPricingCurrenciesItems
+    ProductItemDiscount:
+      type: object
+      properties:
+        ids:
+          type: array
+          items:
+            type: string
+          description: Resource ID of type PRODUCT_ITEM
+        start_at:
+          type:
+          - string
+          - 'null'
+        end_at:
+          type:
+          - string
+          - 'null'
+        amount:
+          $ref: '#/components/schemas/Amount'
+        percentage:
+          type:
+          - string
+          - 'null'
+        coupon_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type COUPON
+        promotion_code_details:
+          oneOf:
+          - $ref: '#/components/schemas/PromotionCodeDetails'
+          - type: 'null'
+        condition:
+          $ref: '#/components/schemas/DiscountCondition'
+      title: ProductItemDiscount
+    Gcs:
+      type: object
+      properties:
+        bucket_region:
+          type: string
+        bucket_name:
+          type: string
+        bucket_path:
+          type: string
+        flattening:
+          type: boolean
+      title: Gcs
+    PromotionCodeStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - INACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      title: PromotionCodeStatus
+    RateCard:
+      type: object
+      properties:
+        start_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      title: RateCard
+    PaymentGatewayIntegrationVariant:
+      type: string
+      enum:
+      - ADYEN
+      - STRIPE
+      description: The variant of payment integration.
+      title: PaymentGatewayIntegrationVariant
+    PricingItemOriginalPricingItem:
+      type: object
+      properties: {}
+      description: This property creates a circular reference in the `PricingItem` schema. If you experience any issues with OpenAPI tools related to these circular references, you can try removing this property from the specification.
+      title: PricingItemOriginalPricingItem
+    MeterValueType:
+      type: string
+      enum:
+      - NUMBER
+      - AMOUNT
+      description: The type of the meter value.
+      title: MeterValueType
+    TemplatePricingPlanSubscription:
+      type: object
+      properties:
+        apply_billing_entity_selector:
+          type:
+          - boolean
+          - 'null'
+        allow_promotion_codes:
+          oneOf:
+          - $ref: '#/components/schemas/TemplatePricingPlanSubscriptionAllowPromotionCodes'
+          - type: 'null'
+      title: TemplatePricingPlanSubscription
+    Amount:
+      type: object
+      properties:
+        quantity:
+          type: string
+        currency:
+          $ref: '#/components/schemas/AmountCurrency'
+      title: Amount
+    ProductCategory:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        name:
+          type: string
+        reference:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        tax_category:
+          oneOf:
+          - $ref: '#/components/schemas/ProductCategoryTaxCategory'
+          - type: 'null'
+          description: The default tax category applied to the products in the product category.
+        display_order:
+          type:
+          - integer
+          - 'null'
+        customer_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOMER
+      title: ProductCategory
+    PricingPlanScheduleInfo:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        pricing_plan_schedule:
+          oneOf:
+          - $ref: '#/components/schemas/PricingPlanSchedule'
+          - type: 'null'
+        pricing_plan_id:
+          type:
+          - string
+          - 'null'
+        pricing_plan:
+          oneOf:
+          - $ref: '#/components/schemas/PricingPlan'
+          - type: 'null'
+        pricing_plan_version_id:
+          type:
+          - string
+          - 'null'
+        pricing_plan_version:
+          oneOf:
+          - $ref: '#/components/schemas/PricingPlanVersion'
+          - type: 'null'
+        start_at:
+          type:
+          - string
+          - 'null'
+        end_at:
+          type:
+          - string
+          - 'null'
+        realign_invoice_date_to_pricing_plan_schedule_start_at:
+          type:
+          - boolean
+          - 'null'
+      title: PricingPlanScheduleInfo
+    PricingOriginalPricing:
+      type: object
+      properties: {}
+      description: This property creates a circular reference in the `Pricing` schema. If you experience any issues with OpenAPI tools related to these circular references, you can try removing this property from the specification.
+      title: PricingOriginalPricing
+    PaymentAcceptor:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        billing_entity_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type BILLING_ENTITY
+        customer_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOMER
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentAcceptorType'
+          - type: 'null'
+        bank_account:
+          $ref: '#/components/schemas/BankAccount'
+        payment_gateway:
+          $ref: '#/components/schemas/PaymentGatewayPaymentAcceptor'
+        custom_redirect:
+          $ref: '#/components/schemas/PaymentAcceptorCustomRedirect'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentAcceptorStatus'
+          - type: 'null'
+      title: PaymentAcceptor
+    PricingPlanVersionInfo:
+      type: object
+      properties:
+        version:
+          type: integer
+        id:
+          type: string
+        status:
+          type: string
+        rate_card:
+          $ref: '#/components/schemas/RateCard'
+      title: PricingPlanVersionInfo
+    Markup:
+      type: object
+      properties:
+        pricing_item_configs:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingItemConfigMarkup'
+      title: Markup
+    WalletTypeCreditAmountGrant:
+      type: object
+      properties:
+        default_currency:
+          $ref: '#/components/schemas/WalletTypeCreditAmountGrantDefaultCurrency'
+          description: The default currency for the wallet.
+        tax_category:
+          $ref: '#/components/schemas/WalletTypeCreditAmountGrantTaxCategory'
+          description: The tax category to for what the wallet can be applied to.
+      title: WalletTypeCreditAmountGrant
+    StripeIntegrationDetails:
+      type: object
+      properties:
+        payment_method_id:
+          type: string
+      title: StripeIntegrationDetails
+    NotificationPreference:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/NotificationPreferenceType'
+          description: The notification type to configure.
+        channels:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/NotificationChannel'
+          description: The channels for this notification type.
+      title: NotificationPreference
+    BillingPeriodSettings:
+      type: object
+      properties:
+        billing_periods:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/BillingPeriodOption'
+      title: BillingPeriodSettings
+    MeterValueCalculation:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        calculation_type:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueCalculationCalculationType'
+          - type: 'null'
+          description: The type of calculation used for this billable metric.
+        persist:
+          type:
+          - boolean
+          - 'null'
+          description: Indicate if the data of the billable metric must be persisted to the next billing period of the schedule (default is false).
+        meter_id:
+          type:
+          - string
+          - 'null'
+          description: The ID of the meter.
+        meter:
+          oneOf:
+          - $ref: '#/components/schemas/Meter'
+          - type: 'null'
+        meter_value_id:
+          type:
+          - string
+          - 'null'
+          description: The ID of the meter value.
+        meter_value:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValue'
+          - type: 'null'
+        meter_property_id:
+          type:
+          - string
+          - 'null'
+          description: The ID of the meter property.
+        meter_property:
+          oneOf:
+          - $ref: '#/components/schemas/MeterProperty'
+          - type: 'null'
+      title: MeterValueCalculation
+    WalletTypeCredit:
+      type: object
+      properties:
+        grant_type:
+          $ref: '#/components/schemas/WalletTypeCreditGrantType'
+        amount_grant:
+          $ref: '#/components/schemas/WalletTypeCreditAmountGrant'
+        credits_grant:
+          $ref: '#/components/schemas/WalletTypeCreditCreditsGrant'
+      title: WalletTypeCredit
+    CustomerStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      - CLOSED
+      title: CustomerStatus
+    ProductDiscount:
+      type: object
+      properties:
+        ids:
+          type: array
+          items:
+            type: string
+          description: Resource ID of type PRODUCT
+        start_at:
+          type:
+          - string
+          - 'null'
+        end_at:
+          type:
+          - string
+          - 'null'
+        amount:
+          $ref: '#/components/schemas/Amount'
+        percentage:
+          type:
+          - string
+          - 'null'
+        coupon_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type COUPON
+        promotion_code_details:
+          oneOf:
+          - $ref: '#/components/schemas/PromotionCodeDetails'
+          - type: 'null'
+        condition:
+          $ref: '#/components/schemas/DiscountCondition'
+      title: ProductDiscount
+    PricingItemDiscount:
+      type: object
+      properties:
+        ids:
+          type: array
+          items:
+            type: string
+          description: Resource ID of type PRICING_ITEM
+        start_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        end_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        amount:
+          $ref: '#/components/schemas/Amount'
+        percentage:
+          type:
+          - string
+          - 'null'
+        condition:
+          $ref: '#/components/schemas/DiscountCondition'
+      title: PricingItemDiscount
+    Name:
+      type: object
+      properties:
+        first_name:
+          type:
+          - string
+          - 'null'
+        last_name:
+          type:
+          - string
+          - 'null'
+        infix:
+          type:
+          - string
+          - 'null'
+      title: Name
+    ARLocal:
+      type: object
+      properties:
+        cbu:
+          type:
+          - string
+          - 'null'
+          description: CBU (Clave Bancaria Uniforme) account identifier
+        account_number:
+          type:
+          - string
+          - 'null'
+          description: A bank account number if IBAN is not used
+        bic:
+          type:
+          - string
+          - 'null'
+          description: The ISO 9362 Business Identifier Code (BIC) of the bank account
+      title: ARLocal
+    EnabledPricing:
+      type: object
+      properties:
+        pricing_id:
+          type: string
+          description: Resource ID of type PRICING
+        start_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        end_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      title: EnabledPricing
+    PricingItemConfigDetails:
+      type: object
+      properties:
+        billing_period:
+          $ref: '#/components/schemas/Period'
+        pricing_type:
+          oneOf:
+          - $ref: '#/components/schemas/PricingItemConfigDetailsPricingType'
+          - type: 'null'
+        pricing_period:
+          $ref: '#/components/schemas/Period'
+        bands:
+          type: array
+          items:
+            $ref: '#/components/schemas/PricingItemConfigBand'
+      title: PricingItemConfigDetails
+    Credits:
+      type: object
+      properties:
+        quantity:
+          type: string
+        credit_type_id:
+          type: string
+          description: Resource ID of type CREDIT_TYPE
+      title: Credits
+    NotificationPreferenceType:
+      type: string
+      enum:
+      - INVOICE
+      description: The notification type to configure.
+      title: NotificationPreferenceType
+    UsernamePassword:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      title: UsernamePassword
+    EmailProviderIntegrationVariant:
+      type: string
+      enum:
+      - SYSTEM
+      - MAILGUN
+      description: The variant of email provider integration.
+      title: EmailProviderIntegrationVariant
+    PricingPlanAmountType:
+      type: string
+      enum:
+      - EXCLUDING_TAX
+      - INCLUDING_TAX
+      description: Set to determine whether the pricings in this pricing plan are including or excluding tax. The default, if left empty, is excluding tax.
+      title: PricingPlanAmountType
+    PricingCurrencySettings:
+      type: object
+      properties:
+        default_pricing_currency:
+          type:
+          - string
+          - 'null'
+        pricing_currencies:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+      title: PricingCurrencySettings
+    MeterConditionExpressionOperator:
+      type: string
+      enum:
+      - AND
+      - OR
+      - XOR
+      title: MeterConditionExpressionOperator
+    PricingPlanSubscriptionType:
+      type: string
+      enum:
+      - QUOTE
+      - BILLING
+      - TEMPLATE
+      title: PricingPlanSubscriptionType
+    BillingEntityDefaultCustomerCountrySelectorItems:
+      type: string
+      enum:
+      - AD
+      - AE
+      - AF
+      - AG
+      - AI
+      - AL
+      - AM
+      - AO
+      - AQ
+      - AR
+      - AS
+      - AT
+      - AU
+      - AW
+      - AX
+      - AZ
+      - BA
+      - BB
+      - BD
+      - BE
+      - BF
+      - BG
+      - BH
+      - BI
+      - BJ
+      - BL
+      - BM
+      - BN
+      - BO
+      - BQ
+      - BR
+      - BS
+      - BT
+      - BV
+      - BW
+      - BY
+      - BZ
+      - CA
+      - CC
+      - CD
+      - CF
+      - CG
+      - CH
+      - CI
+      - CK
+      - CL
+      - CM
+      - CN
+      - CO
+      - CR
+      - CU
+      - CV
+      - CW
+      - CX
+      - CY
+      - CZ
+      - DE
+      - DJ
+      - DK
+      - DM
+      - DO
+      - DZ
+      - EC
+      - EE
+      - EG
+      - EH
+      - ER
+      - ES
+      - ET
+      - FI
+      - FJ
+      - FK
+      - FM
+      - FO
+      - FR
+      - GA
+      - GB
+      - GD
+      - GE
+      - GF
+      - GG
+      - GH
+      - GI
+      - GL
+      - GM
+      - GN
+      - GP
+      - GQ
+      - GR
+      - GS
+      - GT
+      - GU
+      - GW
+      - GY
+      - HK
+      - HM
+      - HN
+      - HR
+      - HT
+      - HU
+      - ID
+      - IE
+      - IL
+      - IM
+      - IN
+      - IO
+      - IQ
+      - IR
+      - IS
+      - IT
+      - JE
+      - JM
+      - JO
+      - JP
+      - KE
+      - KG
+      - KH
+      - KI
+      - KM
+      - KN
+      - KP
+      - KR
+      - KW
+      - KY
+      - KZ
+      - LA
+      - LB
+      - LC
+      - LI
+      - LK
+      - LR
+      - LS
+      - LT
+      - LU
+      - LV
+      - LY
+      - MA
+      - MC
+      - MD
+      - ME
+      - MF
+      - MG
+      - MH
+      - MK
+      - ML
+      - MM
+      - MN
+      - MO
+      - MP
+      - MQ
+      - MR
+      - MS
+      - MT
+      - MU
+      - MV
+      - MW
+      - MX
+      - MY
+      - MZ
+      - NA
+      - NC
+      - NE
+      - NF
+      - NG
+      - NI
+      - NL
+      - 'NO'
+      - NP
+      - NR
+      - NU
+      - NZ
+      - OM
+      - PA
+      - PE
+      - PF
+      - PG
+      - PH
+      - PK
+      - PL
+      - PM
+      - PN
+      - PR
+      - PS
+      - PT
+      - PW
+      - PY
+      - QA
+      - RE
+      - RO
+      - RS
+      - RU
+      - RW
+      - SA
+      - SB
+      - SC
+      - SD
+      - SE
+      - SG
+      - SH
+      - SI
+      - SJ
+      - SK
+      - SL
+      - SM
+      - SN
+      - SO
+      - SR
+      - SS
+      - ST
+      - SV
+      - SX
+      - SY
+      - SZ
+      - TC
+      - TD
+      - TF
+      - TG
+      - TH
+      - TJ
+      - TK
+      - TL
+      - TM
+      - TN
+      - TO
+      - TR
+      - TT
+      - TV
+      - TW
+      - TZ
+      - UA
+      - UG
+      - US
+      - UY
+      - UZ
+      - VA
+      - VC
+      - VE
+      - VG
+      - VI
+      - VN
+      - VU
+      - WF
+      - WS
+      - YE
+      - YT
+      - ZA
+      - ZM
+      - ZW
+      title: BillingEntityDefaultCustomerCountrySelectorItems
+    PricingPlanSubscriptionSelectorFilter:
+      type: object
+      properties:
+        field:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFilterField'
+        type:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFilterType'
+        value:
+          type: string
+      title: PricingPlanSubscriptionSelectorFilter
+    EInvoicingCondition:
+      type: object
+      properties:
+        field:
+          type: string
+          description: The field that holds the value to compare against
+        comparator_type:
+          $ref: '#/components/schemas/EInvoicingConditionComparatorType'
+        value:
+          type: string
+          description: Value to check the field against. If a Comparator such as 'IN' or 'CONTAINS' is used, this can be a comma separated list of values
+      title: EInvoicingCondition
+    PricingPlanVariant:
+      type: string
+      enum:
+      - DEFAULT
+      - RATE_CARD
+      title: PricingPlanVariant
+    InvoiceCommitment:
+      type: object
+      properties:
+        start_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: Moment the invoice commitment starts, this is greater or equal to the start of the schedule
+        end_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: Moment the invoice commitment ends, this is before the end of the schedule
+        amount:
+          $ref: '#/components/schemas/Amount'
+          description: Minimum invoice amount.
+      title: InvoiceCommitment
+    PricingPlan:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        customer_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOMER
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/PricingPlanType'
+          - type: 'null'
+        amount_type:
+          $ref: '#/components/schemas/PricingPlanAmountType'
+          description: Set to determine whether the pricings in this pricing plan are including or excluding tax. The default, if left empty, is excluding tax.
+        pricing_plan_version_infos:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingPlanVersionInfo'
+        pricing_plan_selection_rules:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/SelectionRule'
+        pricing_currencies:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingPlanPricingCurrenciesItems'
+          description: The default alphabetic currency code representing the type of currency that can be used for the pricings.
+        variant:
+          oneOf:
+          - $ref: '#/components/schemas/PricingPlanVariant'
+          - type: 'null'
+        custom_fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomFieldValue'
+          description: Custom fields associated to this pricing plan
+      title: PricingPlan
+    PricingItemConfigMeterValue:
+      type: object
+      properties:
+        number:
+          type:
+          - string
+          - 'null'
+        amount:
+          $ref: '#/components/schemas/Amount'
+        count:
+          type:
+          - string
+          - 'null'
+      title: PricingItemConfigMeterValue
+    Organization:
+      type: object
+      properties:
+        legal_name:
+          type: string
+        tax_id:
+          type:
+          - string
+          - 'null'
+          description: Tax Id used for tax purposes of the organization
+        tax_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaxId'
+          description: Tax Ids used for tax purposes of the organization
+        registration_number:
+          type:
+          - string
+          - 'null'
+        tax_exempt:
+          type:
+          - boolean
+          - 'null'
+        tax_exempt_note:
+          type:
+          - string
+          - 'null'
+        registered_address:
+          $ref: '#/components/schemas/Address'
+        tax_registrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaxRegistration'
+          description: Extra tax registrations for the customer
+      title: Organization
+    PromotionCodeDetails:
+      type: object
+      properties:
+        promotion_code_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type PROMOTION_CODE
+        code:
+          type:
+          - string
+          - 'null'
+      title: PromotionCodeDetails
+    ProductItemType:
+      type: string
+      enum:
+      - REVENUE
+      - DEDUCTION
+      description: The type of the product item.
+      title: ProductItemType
+    SelectionRuleResourceComparator:
+      type: string
+      enum:
+      - EQUALS
+      - NOT_EQUALS
+      - IN
+      - NOT_IN
+      - GREATER_THAN
+      - GREATER_THAN_OR_EQUALS
+      - LESS_THAN
+      - LESS_THAN_OR_EQUALS
+      - EMPTY
+      - NOT_EMPTY
+      - CONTAINS
+      - NOT_CONTAINS
+      title: SelectionRuleResourceComparator
+    CustomerSellerDetails:
+      type: object
+      properties:
+        default_billing_entity_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type BILLING_ENTITY
+      title: CustomerSellerDetails
+    PromotionCodeCreateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - INACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      title: PromotionCodeCreateRequestStatus
+    ProductCategoryDiscount:
+      type: object
+      properties:
+        ids:
+          type: array
+          items:
+            type: string
+          description: Resource ID of type PRODUCT_CATEGORY
+        start_at:
+          type:
+          - string
+          - 'null'
+        end_at:
+          type:
+          - string
+          - 'null'
+        amount:
+          $ref: '#/components/schemas/Amount'
+        percentage:
+          type:
+          - string
+          - 'null'
+        coupon_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type COUPON
+        promotion_code_details:
+          oneOf:
+          - $ref: '#/components/schemas/PromotionCodeDetails'
+          - type: 'null'
+        condition:
+          $ref: '#/components/schemas/DiscountCondition'
+      title: ProductCategoryDiscount
+    PromotionCodeLimitedToCreateRequest:
+      type: object
+      properties:
+        customer_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        customers:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Customer'
+      title: PromotionCodeLimitedToCreateRequest
+    InactivePeriod:
+      type: object
+      properties:
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/InactivePeriodType'
+          - type: 'null'
+        start_at:
+          type: string
+          format: date-time
+        end_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      title: InactivePeriod
+    PaginationLinks:
+      type: object
+      properties:
+        first:
+          type:
+          - string
+          - 'null'
+        previous:
+          type:
+          - string
+          - 'null'
+        current:
+          type:
+          - string
+          - 'null'
+        next:
+          type:
+          - string
+          - 'null'
+      title: PaginationLinks
+    PricingPlanVersionStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      title: PricingPlanVersionStatus
+    PricingItemPricingCurrencyConfig:
+      type: object
+      properties:
+        currency:
+          oneOf:
+          - $ref: '#/components/schemas/PricingItemPricingCurrencyConfigCurrency'
+          - type: 'null'
+        configs:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingItemConfig'
+        billing_period_configs:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingItemBillingPeriodConfig'
+        fallback_currency:
+          oneOf:
+          - $ref: '#/components/schemas/PricingItemPricingCurrencyConfigFallbackCurrency'
+          - type: 'null'
+      title: PricingItemPricingCurrencyConfig
+    PricingItemConfigTopUp:
+      type: object
+      properties:
+        rollover:
+          type:
+          - boolean
+          - 'null'
+      title: PricingItemConfigTopUp
+    ProductItemStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      title: ProductItemStatus
+    PricingPlanSubscriptionGroup:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+          description: Unique reference for this subscription group
+        name:
+          type:
+          - string
+          - 'null'
+          description: Optional name for this subscription group
+        description:
+          type:
+          - string
+          - 'null'
+          description: Optional description for this subscription group
+        owner_customer_id:
+          type:
+          - string
+          - 'null'
+          description: When provided, this subscription group can only be used for the customer that is linked to this ID and children of that customer
+        owner_customer:
+          oneOf:
+          - $ref: '#/components/schemas/Customer'
+          - type: 'null'
+        pricing_plan_subscription_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+      title: PricingPlanSubscriptionGroup
+    Period:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/PeriodType'
+        value:
+          type:
+          - integer
+          - 'null'
+      title: Period
+    DueDateType:
+      type: string
+      enum:
+      - PERIOD_AFTER_INVOICE_DATE
+      - END_OF_THE_MONTH
+      title: DueDateType
+    PricingCommitment:
+      type: object
+      properties:
+        ids:
+          type: array
+          items:
+            type: string
+          description: List of resource IDs each referencing a pricing item.
+        start_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: Moment the invoice commitment starts, this is greater or equal to the start of the schedule
+        end_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: Moment the invoice commitment ends, this is before the end of the schedule
+        amount:
+          $ref: '#/components/schemas/Amount'
+          description: Minimum amount to be invoiced.
+      title: PricingCommitment
+    MeterPropertyType:
+      type: string
+      enum:
+      - NUMBER
+      - ENUM
+      - STRING
+      description: The type of the meter property.
+      title: MeterPropertyType
+    SelectionRuleResource:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/SelectionRuleResourceType'
+        field:
+          $ref: '#/components/schemas/SelectionRuleResourceField'
+        value:
+          type:
+          - string
+          - 'null'
+        values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        comparator:
+          $ref: '#/components/schemas/SelectionRuleResourceComparator'
+      title: SelectionRuleResource
+    IntegrationStatus:
+      type: string
+      enum:
+      - DRAFT
+      - PENDING
+      - TESTING
+      - ACTIVE
+      - ERROR
+      - DEPRECATED
+      - ARCHIVED
+      description: The status of the integration.
+      title: IntegrationStatus
+    PricingItemCommitment:
+      type: object
+      properties:
+        ids:
+          type: array
+          items:
+            type: string
+          description: List of resource IDs each referencing a pricing item.
+        start_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: Moment the invoice commitment starts, this is greater or equal to the start of the schedule
+        end_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: Moment the invoice commitment ends, this is before the end of the schedule
+        amount:
+          $ref: '#/components/schemas/Amount'
+          description: Minimum amount to be invoiced.
+      title: PricingItemCommitment
+    Entitlement:
+      type: object
+      properties:
+        feature_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type FEATURE
+        feature:
+          oneOf:
+          - $ref: '#/components/schemas/Feature'
+          - type: 'null'
+        feature_reference:
+          type:
+          - string
+          - 'null'
+        override:
+          type:
+          - boolean
+          - 'null'
+        overwrite:
+          type:
+          - boolean
+          - 'null'
+        number:
+          type:
+          - string
+          - 'null'
+        switch:
+          type:
+          - boolean
+          - 'null'
+        amount:
+          $ref: '#/components/schemas/Amount'
+        enum:
+          type:
+          - string
+          - 'null'
+        string:
+          type:
+          - string
+          - 'null'
+      title: Entitlement
+    AdyenPaymentGatewayIntegration:
+      type: object
+      properties:
+        company_account:
+          type: string
+        environment:
+          $ref: '#/components/schemas/AdyenPaymentGatewayIntegrationEnvironment'
+        live_prefix:
+          type: string
+        merchant_accounts:
+          type: array
+          items:
+            type: string
+        public_key:
+          type: string
+        signing_secret:
+          type: string
+        ownership:
+          $ref: '#/components/schemas/AdyenPaymentGatewayIntegrationOwnership'
+        system_ownership_details:
+          $ref: '#/components/schemas/SystemOwnershipDetails'
+        balance_platform_details:
+          $ref: '#/components/schemas/BalancePlatformDetails'
+        legal_entity_manager_details:
+          $ref: '#/components/schemas/LegalEntityManagerDetails'
+        enabled_payment_methods:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+      title: AdyenPaymentGatewayIntegration
+    PricingItem:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        original_pricing_item_id:
+          type:
+          - string
+          - 'null'
+        original_pricing_item:
+          oneOf:
+          - $ref: '#/components/schemas/PricingItemOriginalPricingItem'
+          - type: 'null'
+          description: This property creates a circular reference in the `PricingItem` schema. If you experience any issues with OpenAPI tools related to these circular references, you can try removing this property from the specification.
+        override:
+          oneOf:
+          - $ref: '#/components/schemas/PricingItemOverride'
+          - type: 'null'
+        product_item_ids:
+          type: array
+          items:
+            type: string
+        product_items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ProductItem'
+        configs:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingItemConfig'
+        pricing_currency_configs:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingItemPricingCurrencyConfig'
+        billing_period_configs:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingItemBillingPeriodConfig'
+        display_order:
+          type:
+          - integer
+          - 'null'
+      title: PricingItem
+    PricingItemConfig:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type PRICING_ITEM_CONFIG
+        original_pricing_item_config_id:
+          type:
+          - string
+          - 'null'
+        original_pricing_item_config:
+          oneOf:
+          - $ref: '#/components/schemas/PricingItemConfigOriginalPricingItemConfig'
+          - type: 'null'
+          description: This property creates a circular reference in the `PricingItemConfig` schema. If you experience any issues with OpenAPI tools related to these circular references, you can try removing this property from the specification.
+        details:
+          $ref: '#/components/schemas/PricingItemConfigDetails'
+        billing_period:
+          $ref: '#/components/schemas/Period'
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/PricingItemConfigType'
+          - type: 'null'
+        pricing_type:
+          oneOf:
+          - $ref: '#/components/schemas/PricingItemConfigPricingType'
+          - type: 'null'
+        pricing_period:
+          $ref: '#/components/schemas/Period'
+        default_included_volume:
+          $ref: '#/components/schemas/PricingItemConfigMeterValueIncludedVolume'
+        default_seats_value:
+          $ref: '#/components/schemas/PricingItemConfigMeterValue'
+        conditions:
+          $ref: '#/components/schemas/PricingItemConfigConditions'
+        tiering_conditions:
+          $ref: '#/components/schemas/MeterConditions'
+          description: Conditions that filter for which `TIERING` events this pricing item config is applied. Only the `expression` is supported here; the deprecated `meter_properties` field is not allowed.
+        bands:
+          type: array
+          items:
+            $ref: '#/components/schemas/PricingItemConfigBand'
+        order:
+          type:
+          - integer
+          - 'null'
+        billing_in_advance:
+          type:
+          - boolean
+          - 'null'
+        volume_group_reference:
+          type:
+          - string
+          - 'null'
+        top_up:
+          $ref: '#/components/schemas/PricingItemConfigTopUp'
+        split_pricing:
+          $ref: '#/components/schemas/PricingItemConfigSplitPricing'
+        on_demand:
+          type:
+          - boolean
+          - 'null'
+        wallet_grants:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingItemConfigWalletGrant'
+      title: PricingItemConfig
+    IntegrationType:
+      type: string
+      enum:
+      - PAYMENT_GATEWAY
+      - E_INVOICING
+      - TAX_CALCULATION
+      - DATA_EXPORT
+      - EMAIL_PROVIDER
+      description: The type of integration.
+      title: IntegrationType
+    TaxId:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/TaxIdType'
+          - type: 'null'
+          description: Optional tax id type, indicates which type of tax the number is for
+        display_name:
+          type:
+          - string
+          - 'null'
+          description: User-friendly display name
+        tax_id_validation_result:
+          $ref: '#/components/schemas/TaxIdValidation'
+      title: TaxId
+    TaxSettings:
+      type: object
+      properties:
+        apply_local_vat_for_missing_tax_id:
+          type: boolean
+          description: Indicates whether to apply VAT when a foreign B2B customer inside the EU has no VAT id configured
+      title: TaxSettings
+    BalancePlatformDetails:
+      type: object
+      properties:
+        account:
+          type: string
+        authentication:
+          $ref: '#/components/schemas/AuthenticationSettings'
+      title: BalancePlatformDetails
+    MeterPropertyStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the meter property indicating the activity and the ability to update properties.
+      title: MeterPropertyStatus
+    PricingItemConfigMeterValueIncludedVolume:
+      type: object
+      properties:
+        number:
+          type:
+          - string
+          - 'null'
+        amount:
+          $ref: '#/components/schemas/Amount'
+        count:
+          type:
+          - string
+          - 'null'
+        reset_type:
+          type:
+          - string
+          - 'null'
+      title: PricingItemConfigMeterValueIncludedVolume
+    SelectionRuleResourceField:
+      type: string
+      enum:
+      - COUNTRY
+      title: SelectionRuleResourceField
+    PricingPlanSubscriptionStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - VOID
+      - ARCHIVED
+      - CANCELLED
+      description: The status of the subscription.
+      title: PricingPlanSubscriptionStatus
+    PricingItemOverride:
+      type: string
+      enum:
+      - ALL
+      - SPECIFIC
+      title: PricingItemOverride
+    Customer:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        parent_customer_id:
+          type:
+          - string
+          - 'null'
+          description: The parent of the customer. Only returned when there is a single parent.
+        parent_customer_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: A list of parents of the customer. Will also be returned if there is a single parent.
+        reference:
+          type: string
+          description: A custom reference assigned to the customer.
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/CustomerStatus'
+          - type: 'null'
+        timezone:
+          type:
+          - string
+          - 'null'
+        type:
+          $ref: '#/components/schemas/CustomerType'
+          description: The type of customer entity.
+        email:
+          type: string
+          description: The email of the customer.
+        notification_preferences:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/NotificationPreference'
+          description: Notification preferences for customer-related communications.
+        locale:
+          type:
+          - string
+          - 'null'
+          description: The locale of the customer. Format is language-country (like en-US).
+        individual:
+          $ref: '#/components/schemas/Individual'
+          description: Additional description of the individual customer type.
+        organization:
+          $ref: '#/components/schemas/Organization'
+          description: Additional description of the organization customer type.
+        custom_fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomFieldValue'
+        processing_only:
+          type:
+          - boolean
+          - 'null'
+        pricing_plan_subscription_selector:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelector'
+          description: Settings to influence dynamically the subscription to use for the ingest data.
+        linked_integrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/LinkedIntegration'
+        roles:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomerRolesItems'
+        seller_details:
+          $ref: '#/components/schemas/CustomerSellerDetails'
+      title: Customer
+    EInvoicingIntegration:
+      type: object
+      properties:
+        mandates:
+          type: array
+          items:
+            $ref: '#/components/schemas/EInvoicingMandate'
+          description: The mandates that are used for eInvoicing
+        processor:
+          $ref: '#/components/schemas/EInvoicingIntegrationProcessor'
+      title: EInvoicingIntegration
+    AuthenticationSettingsApiKey:
+      type: object
+      properties:
+        header:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+      title: AuthenticationSettingsApiKey
+    PricingPlanType:
+      type: string
+      enum:
+      - STANDARD
+      - CUSTOM
+      title: PricingPlanType
+    S3AuthenticationType:
+      type: string
+      enum:
+      - ACCESS_KEY_AND_SECRET
+      - IAM_ROLE
+      title: S3AuthenticationType
+    ProductItemTaxCategory:
+      type: string
+      enum:
+      - STANDARD
+      - NO_TAX
+      - EXEMPT
+      description: The default tax category applied to the product item.
+      title: ProductItemTaxCategory
+    BankAccount:
+      type: object
+      properties:
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/BankAccountType'
+          - type: 'null'
+          description: Determines what fields should be present in the bank account node.
+        iban:
+          type:
+          - string
+          - 'null'
+        country:
+          type:
+          - string
+          - 'null'
+        bic:
+          type:
+          - string
+          - 'null'
+          description: The ISO 9362 Business Identifier Code (BIC) of the bank account
+        bank_name:
+          type:
+          - string
+          - 'null'
+        bank_address:
+          $ref: '#/components/schemas/Address'
+          description: The bank address
+        account_number:
+          type:
+          - string
+          - 'null'
+          description: A bank account number if IBAN is not used, e.g a USA or UK bank account number
+        bank_code:
+          type:
+          - string
+          - 'null'
+          description: A bank code that's used to identify the bank that this account belongs to
+        routing_number:
+          type:
+          - string
+          - 'null'
+          description: The 9-digit code that identifies a specific financial institution for transactions in the USA.
+        account_type:
+          oneOf:
+          - $ref: '#/components/schemas/BankAccountAccountType'
+          - type: 'null'
+          description: The bank account type.
+        account_number_and_bic:
+          $ref: '#/components/schemas/AccountNumberAndBic'
+        uk_local:
+          $ref: '#/components/schemas/UKLocal'
+        us_local:
+          $ref: '#/components/schemas/USLocal'
+        br_local:
+          $ref: '#/components/schemas/BRLocal'
+        ar_local:
+          $ref: '#/components/schemas/ARLocal'
+        mx_local:
+          $ref: '#/components/schemas/MXLocal'
+      title: BankAccount
+    DiscountConditionComparator:
+      type: string
+      enum:
+      - EQUALS
+      - NOT_EQUALS
+      - IN
+      - NOT_IN
+      - GREATER_THAN
+      - GREATER_THAN_OR_EQUALS
+      - LESS_THAN
+      - LESS_THAN_OR_EQUALS
+      - EMPTY
+      - NOT_EMPTY
+      - CONTAINS
+      - NOT_CONTAINS
+      title: DiscountConditionComparator
+    PricingPlanSubscriptionSelectorFilterType:
+      type: string
+      enum:
+      - EQUALS
+      - NOT_EQUALS
+      - IN
+      - NOT_IN
+      - GREATER_THAN
+      - GREATER_THAN_OR_EQUALS
+      - LESS_THAN
+      - LESS_THAN_OR_EQUALS
+      - EMPTY
+      - NOT_EMPTY
+      - CONTAINS
+      - NOT_CONTAINS
+      title: PricingPlanSubscriptionSelectorFilterType
+    EInvoicingConditionComparatorType:
+      type: string
+      enum:
+      - EQUALS
+      - NOT_EQUALS
+      - IN
+      - NOT_IN
+      - GREATER_THAN
+      - GREATER_THAN_OR_EQUALS
+      - LESS_THAN
+      - LESS_THAN_OR_EQUALS
+      - EMPTY
+      - NOT_EMPTY
+      - CONTAINS
+      - NOT_CONTAINS
+      title: EInvoicingConditionComparatorType
+    IntegrationLinkDetail:
+      type: object
+      properties:
+        base_url:
+          type: string
+        custom_field_reference:
+          type: string
+      title: IntegrationLinkDetail
+    Discount:
+      type: object
+      properties:
+        pricing_item_configs:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingItemConfigDiscount'
+        pricing_items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingItemDiscount'
+        pricings:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingDiscount'
+        totals:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TotalDiscount'
+        products:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ProductDiscount'
+        product_items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ProductItemDiscount'
+        product_categories:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ProductCategoryDiscount'
+      title: Discount
+    PricingItemPricingCurrencyConfigFallbackCurrency:
+      type: string
+      enum:
+      - AED
+      - AFN
+      - ALL
+      - AMD
+      - ANG
+      - AOA
+      - ARS
+      - AUD
+      - AWG
+      - AZN
+      - BAM
+      - BBD
+      - BDT
+      - BGN
+      - BHD
+      - BIF
+      - BMD
+      - BND
+      - BOB
+      - BRL
+      - BSD
+      - BTN
+      - BWP
+      - BYN
+      - BZD
+      - CAD
+      - CDF
+      - CHF
+      - CLF
+      - CLP
+      - CNY
+      - COP
+      - CRC
+      - CUC
+      - CUP
+      - CVE
+      - CZK
+      - DJF
+      - DKK
+      - DOP
+      - DZD
+      - EGP
+      - ERN
+      - ETB
+      - EUR
+      - FJD
+      - FKP
+      - GBP
+      - GEL
+      - GHS
+      - GIP
+      - GMD
+      - GNF
+      - GTQ
+      - GYD
+      - HKD
+      - HNL
+      - HRK
+      - HTG
+      - HUF
+      - IDR
+      - ILS
+      - INR
+      - IQD
+      - IRR
+      - ISK
+      - JMD
+      - JOD
+      - JPY
+      - KES
+      - KGS
+      - KHR
+      - KMF
+      - KPW
+      - KRW
+      - KWD
+      - KYD
+      - KZT
+      - LAK
+      - LBP
+      - LKR
+      - LRD
+      - LSL
+      - LYD
+      - MAD
+      - MDL
+      - MGA
+      - MKD
+      - MMK
+      - MNT
+      - MOP
+      - MRO
+      - MRU
+      - MUR
+      - MVR
+      - MWK
+      - MXN
+      - MXV
+      - MYR
+      - MZN
+      - NAD
+      - NGN
+      - NIO
+      - NOK
+      - NPR
+      - NZD
+      - OMR
+      - PAB
+      - PEN
+      - PGK
+      - PHP
+      - PKR
+      - PLN
+      - PYG
+      - QAR
+      - RON
+      - RSD
+      - RUB
+      - RWF
+      - SAR
+      - SBD
+      - SCR
+      - SDG
+      - SEK
+      - SGD
+      - SHP
+      - SLE
+      - SOS
+      - SRD
+      - SSP
+      - STN
+      - SVC
+      - SYP
+      - SZL
+      - THB
+      - TJS
+      - TMT
+      - TND
+      - TOP
+      - TRY
+      - TTD
+      - TWD
+      - TZS
+      - UAH
+      - UGX
+      - USD
+      - USN
+      - UYI
+      - UYU
+      - UZS
+      - VEF
+      - VES
+      - VND
+      - VUV
+      - WST
+      - XAF
+      - XAG
+      - XAU
+      - XBA
+      - XBB
+      - XBC
+      - XBD
+      - XCD
+      - XDR
+      - XOF
+      - XPD
+      - XPF
+      - XPT
+      - XSU
+      - XTS
+      - XUA
+      - XXX
+      - YER
+      - ZAR
+      - ZMW
+      - ZWL
+      title: PricingItemPricingCurrencyConfigFallbackCurrency
+    AdyenPaymentGatewayIntegrationEnvironment:
+      type: string
+      enum:
+      - LIVE
+      - TEST
+      title: AdyenPaymentGatewayIntegrationEnvironment
+    AvaTaxCalculationIntegration:
+      type: object
+      properties:
+        company_code:
+          type: string
+          description: Links a billing entity to a company in AvaTax
+      title: AvaTaxCalculationIntegration
+    PricingItemConfigWalletGrantAmountGrant:
+      type: object
+      properties:
+        amount:
+          $ref: '#/components/schemas/Amount'
+        percentage:
+          type:
+          - string
+          - 'null'
+      title: PricingItemConfigWalletGrantAmountGrant
+    PricingGroupProductType:
+      type: string
+      enum:
+      - DEFAULT
+      - ADDON
+      title: PricingGroupProductType
+    LinkDetail:
+      type: object
+      properties:
+        url:
+          type:
+          - string
+          - 'null'
+        custom_field_name:
+          type:
+          - string
+          - 'null'
+      title: LinkDetail
+    SystemOwnershipDetails:
+      type: object
+      properties:
+        account_holder_id:
+          type: string
+        balance_account_id:
+          type: string
+        legal_entity_id:
+          type: string
+        store_id:
+          type: string
+      title: SystemOwnershipDetails
+    PricingPlanVersion:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        pricing_plan_id:
+          type:
+          - string
+          - 'null'
+          description: The resource ID of the pricing plan.
+        pricing_plan:
+          oneOf:
+          - $ref: '#/components/schemas/PricingPlan'
+          - type: 'null'
+        version:
+          type:
+          - integer
+          - 'null'
+          description: The value describing the version of the pricing plan.
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/PricingPlanVersionStatus'
+          - type: 'null'
+        pricing_currency_settings:
+          $ref: '#/components/schemas/PricingCurrencySettings'
+        billing_period_settings:
+          $ref: '#/components/schemas/BillingPeriodSettings'
+        copied_from_pricing_plan_version_id:
+          type:
+          - string
+          - 'null'
+          description: The id of the pricing plan version from which this pricing plan version was copied
+        pricing_categories:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingCategory'
+          description: The list of priced categories that are within the pricing plan.
+        credit_types:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CreditType'
+        rate_card:
+          $ref: '#/components/schemas/RateCard'
+      title: PricingPlanVersion
+    MeterConditionExpression:
+      type: object
+      properties:
+        operator:
+          $ref: '#/components/schemas/MeterConditionExpressionOperator'
+        operands:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/MeterConditionOperand'
+      title: MeterConditionExpression
+    AuthenticationSettings:
+      type: object
+      properties:
+        api_key:
+          $ref: '#/components/schemas/AuthenticationSettingsApiKey'
+        client_credentials:
+          $ref: '#/components/schemas/ClientCredentials'
+        username_password:
+          $ref: '#/components/schemas/UsernamePassword'
+      title: AuthenticationSettings
+    PaymentGatewayPaymentAcceptorCollectionType:
+      type: string
+      enum:
+      - LINK
+      title: PaymentGatewayPaymentAcceptorCollectionType
+    PromotionCodeCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        code_format:
+          type: string
+        code:
+          type: string
+        coupon_id:
+          type: string
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/PromotionCodeCreateRequestStatus'
+          - type: 'null'
+        limited_to:
+          $ref: '#/components/schemas/PromotionCodeLimitedToCreateRequest'
+        start_at:
+          type:
+          - string
+          - 'null'
+        end_at:
+          type:
+          - string
+          - 'null'
+        maximum_redemptions:
+          type:
+          - integer
+          - 'null'
+        number_of_redemptions:
+          type:
+          - integer
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        updated_at:
+          type:
+          - string
+          - 'null'
+      required:
+      - coupon_id
+      title: PromotionCodeCreateRequest
+    PricingPlanSubscriptionSelectorData:
+      type: object
+      properties:
+        field:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorDataField'
+        value:
+          type: string
+      title: PricingPlanSubscriptionSelectorData
+    ProductItemUsageBased:
+      type: object
+      properties:
+        meter_value_calculation_id:
+          type:
+          - string
+          - 'null'
+          description: The linked meter value calculation
+        meter_value_calculation:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueCalculation'
+          - type: 'null'
+        tiering_meter_value_calculation_id:
+          type:
+          - string
+          - 'null'
+          description: The optional alternative linked meter value calculation for tiering
+        tiering_meter_value_calculation:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueCalculation'
+          - type: 'null'
+        report_meter_value_calculation_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Optional reporting meter value calculations.
+        conditions:
+          $ref: '#/components/schemas/MeterConditions'
+          description: Optional conditions.
+      title: ProductItemUsageBased
+    TaxIdType:
+      type: string
+      enum:
+      - GENERIC_TAX_ID
+      - AU_GST
+      - CA_GST_HST
+      - CA_PST
+      - CA_PST_BC
+      - CA_PST_MB
+      - CA_PST_SK
+      - CA_QST
+      description: Optional tax id type, indicates which type of tax the number is for
+      title: TaxIdType
+    PaymentAcceptorType:
+      type: string
+      enum:
+      - BANK_ACCOUNT
+      - PAYMENT_GATEWAY
+      - CUSTOM_REDIRECT
+      title: PaymentAcceptorType
+    PricingCategory:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        product_category_id:
+          type: string
+          description: Resource ID of type PRODUCT_CATEGORY
+        product_category:
+          oneOf:
+          - $ref: '#/components/schemas/ProductCategory'
+          - type: 'null'
+        pricings:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Pricing'
+        pricing_groups:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingGroup'
+        display_order:
+          type:
+          - integer
+          - 'null'
+      title: PricingCategory
+    AddressCountry:
+      type: string
+      enum:
+      - AD
+      - AE
+      - AF
+      - AG
+      - AI
+      - AL
+      - AM
+      - AO
+      - AQ
+      - AR
+      - AS
+      - AT
+      - AU
+      - AW
+      - AX
+      - AZ
+      - BA
+      - BB
+      - BD
+      - BE
+      - BF
+      - BG
+      - BH
+      - BI
+      - BJ
+      - BL
+      - BM
+      - BN
+      - BO
+      - BQ
+      - BR
+      - BS
+      - BT
+      - BV
+      - BW
+      - BY
+      - BZ
+      - CA
+      - CC
+      - CD
+      - CF
+      - CG
+      - CH
+      - CI
+      - CK
+      - CL
+      - CM
+      - CN
+      - CO
+      - CR
+      - CU
+      - CV
+      - CW
+      - CX
+      - CY
+      - CZ
+      - DE
+      - DJ
+      - DK
+      - DM
+      - DO
+      - DZ
+      - EC
+      - EE
+      - EG
+      - EH
+      - ER
+      - ES
+      - ET
+      - FI
+      - FJ
+      - FK
+      - FM
+      - FO
+      - FR
+      - GA
+      - GB
+      - GD
+      - GE
+      - GF
+      - GG
+      - GH
+      - GI
+      - GL
+      - GM
+      - GN
+      - GP
+      - GQ
+      - GR
+      - GS
+      - GT
+      - GU
+      - GW
+      - GY
+      - HK
+      - HM
+      - HN
+      - HR
+      - HT
+      - HU
+      - ID
+      - IE
+      - IL
+      - IM
+      - IN
+      - IO
+      - IQ
+      - IR
+      - IS
+      - IT
+      - JE
+      - JM
+      - JO
+      - JP
+      - KE
+      - KG
+      - KH
+      - KI
+      - KM
+      - KN
+      - KP
+      - KR
+      - KW
+      - KY
+      - KZ
+      - LA
+      - LB
+      - LC
+      - LI
+      - LK
+      - LR
+      - LS
+      - LT
+      - LU
+      - LV
+      - LY
+      - MA
+      - MC
+      - MD
+      - ME
+      - MF
+      - MG
+      - MH
+      - MK
+      - ML
+      - MM
+      - MN
+      - MO
+      - MP
+      - MQ
+      - MR
+      - MS
+      - MT
+      - MU
+      - MV
+      - MW
+      - MX
+      - MY
+      - MZ
+      - NA
+      - NC
+      - NE
+      - NF
+      - NG
+      - NI
+      - NL
+      - 'NO'
+      - NP
+      - NR
+      - NU
+      - NZ
+      - OM
+      - PA
+      - PE
+      - PF
+      - PG
+      - PH
+      - PK
+      - PL
+      - PM
+      - PN
+      - PR
+      - PS
+      - PT
+      - PW
+      - PY
+      - QA
+      - RE
+      - RO
+      - RS
+      - RU
+      - RW
+      - SA
+      - SB
+      - SC
+      - SD
+      - SE
+      - SG
+      - SH
+      - SI
+      - SJ
+      - SK
+      - SL
+      - SM
+      - SN
+      - SO
+      - SR
+      - SS
+      - ST
+      - SV
+      - SX
+      - SY
+      - SZ
+      - TC
+      - TD
+      - TF
+      - TG
+      - TH
+      - TJ
+      - TK
+      - TL
+      - TM
+      - TN
+      - TO
+      - TR
+      - TT
+      - TV
+      - TW
+      - TZ
+      - UA
+      - UG
+      - US
+      - UY
+      - UZ
+      - VA
+      - VC
+      - VE
+      - VG
+      - VI
+      - VN
+      - VU
+      - WF
+      - WS
+      - YE
+      - YT
+      - ZA
+      - ZM
+      - ZW
+      title: AddressCountry
+    MXLocal:
+      type: object
+      properties:
+        clabe:
+          type:
+          - string
+          - 'null'
+          description: CLABE (Clave Bancaria Estandarizada) account identifier
+        account_number:
+          type:
+          - string
+          - 'null'
+          description: A bank account number if IBAN is not used
+        bic:
+          type:
+          - string
+          - 'null'
+          description: The ISO 9362 Business Identifier Code (BIC) of the bank account
+      title: MXLocal
+    MeterConditionOperandExpression:
+      type: object
+      properties: {}
+      title: MeterConditionOperandExpression
+    MeterValueStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the meter value indicating the activity and the ability to update properties.
+      title: MeterValueStatus
+    ApiErrorResourceType:
+      type: string
+      enum:
+      - CUSTOMER
+      - CUSTOM_FIELD
+      - PLATFORM
+      - PLATFORM_UPTODATE
+      - METER
+      - METER_VALUE
+      - METER_PROPERTY
+      - METER_VALUE_CALCULATION
+      - INGEST_DATA
+      - METER_DATA
+      - CHARGE_DATA
+      - PERSIST_DATA
+      - ADJUSTMENT_DATA
+      - PRODUCT_CATEGORY
+      - PRODUCT
+      - PRODUCT_ITEM
+      - PRICING
+      - PRICING_GROUP
+      - PRICING_ITEM
+      - PRICING_ITEM_CONFIG
+      - PRICING_PLAN_SUBSCRIPTION
+      - PRICING_PLAN_SUBSCRIPTION_GROUP
+      - PRICING_PLAN_SCHEDULE
+      - PRICING_PLAN
+      - PRICING_PLAN_VERSION
+      - QUOTE
+      - QUOTE_VERSION
+      - QUOTE_TEMPLATE
+      - API_KEY
+      - USER
+      - ROLE
+      - PROXY_USER
+      - EXTERNAL_CREDENTIALS
+      - TOKEN
+      - INVOICE
+      - E_INVOICE
+      - PDF
+      - BILLING_ENTITY
+      - FEATURE
+      - MEMBERSHIP
+      - PAYMENT
+      - PAYMENT_ACCEPTOR
+      - PAYMENT_METHOD
+      - PAYMENT_METHOD_OPTIONS
+      - PAYMENT_SCHEDULE
+      - PAYMENT_REQUEST
+      - INTEGRATION
+      - WEBHOOK
+      - FILE
+      - FILE_PROCESSING_SETTINGS
+      - TEAM
+      - DOWNLOAD_URL
+      - CSV_REPORT
+      - REPORT
+      - REPORT_GENERATE_REQUEST
+      - REPORT_CONFIGURATION
+      - REPORT_SUBSCRIPTION
+      - REPORT_DEFINITION
+      - ACCOUNT_GROUP
+      - ENTITY
+      - EVENT_TRACE
+      - EVENT_TRACE_LINK
+      - PRICING_CATEGORY
+      - CONTACT
+      - ALERT_RULE
+      - ALERT
+      - AUDIT_RECORD
+      - PORTAL_URL
+      - AUTHENTICATION_PROVIDER
+      - REPROCESS
+      - APPROVAL_POLICY
+      - APPROVAL_REQUEST
+      - BULK_ACTION
+      - COUPON
+      - PROMOTION_CODE
+      - WALLET
+      - WALLET_TYPE
+      - WALLET_GRANT
+      - WORKFLOW
+      - WORKFLOW_TRIGGER
+      - WORKFLOW_ACTION
+      - CREDIT_TYPE
+      - SIGNATURE_REQUEST
+      - ATTACHMENT
+      - DOCUMENT
+      title: ApiErrorResourceType
+    CustomTaxCode:
+      type: object
+      properties:
+        field:
+          $ref: '#/components/schemas/CustomTaxCodeField'
+          description: The field to use a custom code for
+        value:
+          type: string
+      title: CustomTaxCode
+    WalletTypeCreditAmountGrantDefaultCurrency:
+      type: string
+      enum:
+      - AED
+      - AFN
+      - ALL
+      - AMD
+      - ANG
+      - AOA
+      - ARS
+      - AUD
+      - AWG
+      - AZN
+      - BAM
+      - BBD
+      - BDT
+      - BGN
+      - BHD
+      - BIF
+      - BMD
+      - BND
+      - BOB
+      - BRL
+      - BSD
+      - BTN
+      - BWP
+      - BYN
+      - BZD
+      - CAD
+      - CDF
+      - CHF
+      - CLF
+      - CLP
+      - CNY
+      - COP
+      - CRC
+      - CUC
+      - CUP
+      - CVE
+      - CZK
+      - DJF
+      - DKK
+      - DOP
+      - DZD
+      - EGP
+      - ERN
+      - ETB
+      - EUR
+      - FJD
+      - FKP
+      - GBP
+      - GEL
+      - GHS
+      - GIP
+      - GMD
+      - GNF
+      - GTQ
+      - GYD
+      - HKD
+      - HNL
+      - HRK
+      - HTG
+      - HUF
+      - IDR
+      - ILS
+      - INR
+      - IQD
+      - IRR
+      - ISK
+      - JMD
+      - JOD
+      - JPY
+      - KES
+      - KGS
+      - KHR
+      - KMF
+      - KPW
+      - KRW
+      - KWD
+      - KYD
+      - KZT
+      - LAK
+      - LBP
+      - LKR
+      - LRD
+      - LSL
+      - LYD
+      - MAD
+      - MDL
+      - MGA
+      - MKD
+      - MMK
+      - MNT
+      - MOP
+      - MRO
+      - MRU
+      - MUR
+      - MVR
+      - MWK
+      - MXN
+      - MXV
+      - MYR
+      - MZN
+      - NAD
+      - NGN
+      - NIO
+      - NOK
+      - NPR
+      - NZD
+      - OMR
+      - PAB
+      - PEN
+      - PGK
+      - PHP
+      - PKR
+      - PLN
+      - PYG
+      - QAR
+      - RON
+      - RSD
+      - RUB
+      - RWF
+      - SAR
+      - SBD
+      - SCR
+      - SDG
+      - SEK
+      - SGD
+      - SHP
+      - SLE
+      - SOS
+      - SRD
+      - SSP
+      - STN
+      - SVC
+      - SYP
+      - SZL
+      - THB
+      - TJS
+      - TMT
+      - TND
+      - TOP
+      - TRY
+      - TTD
+      - TWD
+      - TZS
+      - UAH
+      - UGX
+      - USD
+      - USN
+      - UYI
+      - UYU
+      - UZS
+      - VEF
+      - VES
+      - VND
+      - VUV
+      - WST
+      - XAF
+      - XAG
+      - XAU
+      - XBA
+      - XBB
+      - XBC
+      - XBD
+      - XCD
+      - XDR
+      - XOF
+      - XPD
+      - XPF
+      - XPT
+      - XSU
+      - XTS
+      - XUA
+      - XXX
+      - YER
+      - ZAR
+      - ZMW
+      - ZWL
+      description: The default currency for the wallet.
+      title: WalletTypeCreditAmountGrantDefaultCurrency
+    SellerDetails:
+      type: object
+      properties:
+        seller_customer_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOMER
+      title: SellerDetails
+    MeterMeterValue:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type METER_VALUE
+        object:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValue'
+          - type: 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+        required:
+          type:
+          - boolean
+          - 'null'
+      title: MeterMeterValue
+    Commitment:
+      type: object
+      properties:
+        pricing_item_configs:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingItemConfigCommitment'
+        pricing_items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingItemCommitment'
+        pricings:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingCommitment'
+        totals:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/InvoiceCommitment'
+      title: Commitment
+    PaymentGatewayPaymentAcceptorLink:
+      type: object
+      properties:
+        expiry_period:
+          $ref: '#/components/schemas/Period'
+      title: PaymentGatewayPaymentAcceptorLink
+    PricingGroupSelectionConstraint:
+      type: string
+      enum:
+      - ANY
+      - AT_LEAST_ONE
+      - AT_MOST_ONE
+      - EXACTLY_ONE
+      title: PricingGroupSelectionConstraint
+    MeterValueCalculationCalculationType:
+      type: string
+      enum:
+      - SUM
+      - MAX
+      - MIN
+      - AVERAGE
+      - UNIQUE
+      description: The type of calculation used for this billable metric.
+      title: MeterValueCalculationCalculationType
+    MeterValue:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueStatus'
+          - type: 'null'
+          description: The status of the meter value indicating the activity and the ability to update properties.
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueType'
+          - type: 'null'
+          description: The type of the meter value.
+      title: MeterValue
+    ProductProductType:
+      type: string
+      enum:
+      - DEFAULT
+      - ADDON
+      title: ProductProductType
+    PaymentGatewayIntegration:
+      type: object
+      properties:
+        variant:
+          $ref: '#/components/schemas/PaymentGatewayIntegrationVariant'
+          description: The variant of payment integration.
+        adyen:
+          $ref: '#/components/schemas/AdyenPaymentGatewayIntegration'
+        stripe:
+          $ref: '#/components/schemas/StripePaymentGatewayIntegration'
+      title: PaymentGatewayIntegration
+    Pricing:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        pricing_plan_version_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type PRICING_PLAN_VERSION
+        pricing_plan_schedule_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type PRICING_PLAN_SCHEDULE
+        pricing_group_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type PRICING_GROUP
+        original_pricing_id:
+          type:
+          - string
+          - 'null'
+        original_pricing:
+          oneOf:
+          - $ref: '#/components/schemas/PricingOriginalPricing'
+          - type: 'null'
+          description: This property creates a circular reference in the `Pricing` schema. If you experience any issues with OpenAPI tools related to these circular references, you can try removing this property from the specification.
+        override:
+          oneOf:
+          - $ref: '#/components/schemas/PricingOverride'
+          - type: 'null'
+        name:
+          type:
+          - string
+          - 'null'
+        product_type:
+          oneOf:
+          - $ref: '#/components/schemas/PricingProductType'
+          - type: 'null'
+        product_ids:
+          type: array
+          items:
+            type: string
+        display_order:
+          type:
+          - integer
+          - 'null'
+        products:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Product'
+        entitlements:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Entitlement'
+        items:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingItem'
+      title: Pricing
+  securitySchemes:
+    API-Key:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+    JWT-Authentication:
+      type: http
+      scheme: bearer

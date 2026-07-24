@@ -1,0 +1,931 @@
+openapi: 3.1.0
+info:
+  title: Configuration alertRules workflowTriggers API
+  version: 1.0.0
+servers:
+- url: https://test.api.solvimon.com
+  description: The TEST environment for our API
+- url: https://api.solvimon.com
+  description: The live environment for our API
+tags:
+- name: workflowTriggers
+paths:
+  /v{version}/workflow-triggers:
+    get:
+      operationId: getWorkflowTriggers
+      summary: Get all workflow triggers
+      description: Returns paginated workflow trigger records for the platform. Triggers represent concrete workflow executions bound to a specific resource instance. Requires the WORKFLOW_TRIGGER.VIEW permission.
+      tags:
+      - workflowTriggers
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: limit
+        in: query
+        description: The amount of records shown in the list
+        required: false
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: The page which is going to be shown
+        required: false
+        schema:
+          type: integer
+      - name: order_by
+        in: query
+        description: The parameter by which the response is ordered.
+        required: false
+        schema:
+          type: string
+      - name: order_direction
+        in: query
+        description: The order direction by which the response is ordered.
+        required: false
+        schema:
+          type: string
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowTriggerPaginatedResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      operationId: postWorkflowTriggers
+      summary: Create a workflow trigger
+      description: Creates a manual workflow trigger for a concrete resource instance. Provide the payload for exactly one supported target type. Requires the WORKFLOW_TRIGGER.CREATE permission.
+      tags:
+      - workflowTriggers
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowTrigger'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkflowTriggerCreateRequest'
+  /v{version}/workflow-triggers/{resourceId}:
+    get:
+      operationId: getWorkflowTriggersByResourceId
+      summary: Get workflow trigger by ID
+      description: Fetches a single workflow trigger by resource ID. Requires the WORKFLOW_TRIGGER.VIEW permission.
+      tags:
+      - workflowTriggers
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowTrigger'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /v{version}/workflow-triggers/search:
+    post:
+      operationId: postWorkflowTriggersSearch
+      summary: Search workflow triggers
+      description: Searches workflow trigger records with the provided search body plus pagination and ordering query parameters. Requires the WORKFLOW_TRIGGER.VIEW permission.
+      tags:
+      - workflowTriggers
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: expand[]
+        in: query
+        description: The id fields of the resources that are going to be expanded.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: limit
+        in: query
+        description: The amount of records shown in the list
+        required: false
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: The page which is going to be shown
+        required: false
+        schema:
+          type: integer
+      - name: order_by
+        in: query
+        description: The parameter by which the response is ordered. default = name
+        required: false
+        schema:
+          type: string
+      - name: order_direction
+        in: query
+        description: The parameter for the response ordering direction (asc, desc) default asc
+        required: false
+        schema:
+          type: string
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowTriggerPaginatedResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchCreateRequest'
+components:
+  schemas:
+    InvoiceTriggerEvent:
+      type: object
+      properties:
+        variant:
+          $ref: '#/components/schemas/InvoiceTriggerEventVariant'
+          description: Invoice workflow variant used for the execution.
+        overdue:
+          oneOf:
+          - $ref: '#/components/schemas/InvoiceTriggerOverdue'
+          - type: 'null'
+          description: Overdue details captured for invoice overdue executions.
+      description: Defines event details captured for invoice workflow triggers.
+      title: InvoiceTriggerEvent
+    Period:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/PeriodType'
+        value:
+          type:
+          - integer
+          - 'null'
+      title: Period
+    InvoiceTriggerManual:
+      type: object
+      properties:
+        user_id:
+          type:
+          - string
+          - 'null'
+          description: User who created the manual trigger execution.
+        variant:
+          $ref: '#/components/schemas/InvoiceTriggerManualVariant'
+          description: Invoice workflow variant selected for the manual execution.
+        overdue:
+          $ref: '#/components/schemas/InvoiceTriggerOverdue'
+          description: Overdue details used for the manual invoice execution.
+      description: Defines manual execution details captured for an invoice trigger.
+      title: InvoiceTriggerManual
+    SearchCreateRequest:
+      type: object
+      properties:
+        search_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchFieldCreateRequest'
+        filter_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/FilterFieldCreateRequest'
+        selection_rule_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/SelectionRuleFieldCreateRequest'
+      title: SearchCreateRequest
+    WorkflowTriggerType:
+      type: string
+      enum:
+      - MANUAL
+      - EVENT
+      description: Source of the trigger execution, such as a manual request or a system event.
+      title: WorkflowTriggerType
+    PaymentTriggerCreateRequest:
+      type: object
+      properties:
+        payment_id:
+          type: string
+          description: Payment that the workflow execution runs for.
+        event:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentTriggerEvent'
+          - type: 'null'
+          description: Event details recorded for payment executions created from system activity.
+        manual:
+          $ref: '#/components/schemas/PaymentTriggerManual'
+          description: Manual execution details recorded for payment triggers started by a user.
+      description: Stores the payment reference and execution details used when a workflow runs for a payment.
+      title: PaymentTriggerCreateRequest
+    FilterFieldCreateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        reference:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+        values:
+          type: array
+          items:
+            type: string
+      title: FilterFieldCreateRequest
+    PaymentTriggerManualVariant:
+      type: string
+      enum:
+      - FAILED_PAYMENT
+      description: Payment workflow variant selected for the manual execution.
+      title: PaymentTriggerManualVariant
+    PaymentTrigger:
+      type: object
+      properties:
+        payment_id:
+          type: string
+          description: Payment that the workflow execution runs for.
+        event:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentTriggerEvent'
+          - type: 'null'
+          description: Event details recorded for payment executions created from system activity.
+        manual:
+          $ref: '#/components/schemas/PaymentTriggerManual'
+          description: Manual execution details recorded for payment triggers started by a user.
+      description: Stores the payment reference and execution details used when a workflow runs for a payment.
+      title: PaymentTrigger
+    PaymentTriggerEvent:
+      type: object
+      properties:
+        variant:
+          $ref: '#/components/schemas/PaymentTriggerEventVariant'
+          description: Payment workflow variant used for the execution.
+      description: Defines event details captured for payment workflow triggers.
+      title: PaymentTriggerEvent
+    WorkflowTriggerCreateRequestType:
+      type: string
+      enum:
+      - MANUAL
+      - EVENT
+      description: Source of the trigger execution, such as a manual request or a system event.
+      title: WorkflowTriggerCreateRequestType
+    PeriodType:
+      type: string
+      enum:
+      - DAY
+      - WEEK
+      - MONTH
+      - YEAR
+      title: PeriodType
+    PricingPlanSubscriptionTriggerEvent:
+      type: object
+      properties:
+        variant:
+          $ref: '#/components/schemas/PricingPlanSubscriptionTriggerEventVariant'
+      title: PricingPlanSubscriptionTriggerEvent
+    InvoiceTriggerEventVariant:
+      type: string
+      enum:
+      - TO_FINAL
+      - OVERDUE
+      - UPCOMING_PAYMENT_REMINDER
+      description: Invoice workflow variant used for the execution.
+      title: InvoiceTriggerEventVariant
+    PricingPlanSubscriptionTriggerCreateRequest:
+      type: object
+      properties:
+        pricing_plan_subscription_id:
+          type: string
+          description: Resource ID of type PRICING_PLAN_SUBSCRIPTION
+        pricing_plan_schedule_id:
+          type: string
+          description: Resource ID of type PRICING_PLAN_SCHEDULE
+        trial_end_at:
+          type: string
+          format: date-time
+        event:
+          oneOf:
+          - $ref: '#/components/schemas/PricingPlanSubscriptionTriggerEvent'
+          - type: 'null'
+        manual:
+          $ref: '#/components/schemas/PricingPlanSubscriptionTriggerManual'
+      title: PricingPlanSubscriptionTriggerCreateRequest
+    WorkflowTrigger:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        customer_id:
+          type:
+          - string
+          - 'null'
+          description: Customer scope associated with the trigger execution.
+        workflow_id:
+          type: string
+          description: Workflow executed by this trigger.
+        type:
+          $ref: '#/components/schemas/WorkflowTriggerType'
+          description: Source of the trigger execution, such as a manual request or a system event.
+        invoice:
+          $ref: '#/components/schemas/InvoiceTrigger'
+          description: Invoice trigger details for executions that run on an invoice.
+        payment:
+          $ref: '#/components/schemas/PaymentTrigger'
+          description: Payment trigger details for executions that run on a payment.
+        pricing_plan_subscription:
+          $ref: '#/components/schemas/PricingPlanSubscriptionTrigger'
+          description: Pricing plan subscription trigger details for executions that run on a subscription.
+        wallet:
+          $ref: '#/components/schemas/WalletTrigger'
+          description: Wallet trigger details for executions that run on a wallet balance event.
+      description: Represents a workflow execution request for a specific business object and stores the context used to run it.
+      title: WorkflowTrigger
+    WorkflowTriggerPaginatedResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkflowTrigger'
+          description: Workflow trigger records returned for the current page.
+        limit:
+          type:
+          - integer
+          - 'null'
+          description: Maximum number of records included in the page.
+        page:
+          type:
+          - integer
+          - 'null'
+          description: Current page number, starting at 1.
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+          description: Navigation links for related pages.
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+          description: Legacy page count value kept for compatibility.
+      required:
+      - data
+      - links
+      description: Paginated response that returns workflow trigger records together with pagination metadata.
+      title: WorkflowTriggerPaginatedResponse
+    PricingPlanSubscriptionTrigger:
+      type: object
+      properties:
+        pricing_plan_subscription_id:
+          type: string
+          description: Resource ID of type PRICING_PLAN_SUBSCRIPTION
+        pricing_plan_schedule_id:
+          type: string
+          description: Resource ID of type PRICING_PLAN_SCHEDULE
+        trial_end_at:
+          type: string
+          format: date-time
+        event:
+          oneOf:
+          - $ref: '#/components/schemas/PricingPlanSubscriptionTriggerEvent'
+          - type: 'null'
+        manual:
+          $ref: '#/components/schemas/PricingPlanSubscriptionTriggerManual'
+      title: PricingPlanSubscriptionTrigger
+    PaymentTriggerEventVariant:
+      type: string
+      enum:
+      - FAILED_PAYMENT
+      description: Payment workflow variant used for the execution.
+      title: PaymentTriggerEventVariant
+    InvoiceTriggerCreateRequest:
+      type: object
+      properties:
+        invoice_id:
+          type: string
+          description: Invoice that the workflow execution runs for.
+        event:
+          oneOf:
+          - $ref: '#/components/schemas/InvoiceTriggerEvent'
+          - type: 'null'
+          description: Event details for invoice executions created from system activity.
+        manual:
+          $ref: '#/components/schemas/InvoiceTriggerManual'
+          description: Manual execution details for invoice triggers.
+      description: Stores the invoice reference and execution details used when a workflow runs for an invoice.
+      title: InvoiceTriggerCreateRequest
+    PricingPlanSubscriptionTriggerEventVariant:
+      type: string
+      enum:
+      - FREE_TRIAL_REMINDER
+      title: PricingPlanSubscriptionTriggerEventVariant
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    WalletTriggerCreateRequest:
+      type: object
+      properties:
+        wallet_type_id:
+          type: string
+          description: Wallet type that the workflow execution runs for.
+        wallet_id:
+          type: string
+          description: Wallet that the workflow execution runs for.
+        customer_reference:
+          type:
+          - string
+          - 'null'
+          description: Customer reference associated with the wallet trigger.
+        wallet_reference:
+          type:
+          - string
+          - 'null'
+          description: Wallet reference associated with the wallet trigger.
+        event:
+          oneOf:
+          - $ref: '#/components/schemas/WalletTriggerEvent'
+          - type: 'null'
+          description: Event details recorded for wallet executions created from system activity.
+      description: Stores the wallet reference and execution details used when a workflow runs for a wallet balance event.
+      title: WalletTriggerCreateRequest
+    InvoiceTriggerManualVariant:
+      type: string
+      enum:
+      - TO_FINAL
+      - OVERDUE
+      - UPCOMING_PAYMENT_REMINDER
+      description: Invoice workflow variant selected for the manual execution.
+      title: InvoiceTriggerManualVariant
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    WalletTriggerEventVariant:
+      type: string
+      enum:
+      - WALLET_BALANCE
+      description: Wallet workflow variant used for the execution.
+      title: WalletTriggerEventVariant
+    SelectionRuleFieldCreateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type:
+          - string
+          - 'null'
+      title: SelectionRuleFieldCreateRequest
+    ApiErrorResourceType:
+      type: string
+      enum:
+      - CUSTOMER
+      - CUSTOM_FIELD
+      - PLATFORM
+      - PLATFORM_UPTODATE
+      - METER
+      - METER_VALUE
+      - METER_PROPERTY
+      - METER_VALUE_CALCULATION
+      - INGEST_DATA
+      - METER_DATA
+      - CHARGE_DATA
+      - PERSIST_DATA
+      - ADJUSTMENT_DATA
+      - PRODUCT_CATEGORY
+      - PRODUCT
+      - PRODUCT_ITEM
+      - PRICING
+      - PRICING_GROUP
+      - PRICING_ITEM
+      - PRICING_ITEM_CONFIG
+      - PRICING_PLAN_SUBSCRIPTION
+      - PRICING_PLAN_SUBSCRIPTION_GROUP
+      - PRICING_PLAN_SCHEDULE
+      - PRICING_PLAN
+      - PRICING_PLAN_VERSION
+      - QUOTE
+      - QUOTE_VERSION
+      - QUOTE_TEMPLATE
+      - API_KEY
+      - USER
+      - ROLE
+      - PROXY_USER
+      - EXTERNAL_CREDENTIALS
+      - TOKEN
+      - INVOICE
+      - E_INVOICE
+      - PDF
+      - BILLING_ENTITY
+      - FEATURE
+      - MEMBERSHIP
+      - PAYMENT
+      - PAYMENT_ACCEPTOR
+      - PAYMENT_METHOD
+      - PAYMENT_METHOD_OPTIONS
+      - PAYMENT_SCHEDULE
+      - PAYMENT_REQUEST
+      - INTEGRATION
+      - WEBHOOK
+      - FILE
+      - FILE_PROCESSING_SETTINGS
+      - TEAM
+      - DOWNLOAD_URL
+      - CSV_REPORT
+      - REPORT
+      - REPORT_GENERATE_REQUEST
+      - REPORT_CONFIGURATION
+      - REPORT_SUBSCRIPTION
+      - REPORT_DEFINITION
+      - ACCOUNT_GROUP
+      - ENTITY
+      - EVENT_TRACE
+      - EVENT_TRACE_LINK
+      - PRICING_CATEGORY
+      - CONTACT
+      - ALERT_RULE
+      - ALERT
+      - AUDIT_RECORD
+      - PORTAL_URL
+      - AUTHENTICATION_PROVIDER
+      - REPROCESS
+      - APPROVAL_POLICY
+      - APPROVAL_REQUEST
+      - BULK_ACTION
+      - COUPON
+      - PROMOTION_CODE
+      - WALLET
+      - WALLET_TYPE
+      - WALLET_GRANT
+      - WORKFLOW
+      - WORKFLOW_TRIGGER
+      - WORKFLOW_ACTION
+      - CREDIT_TYPE
+      - SIGNATURE_REQUEST
+      - ATTACHMENT
+      - DOCUMENT
+      title: ApiErrorResourceType
+    PaymentTriggerManual:
+      type: object
+      properties:
+        user_id:
+          type:
+          - string
+          - 'null'
+          description: User who created the manual trigger execution.
+        variant:
+          $ref: '#/components/schemas/PaymentTriggerManualVariant'
+          description: Payment workflow variant selected for the manual execution.
+      description: Defines manual execution details captured for a payment trigger.
+      title: PaymentTriggerManual
+    PricingPlanSubscriptionTriggerManual:
+      type: object
+      properties:
+        user_id:
+          type:
+          - string
+          - 'null'
+        variant:
+          $ref: '#/components/schemas/PricingPlanSubscriptionTriggerManualVariant'
+      title: PricingPlanSubscriptionTriggerManual
+    WalletTriggerEvent:
+      type: object
+      properties:
+        variant:
+          $ref: '#/components/schemas/WalletTriggerEventVariant'
+          description: Wallet workflow variant used for the execution.
+      description: Defines event details captured for wallet workflow triggers.
+      title: WalletTriggerEvent
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    InvoiceTriggerOverdue:
+      type: object
+      properties:
+        period:
+          $ref: '#/components/schemas/Period'
+          description: Overdue period used for the trigger execution.
+      description: Defines overdue timing details stored on an invoice trigger.
+      title: InvoiceTriggerOverdue
+    InvoiceTrigger:
+      type: object
+      properties:
+        invoice_id:
+          type: string
+          description: Invoice that the workflow execution runs for.
+        event:
+          oneOf:
+          - $ref: '#/components/schemas/InvoiceTriggerEvent'
+          - type: 'null'
+          description: Event details for invoice executions created from system activity.
+        manual:
+          $ref: '#/components/schemas/InvoiceTriggerManual'
+          description: Manual execution details for invoice triggers.
+      description: Stores the invoice reference and execution details used when a workflow runs for an invoice.
+      title: InvoiceTrigger
+    PricingPlanSubscriptionTriggerManualVariant:
+      type: string
+      enum:
+      - FREE_TRIAL_REMINDER
+      title: PricingPlanSubscriptionTriggerManualVariant
+    PaginationLinks:
+      type: object
+      properties:
+        first:
+          type:
+          - string
+          - 'null'
+        previous:
+          type:
+          - string
+          - 'null'
+        current:
+          type:
+          - string
+          - 'null'
+        next:
+          type:
+          - string
+          - 'null'
+      title: PaginationLinks
+    WorkflowTriggerCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        customer_id:
+          type:
+          - string
+          - 'null'
+          description: Customer scope associated with the trigger execution.
+        workflow_id:
+          type: string
+          description: Workflow executed by this trigger.
+        type:
+          $ref: '#/components/schemas/WorkflowTriggerCreateRequestType'
+          description: Source of the trigger execution, such as a manual request or a system event.
+        invoice:
+          $ref: '#/components/schemas/InvoiceTriggerCreateRequest'
+          description: Invoice trigger details for executions that run on an invoice.
+        payment:
+          $ref: '#/components/schemas/PaymentTriggerCreateRequest'
+          description: Payment trigger details for executions that run on a payment.
+        pricing_plan_subscription:
+          $ref: '#/components/schemas/PricingPlanSubscriptionTriggerCreateRequest'
+          description: Pricing plan subscription trigger details for executions that run on a subscription.
+        wallet:
+          $ref: '#/components/schemas/WalletTriggerCreateRequest'
+          description: Wallet trigger details for executions that run on a wallet balance event.
+      required:
+      - type
+      description: Represents a workflow execution request for a specific business object and stores the context used to run it.
+      title: WorkflowTriggerCreateRequest
+    SearchFieldCreateRequest:
+      type: object
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+        value:
+          type: string
+        wildcard_start:
+          type: boolean
+        wildcard_end:
+          type: boolean
+        ignore_case:
+          type: boolean
+      title: SearchFieldCreateRequest
+    WalletTrigger:
+      type: object
+      properties:
+        wallet_type_id:
+          type: string
+          description: Wallet type that the workflow execution runs for.
+        wallet_id:
+          type: string
+          description: Wallet that the workflow execution runs for.
+        customer_reference:
+          type:
+          - string
+          - 'null'
+          description: Customer reference associated with the wallet trigger.
+        wallet_reference:
+          type:
+          - string
+          - 'null'
+          description: Wallet reference associated with the wallet trigger.
+        event:
+          oneOf:
+          - $ref: '#/components/schemas/WalletTriggerEvent'
+          - type: 'null'
+          description: Event details recorded for wallet executions created from system activity.
+      description: Stores the wallet reference and execution details used when a workflow runs for a wallet balance event.
+      title: WalletTrigger
+  securitySchemes:
+    API-Key:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+    JWT-Authentication:
+      type: http
+      scheme: bearer

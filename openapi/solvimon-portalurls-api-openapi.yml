@@ -1,0 +1,1105 @@
+openapi: 3.1.0
+info:
+  title: Configuration alertRules portalUrls API
+  version: 1.0.0
+servers:
+- url: https://test.api.solvimon.com
+  description: The TEST environment for our API
+- url: https://api.solvimon.com
+  description: The live environment for our API
+tags:
+- name: portalUrls
+paths:
+  /v{version}/portal-urls:
+    get:
+      operationId: getPortalUrls
+      summary: Get a list of portal urls
+      tags:
+      - portalUrls
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: customer_id
+        in: query
+        description: Filter based of customer ID
+        required: false
+        schema:
+          type: string
+      - name: pricing_plan_subscription_id
+        in: query
+        description: Filter based of pricing plan subscription ID
+        required: false
+        schema:
+          type: string
+      - name: type
+        in: query
+        description: Filter portal urls based on the type
+        required: false
+        schema:
+          type: string
+      - name: status
+        in: query
+        description: Filter portal urls based on the status
+        required: false
+        schema:
+          type: string
+      - name: expired
+        in: query
+        description: Filter portal urls based on whether it is expired (true or false)
+        required: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: The amount of records shown in the list
+        required: false
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: The page which is going to be shown
+        required: false
+        schema:
+          type: integer
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PortalUrlResponseWrapper'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      operationId: postPortalUrls
+      summary: Create a portal url
+      tags:
+      - portalUrls
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PortalUrl'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PortalUrlCreateRequest'
+  /v{version}/portal-urls/{resourceId}:
+    get:
+      operationId: getPortalUrlsByResourceId
+      summary: Get a portal url by resource ID
+      tags:
+      - portalUrls
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PortalUrl'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    patch:
+      operationId: patchPortalUrlsByResourceId
+      summary: Patch portal url
+      tags:
+      - portalUrls
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PortalUrl'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PortalUrlUpdateRequest'
+  /v{version}/portal-urls/{resourceId}/revoke:
+    post:
+      operationId: postPortalUrlsByResourceIdRevoke
+      summary: Revoke a portal url
+      tags:
+      - portalUrls
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource for which the action is posted.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PortalUrl'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+components:
+  schemas:
+    PortalUrlWidgets:
+      type: object
+      properties:
+        usage:
+          type:
+          - string
+          - 'null'
+        invoices:
+          type:
+          - string
+          - 'null'
+        pricing_plan_subscriptions:
+          type:
+          - string
+          - 'null'
+      title: PortalUrlWidgets
+    Period:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/PeriodType'
+        value:
+          type:
+          - integer
+          - 'null'
+      title: Period
+    CustomerPortalUrlCreateRequest:
+      type: object
+      properties:
+        display:
+          $ref: '#/components/schemas/DisplayConfig'
+        options:
+          $ref: '#/components/schemas/CustomerActionOptions'
+      title: CustomerPortalUrlCreateRequest
+    PortalUrlResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PortalUrl'
+        page:
+          type:
+          - integer
+          - 'null'
+        limit:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      title: PortalUrlResponseWrapper
+    InvoiceActionOptions:
+      type: object
+      properties:
+        download_invoice:
+          type:
+          - boolean
+          - 'null'
+        pay_open_invoice:
+          type:
+          - boolean
+          - 'null'
+      title: InvoiceActionOptions
+    PeriodCreateRequestType:
+      type: string
+      enum:
+      - DAY
+      - WEEK
+      - MONTH
+      - YEAR
+      title: PeriodCreateRequestType
+    QuoteVersionPortalUrlCreateRequest:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type QUOTE_VERSION
+      title: QuoteVersionPortalUrlCreateRequest
+    CustomerActionOptions:
+      type: object
+      properties:
+        edit_customer_details:
+          type:
+          - boolean
+          - 'null'
+        download_invoice:
+          type:
+          - boolean
+          - 'null'
+        pay_open_invoice:
+          type:
+          - boolean
+          - 'null'
+        combine_open_invoices:
+          type:
+          - boolean
+          - 'null'
+      title: CustomerActionOptions
+    CustomerPortalUrl:
+      type: object
+      properties:
+        display:
+          $ref: '#/components/schemas/DisplayConfig'
+        options:
+          $ref: '#/components/schemas/CustomerActionOptions'
+      title: CustomerPortalUrl
+    PeriodUpdateRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/PeriodUpdateRequestType'
+        value:
+          type:
+          - integer
+          - 'null'
+      title: PeriodUpdateRequest
+    InvoicePortalUrlUpdateRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Resource ID of type INVOICE
+        options:
+          $ref: '#/components/schemas/InvoiceActionOptions'
+      title: InvoicePortalUrlUpdateRequest
+    PortalUrlCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/PortalUrlCreateRequestType'
+          - type: 'null'
+        customer_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOMER
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/PortalUrlCreateRequestStatus'
+          - type: 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        updated_at:
+          type:
+          - string
+          - 'null'
+        expiry_period:
+          $ref: '#/components/schemas/PeriodCreateRequest'
+        expires_at:
+          type:
+          - string
+          - 'null'
+        embedded:
+          type:
+          - boolean
+          - 'null'
+        template_id:
+          type:
+          - string
+          - 'null'
+        token:
+          type:
+          - string
+          - 'null'
+        url:
+          type:
+          - string
+          - 'null'
+        widgets:
+          oneOf:
+          - $ref: '#/components/schemas/PortalUrlWidgetsCreateRequest'
+          - type: 'null'
+        invoice:
+          $ref: '#/components/schemas/InvoicePortalUrlCreateRequest'
+        customer:
+          $ref: '#/components/schemas/CustomerPortalUrlCreateRequest'
+        quote_version:
+          $ref: '#/components/schemas/QuoteVersionPortalUrlCreateRequest'
+        init_pricing_plan_subscription:
+          $ref: '#/components/schemas/InitPricingPlanSubscriptionPortalUrlCreateRequest'
+      required:
+      - type
+      title: PortalUrlCreateRequest
+    PortalUrlType:
+      type: string
+      enum:
+      - INVOICE
+      - PAY_INVOICE
+      - CUSTOMER
+      - QUOTE_VERSION
+      - INIT_PRICING_PLAN_SUBSCRIPTION
+      title: PortalUrlType
+    PeriodCreateRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/PeriodCreateRequestType'
+        value:
+          type:
+          - integer
+          - 'null'
+      title: PeriodCreateRequest
+    PortalUrlCreateRequestType:
+      type: string
+      enum:
+      - INVOICE
+      - PAY_INVOICE
+      - CUSTOMER
+      - QUOTE_VERSION
+      - INIT_PRICING_PLAN_SUBSCRIPTION
+      title: PortalUrlCreateRequestType
+    PortalUrlUpdateRequestType:
+      type: string
+      enum:
+      - INVOICE
+      - PAY_INVOICE
+      - CUSTOMER
+      - QUOTE_VERSION
+      - INIT_PRICING_PLAN_SUBSCRIPTION
+      title: PortalUrlUpdateRequestType
+    PeriodType:
+      type: string
+      enum:
+      - DAY
+      - WEEK
+      - MONTH
+      - YEAR
+      title: PeriodType
+    CustomerPortalUrlUpdateRequest:
+      type: object
+      properties:
+        display:
+          $ref: '#/components/schemas/DisplayConfig'
+        options:
+          $ref: '#/components/schemas/CustomerActionOptions'
+      title: CustomerPortalUrlUpdateRequest
+    PortalUrlUpdateRequestStatus:
+      type: string
+      enum:
+      - PUBLISHED
+      - REVOKED
+      - EXPIRED
+      title: PortalUrlUpdateRequestStatus
+    InitPricingPlanSubscriptionPortalUrlUpdateRequest:
+      type: object
+      properties:
+        pricing_plan_subscription_id:
+          type: string
+          description: Resource ID of type PRICING_PLAN_SUBSCRIPTION
+        success_url:
+          type:
+          - string
+          - 'null'
+      title: InitPricingPlanSubscriptionPortalUrlUpdateRequest
+    InitPricingPlanSubscriptionPortalUrl:
+      type: object
+      properties:
+        pricing_plan_subscription_id:
+          type: string
+          description: Resource ID of type PRICING_PLAN_SUBSCRIPTION
+        success_url:
+          type:
+          - string
+          - 'null'
+      title: InitPricingPlanSubscriptionPortalUrl
+    PortalUrlCreateRequestStatus:
+      type: string
+      enum:
+      - PUBLISHED
+      - REVOKED
+      - EXPIRED
+      title: PortalUrlCreateRequestStatus
+    QuoteVersionPortalUrlUpdateRequest:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type QUOTE_VERSION
+      title: QuoteVersionPortalUrlUpdateRequest
+    PortalUrl:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/PortalUrlType'
+          - type: 'null'
+        customer_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOMER
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/PortalUrlStatus'
+          - type: 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        updated_at:
+          type:
+          - string
+          - 'null'
+        expiry_period:
+          $ref: '#/components/schemas/Period'
+        expires_at:
+          type:
+          - string
+          - 'null'
+        embedded:
+          type:
+          - boolean
+          - 'null'
+        template_id:
+          type:
+          - string
+          - 'null'
+        token:
+          type:
+          - string
+          - 'null'
+        url:
+          type:
+          - string
+          - 'null'
+        widgets:
+          oneOf:
+          - $ref: '#/components/schemas/PortalUrlWidgets'
+          - type: 'null'
+        invoice:
+          $ref: '#/components/schemas/InvoicePortalUrl'
+        customer:
+          $ref: '#/components/schemas/CustomerPortalUrl'
+        quote_version:
+          $ref: '#/components/schemas/QuoteVersionPortalUrl'
+        init_pricing_plan_subscription:
+          $ref: '#/components/schemas/InitPricingPlanSubscriptionPortalUrl'
+      title: PortalUrl
+    InvoicePortalUrlCreateRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Resource ID of type INVOICE
+        options:
+          $ref: '#/components/schemas/InvoiceActionOptions'
+      title: InvoicePortalUrlCreateRequest
+    PeriodUpdateRequestType:
+      type: string
+      enum:
+      - DAY
+      - WEEK
+      - MONTH
+      - YEAR
+      title: PeriodUpdateRequestType
+    InitPricingPlanSubscriptionPortalUrlCreateRequest:
+      type: object
+      properties:
+        pricing_plan_subscription_id:
+          type: string
+          description: Resource ID of type PRICING_PLAN_SUBSCRIPTION
+        success_url:
+          type:
+          - string
+          - 'null'
+      title: InitPricingPlanSubscriptionPortalUrlCreateRequest
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    PortalUrlStatus:
+      type: string
+      enum:
+      - PUBLISHED
+      - REVOKED
+      - EXPIRED
+      title: PortalUrlStatus
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    PortalUrlWidgetsUpdateRequest:
+      type: object
+      properties:
+        usage:
+          type:
+          - string
+          - 'null'
+        invoices:
+          type:
+          - string
+          - 'null'
+        pricing_plan_subscriptions:
+          type:
+          - string
+          - 'null'
+      title: PortalUrlWidgetsUpdateRequest
+    ApiErrorResourceType:
+      type: string
+      enum:
+      - CUSTOMER
+      - CUSTOM_FIELD
+      - PLATFORM
+      - PLATFORM_UPTODATE
+      - METER
+      - METER_VALUE
+      - METER_PROPERTY
+      - METER_VALUE_CALCULATION
+      - INGEST_DATA
+      - METER_DATA
+      - CHARGE_DATA
+      - PERSIST_DATA
+      - ADJUSTMENT_DATA
+      - PRODUCT_CATEGORY
+      - PRODUCT
+      - PRODUCT_ITEM
+      - PRICING
+      - PRICING_GROUP
+      - PRICING_ITEM
+      - PRICING_ITEM_CONFIG
+      - PRICING_PLAN_SUBSCRIPTION
+      - PRICING_PLAN_SUBSCRIPTION_GROUP
+      - PRICING_PLAN_SCHEDULE
+      - PRICING_PLAN
+      - PRICING_PLAN_VERSION
+      - QUOTE
+      - QUOTE_VERSION
+      - QUOTE_TEMPLATE
+      - API_KEY
+      - USER
+      - ROLE
+      - PROXY_USER
+      - EXTERNAL_CREDENTIALS
+      - TOKEN
+      - INVOICE
+      - E_INVOICE
+      - PDF
+      - BILLING_ENTITY
+      - FEATURE
+      - MEMBERSHIP
+      - PAYMENT
+      - PAYMENT_ACCEPTOR
+      - PAYMENT_METHOD
+      - PAYMENT_METHOD_OPTIONS
+      - PAYMENT_SCHEDULE
+      - PAYMENT_REQUEST
+      - INTEGRATION
+      - WEBHOOK
+      - FILE
+      - FILE_PROCESSING_SETTINGS
+      - TEAM
+      - DOWNLOAD_URL
+      - CSV_REPORT
+      - REPORT
+      - REPORT_GENERATE_REQUEST
+      - REPORT_CONFIGURATION
+      - REPORT_SUBSCRIPTION
+      - REPORT_DEFINITION
+      - ACCOUNT_GROUP
+      - ENTITY
+      - EVENT_TRACE
+      - EVENT_TRACE_LINK
+      - PRICING_CATEGORY
+      - CONTACT
+      - ALERT_RULE
+      - ALERT
+      - AUDIT_RECORD
+      - PORTAL_URL
+      - AUTHENTICATION_PROVIDER
+      - REPROCESS
+      - APPROVAL_POLICY
+      - APPROVAL_REQUEST
+      - BULK_ACTION
+      - COUPON
+      - PROMOTION_CODE
+      - WALLET
+      - WALLET_TYPE
+      - WALLET_GRANT
+      - WORKFLOW
+      - WORKFLOW_TRIGGER
+      - WORKFLOW_ACTION
+      - CREDIT_TYPE
+      - SIGNATURE_REQUEST
+      - ATTACHMENT
+      - DOCUMENT
+      title: ApiErrorResourceType
+    DisplayConfig:
+      type: object
+      properties:
+        usage:
+          type:
+          - boolean
+          - 'null'
+        invoices:
+          type:
+          - boolean
+          - 'null'
+        pricing_plan_subscriptions:
+          type:
+          - boolean
+          - 'null'
+        payment_acceptors:
+          type:
+          - boolean
+          - 'null'
+      title: DisplayConfig
+    PortalUrlWidgetsCreateRequest:
+      type: object
+      properties:
+        usage:
+          type:
+          - string
+          - 'null'
+        invoices:
+          type:
+          - string
+          - 'null'
+        pricing_plan_subscriptions:
+          type:
+          - string
+          - 'null'
+      title: PortalUrlWidgetsCreateRequest
+    InvoicePortalUrl:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Resource ID of type INVOICE
+        options:
+          $ref: '#/components/schemas/InvoiceActionOptions'
+      title: InvoicePortalUrl
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    PortalUrlUpdateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/PortalUrlUpdateRequestType'
+          - type: 'null'
+        customer_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOMER
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/PortalUrlUpdateRequestStatus'
+          - type: 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        updated_at:
+          type:
+          - string
+          - 'null'
+        expiry_period:
+          $ref: '#/components/schemas/PeriodUpdateRequest'
+        expires_at:
+          type:
+          - string
+          - 'null'
+        embedded:
+          type:
+          - boolean
+          - 'null'
+        template_id:
+          type:
+          - string
+          - 'null'
+        token:
+          type:
+          - string
+          - 'null'
+        url:
+          type:
+          - string
+          - 'null'
+        widgets:
+          oneOf:
+          - $ref: '#/components/schemas/PortalUrlWidgetsUpdateRequest'
+          - type: 'null'
+        invoice:
+          $ref: '#/components/schemas/InvoicePortalUrlUpdateRequest'
+        customer:
+          $ref: '#/components/schemas/CustomerPortalUrlUpdateRequest'
+        quote_version:
+          $ref: '#/components/schemas/QuoteVersionPortalUrlUpdateRequest'
+        init_pricing_plan_subscription:
+          $ref: '#/components/schemas/InitPricingPlanSubscriptionPortalUrlUpdateRequest'
+      title: PortalUrlUpdateRequest
+    PaginationLinks:
+      type: object
+      properties:
+        first:
+          type:
+          - string
+          - 'null'
+        previous:
+          type:
+          - string
+          - 'null'
+        current:
+          type:
+          - string
+          - 'null'
+        next:
+          type:
+          - string
+          - 'null'
+      title: PaginationLinks
+    QuoteVersionPortalUrl:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type QUOTE_VERSION
+      title: QuoteVersionPortalUrl
+  securitySchemes:
+    API-Key:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+    JWT-Authentication:
+      type: http
+      scheme: bearer

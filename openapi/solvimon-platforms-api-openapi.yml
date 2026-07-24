@@ -1,0 +1,2691 @@
+openapi: 3.1.0
+info:
+  title: Configuration alertRules platforms API
+  version: 1.0.0
+servers:
+- url: https://test.api.solvimon.com
+  description: The TEST environment for our API
+- url: https://api.solvimon.com
+  description: The live environment for our API
+tags:
+- name: platforms
+paths:
+  /v{version}/platforms/{resourceId}:
+    get:
+      operationId: getPlatformsByResourceId
+      summary: Get your platform details
+      tags:
+      - platforms
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Platform'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    patch:
+      operationId: patchPlatformsByResourceId
+      summary: Update your platform
+      tags:
+      - platforms
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Platform'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlatformUpdateRequest'
+  /v{version}/platforms/{resourceId}/entitlements:
+    get:
+      operationId: getPlatformsByResourceIdEntitlements
+      summary: Get your platform entitlements
+      tags:
+      - platforms
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Entitlements'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /v{version}/platforms/{resourceId}/currencies:
+    get:
+      operationId: getPlatformsByResourceIdCurrencies
+      summary: Get currencies for platform
+      description: Requires the CURRENCIES.VIEW permission.
+      tags:
+      - platforms
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Currency'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /v{version}/platforms/{resourceId}/up-to-date:
+    get:
+      operationId: getPlatformsByResourceIdUpToDate
+      summary: Get up-to-date for platform
+      tags:
+      - platforms
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformUpToDate'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+components:
+  schemas:
+    PortalUrlSettings:
+      type: object
+      properties:
+        expiry_period:
+          $ref: '#/components/schemas/Period'
+      title: PortalUrlSettings
+    Platform:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        status:
+          type:
+          - string
+          - 'null'
+        timezone:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        entity_id:
+          type:
+          - string
+          - 'null'
+          description: The resource ID of the entity.
+        default_billing_entity_id:
+          type:
+          - string
+          - 'null'
+          description: The resource ID of the billing entity.
+        default_product_tax_category:
+          $ref: '#/components/schemas/PlatformDefaultProductTaxCategory'
+          description: The default tax category that will be applied to the product.
+        account_group_id:
+          type: string
+        default_pricing_plan_subscription_settings:
+          $ref: '#/components/schemas/PlatformPricingPlanSubscriptionSettings'
+          description: The default configuration when creating a pricing plan subscription.
+        crm_integrations:
+          $ref: '#/components/schemas/CrmIntegrations'
+          description: The associated crm integrations
+        branding:
+          $ref: '#/components/schemas/Branding'
+          description: Custom branding for the platform, the logo & colors can be set
+        invoice_settings:
+          $ref: '#/components/schemas/InvoiceSettings'
+          description: The settings of the invoice
+        reporting_currency:
+          $ref: '#/components/schemas/PlatformReportingCurrency'
+          description: currency for reporting on platform level
+        default_pricing_currency:
+          $ref: '#/components/schemas/PlatformDefaultPricingCurrency'
+          description: initial/default currency when creating pricingPlanVersions
+        quote_settings:
+          $ref: '#/components/schemas/QuoteSettings'
+          description: The settings of the quote
+        rounding_settings:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/RoundingSetting'
+          description: Allow platforms to configure rounding behavior for different kinds of objects.
+        reprocessing_settings:
+          $ref: '#/components/schemas/ReprocessingSettings'
+          description: Settings for reprocessing
+        processing_settings:
+          $ref: '#/components/schemas/ProcessingSettings'
+          description: Settings for processing
+        default_portal_url_settings:
+          $ref: '#/components/schemas/DefaultPortalUrlSettings'
+          description: The settings related with portal
+      title: Platform
+    Period:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/PeriodType'
+        value:
+          type:
+          - integer
+          - 'null'
+      title: Period
+    RoundingSettingUpdateRequest:
+      type: object
+      properties:
+        rounding_target:
+          $ref: '#/components/schemas/RoundingSettingUpdateRequestRoundingTarget'
+        rounding_mode:
+          $ref: '#/components/schemas/RoundingSettingUpdateRequestRoundingMode'
+      title: RoundingSettingUpdateRequest
+    DueDateType:
+      type: string
+      enum:
+      - PERIOD_AFTER_INVOICE_DATE
+      - END_OF_THE_MONTH
+      title: DueDateType
+    DocumentNumberConfigurationResetPeriod:
+      type: object
+      properties:
+        type:
+          type: string
+        month:
+          oneOf:
+          - $ref: '#/components/schemas/DocumentNumberConfigurationResetPeriodMonth'
+          - type: 'null'
+      title: DocumentNumberConfigurationResetPeriod
+    Entitlements:
+      type: object
+      properties:
+        entitlements:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/EntitlementSummaryItem'
+        pricing_plan_subscription_entitlements:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/EntitlementSummary'
+      title: Entitlements
+    InvoiceSettingsInvoiceDateDeterminationType:
+      type: string
+      enum:
+      - AT_END_OF_BILLING_PERIOD
+      - AFTER_END_OF_BILLING_PERIOD
+      - WHEN_INVOICE_GOES_TO_FINAL
+      description: The configuration for determining the invoice date
+      title: InvoiceSettingsInvoiceDateDeterminationType
+    PlatformUpdateRequestReportingCurrency:
+      type: string
+      enum:
+      - AED
+      - AFN
+      - ALL
+      - AMD
+      - ANG
+      - AOA
+      - ARS
+      - AUD
+      - AWG
+      - AZN
+      - BAM
+      - BBD
+      - BDT
+      - BGN
+      - BHD
+      - BIF
+      - BMD
+      - BND
+      - BOB
+      - BRL
+      - BSD
+      - BTN
+      - BWP
+      - BYN
+      - BZD
+      - CAD
+      - CDF
+      - CHF
+      - CLF
+      - CLP
+      - CNY
+      - COP
+      - CRC
+      - CUC
+      - CUP
+      - CVE
+      - CZK
+      - DJF
+      - DKK
+      - DOP
+      - DZD
+      - EGP
+      - ERN
+      - ETB
+      - EUR
+      - FJD
+      - FKP
+      - GBP
+      - GEL
+      - GHS
+      - GIP
+      - GMD
+      - GNF
+      - GTQ
+      - GYD
+      - HKD
+      - HNL
+      - HRK
+      - HTG
+      - HUF
+      - IDR
+      - ILS
+      - INR
+      - IQD
+      - IRR
+      - ISK
+      - JMD
+      - JOD
+      - JPY
+      - KES
+      - KGS
+      - KHR
+      - KMF
+      - KPW
+      - KRW
+      - KWD
+      - KYD
+      - KZT
+      - LAK
+      - LBP
+      - LKR
+      - LRD
+      - LSL
+      - LYD
+      - MAD
+      - MDL
+      - MGA
+      - MKD
+      - MMK
+      - MNT
+      - MOP
+      - MRO
+      - MRU
+      - MUR
+      - MVR
+      - MWK
+      - MXN
+      - MXV
+      - MYR
+      - MZN
+      - NAD
+      - NGN
+      - NIO
+      - NOK
+      - NPR
+      - NZD
+      - OMR
+      - PAB
+      - PEN
+      - PGK
+      - PHP
+      - PKR
+      - PLN
+      - PYG
+      - QAR
+      - RON
+      - RSD
+      - RUB
+      - RWF
+      - SAR
+      - SBD
+      - SCR
+      - SDG
+      - SEK
+      - SGD
+      - SHP
+      - SLE
+      - SOS
+      - SRD
+      - SSP
+      - STN
+      - SVC
+      - SYP
+      - SZL
+      - THB
+      - TJS
+      - TMT
+      - TND
+      - TOP
+      - TRY
+      - TTD
+      - TWD
+      - TZS
+      - UAH
+      - UGX
+      - USD
+      - USN
+      - UYI
+      - UYU
+      - UZS
+      - VEF
+      - VES
+      - VND
+      - VUV
+      - WST
+      - XAF
+      - XAG
+      - XAU
+      - XBA
+      - XBB
+      - XBC
+      - XBD
+      - XCD
+      - XDR
+      - XOF
+      - XPD
+      - XPF
+      - XPT
+      - XSU
+      - XTS
+      - XUA
+      - XXX
+      - YER
+      - ZAR
+      - ZMW
+      - ZWL
+      description: currency for reporting on platform level
+      title: PlatformUpdateRequestReportingCurrency
+    PlatformUpToDate:
+      type: object
+      properties:
+        timestamp:
+          type:
+          - string
+          - 'null'
+        event_processing_up_to_date_until:
+          type:
+          - string
+          - 'null'
+        invoices_to_be_reprocessed:
+          type:
+          - integer
+          - 'null'
+          format: int64
+        customers_to_be_reprocessed:
+          type:
+          - integer
+          - 'null'
+          format: int64
+        reprocess:
+          oneOf:
+          - $ref: '#/components/schemas/PlatformUpToDateReprocess'
+          - type: 'null'
+      title: PlatformUpToDate
+    ReprocessingSettings:
+      type: object
+      properties:
+        default_delay:
+          $ref: '#/components/schemas/ReprocessingDelay'
+      title: ReprocessingSettings
+    PlatformUpdateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        status:
+          type:
+          - string
+          - 'null'
+        timezone:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        entity_id:
+          type:
+          - string
+          - 'null'
+          description: The resource ID of the entity.
+        default_billing_entity_id:
+          type:
+          - string
+          - 'null'
+          description: The resource ID of the billing entity.
+        default_product_tax_category:
+          $ref: '#/components/schemas/PlatformUpdateRequestDefaultProductTaxCategory'
+          description: The default tax category that will be applied to the product.
+        account_group_id:
+          type: string
+        default_pricing_plan_subscription_settings:
+          $ref: '#/components/schemas/PlatformPricingPlanSubscriptionSettingsUpdateRequest'
+          description: The default configuration when creating a pricing plan subscription.
+        crm_integrations:
+          $ref: '#/components/schemas/CrmIntegrationsUpdateRequest'
+          description: The associated crm integrations
+        branding:
+          $ref: '#/components/schemas/BrandingUpdateRequest'
+          description: Custom branding for the platform, the logo & colors can be set
+        invoice_settings:
+          $ref: '#/components/schemas/InvoiceSettingsUpdateRequest'
+          description: The settings of the invoice
+        reporting_currency:
+          $ref: '#/components/schemas/PlatformUpdateRequestReportingCurrency'
+          description: currency for reporting on platform level
+        default_pricing_currency:
+          $ref: '#/components/schemas/PlatformUpdateRequestDefaultPricingCurrency'
+          description: initial/default currency when creating pricingPlanVersions
+        quote_settings:
+          $ref: '#/components/schemas/QuoteSettingsUpdateRequest'
+          description: The settings of the quote
+        rounding_settings:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/RoundingSettingUpdateRequest'
+          description: Allow platforms to configure rounding behavior for different kinds of objects.
+        reprocessing_settings:
+          $ref: '#/components/schemas/ReprocessingSettingsUpdateRequest'
+          description: Settings for reprocessing
+        processing_settings:
+          $ref: '#/components/schemas/ProcessingSettingsUpdateRequest'
+          description: Settings for processing
+        default_portal_url_settings:
+          $ref: '#/components/schemas/DefaultPortalUrlSettingsUpdateRequest'
+          description: The settings related with portal
+      title: PlatformUpdateRequest
+    PlatformDefaultProductTaxCategory:
+      type: string
+      enum:
+      - STANDARD
+      - NO_TAX
+      - EXEMPT
+      description: The default tax category that will be applied to the product.
+      title: PlatformDefaultProductTaxCategory
+    Image:
+      type: object
+      properties:
+        file_name:
+          type: string
+          description: The name of the image, e.g my-logo.jpg
+        content_type:
+          type: string
+          description: Content type of the image, either image/jpeg, image/svg, image/png or image/webp
+        content:
+          type: string
+          description: The image, encoded as Base64 string, maximum fileSize 10MB
+        public_url:
+          type:
+          - string
+          - 'null'
+          description: URL where the uploaded logo can be found
+      title: Image
+    DocumentNumberConfiguration:
+      type: object
+      properties:
+        prefix:
+          type: string
+        dynamic_prefix:
+          type: array
+          items:
+            type: string
+        separator:
+          type: string
+        increment_by:
+          type: integer
+        first_number:
+          type: integer
+        minimum_number_of_digits:
+          type: integer
+        reset_period:
+          $ref: '#/components/schemas/DocumentNumberConfigurationResetPeriod'
+      title: DocumentNumberConfiguration
+    DocumentNumberConfigurationResetPeriodMonth:
+      type: string
+      enum:
+      - JANUARY
+      - FEBRUARY
+      - MARCH
+      - APRIL
+      - MAY
+      - JUNE
+      - JULY
+      - AUGUST
+      - SEPTEMBER
+      - OCTOBER
+      - NOVEMBER
+      - DECEMBER
+      title: DocumentNumberConfigurationResetPeriodMonth
+    PlatformUpdateRequestDefaultPricingCurrency:
+      type: string
+      enum:
+      - AED
+      - AFN
+      - ALL
+      - AMD
+      - ANG
+      - AOA
+      - ARS
+      - AUD
+      - AWG
+      - AZN
+      - BAM
+      - BBD
+      - BDT
+      - BGN
+      - BHD
+      - BIF
+      - BMD
+      - BND
+      - BOB
+      - BRL
+      - BSD
+      - BTN
+      - BWP
+      - BYN
+      - BZD
+      - CAD
+      - CDF
+      - CHF
+      - CLF
+      - CLP
+      - CNY
+      - COP
+      - CRC
+      - CUC
+      - CUP
+      - CVE
+      - CZK
+      - DJF
+      - DKK
+      - DOP
+      - DZD
+      - EGP
+      - ERN
+      - ETB
+      - EUR
+      - FJD
+      - FKP
+      - GBP
+      - GEL
+      - GHS
+      - GIP
+      - GMD
+      - GNF
+      - GTQ
+      - GYD
+      - HKD
+      - HNL
+      - HRK
+      - HTG
+      - HUF
+      - IDR
+      - ILS
+      - INR
+      - IQD
+      - IRR
+      - ISK
+      - JMD
+      - JOD
+      - JPY
+      - KES
+      - KGS
+      - KHR
+      - KMF
+      - KPW
+      - KRW
+      - KWD
+      - KYD
+      - KZT
+      - LAK
+      - LBP
+      - LKR
+      - LRD
+      - LSL
+      - LYD
+      - MAD
+      - MDL
+      - MGA
+      - MKD
+      - MMK
+      - MNT
+      - MOP
+      - MRO
+      - MRU
+      - MUR
+      - MVR
+      - MWK
+      - MXN
+      - MXV
+      - MYR
+      - MZN
+      - NAD
+      - NGN
+      - NIO
+      - NOK
+      - NPR
+      - NZD
+      - OMR
+      - PAB
+      - PEN
+      - PGK
+      - PHP
+      - PKR
+      - PLN
+      - PYG
+      - QAR
+      - RON
+      - RSD
+      - RUB
+      - RWF
+      - SAR
+      - SBD
+      - SCR
+      - SDG
+      - SEK
+      - SGD
+      - SHP
+      - SLE
+      - SOS
+      - SRD
+      - SSP
+      - STN
+      - SVC
+      - SYP
+      - SZL
+      - THB
+      - TJS
+      - TMT
+      - TND
+      - TOP
+      - TRY
+      - TTD
+      - TWD
+      - TZS
+      - UAH
+      - UGX
+      - USD
+      - USN
+      - UYI
+      - UYU
+      - UZS
+      - VEF
+      - VES
+      - VND
+      - VUV
+      - WST
+      - XAF
+      - XAG
+      - XAU
+      - XBA
+      - XBB
+      - XBC
+      - XBD
+      - XCD
+      - XDR
+      - XOF
+      - XPD
+      - XPF
+      - XPT
+      - XSU
+      - XTS
+      - XUA
+      - XXX
+      - YER
+      - ZAR
+      - ZMW
+      - ZWL
+      description: initial/default currency when creating pricingPlanVersions
+      title: PlatformUpdateRequestDefaultPricingCurrency
+    PlatformPricingPlanSubscriptionSettingsBillingTime:
+      type: string
+      enum:
+      - EXACT
+      - CALENDAR
+      description: The default moment when the invoices for the subscription should be created.
+      title: PlatformPricingPlanSubscriptionSettingsBillingTime
+    DueDate:
+      type: object
+      properties:
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/DueDateType'
+          - type: 'null'
+        period:
+          $ref: '#/components/schemas/Period'
+      title: DueDate
+    Amount:
+      type: object
+      properties:
+        quantity:
+          type: string
+        currency:
+          $ref: '#/components/schemas/AmountCurrency'
+      title: Amount
+    PlatformPricingPlanSubscriptionSettingsUpdateRequestBillingCurrency:
+      type: string
+      enum:
+      - AED
+      - AFN
+      - ALL
+      - AMD
+      - ANG
+      - AOA
+      - ARS
+      - AUD
+      - AWG
+      - AZN
+      - BAM
+      - BBD
+      - BDT
+      - BGN
+      - BHD
+      - BIF
+      - BMD
+      - BND
+      - BOB
+      - BRL
+      - BSD
+      - BTN
+      - BWP
+      - BYN
+      - BZD
+      - CAD
+      - CDF
+      - CHF
+      - CLF
+      - CLP
+      - CNY
+      - COP
+      - CRC
+      - CUC
+      - CUP
+      - CVE
+      - CZK
+      - DJF
+      - DKK
+      - DOP
+      - DZD
+      - EGP
+      - ERN
+      - ETB
+      - EUR
+      - FJD
+      - FKP
+      - GBP
+      - GEL
+      - GHS
+      - GIP
+      - GMD
+      - GNF
+      - GTQ
+      - GYD
+      - HKD
+      - HNL
+      - HRK
+      - HTG
+      - HUF
+      - IDR
+      - ILS
+      - INR
+      - IQD
+      - IRR
+      - ISK
+      - JMD
+      - JOD
+      - JPY
+      - KES
+      - KGS
+      - KHR
+      - KMF
+      - KPW
+      - KRW
+      - KWD
+      - KYD
+      - KZT
+      - LAK
+      - LBP
+      - LKR
+      - LRD
+      - LSL
+      - LYD
+      - MAD
+      - MDL
+      - MGA
+      - MKD
+      - MMK
+      - MNT
+      - MOP
+      - MRO
+      - MRU
+      - MUR
+      - MVR
+      - MWK
+      - MXN
+      - MXV
+      - MYR
+      - MZN
+      - NAD
+      - NGN
+      - NIO
+      - NOK
+      - NPR
+      - NZD
+      - OMR
+      - PAB
+      - PEN
+      - PGK
+      - PHP
+      - PKR
+      - PLN
+      - PYG
+      - QAR
+      - RON
+      - RSD
+      - RUB
+      - RWF
+      - SAR
+      - SBD
+      - SCR
+      - SDG
+      - SEK
+      - SGD
+      - SHP
+      - SLE
+      - SOS
+      - SRD
+      - SSP
+      - STN
+      - SVC
+      - SYP
+      - SZL
+      - THB
+      - TJS
+      - TMT
+      - TND
+      - TOP
+      - TRY
+      - TTD
+      - TWD
+      - TZS
+      - UAH
+      - UGX
+      - USD
+      - USN
+      - UYI
+      - UYU
+      - UZS
+      - VEF
+      - VES
+      - VND
+      - VUV
+      - WST
+      - XAF
+      - XAG
+      - XAU
+      - XBA
+      - XBB
+      - XBC
+      - XBD
+      - XCD
+      - XDR
+      - XOF
+      - XPD
+      - XPF
+      - XPT
+      - XSU
+      - XTS
+      - XUA
+      - XXX
+      - YER
+      - ZAR
+      - ZMW
+      - ZWL
+      description: The default alphabetic currency code representing the type of currency used for billing.
+      title: PlatformPricingPlanSubscriptionSettingsUpdateRequestBillingCurrency
+    ProcessingSettingsUpdateRequest:
+      type: object
+      properties:
+        put_after_invoice_final_on_next_invoice:
+          type:
+          - boolean
+          - 'null'
+          description: If enabled, moves usage to the next OPEN/DRAFT invoice when the matching invoice is already FINAL.
+      title: ProcessingSettingsUpdateRequest
+    DocumentActionSettings:
+      type: object
+      properties:
+        trigger_type:
+          oneOf:
+          - $ref: '#/components/schemas/DocumentActionSettingsTriggerType'
+          - type: 'null'
+      title: DocumentActionSettings
+    PlatformUpdateRequestDefaultProductTaxCategory:
+      type: string
+      enum:
+      - STANDARD
+      - NO_TAX
+      - EXEMPT
+      description: The default tax category that will be applied to the product.
+      title: PlatformUpdateRequestDefaultProductTaxCategory
+    QuotePDFConfiguration:
+      type: object
+      properties:
+        display_customer_details:
+          type:
+          - boolean
+          - 'null'
+          description: The setting to determine whether customer details should be shown
+        display_billing_entity_details:
+          type:
+          - boolean
+          - 'null'
+          description: The setting to determine whether billing entity details should be shown
+      title: QuotePDFConfiguration
+    RoundingSettingRoundingMode:
+      type: string
+      enum:
+      - DEFAULT
+      - UNROUNDED
+      title: RoundingSettingRoundingMode
+    PeriodType:
+      type: string
+      enum:
+      - DAY
+      - WEEK
+      - MONTH
+      - YEAR
+      title: PeriodType
+    PlatformPricingPlanSubscriptionSettingsUpdateRequest:
+      type: object
+      properties:
+        billing_entity_id:
+          type:
+          - string
+          - 'null'
+          description: The default resource ID of the billing entity that is assigned to the subscription.
+        due_date_configuration:
+          $ref: '#/components/schemas/DueDate'
+          description: The default configuration for the due dates on invoices.
+        billing_period:
+          $ref: '#/components/schemas/Period'
+        billing_currency:
+          $ref: '#/components/schemas/PlatformPricingPlanSubscriptionSettingsUpdateRequestBillingCurrency'
+          description: The default alphabetic currency code representing the type of currency used for billing.
+        billing_time:
+          oneOf:
+          - $ref: '#/components/schemas/PlatformPricingPlanSubscriptionSettingsUpdateRequestBillingTime'
+          - type: 'null'
+          description: The default moment when the invoices for the subscription should be created.
+        combine:
+          type:
+          - boolean
+          - 'null'
+          description: The default value if invoices needs to be combined.
+        init_invoice_on_hold:
+          type: boolean
+          description: Should invoices be on hold by default.
+        payment_acceptor_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: the default resource ID(s) of the specific payment acceptors for the subscriptions
+        display_invoice_sub_lines_per_processing_only_customer:
+          type:
+          - boolean
+          - 'null'
+          description: The default setting to include sub lines to an invoice line for (child) customers
+        replicate_meter_data_ingest_to_parent:
+          type:
+          - boolean
+          - 'null'
+          description: The default setting to the ingested meter data of a customer to the parent
+        initial_term:
+          $ref: '#/components/schemas/Period'
+          description: The default initial term for the agreement.
+        renewal_term:
+          $ref: '#/components/schemas/Period'
+          description: The default renewal term after the initial term.
+        auto_renewal:
+          type:
+          - boolean
+          - 'null'
+          description: The default value indicating if the subscription renews automatically.
+      title: PlatformPricingPlanSubscriptionSettingsUpdateRequest
+    ReprocessingDelayType:
+      type: string
+      enum:
+      - SECOND
+      - MINUTE
+      - HOUR
+      title: ReprocessingDelayType
+    DefaultPortalUrlSettings:
+      type: object
+      properties:
+        customer:
+          $ref: '#/components/schemas/PortalUrlSettings'
+      title: DefaultPortalUrlSettings
+    RoundingSetting:
+      type: object
+      properties:
+        rounding_target:
+          $ref: '#/components/schemas/RoundingSettingRoundingTarget'
+        rounding_mode:
+          $ref: '#/components/schemas/RoundingSettingRoundingMode'
+      title: RoundingSetting
+    InvoiceGracePeriod:
+      type: object
+      properties:
+        type:
+          type:
+          - string
+          - 'null'
+        configuration:
+          $ref: '#/components/schemas/InvoiceGracePeriodConfiguration'
+      title: InvoiceGracePeriod
+    CrmIntegrationsUpdateRequest:
+      type: object
+      properties:
+        hubspot:
+          $ref: '#/components/schemas/HubspotIntegration'
+      title: CrmIntegrationsUpdateRequest
+    PlatformUpToDateReprocess:
+      type: object
+      properties:
+        in_progress:
+          type:
+          - boolean
+          - 'null'
+        in_error:
+          type:
+          - boolean
+          - 'null'
+        items_scheduled:
+          type:
+          - integer
+          - 'null'
+          format: int64
+      title: PlatformUpToDateReprocess
+    ProcessingSettings:
+      type: object
+      properties:
+        put_after_invoice_final_on_next_invoice:
+          type:
+          - boolean
+          - 'null'
+          description: If enabled, moves usage to the next OPEN/DRAFT invoice when the matching invoice is already FINAL.
+      title: ProcessingSettings
+    RoundingSettingUpdateRequestRoundingTarget:
+      type: string
+      enum:
+      - INVOICE
+      - COST_PREDICTION
+      title: RoundingSettingUpdateRequestRoundingTarget
+    Currency:
+      type: object
+      properties:
+        currencyCode:
+          type: string
+        code:
+          type: string
+        currencyId:
+          $ref: '#/components/schemas/Short'
+        numeric:
+          $ref: '#/components/schemas/Short'
+        sign:
+          type: string
+        exponent:
+          $ref: '#/components/schemas/Short'
+        countryCodes:
+          type: array
+          items:
+            type: string
+        countries:
+          type: array
+          items:
+            type: string
+        currencyName:
+          type: string
+        name:
+          type: string
+      title: Currency
+    ReprocessingSettingsUpdateRequest:
+      type: object
+      properties:
+        default_delay:
+          $ref: '#/components/schemas/ReprocessingDelay'
+      title: ReprocessingSettingsUpdateRequest
+    Short:
+      type: object
+      properties: {}
+      title: Short
+    PlatformDefaultPricingCurrency:
+      type: string
+      enum:
+      - AED
+      - AFN
+      - ALL
+      - AMD
+      - ANG
+      - AOA
+      - ARS
+      - AUD
+      - AWG
+      - AZN
+      - BAM
+      - BBD
+      - BDT
+      - BGN
+      - BHD
+      - BIF
+      - BMD
+      - BND
+      - BOB
+      - BRL
+      - BSD
+      - BTN
+      - BWP
+      - BYN
+      - BZD
+      - CAD
+      - CDF
+      - CHF
+      - CLF
+      - CLP
+      - CNY
+      - COP
+      - CRC
+      - CUC
+      - CUP
+      - CVE
+      - CZK
+      - DJF
+      - DKK
+      - DOP
+      - DZD
+      - EGP
+      - ERN
+      - ETB
+      - EUR
+      - FJD
+      - FKP
+      - GBP
+      - GEL
+      - GHS
+      - GIP
+      - GMD
+      - GNF
+      - GTQ
+      - GYD
+      - HKD
+      - HNL
+      - HRK
+      - HTG
+      - HUF
+      - IDR
+      - ILS
+      - INR
+      - IQD
+      - IRR
+      - ISK
+      - JMD
+      - JOD
+      - JPY
+      - KES
+      - KGS
+      - KHR
+      - KMF
+      - KPW
+      - KRW
+      - KWD
+      - KYD
+      - KZT
+      - LAK
+      - LBP
+      - LKR
+      - LRD
+      - LSL
+      - LYD
+      - MAD
+      - MDL
+      - MGA
+      - MKD
+      - MMK
+      - MNT
+      - MOP
+      - MRO
+      - MRU
+      - MUR
+      - MVR
+      - MWK
+      - MXN
+      - MXV
+      - MYR
+      - MZN
+      - NAD
+      - NGN
+      - NIO
+      - NOK
+      - NPR
+      - NZD
+      - OMR
+      - PAB
+      - PEN
+      - PGK
+      - PHP
+      - PKR
+      - PLN
+      - PYG
+      - QAR
+      - RON
+      - RSD
+      - RUB
+      - RWF
+      - SAR
+      - SBD
+      - SCR
+      - SDG
+      - SEK
+      - SGD
+      - SHP
+      - SLE
+      - SOS
+      - SRD
+      - SSP
+      - STN
+      - SVC
+      - SYP
+      - SZL
+      - THB
+      - TJS
+      - TMT
+      - TND
+      - TOP
+      - TRY
+      - TTD
+      - TWD
+      - TZS
+      - UAH
+      - UGX
+      - USD
+      - USN
+      - UYI
+      - UYU
+      - UZS
+      - VEF
+      - VES
+      - VND
+      - VUV
+      - WST
+      - XAF
+      - XAG
+      - XAU
+      - XBA
+      - XBB
+      - XBC
+      - XBD
+      - XCD
+      - XDR
+      - XOF
+      - XPD
+      - XPF
+      - XPT
+      - XSU
+      - XTS
+      - XUA
+      - XXX
+      - YER
+      - ZAR
+      - ZMW
+      - ZWL
+      description: initial/default currency when creating pricingPlanVersions
+      title: PlatformDefaultPricingCurrency
+    PlatformReportingCurrency:
+      type: string
+      enum:
+      - AED
+      - AFN
+      - ALL
+      - AMD
+      - ANG
+      - AOA
+      - ARS
+      - AUD
+      - AWG
+      - AZN
+      - BAM
+      - BBD
+      - BDT
+      - BGN
+      - BHD
+      - BIF
+      - BMD
+      - BND
+      - BOB
+      - BRL
+      - BSD
+      - BTN
+      - BWP
+      - BYN
+      - BZD
+      - CAD
+      - CDF
+      - CHF
+      - CLF
+      - CLP
+      - CNY
+      - COP
+      - CRC
+      - CUC
+      - CUP
+      - CVE
+      - CZK
+      - DJF
+      - DKK
+      - DOP
+      - DZD
+      - EGP
+      - ERN
+      - ETB
+      - EUR
+      - FJD
+      - FKP
+      - GBP
+      - GEL
+      - GHS
+      - GIP
+      - GMD
+      - GNF
+      - GTQ
+      - GYD
+      - HKD
+      - HNL
+      - HRK
+      - HTG
+      - HUF
+      - IDR
+      - ILS
+      - INR
+      - IQD
+      - IRR
+      - ISK
+      - JMD
+      - JOD
+      - JPY
+      - KES
+      - KGS
+      - KHR
+      - KMF
+      - KPW
+      - KRW
+      - KWD
+      - KYD
+      - KZT
+      - LAK
+      - LBP
+      - LKR
+      - LRD
+      - LSL
+      - LYD
+      - MAD
+      - MDL
+      - MGA
+      - MKD
+      - MMK
+      - MNT
+      - MOP
+      - MRO
+      - MRU
+      - MUR
+      - MVR
+      - MWK
+      - MXN
+      - MXV
+      - MYR
+      - MZN
+      - NAD
+      - NGN
+      - NIO
+      - NOK
+      - NPR
+      - NZD
+      - OMR
+      - PAB
+      - PEN
+      - PGK
+      - PHP
+      - PKR
+      - PLN
+      - PYG
+      - QAR
+      - RON
+      - RSD
+      - RUB
+      - RWF
+      - SAR
+      - SBD
+      - SCR
+      - SDG
+      - SEK
+      - SGD
+      - SHP
+      - SLE
+      - SOS
+      - SRD
+      - SSP
+      - STN
+      - SVC
+      - SYP
+      - SZL
+      - THB
+      - TJS
+      - TMT
+      - TND
+      - TOP
+      - TRY
+      - TTD
+      - TWD
+      - TZS
+      - UAH
+      - UGX
+      - USD
+      - USN
+      - UYI
+      - UYU
+      - UZS
+      - VEF
+      - VES
+      - VND
+      - VUV
+      - WST
+      - XAF
+      - XAG
+      - XAU
+      - XBA
+      - XBB
+      - XBC
+      - XBD
+      - XCD
+      - XDR
+      - XOF
+      - XPD
+      - XPF
+      - XPT
+      - XSU
+      - XTS
+      - XUA
+      - XXX
+      - YER
+      - ZAR
+      - ZMW
+      - ZWL
+      description: currency for reporting on platform level
+      title: PlatformReportingCurrency
+    InvoiceGracePeriodConfiguration:
+      type: object
+      properties:
+        value:
+          type:
+          - integer
+          - 'null'
+        type:
+          type:
+          - string
+          - 'null'
+      title: InvoiceGracePeriodConfiguration
+    InvoiceExtraOpenPeriod:
+      type: object
+      properties:
+        value:
+          type:
+          - integer
+          - 'null'
+        type:
+          type:
+          - string
+          - 'null'
+      title: InvoiceExtraOpenPeriod
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    DocumentActionSettingsTriggerType:
+      type: string
+      enum:
+      - MANUAL
+      - AUTOMATIC
+      title: DocumentActionSettingsTriggerType
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    EntitlementSummaryItem:
+      type: object
+      properties:
+        feature_reference:
+          type:
+          - string
+          - 'null'
+        feature_id:
+          type:
+          - string
+          - 'null'
+        overwrite:
+          type:
+          - boolean
+          - 'null'
+        override:
+          type:
+          - boolean
+          - 'null'
+        number:
+          type:
+          - string
+          - 'null'
+        switch:
+          type:
+          - boolean
+          - 'null'
+        amount:
+          $ref: '#/components/schemas/Amount'
+        enums:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        strings:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+      title: EntitlementSummaryItem
+    CrmIntegrations:
+      type: object
+      properties:
+        hubspot:
+          $ref: '#/components/schemas/HubspotIntegration'
+      title: CrmIntegrations
+    PlatformPricingPlanSubscriptionSettings:
+      type: object
+      properties:
+        billing_entity_id:
+          type:
+          - string
+          - 'null'
+          description: The default resource ID of the billing entity that is assigned to the subscription.
+        due_date_configuration:
+          $ref: '#/components/schemas/DueDate'
+          description: The default configuration for the due dates on invoices.
+        billing_period:
+          $ref: '#/components/schemas/Period'
+        billing_currency:
+          $ref: '#/components/schemas/PlatformPricingPlanSubscriptionSettingsBillingCurrency'
+          description: The default alphabetic currency code representing the type of currency used for billing.
+        billing_time:
+          oneOf:
+          - $ref: '#/components/schemas/PlatformPricingPlanSubscriptionSettingsBillingTime'
+          - type: 'null'
+          description: The default moment when the invoices for the subscription should be created.
+        combine:
+          type:
+          - boolean
+          - 'null'
+          description: The default value if invoices needs to be combined.
+        init_invoice_on_hold:
+          type: boolean
+          description: Should invoices be on hold by default.
+        payment_acceptor_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: the default resource ID(s) of the specific payment acceptors for the subscriptions
+        display_invoice_sub_lines_per_processing_only_customer:
+          type:
+          - boolean
+          - 'null'
+          description: The default setting to include sub lines to an invoice line for (child) customers
+        replicate_meter_data_ingest_to_parent:
+          type:
+          - boolean
+          - 'null'
+          description: The default setting to the ingested meter data of a customer to the parent
+        initial_term:
+          $ref: '#/components/schemas/Period'
+          description: The default initial term for the agreement.
+        renewal_term:
+          $ref: '#/components/schemas/Period'
+          description: The default renewal term after the initial term.
+        auto_renewal:
+          type:
+          - boolean
+          - 'null'
+          description: The default value indicating if the subscription renews automatically.
+      title: PlatformPricingPlanSubscriptionSettings
+    Branding:
+      type: object
+      properties:
+        colors:
+          $ref: '#/components/schemas/Colors'
+          description: The colors that are used in the branding
+        logo:
+          $ref: '#/components/schemas/Image'
+          description: The logo that is used in the branding
+        emblem:
+          $ref: '#/components/schemas/Image'
+          description: The emblem that is used in the branding
+        name:
+          type: string
+          description: The external facing name that is used in the branding
+        domain:
+          type: string
+          description: The custom domain that is used in the branding
+      title: Branding
+    HubspotIntegration:
+      type: object
+      properties:
+        portal_id:
+          type:
+          - string
+          - 'null'
+      title: HubspotIntegration
+    ApiErrorResourceType:
+      type: string
+      enum:
+      - CUSTOMER
+      - CUSTOM_FIELD
+      - PLATFORM
+      - PLATFORM_UPTODATE
+      - METER
+      - METER_VALUE
+      - METER_PROPERTY
+      - METER_VALUE_CALCULATION
+      - INGEST_DATA
+      - METER_DATA
+      - CHARGE_DATA
+      - PERSIST_DATA
+      - ADJUSTMENT_DATA
+      - PRODUCT_CATEGORY
+      - PRODUCT
+      - PRODUCT_ITEM
+      - PRICING
+      - PRICING_GROUP
+      - PRICING_ITEM
+      - PRICING_ITEM_CONFIG
+      - PRICING_PLAN_SUBSCRIPTION
+      - PRICING_PLAN_SUBSCRIPTION_GROUP
+      - PRICING_PLAN_SCHEDULE
+      - PRICING_PLAN
+      - PRICING_PLAN_VERSION
+      - QUOTE
+      - QUOTE_VERSION
+      - QUOTE_TEMPLATE
+      - API_KEY
+      - USER
+      - ROLE
+      - PROXY_USER
+      - EXTERNAL_CREDENTIALS
+      - TOKEN
+      - INVOICE
+      - E_INVOICE
+      - PDF
+      - BILLING_ENTITY
+      - FEATURE
+      - MEMBERSHIP
+      - PAYMENT
+      - PAYMENT_ACCEPTOR
+      - PAYMENT_METHOD
+      - PAYMENT_METHOD_OPTIONS
+      - PAYMENT_SCHEDULE
+      - PAYMENT_REQUEST
+      - INTEGRATION
+      - WEBHOOK
+      - FILE
+      - FILE_PROCESSING_SETTINGS
+      - TEAM
+      - DOWNLOAD_URL
+      - CSV_REPORT
+      - REPORT
+      - REPORT_GENERATE_REQUEST
+      - REPORT_CONFIGURATION
+      - REPORT_SUBSCRIPTION
+      - REPORT_DEFINITION
+      - ACCOUNT_GROUP
+      - ENTITY
+      - EVENT_TRACE
+      - EVENT_TRACE_LINK
+      - PRICING_CATEGORY
+      - CONTACT
+      - ALERT_RULE
+      - ALERT
+      - AUDIT_RECORD
+      - PORTAL_URL
+      - AUTHENTICATION_PROVIDER
+      - REPROCESS
+      - APPROVAL_POLICY
+      - APPROVAL_REQUEST
+      - BULK_ACTION
+      - COUPON
+      - PROMOTION_CODE
+      - WALLET
+      - WALLET_TYPE
+      - WALLET_GRANT
+      - WORKFLOW
+      - WORKFLOW_TRIGGER
+      - WORKFLOW_ACTION
+      - CREDIT_TYPE
+      - SIGNATURE_REQUEST
+      - ATTACHMENT
+      - DOCUMENT
+      title: ApiErrorResourceType
+    RoundingSettingUpdateRequestRoundingMode:
+      type: string
+      enum:
+      - DEFAULT
+      - UNROUNDED
+      title: RoundingSettingUpdateRequestRoundingMode
+    EntitlementSummary:
+      type: object
+      properties:
+        pricing_plan_subscription_id:
+          type: string
+        entitlements:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntitlementSummaryItem'
+      title: EntitlementSummary
+    RoundingSettingRoundingTarget:
+      type: string
+      enum:
+      - INVOICE
+      - COST_PREDICTION
+      title: RoundingSettingRoundingTarget
+    InvoiceSettingsUpdateRequestInvoiceDateDeterminationType:
+      type: string
+      enum:
+      - AT_END_OF_BILLING_PERIOD
+      - AFTER_END_OF_BILLING_PERIOD
+      - WHEN_INVOICE_GOES_TO_FINAL
+      description: The configuration for determining the invoice date
+      title: InvoiceSettingsUpdateRequestInvoiceDateDeterminationType
+    DefaultPortalUrlSettingsUpdateRequest:
+      type: object
+      properties:
+        customer:
+          $ref: '#/components/schemas/PortalUrlSettings'
+      title: DefaultPortalUrlSettingsUpdateRequest
+    PlatformPricingPlanSubscriptionSettingsBillingCurrency:
+      type: string
+      enum:
+      - AED
+      - AFN
+      - ALL
+      - AMD
+      - ANG
+      - AOA
+      - ARS
+      - AUD
+      - AWG
+      - AZN
+      - BAM
+      - BBD
+      - BDT
+      - BGN
+      - BHD
+      - BIF
+      - BMD
+      - BND
+      - BOB
+      - BRL
+      - BSD
+      - BTN
+      - BWP
+      - BYN
+      - BZD
+      - CAD
+      - CDF
+      - CHF
+      - CLF
+      - CLP
+      - CNY
+      - COP
+      - CRC
+      - CUC
+      - CUP
+      - CVE
+      - CZK
+      - DJF
+      - DKK
+      - DOP
+      - DZD
+      - EGP
+      - ERN
+      - ETB
+      - EUR
+      - FJD
+      - FKP
+      - GBP
+      - GEL
+      - GHS
+      - GIP
+      - GMD
+      - GNF
+      - GTQ
+      - GYD
+      - HKD
+      - HNL
+      - HRK
+      - HTG
+      - HUF
+      - IDR
+      - ILS
+      - INR
+      - IQD
+      - IRR
+      - ISK
+      - JMD
+      - JOD
+      - JPY
+      - KES
+      - KGS
+      - KHR
+      - KMF
+      - KPW
+      - KRW
+      - KWD
+      - KYD
+      - KZT
+      - LAK
+      - LBP
+      - LKR
+      - LRD
+      - LSL
+      - LYD
+      - MAD
+      - MDL
+      - MGA
+      - MKD
+      - MMK
+      - MNT
+      - MOP
+      - MRO
+      - MRU
+      - MUR
+      - MVR
+      - MWK
+      - MXN
+      - MXV
+      - MYR
+      - MZN
+      - NAD
+      - NGN
+      - NIO
+      - NOK
+      - NPR
+      - NZD
+      - OMR
+      - PAB
+      - PEN
+      - PGK
+      - PHP
+      - PKR
+      - PLN
+      - PYG
+      - QAR
+      - RON
+      - RSD
+      - RUB
+      - RWF
+      - SAR
+      - SBD
+      - SCR
+      - SDG
+      - SEK
+      - SGD
+      - SHP
+      - SLE
+      - SOS
+      - SRD
+      - SSP
+      - STN
+      - SVC
+      - SYP
+      - SZL
+      - THB
+      - TJS
+      - TMT
+      - TND
+      - TOP
+      - TRY
+      - TTD
+      - TWD
+      - TZS
+      - UAH
+      - UGX
+      - USD
+      - USN
+      - UYI
+      - UYU
+      - UZS
+      - VEF
+      - VES
+      - VND
+      - VUV
+      - WST
+      - XAF
+      - XAG
+      - XAU
+      - XBA
+      - XBB
+      - XBC
+      - XBD
+      - XCD
+      - XDR
+      - XOF
+      - XPD
+      - XPF
+      - XPT
+      - XSU
+      - XTS
+      - XUA
+      - XXX
+      - YER
+      - ZAR
+      - ZMW
+      - ZWL
+      description: The default alphabetic currency code representing the type of currency used for billing.
+      title: PlatformPricingPlanSubscriptionSettingsBillingCurrency
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    InvoiceSettings:
+      type: object
+      properties:
+        invoice_number_configuration:
+          $ref: '#/components/schemas/DocumentNumberConfiguration'
+          description: The configuration of the invoice number
+        credit_invoice_number_configuration:
+          $ref: '#/components/schemas/DocumentNumberConfiguration'
+          description: The configuration of the credit invoice number
+        self_billing_invoice_number_configuration:
+          $ref: '#/components/schemas/DocumentNumberConfiguration'
+          description: The configuration of the invoice number when invoice billing type is SELF_BILLING
+        self_billing_credit_invoice_number_configuration:
+          $ref: '#/components/schemas/DocumentNumberConfiguration'
+          description: The configuration of the credit invoice number when invoice billing type is SELF_BILLING
+        send_by_email:
+          $ref: '#/components/schemas/DocumentActionSettings'
+          description: The configuration of sending invoices by email after they are set to final status
+        export_to_erp:
+          $ref: '#/components/schemas/DocumentActionSettings'
+          description: The configuration of exporting invoices to an erp system after they are set to final status
+        invoice_date_determination_type:
+          oneOf:
+          - $ref: '#/components/schemas/InvoiceSettingsInvoiceDateDeterminationType'
+          - type: 'null'
+          description: The configuration for determining the invoice date
+        invoice_grace_period:
+          oneOf:
+          - $ref: '#/components/schemas/InvoiceGracePeriod'
+          - type: 'null'
+          description: The configuration for determining the grace period
+        invoice_extra_open_period:
+          oneOf:
+          - $ref: '#/components/schemas/InvoiceExtraOpenPeriod'
+          - type: 'null'
+          description: The configuration for determining the extra open period
+        footnote:
+          type:
+          - string
+          - 'null'
+          description: Footnote to be shown on the invoice
+        add_zero_meter_value_invoice_lines:
+          type:
+          - boolean
+          - 'null'
+          description: Indicate if zero meter value invoice lines must be added; default false
+      title: InvoiceSettings
+    ReprocessingDelay:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ReprocessingDelayType'
+        value:
+          type: integer
+          format: int64
+      title: ReprocessingDelay
+    QuoteSettingsUpdateRequest:
+      type: object
+      properties:
+        quote_pdf_configuration:
+          $ref: '#/components/schemas/QuotePDFConfiguration'
+          description: The settings of the quote pdf
+      title: QuoteSettingsUpdateRequest
+    QuoteSettings:
+      type: object
+      properties:
+        quote_pdf_configuration:
+          $ref: '#/components/schemas/QuotePDFConfiguration'
+          description: The settings of the quote pdf
+      title: QuoteSettings
+    BrandingUpdateRequest:
+      type: object
+      properties:
+        colors:
+          $ref: '#/components/schemas/Colors'
+          description: The colors that are used in the branding
+        logo:
+          $ref: '#/components/schemas/Image'
+          description: The logo that is used in the branding
+        emblem:
+          $ref: '#/components/schemas/Image'
+          description: The emblem that is used in the branding
+        name:
+          type: string
+          description: The external facing name that is used in the branding
+        domain:
+          type: string
+          description: The custom domain that is used in the branding
+      title: BrandingUpdateRequest
+    Colors:
+      type: object
+      properties:
+        primary:
+          type:
+          - string
+          - 'null'
+          description: 'Color code for the primary color. Must be a valid HEX triplet, starting with #'
+        secondary:
+          type:
+          - string
+          - 'null'
+          description: 'Color code for the secondary color. Must be a valid HEX triplet, starting with #'
+      title: Colors
+    PlatformPricingPlanSubscriptionSettingsUpdateRequestBillingTime:
+      type: string
+      enum:
+      - EXACT
+      - CALENDAR
+      description: The default moment when the invoices for the subscription should be created.
+      title: PlatformPricingPlanSubscriptionSettingsUpdateRequestBillingTime
+    AmountCurrency:
+      type: string
+      enum:
+      - AED
+      - AFN
+      - ALL
+      - AMD
+      - ANG
+      - AOA
+      - ARS
+      - AUD
+      - AWG
+      - AZN
+      - BAM
+      - BBD
+      - BDT
+      - BGN
+      - BHD
+      - BIF
+      - BMD
+      - BND
+      - BOB
+      - BRL
+      - BSD
+      - BTN
+      - BWP
+      - BYN
+      - BZD
+      - CAD
+      - CDF
+      - CHF
+      - CLF
+      - CLP
+      - CNY
+      - COP
+      - CRC
+      - CUC
+      - CUP
+      - CVE
+      - CZK
+      - DJF
+      - DKK
+      - DOP
+      - DZD
+      - EGP
+      - ERN
+      - ETB
+      - EUR
+      - FJD
+      - FKP
+      - GBP
+      - GEL
+      - GHS
+      - GIP
+      - GMD
+      - GNF
+      - GTQ
+      - GYD
+      - HKD
+      - HNL
+      - HRK
+      - HTG
+      - HUF
+      - IDR
+      - ILS
+      - INR
+      - IQD
+      - IRR
+      - ISK
+      - JMD
+      - JOD
+      - JPY
+      - KES
+      - KGS
+      - KHR
+      - KMF
+      - KPW
+      - KRW
+      - KWD
+      - KYD
+      - KZT
+      - LAK
+      - LBP
+      - LKR
+      - LRD
+      - LSL
+      - LYD
+      - MAD
+      - MDL
+      - MGA
+      - MKD
+      - MMK
+      - MNT
+      - MOP
+      - MRO
+      - MRU
+      - MUR
+      - MVR
+      - MWK
+      - MXN
+      - MXV
+      - MYR
+      - MZN
+      - NAD
+      - NGN
+      - NIO
+      - NOK
+      - NPR
+      - NZD
+      - OMR
+      - PAB
+      - PEN
+      - PGK
+      - PHP
+      - PKR
+      - PLN
+      - PYG
+      - QAR
+      - RON
+      - RSD
+      - RUB
+      - RWF
+      - SAR
+      - SBD
+      - SCR
+      - SDG
+      - SEK
+      - SGD
+      - SHP
+      - SLE
+      - SOS
+      - SRD
+      - SSP
+      - STN
+      - SVC
+      - SYP
+      - SZL
+      - THB
+      - TJS
+      - TMT
+      - TND
+      - TOP
+      - TRY
+      - TTD
+      - TWD
+      - TZS
+      - UAH
+      - UGX
+      - USD
+      - USN
+      - UYI
+      - UYU
+      - UZS
+      - VEF
+      - VES
+      - VND
+      - VUV
+      - WST
+      - XAF
+      - XAG
+      - XAU
+      - XBA
+      - XBB
+      - XBC
+      - XBD
+      - XCD
+      - XDR
+      - XOF
+      - XPD
+      - XPF
+      - XPT
+      - XSU
+      - XTS
+      - XUA
+      - XXX
+      - YER
+      - ZAR
+      - ZMW
+      - ZWL
+      title: AmountCurrency
+    InvoiceSettingsUpdateRequest:
+      type: object
+      properties:
+        invoice_number_configuration:
+          $ref: '#/components/schemas/DocumentNumberConfiguration'
+          description: The configuration of the invoice number
+        credit_invoice_number_configuration:
+          $ref: '#/components/schemas/DocumentNumberConfiguration'
+          description: The configuration of the credit invoice number
+        self_billing_invoice_number_configuration:
+          $ref: '#/components/schemas/DocumentNumberConfiguration'
+          description: The configuration of the invoice number when invoice billing type is SELF_BILLING
+        self_billing_credit_invoice_number_configuration:
+          $ref: '#/components/schemas/DocumentNumberConfiguration'
+          description: The configuration of the credit invoice number when invoice billing type is SELF_BILLING
+        send_by_email:
+          $ref: '#/components/schemas/DocumentActionSettings'
+          description: The configuration of sending invoices by email after they are set to final status
+        export_to_erp:
+          $ref: '#/components/schemas/DocumentActionSettings'
+          description: The configuration of exporting invoices to an erp system after they are set to final status
+        invoice_date_determination_type:
+          oneOf:
+          - $ref: '#/components/schemas/InvoiceSettingsUpdateRequestInvoiceDateDeterminationType'
+          - type: 'null'
+          description: The configuration for determining the invoice date
+        invoice_grace_period:
+          oneOf:
+          - $ref: '#/components/schemas/InvoiceGracePeriod'
+          - type: 'null'
+          description: The configuration for determining the grace period
+        invoice_extra_open_period:
+          oneOf:
+          - $ref: '#/components/schemas/InvoiceExtraOpenPeriod'
+          - type: 'null'
+          description: The configuration for determining the extra open period
+        footnote:
+          type:
+          - string
+          - 'null'
+          description: Footnote to be shown on the invoice
+        add_zero_meter_value_invoice_lines:
+          type:
+          - boolean
+          - 'null'
+          description: Indicate if zero meter value invoice lines must be added; default false
+      title: InvoiceSettingsUpdateRequest
+  securitySchemes:
+    API-Key:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+    JWT-Authentication:
+      type: http
+      scheme: bearer

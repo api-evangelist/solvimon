@@ -1,0 +1,2842 @@
+openapi: 3.1.0
+info:
+  title: Configuration alertRules API
+  version: 1.0.0
+servers:
+- url: https://test.api.solvimon.com
+  description: The TEST environment for our API
+- url: https://api.solvimon.com
+  description: The live environment for our API
+tags:
+- name: alertRules
+paths:
+  /v{version}/alert-rules:
+    get:
+      operationId: getAlertRules
+      summary: Get a list of alert rules
+      description: Requires the ALERT_RULE.VIEW permission.
+      tags:
+      - alertRules
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: expand[]
+        in: query
+        description: The id fields of the resources that are going to be expanded.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: limit
+        in: query
+        description: The amount of records shown in the list
+        required: false
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: The page which is going to be shown
+        required: false
+        schema:
+          type: integer
+      - name: order_by
+        in: query
+        description: The parameter by which the response is ordered.
+        required: false
+        schema:
+          type: string
+      - name: order_direction
+        in: query
+        description: The order direction by which the response is ordered.
+        required: false
+        schema:
+          type: string
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertRuleResponseWrapper'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      operationId: postAlertRules
+      summary: Create an alert rule
+      description: Requires the ALERT_RULE.CREATE permission.
+      tags:
+      - alertRules
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertRule'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlertRuleCreateRequest'
+  /v{version}/alert-rules/{resourceId}:
+    get:
+      operationId: getAlertRulesByResourceId
+      summary: Get an alert rule by its ID
+      description: Requires the ALERT_RULE.VIEW permission.
+      tags:
+      - alertRules
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: expand[]
+        in: query
+        description: The id fields of the resources that are going to be expanded.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertRule'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    delete:
+      operationId: deleteAlertRulesByResourceId
+      summary: Delete an alert rule
+      description: Requires the ALERT_RULE.DELETE permission.
+      tags:
+      - alertRules
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertRule'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    patch:
+      operationId: patchAlertRulesByResourceId
+      summary: Update an alert rule
+      description: Requires the ALERT_RULE.UPDATE permission.
+      tags:
+      - alertRules
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertRule'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlertRuleUpdateRequest'
+components:
+  schemas:
+    IndividualCreateRequest:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/Name'
+        residential_address:
+          $ref: '#/components/schemas/Address'
+      title: IndividualCreateRequest
+    TaxIdValidationValid:
+      type: string
+      enum:
+      - VALID
+      - NOT_VALID
+      - UNKNOWN
+      title: TaxIdValidationValid
+    AlertRuleCreateRequestTriggerType:
+      type: string
+      enum:
+      - STATIC
+      - DYNAMIC
+      title: AlertRuleCreateRequestTriggerType
+    TaxIdValidation:
+      type: object
+      properties:
+        id:
+          type: string
+        validation_date:
+          type: string
+        source:
+          type: string
+        valid:
+          $ref: '#/components/schemas/TaxIdValidationValid'
+        message:
+          type:
+          - string
+          - 'null'
+      title: TaxIdValidation
+    AlertRuleEntitlementUpdateRequest:
+      type: object
+      properties:
+        feature_id:
+          type: string
+          description: Resource ID of type FEATURE
+        feature:
+          oneOf:
+          - $ref: '#/components/schemas/Feature'
+          - type: 'null'
+        comparator:
+          $ref: '#/components/schemas/AlertRuleEntitlementUpdateRequestComparator'
+        threshold:
+          $ref: '#/components/schemas/Threshold'
+      title: AlertRuleEntitlementUpdateRequest
+    LinkedIntegration:
+      type: object
+      properties:
+        id:
+          type: string
+        link_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/LinkDetail'
+      title: LinkedIntegration
+    IntegrationDetails:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+        payment_gateway_variant:
+          $ref: '#/components/schemas/IntegrationDetailsPaymentGatewayVariant'
+        adyen:
+          $ref: '#/components/schemas/AdyenIntegrationDetails'
+        stripe:
+          $ref: '#/components/schemas/StripeIntegrationDetails'
+      title: IntegrationDetails
+    AlertRuleUpdateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+          description: A custom reference assigned to the alert.
+        name:
+          type:
+          - string
+          - 'null'
+          description: A custom name assigned to the alert.
+        description:
+          type:
+          - string
+          - 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/AlertRuleUpdateRequestStatus'
+          - type: 'null'
+          description: The status of the AlertRule. DEPRECATED is not supported.
+        customer_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: The IDs of the customers linked to the alert.
+        customers:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomerUpdateRequest'
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/AlertRuleUpdateRequestType'
+          - type: 'null'
+          description: The type of the the alert.
+        trigger_type:
+          oneOf:
+          - $ref: '#/components/schemas/AlertRuleUpdateRequestTriggerType'
+          - type: 'null'
+        entitlement:
+          $ref: '#/components/schemas/AlertRuleEntitlementUpdateRequest'
+          description: The specification of the entitlement for the alert, can only be specified when type is ENTITLEMENT
+        invoice:
+          $ref: '#/components/schemas/AlertRuleInvoiceUpdateRequest'
+          description: The specification of the invoice for the alert, can only be specified when type is INVOICE
+      title: AlertRuleUpdateRequest
+    Threshold:
+      type: object
+      properties:
+        number:
+          type:
+          - string
+          - 'null'
+        percentage:
+          type:
+          - string
+          - 'null'
+        amount:
+          $ref: '#/components/schemas/Amount'
+      title: Threshold
+    MeterStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the meter indicating the activity of the meter and the ability to update properties.
+      title: MeterStatus
+    PricingPlanSubscriptionSelectorRuleType:
+      type: string
+      enum:
+      - EQUALS
+      - NOT_EQUALS
+      - IN
+      - NOT_IN
+      - GREATER_THAN
+      - GREATER_THAN_OR_EQUALS
+      - LESS_THAN
+      - LESS_THAN_OR_EQUALS
+      - EMPTY
+      - NOT_EMPTY
+      - CONTAINS
+      - NOT_CONTAINS
+      title: PricingPlanSubscriptionSelectorRuleType
+    PricingPlanSubscriptionSelectorDataField:
+      type: string
+      enum:
+      - BILLING_ENTITY_REGISTERED_ADDRESS_COUNTRY
+      - PRICING_PLAN_REFERENCE
+      title: PricingPlanSubscriptionSelectorDataField
+    AlertRuleCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+          description: A custom reference assigned to the alert.
+        name:
+          type:
+          - string
+          - 'null'
+          description: A custom name assigned to the alert.
+        description:
+          type:
+          - string
+          - 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/AlertRuleCreateRequestStatus'
+          - type: 'null'
+          description: The status of the AlertRule. DEPRECATED is not supported.
+        customer_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: The IDs of the customers linked to the alert.
+        customers:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomerCreateRequest'
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/AlertRuleCreateRequestType'
+          - type: 'null'
+          description: The type of the the alert.
+        trigger_type:
+          oneOf:
+          - $ref: '#/components/schemas/AlertRuleCreateRequestTriggerType'
+          - type: 'null'
+        entitlement:
+          $ref: '#/components/schemas/AlertRuleEntitlementCreateRequest'
+          description: The specification of the entitlement for the alert, can only be specified when type is ENTITLEMENT
+        invoice:
+          $ref: '#/components/schemas/AlertRuleInvoiceCreateRequest'
+          description: The specification of the invoice for the alert, can only be specified when type is INVOICE
+      required:
+      - reference
+      - type
+      title: AlertRuleCreateRequest
+    AlertRuleInvoiceVariant:
+      type: string
+      enum:
+      - OVERDUE
+      title: AlertRuleInvoiceVariant
+    TaxRegistration:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The id of this tax registration
+        description:
+          type:
+          - string
+          - 'null'
+          description: The description of this tax registration
+        tax_id:
+          type:
+          - string
+          - 'null'
+          description: The tax id of this tax registration, e.g. a TIN, VAT id or other tax number
+        tax_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaxId'
+          description: Tax IDs used for tax purposes of the tax registration, e.g. TINs, VAT ids, or other tax number
+        registration_number:
+          type:
+          - string
+          - 'null'
+          description: The registration number of this tax registration, e.g. a company registration number
+        registered_address:
+          $ref: '#/components/schemas/Address'
+          description: The address of this tax registration, if different from the billing entity. Currently, only the address will be used for tax calculations
+      title: TaxRegistration
+    PricingPlanSubscriptionSelector:
+      type: object
+      properties:
+        data:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorData'
+        rules:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorRule'
+        filters:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFilter'
+        fallback:
+          oneOf:
+          - $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFallback'
+          - type: 'null'
+          description: The fallback logic what to do when no subscription is found. By default it is LATEST
+      title: PricingPlanSubscriptionSelector
+    PricingPlanSubscriptionSelectorFilterField:
+      type: string
+      enum:
+      - BILLING_ENTITY_REGISTERED_ADDRESS_COUNTRY
+      - PRICING_PLAN_REFERENCE
+      title: PricingPlanSubscriptionSelectorFilterField
+    AlertRuleInvoiceCreateRequest:
+      type: object
+      properties:
+        variant:
+          $ref: '#/components/schemas/AlertRuleInvoiceCreateRequestVariant'
+        overdue:
+          $ref: '#/components/schemas/AlertRuleInvoiceOverdue'
+      title: AlertRuleInvoiceCreateRequest
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    CustomerSellerDetailsUpdateRequest:
+      type: object
+      properties:
+        default_billing_entity_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type BILLING_ENTITY
+      title: CustomerSellerDetailsUpdateRequest
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    PricingPlanSubscriptionSelectorRule:
+      type: object
+      properties:
+        field:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorRuleField'
+        type:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorRuleType'
+      title: PricingPlanSubscriptionSelectorRule
+    IndividualUpdateRequest:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/Name'
+        residential_address:
+          $ref: '#/components/schemas/Address'
+      title: IndividualUpdateRequest
+    AlertRuleUpdateRequestTriggerType:
+      type: string
+      enum:
+      - STATIC
+      - DYNAMIC
+      title: AlertRuleUpdateRequestTriggerType
+    AlertRule:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+          description: A custom reference assigned to the alert.
+        name:
+          type:
+          - string
+          - 'null'
+          description: A custom name assigned to the alert.
+        description:
+          type:
+          - string
+          - 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/AlertRuleStatus'
+          - type: 'null'
+          description: The status of the AlertRule. DEPRECATED is not supported.
+        customer_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: The IDs of the customers linked to the alert.
+        customers:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Customer'
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/AlertRuleType'
+          - type: 'null'
+          description: The type of the the alert.
+        trigger_type:
+          oneOf:
+          - $ref: '#/components/schemas/AlertRuleTriggerType'
+          - type: 'null'
+        entitlement:
+          $ref: '#/components/schemas/AlertRuleEntitlement'
+          description: The specification of the entitlement for the alert, can only be specified when type is ENTITLEMENT
+        invoice:
+          $ref: '#/components/schemas/AlertRuleInvoice'
+          description: The specification of the invoice for the alert, can only be specified when type is INVOICE
+      title: AlertRule
+    CustomerUpdateRequestRolesItems:
+      type: string
+      enum:
+      - DEFAULT
+      - NON_PROCESSING
+      - SELF_BILLING
+      - SELLER
+      - PROCESSING_ONLY
+      title: CustomerUpdateRequestRolesItems
+    PricingPlanSubscriptionSelectorFallback:
+      type: string
+      enum:
+      - LATEST
+      - NONE
+      description: The fallback logic what to do when no subscription is found. By default it is LATEST
+      title: PricingPlanSubscriptionSelectorFallback
+    NotificationChannelType:
+      type: string
+      enum:
+      - EMAIL
+      description: The channel type to use.
+      title: NotificationChannelType
+    AlertRuleInvoiceOverdueComparator:
+      type: string
+      enum:
+      - EQUALS
+      - NOT_EQUALS
+      - IN
+      - NOT_IN
+      - GREATER_THAN
+      - GREATER_THAN_OR_EQUALS
+      - LESS_THAN
+      - LESS_THAN_OR_EQUALS
+      - EMPTY
+      - NOT_EMPTY
+      - CONTAINS
+      - NOT_CONTAINS
+      title: AlertRuleInvoiceOverdueComparator
+    CustomerUpdateRequestType:
+      type: string
+      enum:
+      - ORGANIZATION
+      - INDIVIDUAL
+      description: The type of customer entity.
+      title: CustomerUpdateRequestType
+    CustomFieldValue:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOM_FIELD
+        reference:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+        values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        integration_details:
+          oneOf:
+          - $ref: '#/components/schemas/IntegrationDetails'
+          - type: 'null'
+        integration_id:
+          type: string
+          description: The resource ID of the integration linked to the custom field
+      title: CustomFieldValue
+    PricingPlanSubscriptionSelectorRuleField:
+      type: string
+      enum:
+      - BILLING_ENTITY_REGISTERED_ADDRESS_COUNTRY
+      - PRICING_PLAN_REFERENCE
+      title: PricingPlanSubscriptionSelectorRuleField
+    NotificationPreferenceUpdateRequestType:
+      type: string
+      enum:
+      - INVOICE
+      description: The notification type to configure.
+      title: NotificationPreferenceUpdateRequestType
+    AlertRuleCreateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the AlertRule. DEPRECATED is not supported.
+      title: AlertRuleCreateRequestStatus
+    AlertRuleEntitlementComparator:
+      type: string
+      enum:
+      - EQUALS
+      - NOT_EQUALS
+      - IN
+      - NOT_IN
+      - GREATER_THAN
+      - GREATER_THAN_OR_EQUALS
+      - LESS_THAN
+      - LESS_THAN_OR_EQUALS
+      - EMPTY
+      - NOT_EMPTY
+      - CONTAINS
+      - NOT_CONTAINS
+      title: AlertRuleEntitlementComparator
+    CustomerCreateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      - CLOSED
+      title: CustomerCreateRequestStatus
+    Individual:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/Name'
+        residential_address:
+          $ref: '#/components/schemas/Address'
+      title: Individual
+    CustomerType:
+      type: string
+      enum:
+      - ORGANIZATION
+      - INDIVIDUAL
+      description: The type of customer entity.
+      title: CustomerType
+    AlertRuleType:
+      type: string
+      enum:
+      - ENTITLEMENT
+      - INVOICE
+      description: The type of the the alert.
+      title: AlertRuleType
+    PeriodType:
+      type: string
+      enum:
+      - DAY
+      - WEEK
+      - MONTH
+      - YEAR
+      title: PeriodType
+    CustomerRolesItems:
+      type: string
+      enum:
+      - DEFAULT
+      - NON_PROCESSING
+      - SELF_BILLING
+      - SELLER
+      - PROCESSING_ONLY
+      title: CustomerRolesItems
+    LinkedIntegrationCreateRequest:
+      type: object
+      properties:
+        id:
+          type: string
+        link_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/LinkDetail'
+      title: LinkedIntegrationCreateRequest
+    OrganizationUpdateRequest:
+      type: object
+      properties:
+        legal_name:
+          type: string
+        tax_id:
+          type:
+          - string
+          - 'null'
+          description: Tax Id used for tax purposes of the organization
+        tax_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaxId'
+          description: Tax Ids used for tax purposes of the organization
+        registration_number:
+          type:
+          - string
+          - 'null'
+        tax_exempt:
+          type:
+          - boolean
+          - 'null'
+        tax_exempt_note:
+          type:
+          - string
+          - 'null'
+        registered_address:
+          $ref: '#/components/schemas/Address'
+        tax_registrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaxRegistration'
+          description: Extra tax registrations for the customer
+      title: OrganizationUpdateRequest
+    AlertRuleInvoiceUpdateRequestVariant:
+      type: string
+      enum:
+      - OVERDUE
+      title: AlertRuleInvoiceUpdateRequestVariant
+    IntegrationDetailsPaymentGatewayVariant:
+      type: string
+      enum:
+      - ADYEN
+      - STRIPE
+      title: IntegrationDetailsPaymentGatewayVariant
+    LinkedIntegrationUpdateRequest:
+      type: object
+      properties:
+        id:
+          type: string
+        link_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/LinkDetail'
+      title: LinkedIntegrationUpdateRequest
+    MeterProperty:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        status:
+          $ref: '#/components/schemas/MeterPropertyStatus'
+          description: The status of the meter property indicating the activity and the ability to update properties.
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/MeterPropertyType'
+          - type: 'null'
+          description: The type of the meter property.
+        enum_values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: The list of available ENUM values.
+      title: MeterProperty
+    Meter:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/MeterStatus'
+          - type: 'null'
+          description: The status of the meter indicating the activity of the meter and the ability to update properties.
+        meter_values:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/MeterMeterValue'
+          description: The values used as input to calculate billable units, used in the meter.
+        meter_properties:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/MeterMeterProperty'
+          description: The properties that provide information to give context to an event, used in the meter.
+      title: Meter
+    CustomerCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        parent_customer_id:
+          type:
+          - string
+          - 'null'
+          description: The parent of the customer. Only returned when there is a single parent.
+        parent_customer_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: A list of parents of the customer. Will also be returned if there is a single parent.
+        reference:
+          type: string
+          description: A custom reference assigned to the customer.
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/CustomerCreateRequestStatus'
+          - type: 'null'
+        timezone:
+          type:
+          - string
+          - 'null'
+        type:
+          $ref: '#/components/schemas/CustomerCreateRequestType'
+          description: The type of customer entity.
+        email:
+          type: string
+          description: The email of the customer.
+        notification_preferences:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/NotificationPreferenceCreateRequest'
+          description: Notification preferences for customer-related communications.
+        locale:
+          type:
+          - string
+          - 'null'
+          description: The locale of the customer. Format is language-country (like en-US).
+        individual:
+          $ref: '#/components/schemas/IndividualCreateRequest'
+          description: Additional description of the individual customer type.
+        organization:
+          $ref: '#/components/schemas/OrganizationCreateRequest'
+          description: Additional description of the organization customer type.
+        custom_fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomFieldValueCreateRequest'
+        processing_only:
+          type:
+          - boolean
+          - 'null'
+        pricing_plan_subscription_selector:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorCreateRequest'
+          description: Settings to influence dynamically the subscription to use for the ingest data.
+        linked_integrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/LinkedIntegrationCreateRequest'
+        roles:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomerCreateRequestRolesItems'
+        seller_details:
+          $ref: '#/components/schemas/CustomerSellerDetailsCreateRequest'
+      required:
+      - type
+      title: CustomerCreateRequest
+    AlertRuleUpdateRequestType:
+      type: string
+      enum:
+      - ENTITLEMENT
+      - INVOICE
+      description: The type of the the alert.
+      title: AlertRuleUpdateRequestType
+    CustomerUpdateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        parent_customer_id:
+          type:
+          - string
+          - 'null'
+          description: The parent of the customer. Only returned when there is a single parent.
+        parent_customer_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: A list of parents of the customer. Will also be returned if there is a single parent.
+        reference:
+          type: string
+          description: A custom reference assigned to the customer.
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/CustomerUpdateRequestStatus'
+          - type: 'null'
+        timezone:
+          type:
+          - string
+          - 'null'
+        type:
+          $ref: '#/components/schemas/CustomerUpdateRequestType'
+          description: The type of customer entity.
+        email:
+          type: string
+          description: The email of the customer.
+        notification_preferences:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/NotificationPreferenceUpdateRequest'
+          description: Notification preferences for customer-related communications.
+        locale:
+          type:
+          - string
+          - 'null'
+          description: The locale of the customer. Format is language-country (like en-US).
+        individual:
+          $ref: '#/components/schemas/IndividualUpdateRequest'
+          description: Additional description of the individual customer type.
+        organization:
+          $ref: '#/components/schemas/OrganizationUpdateRequest'
+          description: Additional description of the organization customer type.
+        custom_fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomFieldValueUpdateRequest'
+        processing_only:
+          type:
+          - boolean
+          - 'null'
+        pricing_plan_subscription_selector:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorUpdateRequest'
+          description: Settings to influence dynamically the subscription to use for the ingest data.
+        linked_integrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/LinkedIntegrationUpdateRequest'
+        roles:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomerUpdateRequestRolesItems'
+        seller_details:
+          $ref: '#/components/schemas/CustomerSellerDetailsUpdateRequest'
+      title: CustomerUpdateRequest
+    AlertRuleUpdateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the AlertRule. DEPRECATED is not supported.
+      title: AlertRuleUpdateRequestStatus
+    NotificationPreferenceUpdateRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/NotificationPreferenceUpdateRequestType'
+          description: The notification type to configure.
+        channels:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/NotificationChannel'
+          description: The channels for this notification type.
+      title: NotificationPreferenceUpdateRequest
+    Feature:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/FeatureType'
+          - type: 'null'
+          description: The indication of the type of feature associated with the pricing plan.
+        enum_values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: If the feature type is ENUM, these fields provide additional information on the values used.
+        meter_value_calculation_id:
+          type:
+          - string
+          - 'null'
+          description: The linked meter value calculation
+        meter_value_calculation:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueCalculation'
+          - type: 'null'
+      title: Feature
+    MeterMeterProperty:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type METER_PROPERTY
+        object:
+          oneOf:
+          - $ref: '#/components/schemas/MeterProperty'
+          - type: 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+        required:
+          type:
+          - boolean
+          - 'null'
+      title: MeterMeterProperty
+    PricingPlanSubscriptionSelectorUpdateRequestFallback:
+      type: string
+      enum:
+      - LATEST
+      - NONE
+      description: The fallback logic what to do when no subscription is found. By default it is LATEST
+      title: PricingPlanSubscriptionSelectorUpdateRequestFallback
+    AlertRuleEntitlement:
+      type: object
+      properties:
+        feature_id:
+          type: string
+          description: Resource ID of type FEATURE
+        feature:
+          oneOf:
+          - $ref: '#/components/schemas/Feature'
+          - type: 'null'
+        comparator:
+          $ref: '#/components/schemas/AlertRuleEntitlementComparator'
+        threshold:
+          $ref: '#/components/schemas/Threshold'
+      title: AlertRuleEntitlement
+    AdyenIntegrationDetails:
+      type: object
+      properties:
+        recurring_detail_reference:
+          type: string
+      title: AdyenIntegrationDetails
+    AlertRuleEntitlementCreateRequest:
+      type: object
+      properties:
+        feature_id:
+          type: string
+          description: Resource ID of type FEATURE
+        feature:
+          oneOf:
+          - $ref: '#/components/schemas/Feature'
+          - type: 'null'
+        comparator:
+          $ref: '#/components/schemas/AlertRuleEntitlementCreateRequestComparator'
+        threshold:
+          $ref: '#/components/schemas/Threshold'
+      title: AlertRuleEntitlementCreateRequest
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    FeatureType:
+      type: string
+      enum:
+      - SWITCH
+      - NUMBER
+      - ENUM
+      - AMOUNT
+      - STRING
+      description: The indication of the type of feature associated with the pricing plan.
+      title: FeatureType
+    AmountCurrency:
+      type: string
+      enum:
+      - AED
+      - AFN
+      - ALL
+      - AMD
+      - ANG
+      - AOA
+      - ARS
+      - AUD
+      - AWG
+      - AZN
+      - BAM
+      - BBD
+      - BDT
+      - BGN
+      - BHD
+      - BIF
+      - BMD
+      - BND
+      - BOB
+      - BRL
+      - BSD
+      - BTN
+      - BWP
+      - BYN
+      - BZD
+      - CAD
+      - CDF
+      - CHF
+      - CLF
+      - CLP
+      - CNY
+      - COP
+      - CRC
+      - CUC
+      - CUP
+      - CVE
+      - CZK
+      - DJF
+      - DKK
+      - DOP
+      - DZD
+      - EGP
+      - ERN
+      - ETB
+      - EUR
+      - FJD
+      - FKP
+      - GBP
+      - GEL
+      - GHS
+      - GIP
+      - GMD
+      - GNF
+      - GTQ
+      - GYD
+      - HKD
+      - HNL
+      - HRK
+      - HTG
+      - HUF
+      - IDR
+      - ILS
+      - INR
+      - IQD
+      - IRR
+      - ISK
+      - JMD
+      - JOD
+      - JPY
+      - KES
+      - KGS
+      - KHR
+      - KMF
+      - KPW
+      - KRW
+      - KWD
+      - KYD
+      - KZT
+      - LAK
+      - LBP
+      - LKR
+      - LRD
+      - LSL
+      - LYD
+      - MAD
+      - MDL
+      - MGA
+      - MKD
+      - MMK
+      - MNT
+      - MOP
+      - MRO
+      - MRU
+      - MUR
+      - MVR
+      - MWK
+      - MXN
+      - MXV
+      - MYR
+      - MZN
+      - NAD
+      - NGN
+      - NIO
+      - NOK
+      - NPR
+      - NZD
+      - OMR
+      - PAB
+      - PEN
+      - PGK
+      - PHP
+      - PKR
+      - PLN
+      - PYG
+      - QAR
+      - RON
+      - RSD
+      - RUB
+      - RWF
+      - SAR
+      - SBD
+      - SCR
+      - SDG
+      - SEK
+      - SGD
+      - SHP
+      - SLE
+      - SOS
+      - SRD
+      - SSP
+      - STN
+      - SVC
+      - SYP
+      - SZL
+      - THB
+      - TJS
+      - TMT
+      - TND
+      - TOP
+      - TRY
+      - TTD
+      - TWD
+      - TZS
+      - UAH
+      - UGX
+      - USD
+      - USN
+      - UYI
+      - UYU
+      - UZS
+      - VEF
+      - VES
+      - VND
+      - VUV
+      - WST
+      - XAF
+      - XAG
+      - XAU
+      - XBA
+      - XBB
+      - XBC
+      - XBD
+      - XCD
+      - XDR
+      - XOF
+      - XPD
+      - XPF
+      - XPT
+      - XSU
+      - XTS
+      - XUA
+      - XXX
+      - YER
+      - ZAR
+      - ZMW
+      - ZWL
+      title: AmountCurrency
+    NotificationChannel:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/NotificationChannelType'
+          description: The channel type to use.
+        enabled:
+          type:
+          - boolean
+          - 'null'
+          description: Whether the channel is enabled for the notification type.
+      title: NotificationChannel
+    Address:
+      type: object
+      properties:
+        line1:
+          type:
+          - string
+          - 'null'
+        line2:
+          type:
+          - string
+          - 'null'
+        city:
+          type:
+          - string
+          - 'null'
+        postal_code:
+          type:
+          - string
+          - 'null'
+        state:
+          type:
+          - string
+          - 'null'
+        country:
+          oneOf:
+          - $ref: '#/components/schemas/AddressCountry'
+          - type: 'null'
+      title: Address
+    CustomerCreateRequestRolesItems:
+      type: string
+      enum:
+      - DEFAULT
+      - NON_PROCESSING
+      - SELF_BILLING
+      - SELLER
+      - PROCESSING_ONLY
+      title: CustomerCreateRequestRolesItems
+    MeterValueType:
+      type: string
+      enum:
+      - NUMBER
+      - AMOUNT
+      description: The type of the meter value.
+      title: MeterValueType
+    Amount:
+      type: object
+      properties:
+        quantity:
+          type: string
+        currency:
+          $ref: '#/components/schemas/AmountCurrency'
+      title: Amount
+    NotificationPreferenceCreateRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/NotificationPreferenceCreateRequestType'
+          description: The notification type to configure.
+        channels:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/NotificationChannel'
+          description: The channels for this notification type.
+      title: NotificationPreferenceCreateRequest
+    StripeIntegrationDetails:
+      type: object
+      properties:
+        payment_method_id:
+          type: string
+      title: StripeIntegrationDetails
+    NotificationPreference:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/NotificationPreferenceType'
+          description: The notification type to configure.
+        channels:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/NotificationChannel'
+          description: The channels for this notification type.
+      title: NotificationPreference
+    AlertRuleTriggerType:
+      type: string
+      enum:
+      - STATIC
+      - DYNAMIC
+      title: AlertRuleTriggerType
+    AlertRuleInvoiceCreateRequestVariant:
+      type: string
+      enum:
+      - OVERDUE
+      title: AlertRuleInvoiceCreateRequestVariant
+    MeterValueCalculation:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        calculation_type:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueCalculationCalculationType'
+          - type: 'null'
+          description: The type of calculation used for this billable metric.
+        persist:
+          type:
+          - boolean
+          - 'null'
+          description: Indicate if the data of the billable metric must be persisted to the next billing period of the schedule (default is false).
+        meter_id:
+          type:
+          - string
+          - 'null'
+          description: The ID of the meter.
+        meter:
+          oneOf:
+          - $ref: '#/components/schemas/Meter'
+          - type: 'null'
+        meter_value_id:
+          type:
+          - string
+          - 'null'
+          description: The ID of the meter value.
+        meter_value:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValue'
+          - type: 'null'
+        meter_property_id:
+          type:
+          - string
+          - 'null'
+          description: The ID of the meter property.
+        meter_property:
+          oneOf:
+          - $ref: '#/components/schemas/MeterProperty'
+          - type: 'null'
+      title: MeterValueCalculation
+    CustomerStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      - CLOSED
+      title: CustomerStatus
+    Name:
+      type: object
+      properties:
+        first_name:
+          type:
+          - string
+          - 'null'
+        last_name:
+          type:
+          - string
+          - 'null'
+        infix:
+          type:
+          - string
+          - 'null'
+      title: Name
+    CustomFieldValueCreateRequest:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOM_FIELD
+        reference:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+        values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        integration_details:
+          oneOf:
+          - $ref: '#/components/schemas/IntegrationDetails'
+          - type: 'null'
+        integration_id:
+          type: string
+          description: The resource ID of the integration linked to the custom field
+      title: CustomFieldValueCreateRequest
+    NotificationPreferenceType:
+      type: string
+      enum:
+      - INVOICE
+      description: The notification type to configure.
+      title: NotificationPreferenceType
+    AlertRuleResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AlertRule'
+        page:
+          type:
+          - integer
+          - 'null'
+        limit:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      title: AlertRuleResponseWrapper
+    PricingPlanSubscriptionSelectorFilter:
+      type: object
+      properties:
+        field:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFilterField'
+        type:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFilterType'
+        value:
+          type: string
+      title: PricingPlanSubscriptionSelectorFilter
+    PricingPlanSubscriptionSelectorCreateRequest:
+      type: object
+      properties:
+        data:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorData'
+        rules:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorRule'
+        filters:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFilter'
+        fallback:
+          oneOf:
+          - $ref: '#/components/schemas/PricingPlanSubscriptionSelectorCreateRequestFallback'
+          - type: 'null'
+          description: The fallback logic what to do when no subscription is found. By default it is LATEST
+      title: PricingPlanSubscriptionSelectorCreateRequest
+    AlertRuleInvoiceOverdue:
+      type: object
+      properties:
+        comparator:
+          oneOf:
+          - $ref: '#/components/schemas/AlertRuleInvoiceOverdueComparator'
+          - type: 'null'
+        threshold:
+          $ref: '#/components/schemas/Period'
+      title: AlertRuleInvoiceOverdue
+    Organization:
+      type: object
+      properties:
+        legal_name:
+          type: string
+        tax_id:
+          type:
+          - string
+          - 'null'
+          description: Tax Id used for tax purposes of the organization
+        tax_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaxId'
+          description: Tax Ids used for tax purposes of the organization
+        registration_number:
+          type:
+          - string
+          - 'null'
+        tax_exempt:
+          type:
+          - boolean
+          - 'null'
+        tax_exempt_note:
+          type:
+          - string
+          - 'null'
+        registered_address:
+          $ref: '#/components/schemas/Address'
+        tax_registrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaxRegistration'
+          description: Extra tax registrations for the customer
+      title: Organization
+    CustomerSellerDetails:
+      type: object
+      properties:
+        default_billing_entity_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type BILLING_ENTITY
+      title: CustomerSellerDetails
+    PaginationLinks:
+      type: object
+      properties:
+        first:
+          type:
+          - string
+          - 'null'
+        previous:
+          type:
+          - string
+          - 'null'
+        current:
+          type:
+          - string
+          - 'null'
+        next:
+          type:
+          - string
+          - 'null'
+      title: PaginationLinks
+    PricingPlanSubscriptionSelectorUpdateRequest:
+      type: object
+      properties:
+        data:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorData'
+        rules:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorRule'
+        filters:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFilter'
+        fallback:
+          oneOf:
+          - $ref: '#/components/schemas/PricingPlanSubscriptionSelectorUpdateRequestFallback'
+          - type: 'null'
+          description: The fallback logic what to do when no subscription is found. By default it is LATEST
+      title: PricingPlanSubscriptionSelectorUpdateRequest
+    Period:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/PeriodType'
+        value:
+          type:
+          - integer
+          - 'null'
+      title: Period
+    AlertRuleInvoice:
+      type: object
+      properties:
+        variant:
+          $ref: '#/components/schemas/AlertRuleInvoiceVariant'
+        overdue:
+          $ref: '#/components/schemas/AlertRuleInvoiceOverdue'
+      title: AlertRuleInvoice
+    MeterPropertyType:
+      type: string
+      enum:
+      - NUMBER
+      - ENUM
+      - STRING
+      description: The type of the meter property.
+      title: MeterPropertyType
+    TaxId:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/TaxIdType'
+          - type: 'null'
+          description: Optional tax id type, indicates which type of tax the number is for
+        display_name:
+          type:
+          - string
+          - 'null'
+          description: User-friendly display name
+        tax_id_validation_result:
+          $ref: '#/components/schemas/TaxIdValidation'
+      title: TaxId
+    AlertRuleInvoiceUpdateRequest:
+      type: object
+      properties:
+        variant:
+          $ref: '#/components/schemas/AlertRuleInvoiceUpdateRequestVariant'
+        overdue:
+          $ref: '#/components/schemas/AlertRuleInvoiceOverdue'
+      title: AlertRuleInvoiceUpdateRequest
+    CustomerCreateRequestType:
+      type: string
+      enum:
+      - ORGANIZATION
+      - INDIVIDUAL
+      description: The type of customer entity.
+      title: CustomerCreateRequestType
+    MeterPropertyStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the meter property indicating the activity and the ability to update properties.
+      title: MeterPropertyStatus
+    Customer:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        parent_customer_id:
+          type:
+          - string
+          - 'null'
+          description: The parent of the customer. Only returned when there is a single parent.
+        parent_customer_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: A list of parents of the customer. Will also be returned if there is a single parent.
+        reference:
+          type: string
+          description: A custom reference assigned to the customer.
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/CustomerStatus'
+          - type: 'null'
+        timezone:
+          type:
+          - string
+          - 'null'
+        type:
+          $ref: '#/components/schemas/CustomerType'
+          description: The type of customer entity.
+        email:
+          type: string
+          description: The email of the customer.
+        notification_preferences:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/NotificationPreference'
+          description: Notification preferences for customer-related communications.
+        locale:
+          type:
+          - string
+          - 'null'
+          description: The locale of the customer. Format is language-country (like en-US).
+        individual:
+          $ref: '#/components/schemas/Individual'
+          description: Additional description of the individual customer type.
+        organization:
+          $ref: '#/components/schemas/Organization'
+          description: Additional description of the organization customer type.
+        custom_fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomFieldValue'
+        processing_only:
+          type:
+          - boolean
+          - 'null'
+        pricing_plan_subscription_selector:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelector'
+          description: Settings to influence dynamically the subscription to use for the ingest data.
+        linked_integrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/LinkedIntegration'
+        roles:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomerRolesItems'
+        seller_details:
+          $ref: '#/components/schemas/CustomerSellerDetails'
+      title: Customer
+    PricingPlanSubscriptionSelectorFilterType:
+      type: string
+      enum:
+      - EQUALS
+      - NOT_EQUALS
+      - IN
+      - NOT_IN
+      - GREATER_THAN
+      - GREATER_THAN_OR_EQUALS
+      - LESS_THAN
+      - LESS_THAN_OR_EQUALS
+      - EMPTY
+      - NOT_EMPTY
+      - CONTAINS
+      - NOT_CONTAINS
+      title: PricingPlanSubscriptionSelectorFilterType
+    OrganizationCreateRequest:
+      type: object
+      properties:
+        legal_name:
+          type: string
+        tax_id:
+          type:
+          - string
+          - 'null'
+          description: Tax Id used for tax purposes of the organization
+        tax_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaxId'
+          description: Tax Ids used for tax purposes of the organization
+        registration_number:
+          type:
+          - string
+          - 'null'
+        tax_exempt:
+          type:
+          - boolean
+          - 'null'
+        tax_exempt_note:
+          type:
+          - string
+          - 'null'
+        registered_address:
+          $ref: '#/components/schemas/Address'
+        tax_registrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaxRegistration'
+          description: Extra tax registrations for the customer
+      title: OrganizationCreateRequest
+    AlertRuleEntitlementCreateRequestComparator:
+      type: string
+      enum:
+      - EQUALS
+      - NOT_EQUALS
+      - IN
+      - NOT_IN
+      - GREATER_THAN
+      - GREATER_THAN_OR_EQUALS
+      - LESS_THAN
+      - LESS_THAN_OR_EQUALS
+      - EMPTY
+      - NOT_EMPTY
+      - CONTAINS
+      - NOT_CONTAINS
+      title: AlertRuleEntitlementCreateRequestComparator
+    LinkDetail:
+      type: object
+      properties:
+        url:
+          type:
+          - string
+          - 'null'
+        custom_field_name:
+          type:
+          - string
+          - 'null'
+      title: LinkDetail
+    CustomerSellerDetailsCreateRequest:
+      type: object
+      properties:
+        default_billing_entity_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type BILLING_ENTITY
+      title: CustomerSellerDetailsCreateRequest
+    PricingPlanSubscriptionSelectorCreateRequestFallback:
+      type: string
+      enum:
+      - LATEST
+      - NONE
+      description: The fallback logic what to do when no subscription is found. By default it is LATEST
+      title: PricingPlanSubscriptionSelectorCreateRequestFallback
+    PricingPlanSubscriptionSelectorData:
+      type: object
+      properties:
+        field:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorDataField'
+        value:
+          type: string
+      title: PricingPlanSubscriptionSelectorData
+    TaxIdType:
+      type: string
+      enum:
+      - GENERIC_TAX_ID
+      - AU_GST
+      - CA_GST_HST
+      - CA_PST
+      - CA_PST_BC
+      - CA_PST_MB
+      - CA_PST_SK
+      - CA_QST
+      description: Optional tax id type, indicates which type of tax the number is for
+      title: TaxIdType
+    MeterValueStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the meter value indicating the activity and the ability to update properties.
+      title: MeterValueStatus
+    AddressCountry:
+      type: string
+      enum:
+      - AD
+      - AE
+      - AF
+      - AG
+      - AI
+      - AL
+      - AM
+      - AO
+      - AQ
+      - AR
+      - AS
+      - AT
+      - AU
+      - AW
+      - AX
+      - AZ
+      - BA
+      - BB
+      - BD
+      - BE
+      - BF
+      - BG
+      - BH
+      - BI
+      - BJ
+      - BL
+      - BM
+      - BN
+      - BO
+      - BQ
+      - BR
+      - BS
+      - BT
+      - BV
+      - BW
+      - BY
+      - BZ
+      - CA
+      - CC
+      - CD
+      - CF
+      - CG
+      - CH
+      - CI
+      - CK
+      - CL
+      - CM
+      - CN
+      - CO
+      - CR
+      - CU
+      - CV
+      - CW
+      - CX
+      - CY
+      - CZ
+      - DE
+      - DJ
+      - DK
+      - DM
+      - DO
+      - DZ
+      - EC
+      - EE
+      - EG
+      - EH
+      - ER
+      - ES
+      - ET
+      - FI
+      - FJ
+      - FK
+      - FM
+      - FO
+      - FR
+      - GA
+      - GB
+      - GD
+      - GE
+      - GF
+      - GG
+      - GH
+      - GI
+      - GL
+      - GM
+      - GN
+      - GP
+      - GQ
+      - GR
+      - GS
+      - GT
+      - GU
+      - GW
+      - GY
+      - HK
+      - HM
+      - HN
+      - HR
+      - HT
+      - HU
+      - ID
+      - IE
+      - IL
+      - IM
+      - IN
+      - IO
+      - IQ
+      - IR
+      - IS
+      - IT
+      - JE
+      - JM
+      - JO
+      - JP
+      - KE
+      - KG
+      - KH
+      - KI
+      - KM
+      - KN
+      - KP
+      - KR
+      - KW
+      - KY
+      - KZ
+      - LA
+      - LB
+      - LC
+      - LI
+      - LK
+      - LR
+      - LS
+      - LT
+      - LU
+      - LV
+      - LY
+      - MA
+      - MC
+      - MD
+      - ME
+      - MF
+      - MG
+      - MH
+      - MK
+      - ML
+      - MM
+      - MN
+      - MO
+      - MP
+      - MQ
+      - MR
+      - MS
+      - MT
+      - MU
+      - MV
+      - MW
+      - MX
+      - MY
+      - MZ
+      - NA
+      - NC
+      - NE
+      - NF
+      - NG
+      - NI
+      - NL
+      - 'NO'
+      - NP
+      - NR
+      - NU
+      - NZ
+      - OM
+      - PA
+      - PE
+      - PF
+      - PG
+      - PH
+      - PK
+      - PL
+      - PM
+      - PN
+      - PR
+      - PS
+      - PT
+      - PW
+      - PY
+      - QA
+      - RE
+      - RO
+      - RS
+      - RU
+      - RW
+      - SA
+      - SB
+      - SC
+      - SD
+      - SE
+      - SG
+      - SH
+      - SI
+      - SJ
+      - SK
+      - SL
+      - SM
+      - SN
+      - SO
+      - SR
+      - SS
+      - ST
+      - SV
+      - SX
+      - SY
+      - SZ
+      - TC
+      - TD
+      - TF
+      - TG
+      - TH
+      - TJ
+      - TK
+      - TL
+      - TM
+      - TN
+      - TO
+      - TR
+      - TT
+      - TV
+      - TW
+      - TZ
+      - UA
+      - UG
+      - US
+      - UY
+      - UZ
+      - VA
+      - VC
+      - VE
+      - VG
+      - VI
+      - VN
+      - VU
+      - WF
+      - WS
+      - YE
+      - YT
+      - ZA
+      - ZM
+      - ZW
+      title: AddressCountry
+    CustomerUpdateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      - CLOSED
+      title: CustomerUpdateRequestStatus
+    CustomFieldValueUpdateRequest:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOM_FIELD
+        reference:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+        values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        integration_details:
+          oneOf:
+          - $ref: '#/components/schemas/IntegrationDetails'
+          - type: 'null'
+        integration_id:
+          type: string
+          description: The resource ID of the integration linked to the custom field
+      title: CustomFieldValueUpdateRequest
+    ApiErrorResourceType:
+      type: string
+      enum:
+      - CUSTOMER
+      - CUSTOM_FIELD
+      - PLATFORM
+      - PLATFORM_UPTODATE
+      - METER
+      - METER_VALUE
+      - METER_PROPERTY
+      - METER_VALUE_CALCULATION
+      - INGEST_DATA
+      - METER_DATA
+      - CHARGE_DATA
+      - PERSIST_DATA
+      - ADJUSTMENT_DATA
+      - PRODUCT_CATEGORY
+      - PRODUCT
+      - PRODUCT_ITEM
+      - PRICING
+      - PRICING_GROUP
+      - PRICING_ITEM
+      - PRICING_ITEM_CONFIG
+      - PRICING_PLAN_SUBSCRIPTION
+      - PRICING_PLAN_SUBSCRIPTION_GROUP
+      - PRICING_PLAN_SCHEDULE
+      - PRICING_PLAN
+      - PRICING_PLAN_VERSION
+      - QUOTE
+      - QUOTE_VERSION
+      - QUOTE_TEMPLATE
+      - API_KEY
+      - USER
+      - ROLE
+      - PROXY_USER
+      - EXTERNAL_CREDENTIALS
+      - TOKEN
+      - INVOICE
+      - E_INVOICE
+      - PDF
+      - BILLING_ENTITY
+      - FEATURE
+      - MEMBERSHIP
+      - PAYMENT
+      - PAYMENT_ACCEPTOR
+      - PAYMENT_METHOD
+      - PAYMENT_METHOD_OPTIONS
+      - PAYMENT_SCHEDULE
+      - PAYMENT_REQUEST
+      - INTEGRATION
+      - WEBHOOK
+      - FILE
+      - FILE_PROCESSING_SETTINGS
+      - TEAM
+      - DOWNLOAD_URL
+      - CSV_REPORT
+      - REPORT
+      - REPORT_GENERATE_REQUEST
+      - REPORT_CONFIGURATION
+      - REPORT_SUBSCRIPTION
+      - REPORT_DEFINITION
+      - ACCOUNT_GROUP
+      - ENTITY
+      - EVENT_TRACE
+      - EVENT_TRACE_LINK
+      - PRICING_CATEGORY
+      - CONTACT
+      - ALERT_RULE
+      - ALERT
+      - AUDIT_RECORD
+      - PORTAL_URL
+      - AUTHENTICATION_PROVIDER
+      - REPROCESS
+      - APPROVAL_POLICY
+      - APPROVAL_REQUEST
+      - BULK_ACTION
+      - COUPON
+      - PROMOTION_CODE
+      - WALLET
+      - WALLET_TYPE
+      - WALLET_GRANT
+      - WORKFLOW
+      - WORKFLOW_TRIGGER
+      - WORKFLOW_ACTION
+      - CREDIT_TYPE
+      - SIGNATURE_REQUEST
+      - ATTACHMENT
+      - DOCUMENT
+      title: ApiErrorResourceType
+    NotificationPreferenceCreateRequestType:
+      type: string
+      enum:
+      - INVOICE
+      description: The notification type to configure.
+      title: NotificationPreferenceCreateRequestType
+    MeterMeterValue:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type METER_VALUE
+        object:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValue'
+          - type: 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+        required:
+          type:
+          - boolean
+          - 'null'
+      title: MeterMeterValue
+    AlertRuleCreateRequestType:
+      type: string
+      enum:
+      - ENTITLEMENT
+      - INVOICE
+      description: The type of the the alert.
+      title: AlertRuleCreateRequestType
+    MeterValueCalculationCalculationType:
+      type: string
+      enum:
+      - SUM
+      - MAX
+      - MIN
+      - AVERAGE
+      - UNIQUE
+      description: The type of calculation used for this billable metric.
+      title: MeterValueCalculationCalculationType
+    MeterValue:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueStatus'
+          - type: 'null'
+          description: The status of the meter value indicating the activity and the ability to update properties.
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueType'
+          - type: 'null'
+          description: The type of the meter value.
+      title: MeterValue
+    AlertRuleStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the AlertRule. DEPRECATED is not supported.
+      title: AlertRuleStatus
+    AlertRuleEntitlementUpdateRequestComparator:
+      type: string
+      enum:
+      - EQUALS
+      - NOT_EQUALS
+      - IN
+      - NOT_IN
+      - GREATER_THAN
+      - GREATER_THAN_OR_EQUALS
+      - LESS_THAN
+      - LESS_THAN_OR_EQUALS
+      - EMPTY
+      - NOT_EMPTY
+      - CONTAINS
+      - NOT_CONTAINS
+      title: AlertRuleEntitlementUpdateRequestComparator
+  securitySchemes:
+    API-Key:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+    JWT-Authentication:
+      type: http
+      scheme: bearer

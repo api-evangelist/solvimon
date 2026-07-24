@@ -1,0 +1,849 @@
+openapi: 3.1.0
+info:
+  title: Configuration alertRules workflowActions API
+  version: 1.0.0
+servers:
+- url: https://test.api.solvimon.com
+  description: The TEST environment for our API
+- url: https://api.solvimon.com
+  description: The live environment for our API
+tags:
+- name: workflowActions
+paths:
+  /v{version}/workflow-actions:
+    get:
+      operationId: getWorkflowActions
+      summary: Get all workflow actions
+      description: Returns all workflow actions for the platform. Actions define what happens when a workflow trigger executes. Requires the WORKFLOW_ACTION.VIEW permission.
+      tags:
+      - workflowActions
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: limit
+        in: query
+        description: The amount of records shown in the list
+        required: false
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: The page which is going to be shown
+        required: false
+        schema:
+          type: integer
+      - name: order_by
+        in: query
+        description: The parameter by which the response is ordered.
+        required: false
+        schema:
+          type: string
+      - name: order_direction
+        in: query
+        description: The order direction by which the response is ordered.
+        required: false
+        schema:
+          type: string
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WorkflowAction'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      operationId: postWorkflowActions
+      summary: Create a workflow action
+      description: Creates a workflow action linked to an existing workflow. The action payload must match the selected action type. Requires the WORKFLOW_ACTION.CREATE permission.
+      tags:
+      - workflowActions
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowAction'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkflowActionCreateRequest'
+  /v{version}/workflow-actions/{resourceId}:
+    get:
+      operationId: getWorkflowActionsByResourceId
+      summary: Get workflow action by ID
+      description: Fetches a single workflow action by resource ID. Requires the WORKFLOW_ACTION.VIEW permission.
+      tags:
+      - workflowActions
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowAction'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    delete:
+      operationId: deleteWorkflowActionsByResourceId
+      summary: Delete a workflow action by ID
+      description: Deletes the workflow action identified by the provided resource ID and returns the deleted action. Requires the WORKFLOW_ACTION.DELETE permission.
+      tags:
+      - workflowActions
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowAction'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    patch:
+      operationId: patchWorkflowActionsByResourceId
+      summary: Update a workflow action by ID
+      description: Updates workflow action fields. Requires the WORKFLOW_ACTION.UPDATE permission.
+      tags:
+      - workflowActions
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowAction'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkflowActionUpdateRequest'
+components:
+  schemas:
+    WorkflowActionCreateRequestStatus:
+      type: string
+      enum:
+      - ACTIVE
+      - INACTIVE
+      - DRAFT
+      - ARCHIVED
+      description: Status of the action.
+      title: WorkflowActionCreateRequestStatus
+    WorkflowActionStatus:
+      type: string
+      enum:
+      - ACTIVE
+      - INACTIVE
+      - DRAFT
+      - ARCHIVED
+      description: Status of the action.
+      title: WorkflowActionStatus
+    EmailIdentifier:
+      type: object
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+        email:
+          type: string
+      title: EmailIdentifier
+    WorkflowActionCreateRequestType:
+      type: string
+      enum:
+      - SEND_EMAIL_TO_CUSTOMER
+      description: Action type that selects the matching action configuration.
+      title: WorkflowActionCreateRequestType
+    SendEmailToCustomerUpdateRequestVariant:
+      type: string
+      enum:
+      - INVOICE
+      - PAYMENT
+      - PRICING_PLAN_SUBSCRIPTION
+      description: Template variant that selects the matching target-specific email configuration.
+      title: SendEmailToCustomerUpdateRequestVariant
+    WorkflowAction:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        workflow_id:
+          type: string
+          description: Workflow that owns this action.
+        type:
+          $ref: '#/components/schemas/WorkflowActionType'
+          description: Action type that selects the matching action configuration.
+        description:
+          type:
+          - string
+          - 'null'
+          description: Description of what this action does.
+        status:
+          $ref: '#/components/schemas/WorkflowActionStatus'
+          description: Status of the action.
+        created_at:
+          type:
+          - string
+          - 'null'
+          description: Date time when the action was created.
+        updated_at:
+          type:
+          - string
+          - 'null'
+          description: Date time when the action was last updated.
+        send_email_to_customer:
+          $ref: '#/components/schemas/SendEmailToCustomer'
+          description: Email action configuration used to send an email to the customer.
+      description: Defines an action that belongs to a workflow and describes what the workflow performs when it runs.
+      title: WorkflowAction
+    WorkflowActionType:
+      type: string
+      enum:
+      - SEND_EMAIL_TO_CUSTOMER
+      description: Action type that selects the matching action configuration.
+      title: WorkflowActionType
+    SendEmailPricingPlanSubscriptionConfiguration:
+      type: object
+      properties:
+        include_customer_contacts_as_cc:
+          type: boolean
+          description: Controls whether the customer's configured contacts are added as CC recipients.
+      description: Defines subscription-specific options for emails sent by the workflow action.
+      title: SendEmailPricingPlanSubscriptionConfiguration
+    SendEmailToCustomerCreateRequestVariant:
+      type: string
+      enum:
+      - INVOICE
+      - PAYMENT
+      - PRICING_PLAN_SUBSCRIPTION
+      description: Template variant that selects the matching target-specific email configuration.
+      title: SendEmailToCustomerCreateRequestVariant
+    SendEmailPaymentConfiguration:
+      type: object
+      properties:
+        include_customer_contacts_as_cc:
+          type: boolean
+          description: Controls whether the customer's configured contacts are added as CC recipients.
+      description: Defines payment-specific options for emails sent by the workflow action.
+      title: SendEmailPaymentConfiguration
+    SendEmailToCustomerCreateRequest:
+      type: object
+      properties:
+        integration_id:
+          type: string
+          description: Integration that provides the email delivery channel configuration.
+        subject:
+          type:
+          - string
+          - 'null'
+          description: Subject line used for the email.
+        from:
+          $ref: '#/components/schemas/EmailIdentifier'
+          description: Sender address and display information for the email.
+        reply_to:
+          $ref: '#/components/schemas/EmailIdentifier'
+          description: Reply-to address and display information for the email.
+        cc_recipients:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: CC recipient email addresses.
+        bcc_recipients:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: BCC recipient email addresses.
+        template_name:
+          type: string
+          description: Template name used to render the email.
+        variant:
+          $ref: '#/components/schemas/SendEmailToCustomerCreateRequestVariant'
+          description: Template variant that selects the matching target-specific email configuration.
+        invoice:
+          $ref: '#/components/schemas/SendEmailInvoiceConfiguration'
+          description: Invoice email settings used when the action runs for an invoice workflow.
+        payment:
+          $ref: '#/components/schemas/SendEmailPaymentConfiguration'
+          description: Payment email settings used when the action runs for a payment workflow.
+        pricing_plan_subscription:
+          $ref: '#/components/schemas/SendEmailPricingPlanSubscriptionConfiguration'
+          description: Pricing plan subscription email settings used when the action runs for a pricing plan subscription workflow.
+      description: Defines the email content, sender details, recipients, and template configuration used by the action.
+      title: SendEmailToCustomerCreateRequest
+    SendEmailToCustomerVariant:
+      type: string
+      enum:
+      - INVOICE
+      - PAYMENT
+      - PRICING_PLAN_SUBSCRIPTION
+      description: Template variant that selects the matching target-specific email configuration.
+      title: SendEmailToCustomerVariant
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    SendEmailToCustomerUpdateRequest:
+      type: object
+      properties:
+        integration_id:
+          type: string
+          description: Integration that provides the email delivery channel configuration.
+        subject:
+          type:
+          - string
+          - 'null'
+          description: Subject line used for the email.
+        from:
+          $ref: '#/components/schemas/EmailIdentifier'
+          description: Sender address and display information for the email.
+        reply_to:
+          $ref: '#/components/schemas/EmailIdentifier'
+          description: Reply-to address and display information for the email.
+        cc_recipients:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: CC recipient email addresses.
+        bcc_recipients:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: BCC recipient email addresses.
+        template_name:
+          type: string
+          description: Template name used to render the email.
+        variant:
+          $ref: '#/components/schemas/SendEmailToCustomerUpdateRequestVariant'
+          description: Template variant that selects the matching target-specific email configuration.
+        invoice:
+          $ref: '#/components/schemas/SendEmailInvoiceConfiguration'
+          description: Invoice email settings used when the action runs for an invoice workflow.
+        payment:
+          $ref: '#/components/schemas/SendEmailPaymentConfiguration'
+          description: Payment email settings used when the action runs for a payment workflow.
+        pricing_plan_subscription:
+          $ref: '#/components/schemas/SendEmailPricingPlanSubscriptionConfiguration'
+          description: Pricing plan subscription email settings used when the action runs for a pricing plan subscription workflow.
+      description: Defines the email content, sender details, recipients, and template configuration used by the action.
+      title: SendEmailToCustomerUpdateRequest
+    ApiErrorResourceType:
+      type: string
+      enum:
+      - CUSTOMER
+      - CUSTOM_FIELD
+      - PLATFORM
+      - PLATFORM_UPTODATE
+      - METER
+      - METER_VALUE
+      - METER_PROPERTY
+      - METER_VALUE_CALCULATION
+      - INGEST_DATA
+      - METER_DATA
+      - CHARGE_DATA
+      - PERSIST_DATA
+      - ADJUSTMENT_DATA
+      - PRODUCT_CATEGORY
+      - PRODUCT
+      - PRODUCT_ITEM
+      - PRICING
+      - PRICING_GROUP
+      - PRICING_ITEM
+      - PRICING_ITEM_CONFIG
+      - PRICING_PLAN_SUBSCRIPTION
+      - PRICING_PLAN_SUBSCRIPTION_GROUP
+      - PRICING_PLAN_SCHEDULE
+      - PRICING_PLAN
+      - PRICING_PLAN_VERSION
+      - QUOTE
+      - QUOTE_VERSION
+      - QUOTE_TEMPLATE
+      - API_KEY
+      - USER
+      - ROLE
+      - PROXY_USER
+      - EXTERNAL_CREDENTIALS
+      - TOKEN
+      - INVOICE
+      - E_INVOICE
+      - PDF
+      - BILLING_ENTITY
+      - FEATURE
+      - MEMBERSHIP
+      - PAYMENT
+      - PAYMENT_ACCEPTOR
+      - PAYMENT_METHOD
+      - PAYMENT_METHOD_OPTIONS
+      - PAYMENT_SCHEDULE
+      - PAYMENT_REQUEST
+      - INTEGRATION
+      - WEBHOOK
+      - FILE
+      - FILE_PROCESSING_SETTINGS
+      - TEAM
+      - DOWNLOAD_URL
+      - CSV_REPORT
+      - REPORT
+      - REPORT_GENERATE_REQUEST
+      - REPORT_CONFIGURATION
+      - REPORT_SUBSCRIPTION
+      - REPORT_DEFINITION
+      - ACCOUNT_GROUP
+      - ENTITY
+      - EVENT_TRACE
+      - EVENT_TRACE_LINK
+      - PRICING_CATEGORY
+      - CONTACT
+      - ALERT_RULE
+      - ALERT
+      - AUDIT_RECORD
+      - PORTAL_URL
+      - AUTHENTICATION_PROVIDER
+      - REPROCESS
+      - APPROVAL_POLICY
+      - APPROVAL_REQUEST
+      - BULK_ACTION
+      - COUPON
+      - PROMOTION_CODE
+      - WALLET
+      - WALLET_TYPE
+      - WALLET_GRANT
+      - WORKFLOW
+      - WORKFLOW_TRIGGER
+      - WORKFLOW_ACTION
+      - CREDIT_TYPE
+      - SIGNATURE_REQUEST
+      - ATTACHMENT
+      - DOCUMENT
+      title: ApiErrorResourceType
+    SendEmailInvoiceConfigurationType:
+      type: string
+      enum:
+      - TO_FINAL
+      - OVERDUE
+      - UPCOMING_PAYMENT_REMINDER
+      description: Invoice email type.
+      title: SendEmailInvoiceConfigurationType
+    WorkflowActionUpdateRequestType:
+      type: string
+      enum:
+      - SEND_EMAIL_TO_CUSTOMER
+      description: Action type that selects the matching action configuration.
+      title: WorkflowActionUpdateRequestType
+    SendEmailInvoiceConfiguration:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/SendEmailInvoiceConfigurationType'
+          description: Invoice email type.
+        include_pdf:
+          type: boolean
+          description: Attach the invoice PDF to the email. Only applicable for TO_FINAL and OVERDUE
+        include_payment_link:
+          type: boolean
+          description: Include a payment link in the email. Only applicable for TO_FINAL and OVERDUE
+        include_customer_contacts_as_cc:
+          type: boolean
+          description: Add the customer's configured contacts as CC recipients. Defaults to false when absent.
+      description: Defines invoice-specific options for emails sent by the workflow action. Fields allowed/required depend on `type`.
+      title: SendEmailInvoiceConfiguration
+    WorkflowActionCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        workflow_id:
+          type: string
+          description: Workflow that owns this action.
+        type:
+          $ref: '#/components/schemas/WorkflowActionCreateRequestType'
+          description: Action type that selects the matching action configuration.
+        description:
+          type:
+          - string
+          - 'null'
+          description: Description of what this action does.
+        status:
+          $ref: '#/components/schemas/WorkflowActionCreateRequestStatus'
+          description: Status of the action.
+        created_at:
+          type:
+          - string
+          - 'null'
+          description: Date time when the action was created.
+        updated_at:
+          type:
+          - string
+          - 'null'
+          description: Date time when the action was last updated.
+        send_email_to_customer:
+          $ref: '#/components/schemas/SendEmailToCustomerCreateRequest'
+          description: Email action configuration used to send an email to the customer.
+      required:
+      - workflow_id
+      - type
+      - status
+      description: Defines an action that belongs to a workflow and describes what the workflow performs when it runs.
+      title: WorkflowActionCreateRequest
+    WorkflowActionUpdateRequestStatus:
+      type: string
+      enum:
+      - ACTIVE
+      - INACTIVE
+      - DRAFT
+      - ARCHIVED
+      description: Status of the action.
+      title: WorkflowActionUpdateRequestStatus
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    SendEmailToCustomer:
+      type: object
+      properties:
+        integration_id:
+          type: string
+          description: Integration that provides the email delivery channel configuration.
+        subject:
+          type:
+          - string
+          - 'null'
+          description: Subject line used for the email.
+        from:
+          $ref: '#/components/schemas/EmailIdentifier'
+          description: Sender address and display information for the email.
+        reply_to:
+          $ref: '#/components/schemas/EmailIdentifier'
+          description: Reply-to address and display information for the email.
+        cc_recipients:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: CC recipient email addresses.
+        bcc_recipients:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: BCC recipient email addresses.
+        template_name:
+          type: string
+          description: Template name used to render the email.
+        variant:
+          $ref: '#/components/schemas/SendEmailToCustomerVariant'
+          description: Template variant that selects the matching target-specific email configuration.
+        invoice:
+          $ref: '#/components/schemas/SendEmailInvoiceConfiguration'
+          description: Invoice email settings used when the action runs for an invoice workflow.
+        payment:
+          $ref: '#/components/schemas/SendEmailPaymentConfiguration'
+          description: Payment email settings used when the action runs for a payment workflow.
+        pricing_plan_subscription:
+          $ref: '#/components/schemas/SendEmailPricingPlanSubscriptionConfiguration'
+          description: Pricing plan subscription email settings used when the action runs for a pricing plan subscription workflow.
+      description: Defines the email content, sender details, recipients, and template configuration used by the action.
+      title: SendEmailToCustomer
+    WorkflowActionUpdateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        workflow_id:
+          type: string
+          description: Workflow that owns this action.
+        type:
+          $ref: '#/components/schemas/WorkflowActionUpdateRequestType'
+          description: Action type that selects the matching action configuration.
+        description:
+          type:
+          - string
+          - 'null'
+          description: Description of what this action does.
+        status:
+          $ref: '#/components/schemas/WorkflowActionUpdateRequestStatus'
+          description: Status of the action.
+        created_at:
+          type:
+          - string
+          - 'null'
+          description: Date time when the action was created.
+        updated_at:
+          type:
+          - string
+          - 'null'
+          description: Date time when the action was last updated.
+        send_email_to_customer:
+          $ref: '#/components/schemas/SendEmailToCustomerUpdateRequest'
+          description: Email action configuration used to send an email to the customer.
+      description: Defines an action that belongs to a workflow and describes what the workflow performs when it runs.
+      title: WorkflowActionUpdateRequest
+  securitySchemes:
+    API-Key:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+    JWT-Authentication:
+      type: http
+      scheme: bearer

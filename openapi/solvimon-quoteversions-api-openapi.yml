@@ -1,0 +1,2520 @@
+openapi: 3.1.0
+info:
+  title: Configuration alertRules quoteVersions API
+  version: 1.0.0
+servers:
+- url: https://test.api.solvimon.com
+  description: The TEST environment for our API
+- url: https://api.solvimon.com
+  description: The live environment for our API
+tags:
+- name: quoteVersions
+paths:
+  /v{version}/quote-versions:
+    get:
+      operationId: getQuoteVersions
+      summary: Get a list of all quote versions
+      description: Requires the QUOTE.VIEW permission.
+      tags:
+      - quoteVersions
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: quote_id
+        in: query
+        description: Filter based of quote resource ID
+        required: true
+        schema:
+          type: string
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuoteVersionResponseWrapper'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      operationId: postQuoteVersions
+      summary: Create a quote version
+      description: Requires the QUOTE.CREATE permission.
+      tags:
+      - quoteVersions
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuoteVersion'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuoteVersionCreateRequest'
+  /v{version}/quote-versions/{resourceId}:
+    get:
+      operationId: getQuoteVersionsByResourceId
+      summary: Get a quote version by resource ID
+      description: Requires the QUOTE.VIEW permission.
+      tags:
+      - quoteVersions
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: expand[]
+        in: query
+        description: The id fields of the resources that are going to be expanded.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuoteVersion'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    delete:
+      operationId: deleteQuoteVersionsByResourceId
+      summary: Delete a quote version
+      description: Requires the QUOTE.DELETE permission.
+      tags:
+      - quoteVersions
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuoteVersion'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    patch:
+      operationId: patchQuoteVersionsByResourceId
+      summary: Update a quote version
+      description: Requires the QUOTE.UPDATE permission.
+      tags:
+      - quoteVersions
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuoteVersion'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuoteVersionUpdateRequest'
+  /v{version}/quote-versions/{resourceId}/pdf:
+    get:
+      operationId: getQuoteVersionsByResourceIdPdf
+      summary: Get the quote version as PDF
+      description: Requires the QUOTE.VIEW permission.
+      tags:
+      - quoteVersions
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /v{version}/quote-versions/{resourceId}/finalize:
+    post:
+      operationId: postQuoteVersionsByResourceIdFinalize
+      summary: Finalize the quote version
+      tags:
+      - quoteVersions
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuoteVersion'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /v{version}/quote-versions/{resourceId}/send:
+    post:
+      operationId: postQuoteVersionsByResourceIdSend
+      summary: Send the quote version
+      tags:
+      - quoteVersions
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuoteVersion'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuoteVersionActionSendCreateRequest'
+  /v{version}/quote-versions/{resourceId}/accept:
+    post:
+      operationId: postQuoteVersionsByResourceIdAccept
+      summary: Accept the quote version
+      tags:
+      - quoteVersions
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuoteVersion'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuoteVersionActionAcceptCreateRequest'
+  /v{version}/quote-versions/{resourceId}/reject:
+    post:
+      operationId: postQuoteVersionsByResourceIdReject
+      summary: Reject the quote version
+      tags:
+      - quoteVersions
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuoteVersion'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuoteVersionActionRejectCreateRequest'
+  /v{version}/quote-versions/{resourceId}/request-signature:
+    post:
+      operationId: postQuoteVersionsByResourceIdRequestSignature
+      summary: Request signature for the quote version
+      tags:
+      - quoteVersions
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuoteVersion'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuoteVersionActionRequestSignatureBodyCreateRequest'
+  /v{version}/quote-versions/{resourceId}/create-subscription:
+    post:
+      operationId: postQuoteVersionsByResourceIdCreateSubscription
+      summary: Create the subscription based on a approved quote version
+      tags:
+      - quoteVersions
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuoteVersion'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuoteVersionActionCreateSubscriptionCreateRequest'
+components:
+  schemas:
+    SignatureRequestQuoteVersion:
+      type: object
+      properties:
+        quote_version_id:
+          type:
+          - string
+          - 'null'
+          description: The ID of the quote version this signature request belongs to.
+      title: SignatureRequestQuoteVersion
+    QuoteVersionRecipientDataUpdateRequestRole:
+      type: string
+      enum:
+      - SIGNER
+      - VIEWER
+      description: The role of the recipient.
+      title: QuoteVersionRecipientDataUpdateRequestRole
+    QuoteVersionActionAcceptCreateRequest:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/NameCreateRequest'
+          description: The name of the accepter
+        role:
+          type:
+          - string
+          - 'null'
+          description: The role of the accepter
+      title: QuoteVersionActionAcceptCreateRequest
+    QuoteVersionActionCreateSubscriptionCreateRequest:
+      type: object
+      properties:
+        pricing_plan_subscription_id:
+          type:
+          - string
+          - 'null'
+          description: The create pricing plan subscription based on the quote version
+      title: QuoteVersionActionCreateSubscriptionCreateRequest
+    QuoteVersionAction:
+      type: object
+      properties:
+        created_at:
+          type:
+          - string
+          - 'null'
+        type:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - string
+          - 'null'
+        send:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionActionSend'
+          - type: 'null'
+        accept:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionActionAccept'
+          - type: 'null'
+        reject:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionActionReject'
+          - type: 'null'
+        create_subscription:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionActionCreateSubscription'
+          - type: 'null'
+        request_signature:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionActionRequestSignature'
+          - type: 'null'
+        sign:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionActionSign'
+          - type: 'null'
+      title: QuoteVersionAction
+    QuoteVersionContentUpdateRequestType:
+      type: string
+      enum:
+      - DEFAULT
+      - TIPTAP
+      description: The type of content used by the quote version.
+      title: QuoteVersionContentUpdateRequestType
+    LinkedIntegration:
+      type: object
+      properties:
+        id:
+          type: string
+        link_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/LinkDetail'
+      title: LinkedIntegration
+    IntegrationDetails:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+        payment_gateway_variant:
+          $ref: '#/components/schemas/IntegrationDetailsPaymentGatewayVariant'
+        adyen:
+          $ref: '#/components/schemas/AdyenIntegrationDetails'
+        stripe:
+          $ref: '#/components/schemas/StripeIntegrationDetails'
+      title: IntegrationDetails
+    QuoteVersionStatus:
+      type: string
+      enum:
+      - DRAFT
+      - FINAL
+      - WAITING_APPROVAL
+      - APPROVED
+      - DECLINED
+      - SEND
+      - SIGNATURE_REQUESTED
+      - SIGNED
+      - ACCEPTED
+      - REJECTED
+      - CLOSED
+      title: QuoteVersionStatus
+    PortalUrlLink:
+      type: object
+      properties:
+        expiry_period:
+          $ref: '#/components/schemas/Period'
+        portal_url_id:
+          type:
+          - string
+          - 'null'
+        url:
+          type:
+          - string
+          - 'null'
+      title: PortalUrlLink
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    Contact:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+          description: A custom reference assigned to the contact.
+        customer_id:
+          type: string
+          description: The ID of the customer.
+        name:
+          $ref: '#/components/schemas/Name'
+          description: A custom name assigned to the contact.
+        email:
+          type: string
+          description: The email of the contact.
+        notification_preferences:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/NotificationPreference'
+          description: Notification preferences for contact-related communications.
+        custom_fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomFieldValue'
+        linked_integrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/LinkedIntegration'
+      title: Contact
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    SignatureRequestRecipientData:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier of this recipient.
+        contact_id:
+          type:
+          - string
+          - 'null'
+          description: The contact ID, present when the recipient originates from a contact.
+        name:
+          oneOf:
+          - $ref: '#/components/schemas/Name'
+          - type: 'null'
+          description: The name of the recipient.
+        email:
+          type:
+          - string
+          - 'null'
+          description: The email of the recipient.
+        role:
+          oneOf:
+          - $ref: '#/components/schemas/SignatureRequestRecipientDataRole'
+          - type: 'null'
+          description: The role of the recipient.
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/SignatureRequestRecipientDataStatus'
+          - type: 'null'
+          description: The status of the recipient.
+      title: SignatureRequestRecipientData
+    QuoteVersionDefaultContent:
+      type: object
+      properties:
+        header:
+          type:
+          - string
+          - 'null'
+          description: Text shown above the pricing plan.
+        footer:
+          type:
+          - string
+          - 'null'
+          description: Text shown below the pricing plan.
+      title: QuoteVersionDefaultContent
+    PricingPlanSubscriptionInfo:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        upgraded_from_pricing_plan_subscription_id:
+          type:
+          - string
+          - 'null'
+      title: PricingPlanSubscriptionInfo
+    QuoteVersionRecipientDataUpdateRequestType:
+      type: string
+      enum:
+      - CONTACT
+      - DETAILS
+      description: The type of the recipient.
+      title: QuoteVersionRecipientDataUpdateRequestType
+    QuoteVersionResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuoteVersion'
+        page:
+          type:
+          - integer
+          - 'null'
+        limit:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      title: QuoteVersionResponseWrapper
+    SignatureRequestType:
+      type: string
+      enum:
+      - QUOTE_VERSION
+      description: The type of the signature request.
+      title: SignatureRequestType
+    QuoteVersionRecipientDataType:
+      type: string
+      enum:
+      - CONTACT
+      - DETAILS
+      description: The type of the recipient.
+      title: QuoteVersionRecipientDataType
+    QuoteVersionActionReject:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/Name'
+          description: The name of the rejecter
+        role:
+          type:
+          - string
+          - 'null'
+          description: The role of the rejecter
+        reason:
+          type:
+          - string
+          - 'null'
+          description: The reason of the rejection
+      title: QuoteVersionActionReject
+    QuoteVersionInvoicesInfoUpdateRequest:
+      type: object
+      properties:
+        first_invoice_summary:
+          oneOf:
+          - $ref: '#/components/schemas/InvoiceTaxTotalSummary'
+          - type: 'null'
+          description: Base, tax, and total costs on the first invoice generated by quote version.
+      title: QuoteVersionInvoicesInfoUpdateRequest
+    QuoteVersionActionUpdateRequest:
+      type: object
+      properties:
+        created_at:
+          type:
+          - string
+          - 'null'
+        type:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - string
+          - 'null'
+        send:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionActionSend'
+          - type: 'null'
+        accept:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionActionAccept'
+          - type: 'null'
+        reject:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionActionReject'
+          - type: 'null'
+        create_subscription:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionActionCreateSubscription'
+          - type: 'null'
+        request_signature:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionActionRequestSignature'
+          - type: 'null'
+        sign:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionActionSign'
+          - type: 'null'
+      title: QuoteVersionActionUpdateRequest
+    NotificationChannelType:
+      type: string
+      enum:
+      - EMAIL
+      description: The channel type to use.
+      title: NotificationChannelType
+    CustomFieldValue:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOM_FIELD
+        reference:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+        values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        integration_details:
+          oneOf:
+          - $ref: '#/components/schemas/IntegrationDetails'
+          - type: 'null'
+        integration_id:
+          type: string
+          description: The resource ID of the integration linked to the custom field
+      title: CustomFieldValue
+    PeriodType:
+      type: string
+      enum:
+      - DAY
+      - WEEK
+      - MONTH
+      - YEAR
+      title: PeriodType
+    IntegrationDetailsPaymentGatewayVariant:
+      type: string
+      enum:
+      - ADYEN
+      - STRIPE
+      title: IntegrationDetailsPaymentGatewayVariant
+    QuoteVersionRecipientDataCreateRequest:
+      type: object
+      properties:
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionRecipientDataCreateRequestType'
+          - type: 'null'
+          description: The type of the recipient.
+        contact:
+          $ref: '#/components/schemas/RecipientContactData'
+          description: Contact information, when type is CONTACT.
+        details:
+          $ref: '#/components/schemas/RecipientDetailsData'
+          description: Recipient details, when type is DETAILS.
+        role:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionRecipientDataCreateRequestRole'
+          - type: 'null'
+          description: The role of the recipient.
+      title: QuoteVersionRecipientDataCreateRequest
+    QuoteVersion:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        updated_at:
+          type:
+          - string
+          - 'null'
+        expires_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: The expiration date of the quote version.
+        quote_id:
+          type: string
+          description: The ID of the quote.
+        version:
+          type: integer
+          description: The value describing the version of the quote.
+        pricing_plan_subscription_info:
+          oneOf:
+          - $ref: '#/components/schemas/PricingPlanSubscriptionInfo'
+          - type: 'null'
+          description: The info of the linked pricing plan subscription.
+        content:
+          $ref: '#/components/schemas/QuoteVersionContent'
+          description: Content of the body of the quote.
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionStatus'
+          - type: 'null'
+        actions:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/QuoteVersionAction'
+          description: The history of all actions done.
+        link:
+          oneOf:
+          - $ref: '#/components/schemas/PortalUrlLink'
+          - type: 'null'
+          description: The public portal link of the quote.
+        internal_notes:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Internal notes on this quote versions.
+        notes:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Notes on this quote versions.
+        approval_request_id:
+          type:
+          - string
+          - 'null'
+          description: The ID of the Approval Request that was created for this Quote Version.
+        recipients:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/QuoteVersionRecipientData'
+          description: The recipients for signature on this quote version.
+        invoices_info:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionInvoicesInfo'
+          - type: 'null'
+          description: Information pertaining to the invoices generated by this quote version.
+      title: QuoteVersion
+    AdyenIntegrationDetails:
+      type: object
+      properties:
+        recurring_detail_reference:
+          type: string
+      title: AdyenIntegrationDetails
+    RecipientContactData:
+      type: object
+      properties:
+        contact_id:
+          type: string
+          description: Resource ID of type CONTACT
+        contact:
+          oneOf:
+          - $ref: '#/components/schemas/Contact'
+          - type: 'null'
+      title: RecipientContactData
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    QuoteVersionContentCreateRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/QuoteVersionContentCreateRequestType'
+          description: The type of content used by the quote version.
+        default:
+          $ref: '#/components/schemas/QuoteVersionDefaultContent'
+          description: If type is DEFAULT, the content of the quote version.
+        tiptap:
+          type:
+          - string
+          - 'null'
+          description: If type is TIPTAP, the content of the quote version, stringified JSON following the ProseMirror schema.
+      title: QuoteVersionContentCreateRequest
+    QuoteVersionActionAccept:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/Name'
+          description: The name of the accepter
+        role:
+          type:
+          - string
+          - 'null'
+          description: The role of the accepter
+      title: QuoteVersionActionAccept
+    AmountCurrency:
+      type: string
+      enum:
+      - AED
+      - AFN
+      - ALL
+      - AMD
+      - ANG
+      - AOA
+      - ARS
+      - AUD
+      - AWG
+      - AZN
+      - BAM
+      - BBD
+      - BDT
+      - BGN
+      - BHD
+      - BIF
+      - BMD
+      - BND
+      - BOB
+      - BRL
+      - BSD
+      - BTN
+      - BWP
+      - BYN
+      - BZD
+      - CAD
+      - CDF
+      - CHF
+      - CLF
+      - CLP
+      - CNY
+      - COP
+      - CRC
+      - CUC
+      - CUP
+      - CVE
+      - CZK
+      - DJF
+      - DKK
+      - DOP
+      - DZD
+      - EGP
+      - ERN
+      - ETB
+      - EUR
+      - FJD
+      - FKP
+      - GBP
+      - GEL
+      - GHS
+      - GIP
+      - GMD
+      - GNF
+      - GTQ
+      - GYD
+      - HKD
+      - HNL
+      - HRK
+      - HTG
+      - HUF
+      - IDR
+      - ILS
+      - INR
+      - IQD
+      - IRR
+      - ISK
+      - JMD
+      - JOD
+      - JPY
+      - KES
+      - KGS
+      - KHR
+      - KMF
+      - KPW
+      - KRW
+      - KWD
+      - KYD
+      - KZT
+      - LAK
+      - LBP
+      - LKR
+      - LRD
+      - LSL
+      - LYD
+      - MAD
+      - MDL
+      - MGA
+      - MKD
+      - MMK
+      - MNT
+      - MOP
+      - MRO
+      - MRU
+      - MUR
+      - MVR
+      - MWK
+      - MXN
+      - MXV
+      - MYR
+      - MZN
+      - NAD
+      - NGN
+      - NIO
+      - NOK
+      - NPR
+      - NZD
+      - OMR
+      - PAB
+      - PEN
+      - PGK
+      - PHP
+      - PKR
+      - PLN
+      - PYG
+      - QAR
+      - RON
+      - RSD
+      - RUB
+      - RWF
+      - SAR
+      - SBD
+      - SCR
+      - SDG
+      - SEK
+      - SGD
+      - SHP
+      - SLE
+      - SOS
+      - SRD
+      - SSP
+      - STN
+      - SVC
+      - SYP
+      - SZL
+      - THB
+      - TJS
+      - TMT
+      - TND
+      - TOP
+      - TRY
+      - TTD
+      - TWD
+      - TZS
+      - UAH
+      - UGX
+      - USD
+      - USN
+      - UYI
+      - UYU
+      - UZS
+      - VEF
+      - VES
+      - VND
+      - VUV
+      - WST
+      - XAF
+      - XAG
+      - XAU
+      - XBA
+      - XBB
+      - XBC
+      - XBD
+      - XCD
+      - XDR
+      - XOF
+      - XPD
+      - XPF
+      - XPT
+      - XSU
+      - XTS
+      - XUA
+      - XXX
+      - YER
+      - ZAR
+      - ZMW
+      - ZWL
+      title: AmountCurrency
+    QuoteVersionActionSign:
+      type: object
+      properties:
+        signature_request_id:
+          type:
+          - string
+          - 'null'
+      title: QuoteVersionActionSign
+    NotificationChannel:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/NotificationChannelType'
+          description: The channel type to use.
+        enabled:
+          type:
+          - boolean
+          - 'null'
+          description: Whether the channel is enabled for the notification type.
+      title: NotificationChannel
+    InvoiceTaxTotalSummary:
+      type: object
+      properties:
+        base_amount:
+          $ref: '#/components/schemas/Amount'
+        tax_amount:
+          $ref: '#/components/schemas/Amount'
+        total_amount:
+          $ref: '#/components/schemas/Amount'
+        local_amounts:
+          $ref: '#/components/schemas/InvoiceTaxAmounts'
+        notes:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        country_code:
+          type: string
+      title: InvoiceTaxTotalSummary
+    Amount:
+      type: object
+      properties:
+        quantity:
+          type: string
+        currency:
+          $ref: '#/components/schemas/AmountCurrency'
+      title: Amount
+    SignatureRequestRecipientDataStatus:
+      type: string
+      enum:
+      - PENDING
+      - COMPLETED
+      description: The status of the recipient.
+      title: SignatureRequestRecipientDataStatus
+    SignatureRequestStatus:
+      type: string
+      enum:
+      - IN_PROGRESS
+      - COMPLETED
+      - VOID
+      description: The status of the signature request.
+      title: SignatureRequestStatus
+    StripeIntegrationDetails:
+      type: object
+      properties:
+        payment_method_id:
+          type: string
+      title: StripeIntegrationDetails
+    UsedExchangeRate:
+      type: object
+      properties:
+        currency:
+          type: string
+        base_currency:
+          type: string
+        rate_timestamp:
+          type: string
+        rate:
+          type: string
+        source:
+          type:
+          - string
+          - 'null'
+      title: UsedExchangeRate
+    NotificationPreference:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/NotificationPreferenceType'
+          description: The notification type to configure.
+        channels:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/NotificationChannel'
+          description: The channels for this notification type.
+      title: NotificationPreference
+    PortalUrlLinkCreateRequest:
+      type: object
+      properties:
+        expiry_period:
+          $ref: '#/components/schemas/Period'
+        portal_url_id:
+          type:
+          - string
+          - 'null'
+        url:
+          type:
+          - string
+          - 'null'
+      title: PortalUrlLinkCreateRequest
+    PortalUrlLinkUpdateRequest:
+      type: object
+      properties:
+        expiry_period:
+          $ref: '#/components/schemas/Period'
+        portal_url_id:
+          type:
+          - string
+          - 'null'
+        url:
+          type:
+          - string
+          - 'null'
+      title: PortalUrlLinkUpdateRequest
+    Name:
+      type: object
+      properties:
+        first_name:
+          type:
+          - string
+          - 'null'
+        last_name:
+          type:
+          - string
+          - 'null'
+        infix:
+          type:
+          - string
+          - 'null'
+      title: Name
+    QuoteVersionActionCreateSubscription:
+      type: object
+      properties:
+        pricing_plan_subscription_id:
+          type:
+          - string
+          - 'null'
+          description: The create pricing plan subscription based on the quote version
+      title: QuoteVersionActionCreateSubscription
+    SignatureRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        updated_at:
+          type:
+          - string
+          - 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/SignatureRequestStatus'
+          - type: 'null'
+          description: The status of the signature request.
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/SignatureRequestType'
+          - type: 'null'
+          description: The type of the signature request.
+        quote_version:
+          $ref: '#/components/schemas/SignatureRequestQuoteVersion'
+        recipients:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/SignatureRequestRecipientData'
+          description: The recipients of the signature request.
+      title: SignatureRequest
+    NotificationPreferenceType:
+      type: string
+      enum:
+      - INVOICE
+      description: The notification type to configure.
+      title: NotificationPreferenceType
+    QuoteVersionContentUpdateRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/QuoteVersionContentUpdateRequestType'
+          description: The type of content used by the quote version.
+        default:
+          $ref: '#/components/schemas/QuoteVersionDefaultContent'
+          description: If type is DEFAULT, the content of the quote version.
+        tiptap:
+          type:
+          - string
+          - 'null'
+          description: If type is TIPTAP, the content of the quote version, stringified JSON following the ProseMirror schema.
+      title: QuoteVersionContentUpdateRequest
+    QuoteVersionInvoicesInfoCreateRequest:
+      type: object
+      properties:
+        first_invoice_summary:
+          oneOf:
+          - $ref: '#/components/schemas/InvoiceTaxTotalSummary'
+          - type: 'null'
+          description: Base, tax, and total costs on the first invoice generated by quote version.
+      title: QuoteVersionInvoicesInfoCreateRequest
+    QuoteVersionRecipientDataCreateRequestType:
+      type: string
+      enum:
+      - CONTACT
+      - DETAILS
+      description: The type of the recipient.
+      title: QuoteVersionRecipientDataCreateRequestType
+    QuoteVersionRecipientDataUpdateRequest:
+      type: object
+      properties:
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionRecipientDataUpdateRequestType'
+          - type: 'null'
+          description: The type of the recipient.
+        contact:
+          $ref: '#/components/schemas/RecipientContactData'
+          description: Contact information, when type is CONTACT.
+        details:
+          $ref: '#/components/schemas/RecipientDetailsData'
+          description: Recipient details, when type is DETAILS.
+        role:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionRecipientDataUpdateRequestRole'
+          - type: 'null'
+          description: The role of the recipient.
+      title: QuoteVersionRecipientDataUpdateRequest
+    RecipientDetailsData:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/Name'
+        email:
+          type:
+          - string
+          - 'null'
+      title: RecipientDetailsData
+    PaginationLinks:
+      type: object
+      properties:
+        first:
+          type:
+          - string
+          - 'null'
+        previous:
+          type:
+          - string
+          - 'null'
+        current:
+          type:
+          - string
+          - 'null'
+        next:
+          type:
+          - string
+          - 'null'
+      title: PaginationLinks
+    QuoteVersionActionRejectCreateRequest:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/NameCreateRequest'
+          description: The name of the rejecter
+        role:
+          type:
+          - string
+          - 'null'
+          description: The role of the rejecter
+        reason:
+          type:
+          - string
+          - 'null'
+          description: The reason of the rejection
+      title: QuoteVersionActionRejectCreateRequest
+    QuoteVersionContentType:
+      type: string
+      enum:
+      - DEFAULT
+      - TIPTAP
+      description: The type of content used by the quote version.
+      title: QuoteVersionContentType
+    QuoteVersionRecipientDataCreateRequestRole:
+      type: string
+      enum:
+      - SIGNER
+      - VIEWER
+      description: The role of the recipient.
+      title: QuoteVersionRecipientDataCreateRequestRole
+    Period:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/PeriodType'
+        value:
+          type:
+          - integer
+          - 'null'
+      title: Period
+    QuoteVersionInvoicesInfo:
+      type: object
+      properties:
+        first_invoice_summary:
+          oneOf:
+          - $ref: '#/components/schemas/InvoiceTaxTotalSummary'
+          - type: 'null'
+          description: Base, tax, and total costs on the first invoice generated by quote version.
+      title: QuoteVersionInvoicesInfo
+    QuoteVersionActionSend:
+      type: object
+      properties:
+        to_email_addresses:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Extra email addresses for the TO
+        overwrite_to:
+          type:
+          - boolean
+          - 'null'
+          description: Overwrite the TO with the email addresses in the to_email_addresses
+        cc_email_addresses:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Extra email addresses for the CC
+        bcc_email_addresses:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Extra email addresses for the BCC
+      title: QuoteVersionActionSend
+    QuoteVersionUpdateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - FINAL
+      - WAITING_APPROVAL
+      - APPROVED
+      - DECLINED
+      - SEND
+      - SIGNATURE_REQUESTED
+      - SIGNED
+      - ACCEPTED
+      - REJECTED
+      - CLOSED
+      title: QuoteVersionUpdateRequestStatus
+    PricingPlanSubscriptionInfoUpdateRequest:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        upgraded_from_pricing_plan_subscription_id:
+          type:
+          - string
+          - 'null'
+      title: PricingPlanSubscriptionInfoUpdateRequest
+    QuoteVersionCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        updated_at:
+          type:
+          - string
+          - 'null'
+        expires_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: The expiration date of the quote version.
+        quote_id:
+          type: string
+          description: The ID of the quote.
+        version:
+          type: integer
+          description: The value describing the version of the quote.
+        pricing_plan_subscription_info:
+          oneOf:
+          - $ref: '#/components/schemas/PricingPlanSubscriptionInfoCreateRequest'
+          - type: 'null'
+          description: The info of the linked pricing plan subscription.
+        content:
+          $ref: '#/components/schemas/QuoteVersionContentCreateRequest'
+          description: Content of the body of the quote.
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionCreateRequestStatus'
+          - type: 'null'
+        actions:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/QuoteVersionActionCreateRequest'
+          description: The history of all actions done.
+        link:
+          oneOf:
+          - $ref: '#/components/schemas/PortalUrlLinkCreateRequest'
+          - type: 'null'
+          description: The public portal link of the quote.
+        internal_notes:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Internal notes on this quote versions.
+        notes:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Notes on this quote versions.
+        approval_request_id:
+          type:
+          - string
+          - 'null'
+          description: The ID of the Approval Request that was created for this Quote Version.
+        recipients:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/QuoteVersionRecipientDataCreateRequest'
+          description: The recipients for signature on this quote version.
+        invoices_info:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionInvoicesInfoCreateRequest'
+          - type: 'null'
+          description: Information pertaining to the invoices generated by this quote version.
+      required:
+      - quote_id
+      title: QuoteVersionCreateRequest
+    QuoteVersionUpdateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        updated_at:
+          type:
+          - string
+          - 'null'
+        expires_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: The expiration date of the quote version.
+        quote_id:
+          type: string
+          description: The ID of the quote.
+        version:
+          type: integer
+          description: The value describing the version of the quote.
+        pricing_plan_subscription_info:
+          oneOf:
+          - $ref: '#/components/schemas/PricingPlanSubscriptionInfoUpdateRequest'
+          - type: 'null'
+          description: The info of the linked pricing plan subscription.
+        content:
+          $ref: '#/components/schemas/QuoteVersionContentUpdateRequest'
+          description: Content of the body of the quote.
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionUpdateRequestStatus'
+          - type: 'null'
+        actions:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/QuoteVersionActionUpdateRequest'
+          description: The history of all actions done.
+        link:
+          oneOf:
+          - $ref: '#/components/schemas/PortalUrlLinkUpdateRequest'
+          - type: 'null'
+          description: The public portal link of the quote.
+        internal_notes:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Internal notes on this quote versions.
+        notes:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Notes on this quote versions.
+        approval_request_id:
+          type:
+          - string
+          - 'null'
+          description: The ID of the Approval Request that was created for this Quote Version.
+        recipients:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/QuoteVersionRecipientDataUpdateRequest'
+          description: The recipients for signature on this quote version.
+        invoices_info:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionInvoicesInfoUpdateRequest'
+          - type: 'null'
+          description: Information pertaining to the invoices generated by this quote version.
+      title: QuoteVersionUpdateRequest
+    QuoteVersionActionRequestSignature:
+      type: object
+      properties:
+        signature_request_id:
+          type:
+          - string
+          - 'null'
+        signature_request:
+          oneOf:
+          - $ref: '#/components/schemas/SignatureRequest'
+          - type: 'null'
+      title: QuoteVersionActionRequestSignature
+    QuoteVersionActionSendCreateRequest:
+      type: object
+      properties:
+        to_email_addresses:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Extra email addresses for the TO
+        overwrite_to:
+          type:
+          - boolean
+          - 'null'
+          description: Overwrite the TO with the email addresses in the to_email_addresses
+        cc_email_addresses:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Extra email addresses for the CC
+        bcc_email_addresses:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Extra email addresses for the BCC
+      title: QuoteVersionActionSendCreateRequest
+    QuoteVersionRecipientDataRole:
+      type: string
+      enum:
+      - SIGNER
+      - VIEWER
+      description: The role of the recipient.
+      title: QuoteVersionRecipientDataRole
+    QuoteVersionCreateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - FINAL
+      - WAITING_APPROVAL
+      - APPROVED
+      - DECLINED
+      - SEND
+      - SIGNATURE_REQUESTED
+      - SIGNED
+      - ACCEPTED
+      - REJECTED
+      - CLOSED
+      title: QuoteVersionCreateRequestStatus
+    LinkDetail:
+      type: object
+      properties:
+        url:
+          type:
+          - string
+          - 'null'
+        custom_field_name:
+          type:
+          - string
+          - 'null'
+      title: LinkDetail
+    QuoteVersionActionCreateRequest:
+      type: object
+      properties:
+        created_at:
+          type:
+          - string
+          - 'null'
+        type:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - string
+          - 'null'
+        send:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionActionSend'
+          - type: 'null'
+        accept:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionActionAccept'
+          - type: 'null'
+        reject:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionActionReject'
+          - type: 'null'
+        create_subscription:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionActionCreateSubscription'
+          - type: 'null'
+        request_signature:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionActionRequestSignature'
+          - type: 'null'
+        sign:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionActionSign'
+          - type: 'null'
+      title: QuoteVersionActionCreateRequest
+    QuoteVersionRecipientData:
+      type: object
+      properties:
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionRecipientDataType'
+          - type: 'null'
+          description: The type of the recipient.
+        contact:
+          $ref: '#/components/schemas/RecipientContactData'
+          description: Contact information, when type is CONTACT.
+        details:
+          $ref: '#/components/schemas/RecipientDetailsData'
+          description: Recipient details, when type is DETAILS.
+        role:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionRecipientDataRole'
+          - type: 'null'
+          description: The role of the recipient.
+      title: QuoteVersionRecipientData
+    InvoiceTaxAmounts:
+      type: object
+      properties:
+        base_amount:
+          $ref: '#/components/schemas/Amount'
+        tax_amount:
+          $ref: '#/components/schemas/Amount'
+        total_amount:
+          $ref: '#/components/schemas/Amount'
+        used_exchange_rate:
+          $ref: '#/components/schemas/UsedExchangeRate'
+        display:
+          type: boolean
+      title: InvoiceTaxAmounts
+    QuoteVersionContent:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/QuoteVersionContentType'
+          description: The type of content used by the quote version.
+        default:
+          $ref: '#/components/schemas/QuoteVersionDefaultContent'
+          description: If type is DEFAULT, the content of the quote version.
+        tiptap:
+          type:
+          - string
+          - 'null'
+          description: If type is TIPTAP, the content of the quote version, stringified JSON following the ProseMirror schema.
+      title: QuoteVersionContent
+    NameCreateRequest:
+      type: object
+      properties:
+        first_name:
+          type:
+          - string
+          - 'null'
+        last_name:
+          type:
+          - string
+          - 'null'
+        infix:
+          type:
+          - string
+          - 'null'
+      title: NameCreateRequest
+    QuoteVersionContentCreateRequestType:
+      type: string
+      enum:
+      - DEFAULT
+      - TIPTAP
+      description: The type of content used by the quote version.
+      title: QuoteVersionContentCreateRequestType
+    ApiErrorResourceType:
+      type: string
+      enum:
+      - CUSTOMER
+      - CUSTOM_FIELD
+      - PLATFORM
+      - PLATFORM_UPTODATE
+      - METER
+      - METER_VALUE
+      - METER_PROPERTY
+      - METER_VALUE_CALCULATION
+      - INGEST_DATA
+      - METER_DATA
+      - CHARGE_DATA
+      - PERSIST_DATA
+      - ADJUSTMENT_DATA
+      - PRODUCT_CATEGORY
+      - PRODUCT
+      - PRODUCT_ITEM
+      - PRICING
+      - PRICING_GROUP
+      - PRICING_ITEM
+      - PRICING_ITEM_CONFIG
+      - PRICING_PLAN_SUBSCRIPTION
+      - PRICING_PLAN_SUBSCRIPTION_GROUP
+      - PRICING_PLAN_SCHEDULE
+      - PRICING_PLAN
+      - PRICING_PLAN_VERSION
+      - QUOTE
+      - QUOTE_VERSION
+      - QUOTE_TEMPLATE
+      - API_KEY
+      - USER
+      - ROLE
+      - PROXY_USER
+      - EXTERNAL_CREDENTIALS
+      - TOKEN
+      - INVOICE
+      - E_INVOICE
+      - PDF
+      - BILLING_ENTITY
+      - FEATURE
+      - MEMBERSHIP
+      - PAYMENT
+      - PAYMENT_ACCEPTOR
+      - PAYMENT_METHOD
+      - PAYMENT_METHOD_OPTIONS
+      - PAYMENT_SCHEDULE
+      - PAYMENT_REQUEST
+      - INTEGRATION
+      - WEBHOOK
+      - FILE
+      - FILE_PROCESSING_SETTINGS
+      - TEAM
+      - DOWNLOAD_URL
+      - CSV_REPORT
+      - REPORT
+      - REPORT_GENERATE_REQUEST
+      - REPORT_CONFIGURATION
+      - REPORT_SUBSCRIPTION
+      - REPORT_DEFINITION
+      - ACCOUNT_GROUP
+      - ENTITY
+      - EVENT_TRACE
+      - EVENT_TRACE_LINK
+      - PRICING_CATEGORY
+      - CONTACT
+      - ALERT_RULE
+      - ALERT
+      - AUDIT_RECORD
+      - PORTAL_URL
+      - AUTHENTICATION_PROVIDER
+      - REPROCESS
+      - APPROVAL_POLICY
+      - APPROVAL_REQUEST
+      - BULK_ACTION
+      - COUPON
+      - PROMOTION_CODE
+      - WALLET
+      - WALLET_TYPE
+      - WALLET_GRANT
+      - WORKFLOW
+      - WORKFLOW_TRIGGER
+      - WORKFLOW_ACTION
+      - CREDIT_TYPE
+      - SIGNATURE_REQUEST
+      - ATTACHMENT
+      - DOCUMENT
+      title: ApiErrorResourceType
+    PricingPlanSubscriptionInfoCreateRequest:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        upgraded_from_pricing_plan_subscription_id:
+          type:
+          - string
+          - 'null'
+      title: PricingPlanSubscriptionInfoCreateRequest
+    SignatureRequestRecipientDataRole:
+      type: string
+      enum:
+      - SIGNER
+      - VIEWER
+      description: The role of the recipient.
+      title: SignatureRequestRecipientDataRole
+    QuoteVersionActionRequestSignatureBodyCreateRequest:
+      type: object
+      properties: {}
+      title: QuoteVersionActionRequestSignatureBodyCreateRequest
+  securitySchemes:
+    API-Key:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+    JWT-Authentication:
+      type: http
+      scheme: bearer

@@ -1,0 +1,4579 @@
+openapi: 3.1.0
+info:
+  title: Configuration alertRules payments API
+  version: 1.0.0
+servers:
+- url: https://test.api.solvimon.com
+  description: The TEST environment for our API
+- url: https://api.solvimon.com
+  description: The live environment for our API
+tags:
+- name: payments
+paths:
+  /v{version}/payments:
+    get:
+      operationId: getPayments
+      summary: Get a list of payments
+      description: Requires the PAYMENT.VIEW permission.
+      tags:
+      - payments
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: customer_id
+        in: query
+        description: Filter based of customer ID
+        required: false
+        schema:
+          type: string
+      - name: invoice_id
+        in: query
+        description: Filter based of invoice ID
+        required: false
+        schema:
+          type: string
+      - name: external_reference
+        in: query
+        description: Filter based on external reference
+        required: false
+        schema:
+          type: string
+      - name: expand[]
+        in: query
+        description: The id fields of the resources that are going to be expanded.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: limit
+        in: query
+        description: The amount of records shown in the list
+        required: false
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: The page which is going to be shown
+        required: false
+        schema:
+          type: integer
+      - name: order_by
+        in: query
+        description: The parameter by which the response is ordered.
+        required: false
+        schema:
+          type: string
+      - name: order_direction
+        in: query
+        description: The order direction by which the response is ordered.
+        required: false
+        schema:
+          type: string
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentResponseWrapper'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      operationId: postPayments
+      summary: Create a payment
+      description: Requires the PAYMENT.CREATE permission.
+      tags:
+      - payments
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentCreateRequest'
+  /v{version}/payments/{resourceId}:
+    get:
+      operationId: getPaymentsByResourceId
+      summary: Get a payment by ID
+      description: Requires the PAYMENT.VIEW permission.
+      tags:
+      - payments
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: expand[]
+        in: query
+        description: The id fields of the resources that are going to be expanded.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Payment'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /v{version}/payments/{resourceId}/refund:
+    post:
+      operationId: postPaymentsByResourceIdRefund
+      summary: Refund a payment
+      description: Requires the PAYMENT.REFUND permission.
+      tags:
+      - payments
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource for which the action is posted.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentModificationResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefundPaymentRequestCreateRequest'
+  /v{version}/payments/{resourceId}/reverse:
+    post:
+      operationId: postPaymentsByResourceIdReverse
+      summary: Reverse a payment
+      description: Requires the PAYMENT.REVERSE permission.
+      tags:
+      - payments
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource for which the action is posted.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentModificationResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /v{version}/payments/authorize:
+    post:
+      operationId: postPaymentsAuthorize
+      summary: Authorize a payment
+      description: Requires the PAYMENT.AUTHORIZE permission.
+      tags:
+      - payments
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentMethodPaymentResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthorizePaymentRequestCreateRequest'
+  /v{version}/payments/verify-details:
+    post:
+      operationId: postPaymentsVerifyDetails
+      summary: Verify payment details
+      description: Requires the PAYMENT.AUTHORIZE permission.
+      tags:
+      - payments
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentVerifyDetailResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentVerifyDetailCreateRequest'
+  /v{version}/payment-requests:
+    get:
+      operationId: getPaymentRequests
+      summary: Get Payment Requests
+      description: Requires the PAYMENT_REQUEST.VIEW permission.
+      tags:
+      - payments
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: customer_id
+        in: query
+        description: Filter based of customer ID
+        required: false
+        schema:
+          type: string
+      - name: payment_schedule_id
+        in: query
+        description: Filter based of payment schedule ID
+        required: false
+        schema:
+          type: string
+      - name: statuses[]
+        in: query
+        description: Filter payment requests based on status(es)
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: expand[]
+        in: query
+        description: The id fields of the resources that are going to be expanded.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: limit
+        in: query
+        description: The amount of records shown in the list
+        required: false
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: The page which is going to be shown
+        required: false
+        schema:
+          type: integer
+      - name: order_by
+        in: query
+        description: The parameter by which the response is ordered.
+        required: false
+        schema:
+          type: string
+      - name: order_direction
+        in: query
+        description: The order direction by which the response is ordered.
+        required: false
+        schema:
+          type: string
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentRequestResponseWrapper'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /v{version}/payment-requests/{resourceId}:
+    get:
+      operationId: getPaymentRequestsByResourceId
+      summary: Get a Payment Request by ID
+      description: Requires the PAYMENT_REQUEST.VIEW permission.
+      tags:
+      - payments
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: expand[]
+        in: query
+        description: The id fields of the resources that are going to be expanded.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentRequest'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+components:
+  schemas:
+    PaymentModificationResponse:
+      type: object
+      properties:
+        payment:
+          $ref: '#/components/schemas/Payment'
+        status:
+          $ref: '#/components/schemas/PaymentModificationResponseStatus'
+      title: PaymentModificationResponse
+    TaxIdValidationValid:
+      type: string
+      enum:
+      - VALID
+      - NOT_VALID
+      - UNKNOWN
+      title: TaxIdValidationValid
+    PaymentMethodDetailsOnlineBankingCountry:
+      type: string
+      enum:
+      - AD
+      - AE
+      - AF
+      - AG
+      - AI
+      - AL
+      - AM
+      - AO
+      - AQ
+      - AR
+      - AS
+      - AT
+      - AU
+      - AW
+      - AX
+      - AZ
+      - BA
+      - BB
+      - BD
+      - BE
+      - BF
+      - BG
+      - BH
+      - BI
+      - BJ
+      - BL
+      - BM
+      - BN
+      - BO
+      - BQ
+      - BR
+      - BS
+      - BT
+      - BV
+      - BW
+      - BY
+      - BZ
+      - CA
+      - CC
+      - CD
+      - CF
+      - CG
+      - CH
+      - CI
+      - CK
+      - CL
+      - CM
+      - CN
+      - CO
+      - CR
+      - CU
+      - CV
+      - CW
+      - CX
+      - CY
+      - CZ
+      - DE
+      - DJ
+      - DK
+      - DM
+      - DO
+      - DZ
+      - EC
+      - EE
+      - EG
+      - EH
+      - ER
+      - ES
+      - ET
+      - FI
+      - FJ
+      - FK
+      - FM
+      - FO
+      - FR
+      - GA
+      - GB
+      - GD
+      - GE
+      - GF
+      - GG
+      - GH
+      - GI
+      - GL
+      - GM
+      - GN
+      - GP
+      - GQ
+      - GR
+      - GS
+      - GT
+      - GU
+      - GW
+      - GY
+      - HK
+      - HM
+      - HN
+      - HR
+      - HT
+      - HU
+      - ID
+      - IE
+      - IL
+      - IM
+      - IN
+      - IO
+      - IQ
+      - IR
+      - IS
+      - IT
+      - JE
+      - JM
+      - JO
+      - JP
+      - KE
+      - KG
+      - KH
+      - KI
+      - KM
+      - KN
+      - KP
+      - KR
+      - KW
+      - KY
+      - KZ
+      - LA
+      - LB
+      - LC
+      - LI
+      - LK
+      - LR
+      - LS
+      - LT
+      - LU
+      - LV
+      - LY
+      - MA
+      - MC
+      - MD
+      - ME
+      - MF
+      - MG
+      - MH
+      - MK
+      - ML
+      - MM
+      - MN
+      - MO
+      - MP
+      - MQ
+      - MR
+      - MS
+      - MT
+      - MU
+      - MV
+      - MW
+      - MX
+      - MY
+      - MZ
+      - NA
+      - NC
+      - NE
+      - NF
+      - NG
+      - NI
+      - NL
+      - 'NO'
+      - NP
+      - NR
+      - NU
+      - NZ
+      - OM
+      - PA
+      - PE
+      - PF
+      - PG
+      - PH
+      - PK
+      - PL
+      - PM
+      - PN
+      - PR
+      - PS
+      - PT
+      - PW
+      - PY
+      - QA
+      - RE
+      - RO
+      - RS
+      - RU
+      - RW
+      - SA
+      - SB
+      - SC
+      - SD
+      - SE
+      - SG
+      - SH
+      - SI
+      - SJ
+      - SK
+      - SL
+      - SM
+      - SN
+      - SO
+      - SR
+      - SS
+      - ST
+      - SV
+      - SX
+      - SY
+      - SZ
+      - TC
+      - TD
+      - TF
+      - TG
+      - TH
+      - TJ
+      - TK
+      - TL
+      - TM
+      - TN
+      - TO
+      - TR
+      - TT
+      - TV
+      - TW
+      - TZ
+      - UA
+      - UG
+      - US
+      - UY
+      - UZ
+      - VA
+      - VC
+      - VE
+      - VG
+      - VI
+      - VN
+      - VU
+      - WF
+      - WS
+      - YE
+      - YT
+      - ZA
+      - ZM
+      - ZW
+      title: PaymentMethodDetailsOnlineBankingCountry
+    TaxIdValidation:
+      type: object
+      properties:
+        id:
+          type: string
+        validation_date:
+          type: string
+        source:
+          type: string
+        valid:
+          $ref: '#/components/schemas/TaxIdValidationValid'
+        message:
+          type:
+          - string
+          - 'null'
+      title: TaxIdValidation
+    ChargeOnDemandPaymentContext:
+      type: object
+      properties:
+        pricing_plan_schedule_id:
+          type: string
+          description: Resource ID of type PRICING_PLAN_SCHEDULE
+        pricing_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChargeOnDemandPaymentContextPricingItem'
+        start_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      title: ChargeOnDemandPaymentContext
+    PaymentMethodDetails:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/PaymentMethodDetailsType'
+        card:
+          $ref: '#/components/schemas/PaymentMethodDetailsCard'
+        online_banking:
+          $ref: '#/components/schemas/PaymentMethodDetailsOnlineBanking'
+        buy_now_pay_later:
+          $ref: '#/components/schemas/PaymentMethodDetailsBuyNowPayLater'
+        direct_debit:
+          $ref: '#/components/schemas/PaymentMethodDetailsDirectDebit'
+        digital_wallet:
+          $ref: '#/components/schemas/PaymentMethodDetailsDigitalWallet'
+        unknown:
+          $ref: '#/components/schemas/PaymentMethodDetailsUnknown'
+      title: PaymentMethodDetails
+    CreatePaymentMethodPaymentContext:
+      type: object
+      properties:
+        payment_method_id:
+          type: string
+          description: Resource ID of type PAYMENT_METHOD
+      title: CreatePaymentMethodPaymentContext
+    PaymentMethodStatus:
+      type: string
+      enum:
+      - SETUP
+      - ACTIVE
+      - INACTIVE
+      - ARCHIVED
+      title: PaymentMethodStatus
+    PaymentMethodPaymentResponseStatus:
+      type: string
+      enum:
+      - SUCCESS
+      - ACTION_REQUIRED
+      - FAILURE
+      title: PaymentMethodPaymentResponseStatus
+    LinkedIntegration:
+      type: object
+      properties:
+        id:
+          type: string
+        link_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/LinkDetail'
+      title: LinkedIntegration
+    IntegrationDetails:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+        payment_gateway_variant:
+          $ref: '#/components/schemas/IntegrationDetailsPaymentGatewayVariant'
+        adyen:
+          $ref: '#/components/schemas/AdyenIntegrationDetails'
+        stripe:
+          $ref: '#/components/schemas/StripeIntegrationDetails'
+      title: IntegrationDetails
+    PaymentResultDetails:
+      type: object
+      properties:
+        code:
+          type:
+          - string
+          - 'null'
+        reason:
+          type:
+          - string
+          - 'null'
+        external_code:
+          type:
+          - string
+          - 'null'
+        external_reason:
+          type:
+          - string
+          - 'null'
+      title: PaymentResultDetails
+    NextAction:
+      type: object
+      properties:
+        type:
+          type: string
+        redirect_to_url:
+          $ref: '#/components/schemas/NextActionRedirectToUrl'
+      title: NextAction
+    PaymentMethodDetailsCard:
+      type: object
+      properties:
+        brand:
+          type:
+          - string
+          - 'null'
+        name:
+          type:
+          - string
+          - 'null'
+        expiry_date:
+          $ref: '#/components/schemas/ExpiryDate'
+        last_four_digits:
+          type:
+          - string
+          - 'null'
+        country:
+          type:
+          - string
+          - 'null'
+      title: PaymentMethodDetailsCard
+    PaymentDunningActionDetailsCreateRequest:
+      type: object
+      properties:
+        attempt:
+          type:
+          - integer
+          - 'null'
+        external_reference:
+          type:
+          - string
+          - 'null'
+        next_attempt_scheduled:
+          type:
+          - boolean
+          - 'null'
+      title: PaymentDunningActionDetailsCreateRequest
+    PaymentCreateRequestResult:
+      type: string
+      enum:
+      - AUTHORIZED
+      - CANCELLED
+      - CHARGED_BACK
+      - ERROR
+      - PENDING
+      - REFUSED
+      - REFUNDED
+      title: PaymentCreateRequestResult
+    PricingPlanSubscriptionSelectorRuleType:
+      type: string
+      enum:
+      - EQUALS
+      - NOT_EQUALS
+      - IN
+      - NOT_IN
+      - GREATER_THAN
+      - GREATER_THAN_OR_EQUALS
+      - LESS_THAN
+      - LESS_THAN_OR_EQUALS
+      - EMPTY
+      - NOT_EMPTY
+      - CONTAINS
+      - NOT_CONTAINS
+      title: PricingPlanSubscriptionSelectorRuleType
+    PricingPlanSubscriptionSelectorDataField:
+      type: string
+      enum:
+      - BILLING_ENTITY_REGISTERED_ADDRESS_COUNTRY
+      - PRICING_PLAN_REFERENCE
+      title: PricingPlanSubscriptionSelectorDataField
+    PaymentMethodDirectDebit:
+      type: object
+      properties:
+        variant:
+          type:
+          - string
+          - 'null'
+        owner_name:
+          type:
+          - string
+          - 'null'
+        iban:
+          type:
+          - string
+          - 'null'
+        bic:
+          type:
+          - string
+          - 'null'
+        country:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentMethodDirectDebitCountry'
+          - type: 'null'
+      title: PaymentMethodDirectDebit
+    PaymentRequestResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentRequest'
+        page:
+          type:
+          - integer
+          - 'null'
+        limit:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      title: PaymentRequestResponseWrapper
+    TaxRegistration:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The id of this tax registration
+        description:
+          type:
+          - string
+          - 'null'
+          description: The description of this tax registration
+        tax_id:
+          type:
+          - string
+          - 'null'
+          description: The tax id of this tax registration, e.g. a TIN, VAT id or other tax number
+        tax_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaxId'
+          description: Tax IDs used for tax purposes of the tax registration, e.g. TINs, VAT ids, or other tax number
+        registration_number:
+          type:
+          - string
+          - 'null'
+          description: The registration number of this tax registration, e.g. a company registration number
+        registered_address:
+          $ref: '#/components/schemas/Address'
+          description: The address of this tax registration, if different from the billing entity. Currently, only the address will be used for tax calculations
+      title: TaxRegistration
+    PricingPlanSubscriptionSelector:
+      type: object
+      properties:
+        data:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorData'
+        rules:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorRule'
+        filters:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFilter'
+        fallback:
+          oneOf:
+          - $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFallback'
+          - type: 'null'
+          description: The fallback logic what to do when no subscription is found. By default it is LATEST
+      title: PricingPlanSubscriptionSelector
+    PricingPlanSubscriptionSelectorFilterField:
+      type: string
+      enum:
+      - BILLING_ENTITY_REGISTERED_ADDRESS_COUNTRY
+      - PRICING_PLAN_REFERENCE
+      title: PricingPlanSubscriptionSelectorFilterField
+    PaymentContextCreateRequestType:
+      type: string
+      enum:
+      - INVOICE
+      - PAY_INVOICE
+      - CREATE_PAYMENT_METHOD
+      - INIT_PRICING_PLAN_SUBSCRIPTION
+      - PAYMENT_REQUEST
+      - CHARGE_ON_DEMAND
+      - DIRECT
+      title: PaymentContextCreateRequestType
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    PaymentMethodPaymentResponse:
+      type: object
+      properties:
+        payment_method:
+          $ref: '#/components/schemas/PaymentMethod'
+        payment:
+          $ref: '#/components/schemas/Payment'
+        status:
+          $ref: '#/components/schemas/PaymentMethodPaymentResponseStatus'
+        action:
+          $ref: '#/components/schemas/RequiredAction'
+      title: PaymentMethodPaymentResponse
+    PricingPlanSubscriptionSelectorRule:
+      type: object
+      properties:
+        field:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorRuleField'
+        type:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorRuleType'
+      title: PricingPlanSubscriptionSelectorRule
+    PaymentMethodCard:
+      type: object
+      properties:
+        brand:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentMethodCardBrand'
+          - type: 'null'
+        name:
+          type:
+          - string
+          - 'null'
+        expiry_date:
+          $ref: '#/components/schemas/ExpiryDate'
+        last_four_digits:
+          type:
+          - string
+          - 'null'
+        country:
+          type:
+          - string
+          - 'null'
+      title: PaymentMethodCard
+    PricingPlanSubscriptionSelectorFallback:
+      type: string
+      enum:
+      - LATEST
+      - NONE
+      description: The fallback logic what to do when no subscription is found. By default it is LATEST
+      title: PricingPlanSubscriptionSelectorFallback
+    PaymentContext:
+      type: object
+      properties:
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentContextType'
+          - type: 'null'
+        related_resource_ids:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceIdentifier'
+        metadata:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: string
+        init_pricing_plan_subscription:
+          $ref: '#/components/schemas/InitPricingPlanSubscriptionPaymentContext'
+        create_payment_method:
+          $ref: '#/components/schemas/CreatePaymentMethodPaymentContext'
+        payment_request:
+          $ref: '#/components/schemas/PaymentRequestPaymentContext'
+        pay_invoice:
+          $ref: '#/components/schemas/PayInvoicePaymentContext'
+        charge_on_demand:
+          $ref: '#/components/schemas/ChargeOnDemandPaymentContext'
+        direct:
+          $ref: '#/components/schemas/DirectPaymentContext'
+      title: PaymentContext
+    Payment:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        timestamp:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        customer_id:
+          type:
+          - string
+          - 'null'
+        customer:
+          oneOf:
+          - $ref: '#/components/schemas/Customer'
+          - type: 'null'
+        invoice_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type INVOICE
+        payment_acceptor_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type PAYMENT_ACCEPTOR
+        payment_acceptor_reference:
+          type:
+          - string
+          - 'null'
+        payment_method_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type PAYMENT_METHOD
+        payment_method_details:
+          $ref: '#/components/schemas/PaymentMethodDetails'
+        integration_payment_method_reference:
+          type:
+          - string
+          - 'null'
+        external_reference:
+          type: string
+        reference:
+          type:
+          - string
+          - 'null'
+        amount:
+          $ref: '#/components/schemas/Amount'
+        result:
+          $ref: '#/components/schemas/PaymentResult'
+        result_details:
+          $ref: '#/components/schemas/PaymentResultDetails'
+        dunning_action_details:
+          $ref: '#/components/schemas/PaymentDunningActionDetails'
+        updated_at:
+          type:
+          - string
+          - 'null'
+        context:
+          $ref: '#/components/schemas/PaymentContext'
+      title: Payment
+    NotificationChannelType:
+      type: string
+      enum:
+      - EMAIL
+      description: The channel type to use.
+      title: NotificationChannelType
+    RequiredAction:
+      type: object
+      properties:
+        url:
+          type: string
+        data:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: string
+        method:
+          type: string
+        payment_gateway_variant:
+          type: string
+        adyen:
+          $ref: '#/components/schemas/AdyenRequiredAction'
+        stripe:
+          $ref: '#/components/schemas/StripeRequiredAction'
+      title: RequiredAction
+    ResourceIdentifierType:
+      type: string
+      enum:
+      - PLATFORM
+      - CUSTOMER
+      - BILLING_ENTITY
+      - METER
+      - METER_VALUE
+      - METER_PROPERTY
+      - METER_VALUE_CALCULATION
+      - PRODUCT
+      - PRODUCT_ITEM
+      - PRODUCT_CATEGORY
+      - PRICING
+      - PRICING_ITEM
+      - PRICING_ITEM_CONFIG
+      - PRICING_ITEM_SUMMARY
+      - METER_VALUE_CALCULATION_SUMMARY
+      - PRICING_PLAN
+      - PRICING_PLAN_VERSION
+      - PRICING_PLAN_SUBSCRIPTION
+      - PRICING_PLAN_SCHEDULE
+      - QUOTE
+      - QUOTE_VERSION
+      - CONTACT
+      - CUSTOM_FIELD
+      - REQUEST_REFERENCE
+      - METER_DATA
+      - CHARGE_DATA
+      - ADJUSTMENT_DATA
+      - PERSIST_DATA
+      - INVOICE
+      - INVOICE_PAYMENT_ATTEMPT
+      - PAYMENT_ACCEPTOR
+      - PAYMENT_SCHEDULE
+      - PAYMENT_REQUEST
+      - FEATURE
+      - ALERT_RULE
+      - ALERT
+      - USER
+      - MEMBERSHIP
+      - TEAM
+      - ENTITY
+      - ACCOUNT_GROUP
+      - AUDIT
+      - WEBHOOK
+      - REPORT_SUBSCRIPTION
+      - REPORT_CONFIGURATION
+      title: ResourceIdentifierType
+    AdyenVerifyDetailsCreateRequest:
+      type: object
+      properties:
+        details:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: string
+        redirect_result:
+          type:
+          - string
+          - 'null'
+        threeds_result:
+          type:
+          - string
+          - 'null'
+        payment_data:
+          type:
+          - string
+          - 'null'
+      title: AdyenVerifyDetailsCreateRequest
+    CustomFieldValue:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOM_FIELD
+        reference:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+        values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        integration_details:
+          oneOf:
+          - $ref: '#/components/schemas/IntegrationDetails'
+          - type: 'null'
+        integration_id:
+          type: string
+          description: The resource ID of the integration linked to the custom field
+      title: CustomFieldValue
+    PricingPlanSubscriptionSelectorRuleField:
+      type: string
+      enum:
+      - BILLING_ENTITY_REGISTERED_ADDRESS_COUNTRY
+      - PRICING_PLAN_REFERENCE
+      title: PricingPlanSubscriptionSelectorRuleField
+    DirectAutoRescue:
+      type: object
+      properties:
+        enabled:
+          type:
+          - boolean
+          - 'null'
+        period:
+          $ref: '#/components/schemas/Period'
+      title: DirectAutoRescue
+    PaymentVerifyDetailResponse:
+      type: object
+      properties:
+        payment_status:
+          type: string
+      title: PaymentVerifyDetailResponse
+    CustomerCreateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      - CLOSED
+      title: CustomerCreateRequestStatus
+    Individual:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/Name'
+        residential_address:
+          $ref: '#/components/schemas/Address'
+      title: Individual
+    PaymentRequestPaymentContext:
+      type: object
+      properties:
+        payment_request_id:
+          type: string
+          description: Resource ID of type PAYMENT_REQUEST
+      title: PaymentRequestPaymentContext
+    PaymentMethodOnlineBanking:
+      type: object
+      properties:
+        variant:
+          type:
+          - string
+          - 'null'
+        owner_name:
+          type:
+          - string
+          - 'null'
+        iban:
+          type:
+          - string
+          - 'null'
+        bic:
+          type:
+          - string
+          - 'null'
+        country:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentMethodOnlineBankingCountry'
+          - type: 'null'
+      title: PaymentMethodOnlineBanking
+    CustomerType:
+      type: string
+      enum:
+      - ORGANIZATION
+      - INDIVIDUAL
+      description: The type of customer entity.
+      title: CustomerType
+    AuthorizePaymentRequestCreateRequestPaymentGatewayVariant:
+      type: string
+      enum:
+      - ADYEN
+      - STRIPE
+      title: AuthorizePaymentRequestCreateRequestPaymentGatewayVariant
+    DirectPaymentContext:
+      type: object
+      properties:
+        adyen:
+          $ref: '#/components/schemas/AdyenDirectPaymentContext'
+      title: DirectPaymentContext
+    CustomerRolesItems:
+      type: string
+      enum:
+      - DEFAULT
+      - NON_PROCESSING
+      - SELF_BILLING
+      - SELLER
+      - PROCESSING_ONLY
+      title: CustomerRolesItems
+    PeriodType:
+      type: string
+      enum:
+      - DAY
+      - WEEK
+      - MONTH
+      - YEAR
+      title: PeriodType
+    ConfiguredMeterValue:
+      type: object
+      properties:
+        pricing_item_config_id:
+          type: string
+          description: Resource ID of type PRICING_ITEM_CONFIG
+        number:
+          type:
+          - string
+          - 'null'
+        amount:
+          $ref: '#/components/schemas/Amount'
+        start_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        set_start_at_to_now:
+          type:
+          - boolean
+          - 'null'
+        end_at:
+          type:
+          - string
+          - 'null'
+      title: ConfiguredMeterValue
+    RefundPaymentRequestCreateRequest:
+      type: object
+      properties:
+        amount:
+          $ref: '#/components/schemas/AmountCreateRequest'
+      title: RefundPaymentRequestCreateRequest
+    AmountCreateRequestCurrency:
+      type: string
+      enum:
+      - AED
+      - AFN
+      - ALL
+      - AMD
+      - ANG
+      - AOA
+      - ARS
+      - AUD
+      - AWG
+      - AZN
+      - BAM
+      - BBD
+      - BDT
+      - BGN
+      - BHD
+      - BIF
+      - BMD
+      - BND
+      - BOB
+      - BRL
+      - BSD
+      - BTN
+      - BWP
+      - BYN
+      - BZD
+      - CAD
+      - CDF
+      - CHF
+      - CLF
+      - CLP
+      - CNY
+      - COP
+      - CRC
+      - CUC
+      - CUP
+      - CVE
+      - CZK
+      - DJF
+      - DKK
+      - DOP
+      - DZD
+      - EGP
+      - ERN
+      - ETB
+      - EUR
+      - FJD
+      - FKP
+      - GBP
+      - GEL
+      - GHS
+      - GIP
+      - GMD
+      - GNF
+      - GTQ
+      - GYD
+      - HKD
+      - HNL
+      - HRK
+      - HTG
+      - HUF
+      - IDR
+      - ILS
+      - INR
+      - IQD
+      - IRR
+      - ISK
+      - JMD
+      - JOD
+      - JPY
+      - KES
+      - KGS
+      - KHR
+      - KMF
+      - KPW
+      - KRW
+      - KWD
+      - KYD
+      - KZT
+      - LAK
+      - LBP
+      - LKR
+      - LRD
+      - LSL
+      - LYD
+      - MAD
+      - MDL
+      - MGA
+      - MKD
+      - MMK
+      - MNT
+      - MOP
+      - MRO
+      - MRU
+      - MUR
+      - MVR
+      - MWK
+      - MXN
+      - MXV
+      - MYR
+      - MZN
+      - NAD
+      - NGN
+      - NIO
+      - NOK
+      - NPR
+      - NZD
+      - OMR
+      - PAB
+      - PEN
+      - PGK
+      - PHP
+      - PKR
+      - PLN
+      - PYG
+      - QAR
+      - RON
+      - RSD
+      - RUB
+      - RWF
+      - SAR
+      - SBD
+      - SCR
+      - SDG
+      - SEK
+      - SGD
+      - SHP
+      - SLE
+      - SOS
+      - SRD
+      - SSP
+      - STN
+      - SVC
+      - SYP
+      - SZL
+      - THB
+      - TJS
+      - TMT
+      - TND
+      - TOP
+      - TRY
+      - TTD
+      - TWD
+      - TZS
+      - UAH
+      - UGX
+      - USD
+      - USN
+      - UYI
+      - UYU
+      - UZS
+      - VEF
+      - VES
+      - VND
+      - VUV
+      - WST
+      - XAF
+      - XAG
+      - XAU
+      - XBA
+      - XBB
+      - XBC
+      - XBD
+      - XCD
+      - XDR
+      - XOF
+      - XPD
+      - XPF
+      - XPT
+      - XSU
+      - XTS
+      - XUA
+      - XXX
+      - YER
+      - ZAR
+      - ZMW
+      - ZWL
+      title: AmountCreateRequestCurrency
+    IntegrationDetailsPaymentGatewayVariant:
+      type: string
+      enum:
+      - ADYEN
+      - STRIPE
+      title: IntegrationDetailsPaymentGatewayVariant
+    ResourceIdentifier:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ResourceIdentifierType'
+        id:
+          type: string
+      title: ResourceIdentifier
+    CustomerCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        parent_customer_id:
+          type:
+          - string
+          - 'null'
+          description: The parent of the customer. Only returned when there is a single parent.
+        parent_customer_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: A list of parents of the customer. Will also be returned if there is a single parent.
+        reference:
+          type: string
+          description: A custom reference assigned to the customer.
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/CustomerCreateRequestStatus'
+          - type: 'null'
+        timezone:
+          type:
+          - string
+          - 'null'
+        type:
+          $ref: '#/components/schemas/CustomerCreateRequestType'
+          description: The type of customer entity.
+        email:
+          type: string
+          description: The email of the customer.
+        notification_preferences:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/NotificationPreference'
+          description: Notification preferences for customer-related communications.
+        locale:
+          type:
+          - string
+          - 'null'
+          description: The locale of the customer. Format is language-country (like en-US).
+        individual:
+          $ref: '#/components/schemas/Individual'
+          description: Additional description of the individual customer type.
+        organization:
+          $ref: '#/components/schemas/Organization'
+          description: Additional description of the organization customer type.
+        custom_fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomFieldValue'
+        processing_only:
+          type:
+          - boolean
+          - 'null'
+        pricing_plan_subscription_selector:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelector'
+          description: Settings to influence dynamically the subscription to use for the ingest data.
+        linked_integrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/LinkedIntegration'
+        roles:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomerCreateRequestRolesItems'
+        seller_details:
+          $ref: '#/components/schemas/CustomerSellerDetails'
+      title: CustomerCreateRequest
+    PaymentMethodDetailsDirectDebit:
+      type: object
+      properties:
+        variant:
+          type:
+          - string
+          - 'null'
+        owner_name:
+          type:
+          - string
+          - 'null'
+        iban:
+          type:
+          - string
+          - 'null'
+        bic:
+          type:
+          - string
+          - 'null'
+        country:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentMethodDetailsDirectDebitCountry'
+          - type: 'null'
+      title: PaymentMethodDetailsDirectDebit
+    AdyenDirectPaymentContext:
+      type: object
+      properties:
+        capture_delay_hours:
+          type:
+          - integer
+          - 'null'
+        auto_rescue:
+          $ref: '#/components/schemas/DirectAutoRescue'
+      title: AdyenDirectPaymentContext
+    PaymentMethod:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        updated_at:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentMethodStatus'
+          - type: 'null'
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentMethodType'
+          - type: 'null'
+        card:
+          $ref: '#/components/schemas/PaymentMethodCard'
+        online_banking:
+          $ref: '#/components/schemas/PaymentMethodOnlineBanking'
+        buy_now_pay_later:
+          $ref: '#/components/schemas/PaymentMethodBuyNowPayLater'
+        direct_debit:
+          $ref: '#/components/schemas/PaymentMethodDirectDebit'
+        digital_wallet:
+          $ref: '#/components/schemas/PaymentMethodDigitalWallet'
+        customer_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOMER
+        integration_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type INTEGRATION
+        integration_reference:
+          type:
+          - string
+          - 'null'
+        integration_details:
+          $ref: '#/components/schemas/IntegrationDetails'
+        billing_address:
+          $ref: '#/components/schemas/Address'
+        is_default:
+          type:
+          - boolean
+          - 'null'
+      title: PaymentMethod
+    PaymentMethodOnlineBankingCountry:
+      type: string
+      enum:
+      - AD
+      - AE
+      - AF
+      - AG
+      - AI
+      - AL
+      - AM
+      - AO
+      - AQ
+      - AR
+      - AS
+      - AT
+      - AU
+      - AW
+      - AX
+      - AZ
+      - BA
+      - BB
+      - BD
+      - BE
+      - BF
+      - BG
+      - BH
+      - BI
+      - BJ
+      - BL
+      - BM
+      - BN
+      - BO
+      - BQ
+      - BR
+      - BS
+      - BT
+      - BV
+      - BW
+      - BY
+      - BZ
+      - CA
+      - CC
+      - CD
+      - CF
+      - CG
+      - CH
+      - CI
+      - CK
+      - CL
+      - CM
+      - CN
+      - CO
+      - CR
+      - CU
+      - CV
+      - CW
+      - CX
+      - CY
+      - CZ
+      - DE
+      - DJ
+      - DK
+      - DM
+      - DO
+      - DZ
+      - EC
+      - EE
+      - EG
+      - EH
+      - ER
+      - ES
+      - ET
+      - FI
+      - FJ
+      - FK
+      - FM
+      - FO
+      - FR
+      - GA
+      - GB
+      - GD
+      - GE
+      - GF
+      - GG
+      - GH
+      - GI
+      - GL
+      - GM
+      - GN
+      - GP
+      - GQ
+      - GR
+      - GS
+      - GT
+      - GU
+      - GW
+      - GY
+      - HK
+      - HM
+      - HN
+      - HR
+      - HT
+      - HU
+      - ID
+      - IE
+      - IL
+      - IM
+      - IN
+      - IO
+      - IQ
+      - IR
+      - IS
+      - IT
+      - JE
+      - JM
+      - JO
+      - JP
+      - KE
+      - KG
+      - KH
+      - KI
+      - KM
+      - KN
+      - KP
+      - KR
+      - KW
+      - KY
+      - KZ
+      - LA
+      - LB
+      - LC
+      - LI
+      - LK
+      - LR
+      - LS
+      - LT
+      - LU
+      - LV
+      - LY
+      - MA
+      - MC
+      - MD
+      - ME
+      - MF
+      - MG
+      - MH
+      - MK
+      - ML
+      - MM
+      - MN
+      - MO
+      - MP
+      - MQ
+      - MR
+      - MS
+      - MT
+      - MU
+      - MV
+      - MW
+      - MX
+      - MY
+      - MZ
+      - NA
+      - NC
+      - NE
+      - NF
+      - NG
+      - NI
+      - NL
+      - 'NO'
+      - NP
+      - NR
+      - NU
+      - NZ
+      - OM
+      - PA
+      - PE
+      - PF
+      - PG
+      - PH
+      - PK
+      - PL
+      - PM
+      - PN
+      - PR
+      - PS
+      - PT
+      - PW
+      - PY
+      - QA
+      - RE
+      - RO
+      - RS
+      - RU
+      - RW
+      - SA
+      - SB
+      - SC
+      - SD
+      - SE
+      - SG
+      - SH
+      - SI
+      - SJ
+      - SK
+      - SL
+      - SM
+      - SN
+      - SO
+      - SR
+      - SS
+      - ST
+      - SV
+      - SX
+      - SY
+      - SZ
+      - TC
+      - TD
+      - TF
+      - TG
+      - TH
+      - TJ
+      - TK
+      - TL
+      - TM
+      - TN
+      - TO
+      - TR
+      - TT
+      - TV
+      - TW
+      - TZ
+      - UA
+      - UG
+      - US
+      - UY
+      - UZ
+      - VA
+      - VC
+      - VE
+      - VG
+      - VI
+      - VN
+      - VU
+      - WF
+      - WS
+      - YE
+      - YT
+      - ZA
+      - ZM
+      - ZW
+      title: PaymentMethodOnlineBankingCountry
+    PaymentDunningActionDetails:
+      type: object
+      properties:
+        attempt:
+          type:
+          - integer
+          - 'null'
+        external_reference:
+          type:
+          - string
+          - 'null'
+        next_attempt_scheduled:
+          type:
+          - boolean
+          - 'null'
+      title: PaymentDunningActionDetails
+    AdyenTokenizationRequestCreateRequest:
+      type: object
+      properties:
+        payment_method:
+          type: object
+          additionalProperties:
+            type: string
+        browser_info:
+          type: object
+          additionalProperties:
+            type: string
+        risk_data:
+          type: object
+          additionalProperties:
+            type: string
+        origin:
+          type: string
+        store_payment_method:
+          type: boolean
+      title: AdyenTokenizationRequestCreateRequest
+    AdyenIntegrationDetails:
+      type: object
+      properties:
+        recurring_detail_reference:
+          type: string
+      title: AdyenIntegrationDetails
+    NextActionRedirectToUrl:
+      type: object
+      properties:
+        return_url:
+          type: string
+        url:
+          type: string
+      title: NextActionRedirectToUrl
+    PaymentMethodDetailsCreateRequestType:
+      type: string
+      enum:
+      - CARD
+      - ONLINE_BANKING
+      - BUY_NOW_PAY_LATER
+      - DIRECT_DEBIT
+      - DIGITAL_WALLET
+      - UNKNOWN
+      title: PaymentMethodDetailsCreateRequestType
+    PaymentMethodDirectDebitCountry:
+      type: string
+      enum:
+      - AD
+      - AE
+      - AF
+      - AG
+      - AI
+      - AL
+      - AM
+      - AO
+      - AQ
+      - AR
+      - AS
+      - AT
+      - AU
+      - AW
+      - AX
+      - AZ
+      - BA
+      - BB
+      - BD
+      - BE
+      - BF
+      - BG
+      - BH
+      - BI
+      - BJ
+      - BL
+      - BM
+      - BN
+      - BO
+      - BQ
+      - BR
+      - BS
+      - BT
+      - BV
+      - BW
+      - BY
+      - BZ
+      - CA
+      - CC
+      - CD
+      - CF
+      - CG
+      - CH
+      - CI
+      - CK
+      - CL
+      - CM
+      - CN
+      - CO
+      - CR
+      - CU
+      - CV
+      - CW
+      - CX
+      - CY
+      - CZ
+      - DE
+      - DJ
+      - DK
+      - DM
+      - DO
+      - DZ
+      - EC
+      - EE
+      - EG
+      - EH
+      - ER
+      - ES
+      - ET
+      - FI
+      - FJ
+      - FK
+      - FM
+      - FO
+      - FR
+      - GA
+      - GB
+      - GD
+      - GE
+      - GF
+      - GG
+      - GH
+      - GI
+      - GL
+      - GM
+      - GN
+      - GP
+      - GQ
+      - GR
+      - GS
+      - GT
+      - GU
+      - GW
+      - GY
+      - HK
+      - HM
+      - HN
+      - HR
+      - HT
+      - HU
+      - ID
+      - IE
+      - IL
+      - IM
+      - IN
+      - IO
+      - IQ
+      - IR
+      - IS
+      - IT
+      - JE
+      - JM
+      - JO
+      - JP
+      - KE
+      - KG
+      - KH
+      - KI
+      - KM
+      - KN
+      - KP
+      - KR
+      - KW
+      - KY
+      - KZ
+      - LA
+      - LB
+      - LC
+      - LI
+      - LK
+      - LR
+      - LS
+      - LT
+      - LU
+      - LV
+      - LY
+      - MA
+      - MC
+      - MD
+      - ME
+      - MF
+      - MG
+      - MH
+      - MK
+      - ML
+      - MM
+      - MN
+      - MO
+      - MP
+      - MQ
+      - MR
+      - MS
+      - MT
+      - MU
+      - MV
+      - MW
+      - MX
+      - MY
+      - MZ
+      - NA
+      - NC
+      - NE
+      - NF
+      - NG
+      - NI
+      - NL
+      - 'NO'
+      - NP
+      - NR
+      - NU
+      - NZ
+      - OM
+      - PA
+      - PE
+      - PF
+      - PG
+      - PH
+      - PK
+      - PL
+      - PM
+      - PN
+      - PR
+      - PS
+      - PT
+      - PW
+      - PY
+      - QA
+      - RE
+      - RO
+      - RS
+      - RU
+      - RW
+      - SA
+      - SB
+      - SC
+      - SD
+      - SE
+      - SG
+      - SH
+      - SI
+      - SJ
+      - SK
+      - SL
+      - SM
+      - SN
+      - SO
+      - SR
+      - SS
+      - ST
+      - SV
+      - SX
+      - SY
+      - SZ
+      - TC
+      - TD
+      - TF
+      - TG
+      - TH
+      - TJ
+      - TK
+      - TL
+      - TM
+      - TN
+      - TO
+      - TR
+      - TT
+      - TV
+      - TW
+      - TZ
+      - UA
+      - UG
+      - US
+      - UY
+      - UZ
+      - VA
+      - VC
+      - VE
+      - VG
+      - VI
+      - VN
+      - VU
+      - WF
+      - WS
+      - YE
+      - YT
+      - ZA
+      - ZM
+      - ZW
+      title: PaymentMethodDirectDebitCountry
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    PaymentMethodBuyNowPayLater:
+      type: object
+      properties:
+        variant:
+          type:
+          - string
+          - 'null'
+      title: PaymentMethodBuyNowPayLater
+    AmountCurrency:
+      type: string
+      enum:
+      - AED
+      - AFN
+      - ALL
+      - AMD
+      - ANG
+      - AOA
+      - ARS
+      - AUD
+      - AWG
+      - AZN
+      - BAM
+      - BBD
+      - BDT
+      - BGN
+      - BHD
+      - BIF
+      - BMD
+      - BND
+      - BOB
+      - BRL
+      - BSD
+      - BTN
+      - BWP
+      - BYN
+      - BZD
+      - CAD
+      - CDF
+      - CHF
+      - CLF
+      - CLP
+      - CNY
+      - COP
+      - CRC
+      - CUC
+      - CUP
+      - CVE
+      - CZK
+      - DJF
+      - DKK
+      - DOP
+      - DZD
+      - EGP
+      - ERN
+      - ETB
+      - EUR
+      - FJD
+      - FKP
+      - GBP
+      - GEL
+      - GHS
+      - GIP
+      - GMD
+      - GNF
+      - GTQ
+      - GYD
+      - HKD
+      - HNL
+      - HRK
+      - HTG
+      - HUF
+      - IDR
+      - ILS
+      - INR
+      - IQD
+      - IRR
+      - ISK
+      - JMD
+      - JOD
+      - JPY
+      - KES
+      - KGS
+      - KHR
+      - KMF
+      - KPW
+      - KRW
+      - KWD
+      - KYD
+      - KZT
+      - LAK
+      - LBP
+      - LKR
+      - LRD
+      - LSL
+      - LYD
+      - MAD
+      - MDL
+      - MGA
+      - MKD
+      - MMK
+      - MNT
+      - MOP
+      - MRO
+      - MRU
+      - MUR
+      - MVR
+      - MWK
+      - MXN
+      - MXV
+      - MYR
+      - MZN
+      - NAD
+      - NGN
+      - NIO
+      - NOK
+      - NPR
+      - NZD
+      - OMR
+      - PAB
+      - PEN
+      - PGK
+      - PHP
+      - PKR
+      - PLN
+      - PYG
+      - QAR
+      - RON
+      - RSD
+      - RUB
+      - RWF
+      - SAR
+      - SBD
+      - SCR
+      - SDG
+      - SEK
+      - SGD
+      - SHP
+      - SLE
+      - SOS
+      - SRD
+      - SSP
+      - STN
+      - SVC
+      - SYP
+      - SZL
+      - THB
+      - TJS
+      - TMT
+      - TND
+      - TOP
+      - TRY
+      - TTD
+      - TWD
+      - TZS
+      - UAH
+      - UGX
+      - USD
+      - USN
+      - UYI
+      - UYU
+      - UZS
+      - VEF
+      - VES
+      - VND
+      - VUV
+      - WST
+      - XAF
+      - XAG
+      - XAU
+      - XBA
+      - XBB
+      - XBC
+      - XBD
+      - XCD
+      - XDR
+      - XOF
+      - XPD
+      - XPF
+      - XPT
+      - XSU
+      - XTS
+      - XUA
+      - XXX
+      - YER
+      - ZAR
+      - ZMW
+      - ZWL
+      title: AmountCurrency
+    PricingPlanScheduleCustomization:
+      type: object
+      properties:
+        pricing_plan_schedule_id:
+          type:
+          - string
+          - 'null'
+        seats_values:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ConfiguredMeterValue'
+        enabled_pricings:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/EnabledPricing'
+        promotion_codes:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        pricing_currency:
+          oneOf:
+          - $ref: '#/components/schemas/PricingPlanScheduleCustomizationPricingCurrency'
+          - type: 'null'
+        billing_period:
+          $ref: '#/components/schemas/Period'
+      title: PricingPlanScheduleCustomization
+    PaymentMethodCardBrand:
+      type: string
+      enum:
+      - ACCEL
+      - AMERICAN_EXPRESS
+      - BANCONTACT
+      - CARNET
+      - CARTES_BANCAIRES
+      - DANKORT
+      - DINERS
+      - DISCOVER
+      - EFTPOS
+      - ELO
+      - GIROCARD
+      - HIPERCARD
+      - JCB
+      - MAESTRO
+      - MASTERCARD
+      - NYCE
+      - PULSE
+      - STAR
+      - UNION_PAY
+      - VISA
+      - V_PAY
+      title: PaymentMethodCardBrand
+    PaymentRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        payment_schedule_id:
+          type:
+          - string
+          - 'null'
+          description: The id of the payment schedule
+        customer_id:
+          type:
+          - string
+          - 'null'
+          description: The id of the customer
+        customer:
+          oneOf:
+          - $ref: '#/components/schemas/Customer'
+          - type: 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentRequestStatus'
+          - type: 'null'
+          description: The status of the payment request
+        created_at:
+          type:
+          - string
+          - 'null'
+          description: The moment the payment request was created
+        execute_at:
+          type:
+          - string
+          - 'null'
+          description: The moment the payment request must be executed
+        index:
+          type:
+          - integer
+          - 'null'
+          description: The index of the payment request of the payment schedule
+        amount:
+          oneOf:
+          - $ref: '#/components/schemas/Amount'
+          - type: 'null'
+          description: The amount of the payment request
+      title: PaymentRequest
+    NotificationChannel:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/NotificationChannelType'
+          description: The channel type to use.
+        enabled:
+          type:
+          - boolean
+          - 'null'
+          description: Whether the channel is enabled for the notification type.
+      title: NotificationChannel
+    PaymentResultDetailsCreateRequest:
+      type: object
+      properties:
+        code:
+          type:
+          - string
+          - 'null'
+        reason:
+          type:
+          - string
+          - 'null'
+        external_code:
+          type:
+          - string
+          - 'null'
+        external_reason:
+          type:
+          - string
+          - 'null'
+      title: PaymentResultDetailsCreateRequest
+    Address:
+      type: object
+      properties:
+        line1:
+          type:
+          - string
+          - 'null'
+        line2:
+          type:
+          - string
+          - 'null'
+        city:
+          type:
+          - string
+          - 'null'
+        postal_code:
+          type:
+          - string
+          - 'null'
+        state:
+          type:
+          - string
+          - 'null'
+        country:
+          oneOf:
+          - $ref: '#/components/schemas/AddressCountry'
+          - type: 'null'
+      title: Address
+    InitPricingPlanSubscriptionPaymentContext:
+      type: object
+      properties:
+        template_pricing_plan_subscription_id:
+          type: string
+          description: Resource ID of type PRICING_PLAN_SUBSCRIPTION
+        pricing_plan_subscription_id:
+          type:
+          - string
+          - 'null'
+        billing_entity_id:
+          type:
+          - string
+          - 'null'
+        customer_details:
+          $ref: '#/components/schemas/Customer'
+        enabled_pricings:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/EnabledPricing'
+        pricing_plan_schedule_customizations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingPlanScheduleCustomization'
+      title: InitPricingPlanSubscriptionPaymentContext
+    CustomerCreateRequestRolesItems:
+      type: string
+      enum:
+      - DEFAULT
+      - NON_PROCESSING
+      - SELF_BILLING
+      - SELLER
+      - PROCESSING_ONLY
+      title: CustomerCreateRequestRolesItems
+    PaymentResult:
+      type: string
+      enum:
+      - AUTHORIZED
+      - CANCELLED
+      - CHARGED_BACK
+      - ERROR
+      - PENDING
+      - REFUSED
+      - REFUNDED
+      title: PaymentResult
+    StripeTokenizationRequestCreateRequest:
+      type: object
+      properties:
+        confirmation_token_id:
+          type: string
+      title: StripeTokenizationRequestCreateRequest
+    PaymentMethodDetailsUnknown:
+      type: object
+      properties:
+        variant:
+          type:
+          - string
+          - 'null'
+      title: PaymentMethodDetailsUnknown
+    Amount:
+      type: object
+      properties:
+        quantity:
+          type: string
+        currency:
+          $ref: '#/components/schemas/AmountCurrency'
+      title: Amount
+    PaymentMethodType:
+      type: string
+      enum:
+      - CARD
+      - ONLINE_BANKING
+      - BUY_NOW_PAY_LATER
+      - DIRECT_DEBIT
+      - DIGITAL_WALLET
+      - UNKNOWN
+      title: PaymentMethodType
+    PaymentMethodDetailsBuyNowPayLater:
+      type: object
+      properties:
+        variant:
+          type:
+          - string
+          - 'null'
+      title: PaymentMethodDetailsBuyNowPayLater
+    StripeIntegrationDetails:
+      type: object
+      properties:
+        payment_method_id:
+          type: string
+      title: StripeIntegrationDetails
+    NotificationPreference:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/NotificationPreferenceType'
+          description: The notification type to configure.
+        channels:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/NotificationChannel'
+          description: The channels for this notification type.
+      title: NotificationPreference
+    PayInvoicePaymentContext:
+      type: object
+      properties:
+        invoice_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type INVOICE
+      title: PayInvoicePaymentContext
+    CustomerStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      - CLOSED
+      title: CustomerStatus
+    EnabledPricing:
+      type: object
+      properties:
+        pricing_id:
+          type: string
+          description: Resource ID of type PRICING
+        start_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        end_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      title: EnabledPricing
+    Name:
+      type: object
+      properties:
+        first_name:
+          type:
+          - string
+          - 'null'
+        last_name:
+          type:
+          - string
+          - 'null'
+        infix:
+          type:
+          - string
+          - 'null'
+      title: Name
+    NotificationPreferenceType:
+      type: string
+      enum:
+      - INVOICE
+      description: The notification type to configure.
+      title: NotificationPreferenceType
+    PaymentContextType:
+      type: string
+      enum:
+      - INVOICE
+      - PAY_INVOICE
+      - CREATE_PAYMENT_METHOD
+      - INIT_PRICING_PLAN_SUBSCRIPTION
+      - PAYMENT_REQUEST
+      - CHARGE_ON_DEMAND
+      - DIRECT
+      title: PaymentContextType
+    PaymentMethodDigitalWallet:
+      type: object
+      properties:
+        variant:
+          type:
+          - string
+          - 'null'
+      title: PaymentMethodDigitalWallet
+    PricingPlanSubscriptionSelectorFilter:
+      type: object
+      properties:
+        field:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFilterField'
+        type:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFilterType'
+        value:
+          type: string
+      title: PricingPlanSubscriptionSelectorFilter
+    PricingPlanScheduleCustomizationPricingCurrency:
+      type: string
+      enum:
+      - AED
+      - AFN
+      - ALL
+      - AMD
+      - ANG
+      - AOA
+      - ARS
+      - AUD
+      - AWG
+      - AZN
+      - BAM
+      - BBD
+      - BDT
+      - BGN
+      - BHD
+      - BIF
+      - BMD
+      - BND
+      - BOB
+      - BRL
+      - BSD
+      - BTN
+      - BWP
+      - BYN
+      - BZD
+      - CAD
+      - CDF
+      - CHF
+      - CLF
+      - CLP
+      - CNY
+      - COP
+      - CRC
+      - CUC
+      - CUP
+      - CVE
+      - CZK
+      - DJF
+      - DKK
+      - DOP
+      - DZD
+      - EGP
+      - ERN
+      - ETB
+      - EUR
+      - FJD
+      - FKP
+      - GBP
+      - GEL
+      - GHS
+      - GIP
+      - GMD
+      - GNF
+      - GTQ
+      - GYD
+      - HKD
+      - HNL
+      - HRK
+      - HTG
+      - HUF
+      - IDR
+      - ILS
+      - INR
+      - IQD
+      - IRR
+      - ISK
+      - JMD
+      - JOD
+      - JPY
+      - KES
+      - KGS
+      - KHR
+      - KMF
+      - KPW
+      - KRW
+      - KWD
+      - KYD
+      - KZT
+      - LAK
+      - LBP
+      - LKR
+      - LRD
+      - LSL
+      - LYD
+      - MAD
+      - MDL
+      - MGA
+      - MKD
+      - MMK
+      - MNT
+      - MOP
+      - MRO
+      - MRU
+      - MUR
+      - MVR
+      - MWK
+      - MXN
+      - MXV
+      - MYR
+      - MZN
+      - NAD
+      - NGN
+      - NIO
+      - NOK
+      - NPR
+      - NZD
+      - OMR
+      - PAB
+      - PEN
+      - PGK
+      - PHP
+      - PKR
+      - PLN
+      - PYG
+      - QAR
+      - RON
+      - RSD
+      - RUB
+      - RWF
+      - SAR
+      - SBD
+      - SCR
+      - SDG
+      - SEK
+      - SGD
+      - SHP
+      - SLE
+      - SOS
+      - SRD
+      - SSP
+      - STN
+      - SVC
+      - SYP
+      - SZL
+      - THB
+      - TJS
+      - TMT
+      - TND
+      - TOP
+      - TRY
+      - TTD
+      - TWD
+      - TZS
+      - UAH
+      - UGX
+      - USD
+      - USN
+      - UYI
+      - UYU
+      - UZS
+      - VEF
+      - VES
+      - VND
+      - VUV
+      - WST
+      - XAF
+      - XAG
+      - XAU
+      - XBA
+      - XBB
+      - XBC
+      - XBD
+      - XCD
+      - XDR
+      - XOF
+      - XPD
+      - XPF
+      - XPT
+      - XSU
+      - XTS
+      - XUA
+      - XXX
+      - YER
+      - ZAR
+      - ZMW
+      - ZWL
+      title: PricingPlanScheduleCustomizationPricingCurrency
+    PaymentContextCreateRequest:
+      type: object
+      properties:
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentContextCreateRequestType'
+          - type: 'null'
+        related_resource_ids:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourceIdentifier'
+        metadata:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: string
+        init_pricing_plan_subscription:
+          $ref: '#/components/schemas/InitPricingPlanSubscriptionPaymentContext'
+        create_payment_method:
+          $ref: '#/components/schemas/CreatePaymentMethodPaymentContext'
+        payment_request:
+          $ref: '#/components/schemas/PaymentRequestPaymentContext'
+        pay_invoice:
+          $ref: '#/components/schemas/PayInvoicePaymentContext'
+        charge_on_demand:
+          $ref: '#/components/schemas/ChargeOnDemandPaymentContext'
+        direct:
+          $ref: '#/components/schemas/DirectPaymentContext'
+      title: PaymentContextCreateRequest
+    Organization:
+      type: object
+      properties:
+        legal_name:
+          type: string
+        tax_id:
+          type:
+          - string
+          - 'null'
+          description: Tax Id used for tax purposes of the organization
+        tax_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaxId'
+          description: Tax Ids used for tax purposes of the organization
+        registration_number:
+          type:
+          - string
+          - 'null'
+        tax_exempt:
+          type:
+          - boolean
+          - 'null'
+        tax_exempt_note:
+          type:
+          - string
+          - 'null'
+        registered_address:
+          $ref: '#/components/schemas/Address'
+        tax_registrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaxRegistration'
+          description: Extra tax registrations for the customer
+      title: Organization
+    PaymentVerifyDetailCreateRequest:
+      type: object
+      properties:
+        payment_acceptor_id:
+          type: string
+        payment_gateway_variant:
+          type: string
+        adyen:
+          $ref: '#/components/schemas/AdyenVerifyDetailsCreateRequest'
+      title: PaymentVerifyDetailCreateRequest
+    PaymentResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Payment'
+        page:
+          type:
+          - integer
+          - 'null'
+        limit:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      title: PaymentResponseWrapper
+    CustomerSellerDetails:
+      type: object
+      properties:
+        default_billing_entity_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type BILLING_ENTITY
+      title: CustomerSellerDetails
+    AmountCreateRequest:
+      type: object
+      properties:
+        quantity:
+          type: string
+        currency:
+          $ref: '#/components/schemas/AmountCreateRequestCurrency'
+      title: AmountCreateRequest
+    PaginationLinks:
+      type: object
+      properties:
+        first:
+          type:
+          - string
+          - 'null'
+        previous:
+          type:
+          - string
+          - 'null'
+        current:
+          type:
+          - string
+          - 'null'
+        next:
+          type:
+          - string
+          - 'null'
+      title: PaginationLinks
+    AuthorizePaymentRequestCreateRequest:
+      type: object
+      properties:
+        payment_acceptor_id:
+          type: string
+          description: Resource ID of type PAYMENT_ACCEPTOR
+        customer_id:
+          type: string
+          description: Resource ID of type CUSTOMER
+        payment_method_id:
+          type:
+          - string
+          - 'null'
+        payment_gateway_variant:
+          $ref: '#/components/schemas/AuthorizePaymentRequestCreateRequestPaymentGatewayVariant'
+        stripe:
+          $ref: '#/components/schemas/StripeTokenizationRequestCreateRequest'
+        adyen:
+          $ref: '#/components/schemas/AdyenTokenizationRequestCreateRequest'
+        amount:
+          $ref: '#/components/schemas/AmountCreateRequest'
+        reference:
+          type:
+          - string
+          - 'null'
+        context:
+          $ref: '#/components/schemas/PaymentContextCreateRequest'
+        return_url:
+          type:
+          - string
+          - 'null'
+      required:
+      - payment_acceptor_id
+      title: AuthorizePaymentRequestCreateRequest
+    AdyenRequiredAction:
+      type: object
+      properties:
+        result_code:
+          type:
+          - string
+          - 'null'
+        action_type:
+          type:
+          - string
+          - 'null'
+        payment_data:
+          type:
+          - string
+          - 'null'
+        payment_method_type:
+          type:
+          - string
+          - 'null'
+        sdk_data:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: string
+      title: AdyenRequiredAction
+    Period:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/PeriodType'
+        value:
+          type:
+          - integer
+          - 'null'
+      title: Period
+    PaymentMethodDetailsDigitalWallet:
+      type: object
+      properties:
+        variant:
+          type:
+          - string
+          - 'null'
+      title: PaymentMethodDetailsDigitalWallet
+    TaxId:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/TaxIdType'
+          - type: 'null'
+          description: Optional tax id type, indicates which type of tax the number is for
+        display_name:
+          type:
+          - string
+          - 'null'
+          description: User-friendly display name
+        tax_id_validation_result:
+          $ref: '#/components/schemas/TaxIdValidation'
+      title: TaxId
+    CustomerCreateRequestType:
+      type: string
+      enum:
+      - ORGANIZATION
+      - INDIVIDUAL
+      description: The type of customer entity.
+      title: CustomerCreateRequestType
+    Customer:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        parent_customer_id:
+          type:
+          - string
+          - 'null'
+          description: The parent of the customer. Only returned when there is a single parent.
+        parent_customer_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: A list of parents of the customer. Will also be returned if there is a single parent.
+        reference:
+          type: string
+          description: A custom reference assigned to the customer.
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/CustomerStatus'
+          - type: 'null'
+        timezone:
+          type:
+          - string
+          - 'null'
+        type:
+          $ref: '#/components/schemas/CustomerType'
+          description: The type of customer entity.
+        email:
+          type: string
+          description: The email of the customer.
+        notification_preferences:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/NotificationPreference'
+          description: Notification preferences for customer-related communications.
+        locale:
+          type:
+          - string
+          - 'null'
+          description: The locale of the customer. Format is language-country (like en-US).
+        individual:
+          $ref: '#/components/schemas/Individual'
+          description: Additional description of the individual customer type.
+        organization:
+          $ref: '#/components/schemas/Organization'
+          description: Additional description of the organization customer type.
+        custom_fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomFieldValue'
+        processing_only:
+          type:
+          - boolean
+          - 'null'
+        pricing_plan_subscription_selector:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelector'
+          description: Settings to influence dynamically the subscription to use for the ingest data.
+        linked_integrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/LinkedIntegration'
+        roles:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomerRolesItems'
+        seller_details:
+          $ref: '#/components/schemas/CustomerSellerDetails'
+      title: Customer
+    PaymentRequestStatus:
+      type: string
+      enum:
+      - SCHEDULED
+      - IN_PROGRESS
+      - ON_HOLD
+      - FAILED
+      - DONE
+      - SKIPPED
+      description: The status of the payment request
+      title: PaymentRequestStatus
+    PaymentMethodDetailsCreateRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/PaymentMethodDetailsCreateRequestType'
+        card:
+          $ref: '#/components/schemas/PaymentMethodDetailsCard'
+        online_banking:
+          $ref: '#/components/schemas/PaymentMethodDetailsOnlineBanking'
+        buy_now_pay_later:
+          $ref: '#/components/schemas/PaymentMethodDetailsBuyNowPayLater'
+        direct_debit:
+          $ref: '#/components/schemas/PaymentMethodDetailsDirectDebit'
+        digital_wallet:
+          $ref: '#/components/schemas/PaymentMethodDetailsDigitalWallet'
+        unknown:
+          $ref: '#/components/schemas/PaymentMethodDetailsUnknown'
+      title: PaymentMethodDetailsCreateRequest
+    PricingPlanSubscriptionSelectorFilterType:
+      type: string
+      enum:
+      - EQUALS
+      - NOT_EQUALS
+      - IN
+      - NOT_IN
+      - GREATER_THAN
+      - GREATER_THAN_OR_EQUALS
+      - LESS_THAN
+      - LESS_THAN_OR_EQUALS
+      - EMPTY
+      - NOT_EMPTY
+      - CONTAINS
+      - NOT_CONTAINS
+      title: PricingPlanSubscriptionSelectorFilterType
+    ExpiryDate:
+      type: object
+      properties:
+        expiry_month:
+          type: integer
+        expiry_year:
+          type: integer
+      title: ExpiryDate
+    PaymentMethodDetailsOnlineBanking:
+      type: object
+      properties:
+        variant:
+          type:
+          - string
+          - 'null'
+        owner_name:
+          type:
+          - string
+          - 'null'
+        iban:
+          type:
+          - string
+          - 'null'
+        bic:
+          type:
+          - string
+          - 'null'
+        country:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentMethodDetailsOnlineBankingCountry'
+          - type: 'null'
+      title: PaymentMethodDetailsOnlineBanking
+    StripeRequiredAction:
+      type: object
+      properties:
+        status:
+          type:
+          - string
+          - 'null'
+        next_action:
+          $ref: '#/components/schemas/NextAction'
+      title: StripeRequiredAction
+    LinkDetail:
+      type: object
+      properties:
+        url:
+          type:
+          - string
+          - 'null'
+        custom_field_name:
+          type:
+          - string
+          - 'null'
+      title: LinkDetail
+    PricingPlanSubscriptionSelectorData:
+      type: object
+      properties:
+        field:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorDataField'
+        value:
+          type: string
+      title: PricingPlanSubscriptionSelectorData
+    TaxIdType:
+      type: string
+      enum:
+      - GENERIC_TAX_ID
+      - AU_GST
+      - CA_GST_HST
+      - CA_PST
+      - CA_PST_BC
+      - CA_PST_MB
+      - CA_PST_SK
+      - CA_QST
+      description: Optional tax id type, indicates which type of tax the number is for
+      title: TaxIdType
+    PaymentMethodDetailsDirectDebitCountry:
+      type: string
+      enum:
+      - AD
+      - AE
+      - AF
+      - AG
+      - AI
+      - AL
+      - AM
+      - AO
+      - AQ
+      - AR
+      - AS
+      - AT
+      - AU
+      - AW
+      - AX
+      - AZ
+      - BA
+      - BB
+      - BD
+      - BE
+      - BF
+      - BG
+      - BH
+      - BI
+      - BJ
+      - BL
+      - BM
+      - BN
+      - BO
+      - BQ
+      - BR
+      - BS
+      - BT
+      - BV
+      - BW
+      - BY
+      - BZ
+      - CA
+      - CC
+      - CD
+      - CF
+      - CG
+      - CH
+      - CI
+      - CK
+      - CL
+      - CM
+      - CN
+      - CO
+      - CR
+      - CU
+      - CV
+      - CW
+      - CX
+      - CY
+      - CZ
+      - DE
+      - DJ
+      - DK
+      - DM
+      - DO
+      - DZ
+      - EC
+      - EE
+      - EG
+      - EH
+      - ER
+      - ES
+      - ET
+      - FI
+      - FJ
+      - FK
+      - FM
+      - FO
+      - FR
+      - GA
+      - GB
+      - GD
+      - GE
+      - GF
+      - GG
+      - GH
+      - GI
+      - GL
+      - GM
+      - GN
+      - GP
+      - GQ
+      - GR
+      - GS
+      - GT
+      - GU
+      - GW
+      - GY
+      - HK
+      - HM
+      - HN
+      - HR
+      - HT
+      - HU
+      - ID
+      - IE
+      - IL
+      - IM
+      - IN
+      - IO
+      - IQ
+      - IR
+      - IS
+      - IT
+      - JE
+      - JM
+      - JO
+      - JP
+      - KE
+      - KG
+      - KH
+      - KI
+      - KM
+      - KN
+      - KP
+      - KR
+      - KW
+      - KY
+      - KZ
+      - LA
+      - LB
+      - LC
+      - LI
+      - LK
+      - LR
+      - LS
+      - LT
+      - LU
+      - LV
+      - LY
+      - MA
+      - MC
+      - MD
+      - ME
+      - MF
+      - MG
+      - MH
+      - MK
+      - ML
+      - MM
+      - MN
+      - MO
+      - MP
+      - MQ
+      - MR
+      - MS
+      - MT
+      - MU
+      - MV
+      - MW
+      - MX
+      - MY
+      - MZ
+      - NA
+      - NC
+      - NE
+      - NF
+      - NG
+      - NI
+      - NL
+      - 'NO'
+      - NP
+      - NR
+      - NU
+      - NZ
+      - OM
+      - PA
+      - PE
+      - PF
+      - PG
+      - PH
+      - PK
+      - PL
+      - PM
+      - PN
+      - PR
+      - PS
+      - PT
+      - PW
+      - PY
+      - QA
+      - RE
+      - RO
+      - RS
+      - RU
+      - RW
+      - SA
+      - SB
+      - SC
+      - SD
+      - SE
+      - SG
+      - SH
+      - SI
+      - SJ
+      - SK
+      - SL
+      - SM
+      - SN
+      - SO
+      - SR
+      - SS
+      - ST
+      - SV
+      - SX
+      - SY
+      - SZ
+      - TC
+      - TD
+      - TF
+      - TG
+      - TH
+      - TJ
+      - TK
+      - TL
+      - TM
+      - TN
+      - TO
+      - TR
+      - TT
+      - TV
+      - TW
+      - TZ
+      - UA
+      - UG
+      - US
+      - UY
+      - UZ
+      - VA
+      - VC
+      - VE
+      - VG
+      - VI
+      - VN
+      - VU
+      - WF
+      - WS
+      - YE
+      - YT
+      - ZA
+      - ZM
+      - ZW
+      title: PaymentMethodDetailsDirectDebitCountry
+    AddressCountry:
+      type: string
+      enum:
+      - AD
+      - AE
+      - AF
+      - AG
+      - AI
+      - AL
+      - AM
+      - AO
+      - AQ
+      - AR
+      - AS
+      - AT
+      - AU
+      - AW
+      - AX
+      - AZ
+      - BA
+      - BB
+      - BD
+      - BE
+      - BF
+      - BG
+      - BH
+      - BI
+      - BJ
+      - BL
+      - BM
+      - BN
+      - BO
+      - BQ
+      - BR
+      - BS
+      - BT
+      - BV
+      - BW
+      - BY
+      - BZ
+      - CA
+      - CC
+      - CD
+      - CF
+      - CG
+      - CH
+      - CI
+      - CK
+      - CL
+      - CM
+      - CN
+      - CO
+      - CR
+      - CU
+      - CV
+      - CW
+      - CX
+      - CY
+      - CZ
+      - DE
+      - DJ
+      - DK
+      - DM
+      - DO
+      - DZ
+      - EC
+      - EE
+      - EG
+      - EH
+      - ER
+      - ES
+      - ET
+      - FI
+      - FJ
+      - FK
+      - FM
+      - FO
+      - FR
+      - GA
+      - GB
+      - GD
+      - GE
+      - GF
+      - GG
+      - GH
+      - GI
+      - GL
+      - GM
+      - GN
+      - GP
+      - GQ
+      - GR
+      - GS
+      - GT
+      - GU
+      - GW
+      - GY
+      - HK
+      - HM
+      - HN
+      - HR
+      - HT
+      - HU
+      - ID
+      - IE
+      - IL
+      - IM
+      - IN
+      - IO
+      - IQ
+      - IR
+      - IS
+      - IT
+      - JE
+      - JM
+      - JO
+      - JP
+      - KE
+      - KG
+      - KH
+      - KI
+      - KM
+      - KN
+      - KP
+      - KR
+      - KW
+      - KY
+      - KZ
+      - LA
+      - LB
+      - LC
+      - LI
+      - LK
+      - LR
+      - LS
+      - LT
+      - LU
+      - LV
+      - LY
+      - MA
+      - MC
+      - MD
+      - ME
+      - MF
+      - MG
+      - MH
+      - MK
+      - ML
+      - MM
+      - MN
+      - MO
+      - MP
+      - MQ
+      - MR
+      - MS
+      - MT
+      - MU
+      - MV
+      - MW
+      - MX
+      - MY
+      - MZ
+      - NA
+      - NC
+      - NE
+      - NF
+      - NG
+      - NI
+      - NL
+      - 'NO'
+      - NP
+      - NR
+      - NU
+      - NZ
+      - OM
+      - PA
+      - PE
+      - PF
+      - PG
+      - PH
+      - PK
+      - PL
+      - PM
+      - PN
+      - PR
+      - PS
+      - PT
+      - PW
+      - PY
+      - QA
+      - RE
+      - RO
+      - RS
+      - RU
+      - RW
+      - SA
+      - SB
+      - SC
+      - SD
+      - SE
+      - SG
+      - SH
+      - SI
+      - SJ
+      - SK
+      - SL
+      - SM
+      - SN
+      - SO
+      - SR
+      - SS
+      - ST
+      - SV
+      - SX
+      - SY
+      - SZ
+      - TC
+      - TD
+      - TF
+      - TG
+      - TH
+      - TJ
+      - TK
+      - TL
+      - TM
+      - TN
+      - TO
+      - TR
+      - TT
+      - TV
+      - TW
+      - TZ
+      - UA
+      - UG
+      - US
+      - UY
+      - UZ
+      - VA
+      - VC
+      - VE
+      - VG
+      - VI
+      - VN
+      - VU
+      - WF
+      - WS
+      - YE
+      - YT
+      - ZA
+      - ZM
+      - ZW
+      title: AddressCountry
+    PaymentMethodDetailsType:
+      type: string
+      enum:
+      - CARD
+      - ONLINE_BANKING
+      - BUY_NOW_PAY_LATER
+      - DIRECT_DEBIT
+      - DIGITAL_WALLET
+      - UNKNOWN
+      title: PaymentMethodDetailsType
+    ApiErrorResourceType:
+      type: string
+      enum:
+      - CUSTOMER
+      - CUSTOM_FIELD
+      - PLATFORM
+      - PLATFORM_UPTODATE
+      - METER
+      - METER_VALUE
+      - METER_PROPERTY
+      - METER_VALUE_CALCULATION
+      - INGEST_DATA
+      - METER_DATA
+      - CHARGE_DATA
+      - PERSIST_DATA
+      - ADJUSTMENT_DATA
+      - PRODUCT_CATEGORY
+      - PRODUCT
+      - PRODUCT_ITEM
+      - PRICING
+      - PRICING_GROUP
+      - PRICING_ITEM
+      - PRICING_ITEM_CONFIG
+      - PRICING_PLAN_SUBSCRIPTION
+      - PRICING_PLAN_SUBSCRIPTION_GROUP
+      - PRICING_PLAN_SCHEDULE
+      - PRICING_PLAN
+      - PRICING_PLAN_VERSION
+      - QUOTE
+      - QUOTE_VERSION
+      - QUOTE_TEMPLATE
+      - API_KEY
+      - USER
+      - ROLE
+      - PROXY_USER
+      - EXTERNAL_CREDENTIALS
+      - TOKEN
+      - INVOICE
+      - E_INVOICE
+      - PDF
+      - BILLING_ENTITY
+      - FEATURE
+      - MEMBERSHIP
+      - PAYMENT
+      - PAYMENT_ACCEPTOR
+      - PAYMENT_METHOD
+      - PAYMENT_METHOD_OPTIONS
+      - PAYMENT_SCHEDULE
+      - PAYMENT_REQUEST
+      - INTEGRATION
+      - WEBHOOK
+      - FILE
+      - FILE_PROCESSING_SETTINGS
+      - TEAM
+      - DOWNLOAD_URL
+      - CSV_REPORT
+      - REPORT
+      - REPORT_GENERATE_REQUEST
+      - REPORT_CONFIGURATION
+      - REPORT_SUBSCRIPTION
+      - REPORT_DEFINITION
+      - ACCOUNT_GROUP
+      - ENTITY
+      - EVENT_TRACE
+      - EVENT_TRACE_LINK
+      - PRICING_CATEGORY
+      - CONTACT
+      - ALERT_RULE
+      - ALERT
+      - AUDIT_RECORD
+      - PORTAL_URL
+      - AUTHENTICATION_PROVIDER
+      - REPROCESS
+      - APPROVAL_POLICY
+      - APPROVAL_REQUEST
+      - BULK_ACTION
+      - COUPON
+      - PROMOTION_CODE
+      - WALLET
+      - WALLET_TYPE
+      - WALLET_GRANT
+      - WORKFLOW
+      - WORKFLOW_TRIGGER
+      - WORKFLOW_ACTION
+      - CREDIT_TYPE
+      - SIGNATURE_REQUEST
+      - ATTACHMENT
+      - DOCUMENT
+      title: ApiErrorResourceType
+    ChargeOnDemandPaymentContextPricingItem:
+      type: object
+      properties:
+        pricing_item_id:
+          type: string
+          description: Resource ID of type PRICING_ITEM
+      title: ChargeOnDemandPaymentContextPricingItem
+    PaymentCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        timestamp:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        customer_id:
+          type:
+          - string
+          - 'null'
+        customer:
+          oneOf:
+          - $ref: '#/components/schemas/CustomerCreateRequest'
+          - type: 'null'
+        invoice_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type INVOICE
+        payment_acceptor_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type PAYMENT_ACCEPTOR
+        payment_acceptor_reference:
+          type:
+          - string
+          - 'null'
+        payment_method_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type PAYMENT_METHOD
+        payment_method_details:
+          $ref: '#/components/schemas/PaymentMethodDetailsCreateRequest'
+        integration_payment_method_reference:
+          type:
+          - string
+          - 'null'
+        external_reference:
+          type: string
+        reference:
+          type:
+          - string
+          - 'null'
+        amount:
+          $ref: '#/components/schemas/AmountCreateRequest'
+        result:
+          $ref: '#/components/schemas/PaymentCreateRequestResult'
+        result_details:
+          $ref: '#/components/schemas/PaymentResultDetailsCreateRequest'
+        dunning_action_details:
+          $ref: '#/components/schemas/PaymentDunningActionDetailsCreateRequest'
+        updated_at:
+          type:
+          - string
+          - 'null'
+        context:
+          $ref: '#/components/schemas/PaymentContextCreateRequest'
+      required:
+      - external_reference
+      - result
+      title: PaymentCreateRequest
+    PaymentModificationResponseStatus:
+      type: string
+      enum:
+      - SUCCESS
+      - ACTION_REQUIRED
+      - FAILURE
+      title: PaymentModificationResponseStatus
+  securitySchemes:
+    API-Key:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+    JWT-Authentication:
+      type: http
+      scheme: bearer

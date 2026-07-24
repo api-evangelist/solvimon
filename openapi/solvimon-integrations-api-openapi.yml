@@ -1,0 +1,1939 @@
+openapi: 3.1.0
+info:
+  title: Configuration alertRules integrations API
+  version: 1.0.0
+servers:
+- url: https://test.api.solvimon.com
+  description: The TEST environment for our API
+- url: https://api.solvimon.com
+  description: The live environment for our API
+tags:
+- name: integrations
+paths:
+  /v{version}/integrations:
+    get:
+      operationId: getIntegrations
+      summary: Get a list of integrations
+      description: Requires the INTEGRATION.VIEW permission.
+      tags:
+      - integrations
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: limit
+        in: query
+        description: The amount of records shown in the list
+        required: false
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: The page which is going to be shown
+        required: false
+        schema:
+          type: integer
+      - name: order_by
+        in: query
+        description: The parameter by which the response is ordered.
+        required: false
+        schema:
+          type: string
+      - name: order_direction
+        in: query
+        description: The order direction by which the response is ordered.
+        required: false
+        schema:
+          type: string
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntegrationResponseWrapper'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      operationId: postIntegrations
+      summary: Create an integration
+      description: Requires the INTEGRATION.CREATE permission.
+      tags:
+      - integrations
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Integration'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IntegrationCreateRequest'
+  /v{version}/integrations/e-invoicing/default-mandates:
+    get:
+      operationId: getIntegrationsEInvoicingDefaultMandates
+      summary: Get a list of mandates
+      description: Requires the INTEGRATION.VIEW permission.
+      tags:
+      - integrations
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: limit
+        in: query
+        description: The amount of records shown in the list
+        required: false
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: The page which is going to be shown
+        required: false
+        schema:
+          type: integer
+      - name: order_by
+        in: query
+        description: The parameter by which the response is ordered.
+        required: false
+        schema:
+          type: string
+      - name: order_direction
+        in: query
+        description: The order direction by which the response is ordered.
+        required: false
+        schema:
+          type: string
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EInvoicingMandate'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /v{version}/integrations/test-connection:
+    post:
+      operationId: postIntegrationsTestConnection
+      summary: Test whether the integration connection is successful
+      description: Requires the INTEGRATION.VIEW permission.
+      tags:
+      - integrations
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: integration_type
+        in: query
+        description: The type of integration to test the connection for
+        required: false
+        schema:
+          type: string
+      - name: e_invoicing_processor
+        in: query
+        description: The processor to connect with when testing an eInvoicing integration
+        required: false
+        schema:
+          type: string
+      - name: tax_calculation_variant
+        in: query
+        description: The variant to connect with when testing a tax calculation integration
+        required: false
+        schema:
+          type: string
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestConnectionResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthenticationSettingsCreateRequest'
+  /v{version}/integrations/{resourceId}:
+    get:
+      operationId: getIntegrationsByResourceId
+      summary: Get an integration by its ID
+      description: Requires the INTEGRATION.VIEW permission.
+      tags:
+      - integrations
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Integration'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    delete:
+      operationId: deleteIntegrationsByResourceId
+      summary: Deleting an integration by its ID
+      description: Requires the INTEGRATION.DELETE permission.
+      tags:
+      - integrations
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Integration'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    patch:
+      operationId: patchIntegrationsByResourceId
+      summary: Update an integration by its ID
+      description: Requires the INTEGRATION.UPDATE permission.
+      tags:
+      - integrations
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Integration'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IntegrationUpdateRequest'
+  /v{version}/integrations/{resourceId}/deprecate:
+    post:
+      operationId: postIntegrationsByResourceIdDeprecate
+      summary: Deprecate an integration
+      description: Requires the INTEGRATION.UPDATE permission.
+      tags:
+      - integrations
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource for which the action is posted.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Integration'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /v{version}/integrations/{resourceId}/activate:
+    post:
+      operationId: postIntegrationsByResourceIdActivate
+      summary: Activate an integration
+      description: Requires the INTEGRATION.UPDATE permission.
+      tags:
+      - integrations
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource for which the action is posted.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Integration'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /v{version}/integrations/{resourceId}/archive:
+    post:
+      operationId: postIntegrationsByResourceIdArchive
+      summary: Archive an integration
+      description: Requires the INTEGRATION.UPDATE permission.
+      tags:
+      - integrations
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource for which the action is posted.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Integration'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+components:
+  schemas:
+    EInvoicingMapping:
+      type: object
+      properties:
+        target:
+          type: string
+          description: The target field for a UBL Invoice
+        source:
+          type:
+          - string
+          - 'null'
+          description: The source field from a Solvimon Invoice
+        description:
+          type:
+          - string
+          - 'null'
+          description: Optional description for the mapping
+      title: EInvoicingMapping
+    AdyenPaymentGatewayIntegrationOwnership:
+      type: string
+      enum:
+      - PLATFORM
+      - SYSTEM
+      title: AdyenPaymentGatewayIntegrationOwnership
+    EmailProviderIntegrationUpdateRequestVariant:
+      type: string
+      enum:
+      - SYSTEM
+      - MAILGUN
+      description: The variant of email provider integration.
+      title: EmailProviderIntegrationUpdateRequestVariant
+    DataExportIntegrationUpdateRequest:
+      type: object
+      properties:
+        variant:
+          $ref: '#/components/schemas/DataExportIntegrationUpdateRequestVariant'
+          description: The variant of payment integration.
+        s3:
+          $ref: '#/components/schemas/S3'
+        bigquery:
+          $ref: '#/components/schemas/BigQuery'
+        gcs:
+          $ref: '#/components/schemas/Gcs'
+        snowflake:
+          $ref: '#/components/schemas/Snowflake'
+        transport_type:
+          type:
+          - string
+          - 'null'
+      title: DataExportIntegrationUpdateRequest
+    Integration:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+          description: A custom reference assigned to the integration.
+        name:
+          type: string
+          description: A custom name assigned to the integration.
+        description:
+          type: string
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/IntegrationStatus'
+          - type: 'null'
+          description: The status of the integration.
+        message:
+          type:
+          - string
+          - 'null'
+          description: The message associated with the status of the integration.
+        type:
+          $ref: '#/components/schemas/IntegrationType'
+          description: The type of integration.
+        authentication:
+          $ref: '#/components/schemas/AuthenticationSettings'
+          description: The authentication information used for the integration
+        payment_gateway:
+          $ref: '#/components/schemas/PaymentGatewayIntegration'
+        e_invoicing:
+          $ref: '#/components/schemas/EInvoicingIntegration'
+          description: Integration to do eInvoicing
+        data_export:
+          $ref: '#/components/schemas/DataExportIntegration'
+        tax_calculation:
+          $ref: '#/components/schemas/TaxCalculationIntegration'
+          description: Integration to calculate tax
+        linked_resources_configurations:
+          type: array
+          items:
+            $ref: '#/components/schemas/IntegrationLinkedResourceConfiguration'
+          description: Details from the resources configurations from Solvimon linked to external integration system
+        email_provider:
+          $ref: '#/components/schemas/EmailProviderIntegration'
+          description: Email provider integration settings. Applicable when the integration type is EMAIL_PROVIDER.
+      title: Integration
+    EInvoiceFileFormat:
+      type: object
+      properties:
+        type:
+          type:
+          - string
+          - 'null'
+          description: The format of the eInvoice that can be downloaded
+        description:
+          type:
+          - string
+          - 'null'
+      title: EInvoiceFileFormat
+    BigQuery:
+      type: object
+      properties:
+        project_id:
+          type: string
+        dataset_id:
+          type: string
+        dataset_location:
+          type: string
+        gcs_bucket_name:
+          type: string
+        gcs_hmac_key_access_id:
+          type: string
+        gcs_hmac_key_secret:
+          type: string
+      title: BigQuery
+    LegalEntityManagerDetails:
+      type: object
+      properties:
+        authentication:
+          $ref: '#/components/schemas/AuthenticationSettings'
+      title: LegalEntityManagerDetails
+    IntegrationLinkedResourceConfigurationUpdateRequest:
+      type: object
+      properties:
+        resource_type:
+          type: string
+        link_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/IntegrationLinkDetail'
+      title: IntegrationLinkedResourceConfigurationUpdateRequest
+    S3:
+      type: object
+      properties:
+        bucket_name:
+          type: string
+        bucket_path:
+          type: string
+        bucket_region:
+          type: string
+        authentication_type:
+          oneOf:
+          - $ref: '#/components/schemas/S3AuthenticationType'
+          - type: 'null'
+        role_arn:
+          type:
+          - string
+          - 'null'
+        external_id:
+          type:
+          - string
+          - 'null'
+      title: S3
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    MailgunEmailProvider:
+      type: object
+      properties:
+        domain:
+          type: string
+          description: Mailgun sending domain used for this email provider integration.
+        region:
+          oneOf:
+          - $ref: '#/components/schemas/MailgunEmailProviderRegion'
+          - type: 'null'
+          description: Mailgun region for the configured domain.
+        plan:
+          type:
+          - string
+          - 'null'
+          description: Optional Mailgun plan stored with the integration.
+      title: MailgunEmailProvider
+    AuthenticationSettingsApiKeyCreateRequest:
+      type: object
+      properties:
+        header:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+      title: AuthenticationSettingsApiKeyCreateRequest
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    StripePaymentGatewayIntegration:
+      type: object
+      properties:
+        public_key:
+          type: string
+        signing_secret:
+          type:
+          - string
+          - 'null'
+      title: StripePaymentGatewayIntegration
+    EmailProviderIntegrationUpdateRequest:
+      type: object
+      properties:
+        variant:
+          $ref: '#/components/schemas/EmailProviderIntegrationUpdateRequestVariant'
+          description: The variant of email provider integration.
+        mailgun:
+          $ref: '#/components/schemas/MailgunEmailProvider'
+          description: Mailgun-specific provider settings. Applicable when variant is MAILGUN.
+        delivery_window:
+          $ref: '#/components/schemas/Period'
+          description: Optional delivery window configuration that limits when outbound emails may be sent.
+        use_localized_templates:
+          type:
+          - boolean
+          - 'null'
+          description: Whether localized email templates should be selected based on customer or request locale when available.
+      title: EmailProviderIntegrationUpdateRequest
+    IntegrationUpdateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - PENDING
+      - TESTING
+      - ACTIVE
+      - ERROR
+      - DEPRECATED
+      - ARCHIVED
+      description: The status of the integration.
+      title: IntegrationUpdateRequestStatus
+    MailgunEmailProviderRegion:
+      type: string
+      enum:
+      - US
+      - EU
+      description: Mailgun region for the configured domain.
+      title: MailgunEmailProviderRegion
+    CustomTaxCodeField:
+      type: string
+      enum:
+      - INVOICE_COMMITMENT
+      - PRODUCT_FALLBACK
+      description: The field to use a custom code for
+      title: CustomTaxCodeField
+    ClientCredentials:
+      type: object
+      properties:
+        client_id:
+          type: string
+        client_secret:
+          type: string
+      title: ClientCredentials
+    EmailProviderIntegrationCreateRequestVariant:
+      type: string
+      enum:
+      - SYSTEM
+      - MAILGUN
+      description: The variant of email provider integration.
+      title: EmailProviderIntegrationCreateRequestVariant
+    TaxCalculationIntegration:
+      type: object
+      properties:
+        billing_entity_id:
+          type: string
+          description: The id of the billing entity for which this integration is used
+        variant:
+          $ref: '#/components/schemas/TaxCalculationIntegrationVariant'
+          description: The variant that provides the tax calculation
+        ava_tax:
+          $ref: '#/components/schemas/AvaTaxCalculationIntegration'
+          description: Details for an AvaTax integration
+        custom_tax_codes:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomTaxCode'
+          description: 'Optional: custom codes that are used to link specific taxes to the tax calculation (e.g. commitments, missing product codes, etc.)'
+        enable_tax_filing:
+          type: boolean
+          description: Determines whether invoices will be sent to the tax integration, or just calculations
+      title: TaxCalculationIntegration
+    PeriodType:
+      type: string
+      enum:
+      - DAY
+      - WEEK
+      - MONTH
+      - YEAR
+      title: PeriodType
+    PaymentGatewayIntegrationUpdateRequest:
+      type: object
+      properties:
+        variant:
+          $ref: '#/components/schemas/PaymentGatewayIntegrationUpdateRequestVariant'
+          description: The variant of payment integration.
+        adyen:
+          $ref: '#/components/schemas/AdyenPaymentGatewayIntegration'
+        stripe:
+          $ref: '#/components/schemas/StripePaymentGatewayIntegration'
+      title: PaymentGatewayIntegrationUpdateRequest
+    EInvoicingConditionGroup:
+      type: object
+      properties:
+        conditions:
+          type: array
+          items:
+            $ref: '#/components/schemas/EInvoicingCondition'
+          description: Conditions that determine whether this conditionGroup matches the invoice. All conditions need to match for the group to match
+      title: EInvoicingConditionGroup
+    IntegrationLinkedResourceConfigurationCreateRequest:
+      type: object
+      properties:
+        resource_type:
+          type: string
+        link_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/IntegrationLinkDetail'
+      title: IntegrationLinkedResourceConfigurationCreateRequest
+    TaxCalculationIntegrationCreateRequestVariant:
+      type: string
+      enum:
+      - AVATAX
+      description: The variant that provides the tax calculation
+      title: TaxCalculationIntegrationCreateRequestVariant
+    IntegrationLinkedResourceConfiguration:
+      type: object
+      properties:
+        resource_type:
+          type: string
+        link_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/IntegrationLinkDetail'
+      title: IntegrationLinkedResourceConfiguration
+    Snowflake:
+      type: object
+      properties:
+        host:
+          type:
+          - string
+          - 'null'
+        role:
+          type:
+          - string
+          - 'null'
+        warehouse:
+          type:
+          - string
+          - 'null'
+        database:
+          type:
+          - string
+          - 'null'
+        schema:
+          type:
+          - string
+          - 'null'
+      title: Snowflake
+    EmailProviderIntegration:
+      type: object
+      properties:
+        variant:
+          $ref: '#/components/schemas/EmailProviderIntegrationVariant'
+          description: The variant of email provider integration.
+        mailgun:
+          $ref: '#/components/schemas/MailgunEmailProvider'
+          description: Mailgun-specific provider settings. Applicable when variant is MAILGUN.
+        delivery_window:
+          $ref: '#/components/schemas/Period'
+          description: Optional delivery window configuration that limits when outbound emails may be sent.
+        use_localized_templates:
+          type:
+          - boolean
+          - 'null'
+          description: Whether localized email templates should be selected based on customer or request locale when available.
+      title: EmailProviderIntegration
+    EInvoicingIntegrationUpdateRequestProcessor:
+      type: string
+      enum:
+      - AVALARA
+      title: EInvoicingIntegrationUpdateRequestProcessor
+    EInvoicingIntegrationCreateRequest:
+      type: object
+      properties:
+        mandates:
+          type: array
+          items:
+            $ref: '#/components/schemas/EInvoicingMandate'
+          description: The mandates that are used for eInvoicing
+        processor:
+          $ref: '#/components/schemas/EInvoicingIntegrationCreateRequestProcessor'
+      title: EInvoicingIntegrationCreateRequest
+    EInvoicingIntegrationCreateRequestProcessor:
+      type: string
+      enum:
+      - AVALARA
+      title: EInvoicingIntegrationCreateRequestProcessor
+    EInvoicingIntegrationProcessor:
+      type: string
+      enum:
+      - AVALARA
+      title: EInvoicingIntegrationProcessor
+    DataExportIntegrationVariant:
+      type: string
+      enum:
+      - S3
+      - BIGQUERY
+      - GCS
+      - SNOWFLAKE
+      description: The variant of payment integration.
+      title: DataExportIntegrationVariant
+    DataExportIntegration:
+      type: object
+      properties:
+        variant:
+          $ref: '#/components/schemas/DataExportIntegrationVariant'
+          description: The variant of payment integration.
+        s3:
+          $ref: '#/components/schemas/S3'
+        bigquery:
+          $ref: '#/components/schemas/BigQuery'
+        gcs:
+          $ref: '#/components/schemas/Gcs'
+        snowflake:
+          $ref: '#/components/schemas/Snowflake'
+        transport_type:
+          type:
+          - string
+          - 'null'
+      title: DataExportIntegration
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    TaxCalculationIntegrationUpdateRequestVariant:
+      type: string
+      enum:
+      - AVATAX
+      description: The variant that provides the tax calculation
+      title: TaxCalculationIntegrationUpdateRequestVariant
+    ClientCredentialsCreateRequest:
+      type: object
+      properties:
+        client_id:
+          type: string
+        client_secret:
+          type: string
+      title: ClientCredentialsCreateRequest
+    EInvoicingMandate:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the mandate
+        country:
+          type:
+          - string
+          - 'null'
+          description: The country that this mandate belongs to
+        mappings:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/EInvoicingMapping'
+          description: The mappings that are used for this Mandate. If not provided, all mappings will be default. If provided, will be merged with defaults
+        condition_groups:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/EInvoicingConditionGroup'
+          description: The condition groups that are used for this mandate. If provided, no defaults will be used. The mandate applies if 1 conditionGroup applies
+        include_pdf_in_einvoice:
+          type:
+          - boolean
+          - 'null'
+          description: Whether the PDF should be included in the submitted eInvoice payload when supported
+        supported_file_formats:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/EInvoiceFileFormat'
+          description: The file formats in which eInvoices for this mandate can be downloaded
+      title: EInvoicingMandate
+    TaxCalculationIntegrationVariant:
+      type: string
+      enum:
+      - AVATAX
+      description: The variant that provides the tax calculation
+      title: TaxCalculationIntegrationVariant
+    Gcs:
+      type: object
+      properties:
+        bucket_region:
+          type: string
+        bucket_name:
+          type: string
+        bucket_path:
+          type: string
+        flattening:
+          type: boolean
+      title: Gcs
+    PaymentGatewayIntegrationVariant:
+      type: string
+      enum:
+      - ADYEN
+      - STRIPE
+      description: The variant of payment integration.
+      title: PaymentGatewayIntegrationVariant
+    AuthenticationSettingsCreateRequest:
+      type: object
+      properties:
+        api_key:
+          $ref: '#/components/schemas/AuthenticationSettingsApiKeyCreateRequest'
+        client_credentials:
+          $ref: '#/components/schemas/ClientCredentialsCreateRequest'
+        username_password:
+          $ref: '#/components/schemas/UsernamePasswordCreateRequest'
+      title: AuthenticationSettingsCreateRequest
+    IntegrationResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Integration'
+        page:
+          type:
+          - integer
+          - 'null'
+        limit:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      title: IntegrationResponseWrapper
+    DataExportIntegrationCreateRequest:
+      type: object
+      properties:
+        variant:
+          $ref: '#/components/schemas/DataExportIntegrationCreateRequestVariant'
+          description: The variant of payment integration.
+        s3:
+          $ref: '#/components/schemas/S3'
+        bigquery:
+          $ref: '#/components/schemas/BigQuery'
+        gcs:
+          $ref: '#/components/schemas/Gcs'
+        snowflake:
+          $ref: '#/components/schemas/Snowflake'
+        transport_type:
+          type:
+          - string
+          - 'null'
+      title: DataExportIntegrationCreateRequest
+    EmailProviderIntegrationCreateRequest:
+      type: object
+      properties:
+        variant:
+          $ref: '#/components/schemas/EmailProviderIntegrationCreateRequestVariant'
+          description: The variant of email provider integration.
+        mailgun:
+          $ref: '#/components/schemas/MailgunEmailProvider'
+          description: Mailgun-specific provider settings. Applicable when variant is MAILGUN.
+        delivery_window:
+          $ref: '#/components/schemas/Period'
+          description: Optional delivery window configuration that limits when outbound emails may be sent.
+        use_localized_templates:
+          type:
+          - boolean
+          - 'null'
+          description: Whether localized email templates should be selected based on customer or request locale when available.
+      title: EmailProviderIntegrationCreateRequest
+    UsernamePassword:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      title: UsernamePassword
+    EmailProviderIntegrationVariant:
+      type: string
+      enum:
+      - SYSTEM
+      - MAILGUN
+      description: The variant of email provider integration.
+      title: EmailProviderIntegrationVariant
+    TestConnectionResponse:
+      type: object
+      properties:
+        successful:
+          type:
+          - boolean
+          - 'null'
+        message:
+          type:
+          - string
+          - 'null'
+      title: TestConnectionResponse
+    EInvoicingCondition:
+      type: object
+      properties:
+        field:
+          type: string
+          description: The field that holds the value to compare against
+        comparator_type:
+          $ref: '#/components/schemas/EInvoicingConditionComparatorType'
+        value:
+          type: string
+          description: Value to check the field against. If a Comparator such as 'IN' or 'CONTAINS' is used, this can be a comma separated list of values
+      title: EInvoicingCondition
+    TaxCalculationIntegrationUpdateRequest:
+      type: object
+      properties:
+        billing_entity_id:
+          type: string
+          description: The id of the billing entity for which this integration is used
+        variant:
+          $ref: '#/components/schemas/TaxCalculationIntegrationUpdateRequestVariant'
+          description: The variant that provides the tax calculation
+        ava_tax:
+          $ref: '#/components/schemas/AvaTaxCalculationIntegration'
+          description: Details for an AvaTax integration
+        custom_tax_codes:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomTaxCode'
+          description: 'Optional: custom codes that are used to link specific taxes to the tax calculation (e.g. commitments, missing product codes, etc.)'
+        enable_tax_filing:
+          type: boolean
+          description: Determines whether invoices will be sent to the tax integration, or just calculations
+      title: TaxCalculationIntegrationUpdateRequest
+    UsernamePasswordCreateRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      title: UsernamePasswordCreateRequest
+    PaginationLinks:
+      type: object
+      properties:
+        first:
+          type:
+          - string
+          - 'null'
+        previous:
+          type:
+          - string
+          - 'null'
+        current:
+          type:
+          - string
+          - 'null'
+        next:
+          type:
+          - string
+          - 'null'
+      title: PaginationLinks
+    DataExportIntegrationUpdateRequestVariant:
+      type: string
+      enum:
+      - S3
+      - BIGQUERY
+      - GCS
+      - SNOWFLAKE
+      description: The variant of payment integration.
+      title: DataExportIntegrationUpdateRequestVariant
+    Period:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/PeriodType'
+        value:
+          type:
+          - integer
+          - 'null'
+      title: Period
+    IntegrationUpdateRequestType:
+      type: string
+      enum:
+      - PAYMENT_GATEWAY
+      - E_INVOICING
+      - TAX_CALCULATION
+      - DATA_EXPORT
+      - EMAIL_PROVIDER
+      description: The type of integration.
+      title: IntegrationUpdateRequestType
+    PaymentGatewayIntegrationUpdateRequestVariant:
+      type: string
+      enum:
+      - ADYEN
+      - STRIPE
+      description: The variant of payment integration.
+      title: PaymentGatewayIntegrationUpdateRequestVariant
+    AuthenticationSettingsUpdateRequest:
+      type: object
+      properties:
+        api_key:
+          $ref: '#/components/schemas/AuthenticationSettingsApiKey'
+        client_credentials:
+          $ref: '#/components/schemas/ClientCredentials'
+        username_password:
+          $ref: '#/components/schemas/UsernamePassword'
+      title: AuthenticationSettingsUpdateRequest
+    IntegrationCreateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - PENDING
+      - TESTING
+      - ACTIVE
+      - ERROR
+      - DEPRECATED
+      - ARCHIVED
+      description: The status of the integration.
+      title: IntegrationCreateRequestStatus
+    IntegrationStatus:
+      type: string
+      enum:
+      - DRAFT
+      - PENDING
+      - TESTING
+      - ACTIVE
+      - ERROR
+      - DEPRECATED
+      - ARCHIVED
+      description: The status of the integration.
+      title: IntegrationStatus
+    AdyenPaymentGatewayIntegration:
+      type: object
+      properties:
+        company_account:
+          type: string
+        environment:
+          $ref: '#/components/schemas/AdyenPaymentGatewayIntegrationEnvironment'
+        live_prefix:
+          type: string
+        merchant_accounts:
+          type: array
+          items:
+            type: string
+        public_key:
+          type: string
+        signing_secret:
+          type: string
+        ownership:
+          $ref: '#/components/schemas/AdyenPaymentGatewayIntegrationOwnership'
+        system_ownership_details:
+          $ref: '#/components/schemas/SystemOwnershipDetails'
+        balance_platform_details:
+          $ref: '#/components/schemas/BalancePlatformDetails'
+        legal_entity_manager_details:
+          $ref: '#/components/schemas/LegalEntityManagerDetails'
+        enabled_payment_methods:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+      title: AdyenPaymentGatewayIntegration
+    TaxCalculationIntegrationCreateRequest:
+      type: object
+      properties:
+        billing_entity_id:
+          type: string
+          description: The id of the billing entity for which this integration is used
+        variant:
+          $ref: '#/components/schemas/TaxCalculationIntegrationCreateRequestVariant'
+          description: The variant that provides the tax calculation
+        ava_tax:
+          $ref: '#/components/schemas/AvaTaxCalculationIntegration'
+          description: Details for an AvaTax integration
+        custom_tax_codes:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomTaxCode'
+          description: 'Optional: custom codes that are used to link specific taxes to the tax calculation (e.g. commitments, missing product codes, etc.)'
+        enable_tax_filing:
+          type: boolean
+          description: Determines whether invoices will be sent to the tax integration, or just calculations
+      title: TaxCalculationIntegrationCreateRequest
+    IntegrationType:
+      type: string
+      enum:
+      - PAYMENT_GATEWAY
+      - E_INVOICING
+      - TAX_CALCULATION
+      - DATA_EXPORT
+      - EMAIL_PROVIDER
+      description: The type of integration.
+      title: IntegrationType
+    BalancePlatformDetails:
+      type: object
+      properties:
+        account:
+          type: string
+        authentication:
+          $ref: '#/components/schemas/AuthenticationSettings'
+      title: BalancePlatformDetails
+    EInvoicingIntegration:
+      type: object
+      properties:
+        mandates:
+          type: array
+          items:
+            $ref: '#/components/schemas/EInvoicingMandate'
+          description: The mandates that are used for eInvoicing
+        processor:
+          $ref: '#/components/schemas/EInvoicingIntegrationProcessor'
+      title: EInvoicingIntegration
+    AuthenticationSettingsApiKey:
+      type: object
+      properties:
+        header:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+      title: AuthenticationSettingsApiKey
+    S3AuthenticationType:
+      type: string
+      enum:
+      - ACCESS_KEY_AND_SECRET
+      - IAM_ROLE
+      title: S3AuthenticationType
+    PaymentGatewayIntegrationCreateRequestVariant:
+      type: string
+      enum:
+      - ADYEN
+      - STRIPE
+      description: The variant of payment integration.
+      title: PaymentGatewayIntegrationCreateRequestVariant
+    EInvoicingConditionComparatorType:
+      type: string
+      enum:
+      - EQUALS
+      - NOT_EQUALS
+      - IN
+      - NOT_IN
+      - GREATER_THAN
+      - GREATER_THAN_OR_EQUALS
+      - LESS_THAN
+      - LESS_THAN_OR_EQUALS
+      - EMPTY
+      - NOT_EMPTY
+      - CONTAINS
+      - NOT_CONTAINS
+      title: EInvoicingConditionComparatorType
+    IntegrationLinkDetail:
+      type: object
+      properties:
+        base_url:
+          type: string
+        custom_field_reference:
+          type: string
+      title: IntegrationLinkDetail
+    DataExportIntegrationCreateRequestVariant:
+      type: string
+      enum:
+      - S3
+      - BIGQUERY
+      - GCS
+      - SNOWFLAKE
+      description: The variant of payment integration.
+      title: DataExportIntegrationCreateRequestVariant
+    IntegrationCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+          description: A custom reference assigned to the integration.
+        name:
+          type: string
+          description: A custom name assigned to the integration.
+        description:
+          type: string
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/IntegrationCreateRequestStatus'
+          - type: 'null'
+          description: The status of the integration.
+        message:
+          type:
+          - string
+          - 'null'
+          description: The message associated with the status of the integration.
+        type:
+          $ref: '#/components/schemas/IntegrationCreateRequestType'
+          description: The type of integration.
+        authentication:
+          $ref: '#/components/schemas/AuthenticationSettingsCreateRequest'
+          description: The authentication information used for the integration
+        payment_gateway:
+          $ref: '#/components/schemas/PaymentGatewayIntegrationCreateRequest'
+        e_invoicing:
+          $ref: '#/components/schemas/EInvoicingIntegrationCreateRequest'
+          description: Integration to do eInvoicing
+        data_export:
+          $ref: '#/components/schemas/DataExportIntegrationCreateRequest'
+        tax_calculation:
+          $ref: '#/components/schemas/TaxCalculationIntegrationCreateRequest'
+          description: Integration to calculate tax
+        linked_resources_configurations:
+          type: array
+          items:
+            $ref: '#/components/schemas/IntegrationLinkedResourceConfigurationCreateRequest'
+          description: Details from the resources configurations from Solvimon linked to external integration system
+        email_provider:
+          $ref: '#/components/schemas/EmailProviderIntegrationCreateRequest'
+          description: Email provider integration settings. Applicable when the integration type is EMAIL_PROVIDER.
+      required:
+      - reference
+      - type
+      title: IntegrationCreateRequest
+    AdyenPaymentGatewayIntegrationEnvironment:
+      type: string
+      enum:
+      - LIVE
+      - TEST
+      title: AdyenPaymentGatewayIntegrationEnvironment
+    AvaTaxCalculationIntegration:
+      type: object
+      properties:
+        company_code:
+          type: string
+          description: Links a billing entity to a company in AvaTax
+      title: AvaTaxCalculationIntegration
+    EInvoicingIntegrationUpdateRequest:
+      type: object
+      properties:
+        mandates:
+          type: array
+          items:
+            $ref: '#/components/schemas/EInvoicingMandate'
+          description: The mandates that are used for eInvoicing
+        processor:
+          $ref: '#/components/schemas/EInvoicingIntegrationUpdateRequestProcessor'
+      title: EInvoicingIntegrationUpdateRequest
+    SystemOwnershipDetails:
+      type: object
+      properties:
+        account_holder_id:
+          type: string
+        balance_account_id:
+          type: string
+        legal_entity_id:
+          type: string
+        store_id:
+          type: string
+      title: SystemOwnershipDetails
+    AuthenticationSettings:
+      type: object
+      properties:
+        api_key:
+          $ref: '#/components/schemas/AuthenticationSettingsApiKey'
+        client_credentials:
+          $ref: '#/components/schemas/ClientCredentials'
+        username_password:
+          $ref: '#/components/schemas/UsernamePassword'
+      title: AuthenticationSettings
+    IntegrationCreateRequestType:
+      type: string
+      enum:
+      - PAYMENT_GATEWAY
+      - E_INVOICING
+      - TAX_CALCULATION
+      - DATA_EXPORT
+      - EMAIL_PROVIDER
+      description: The type of integration.
+      title: IntegrationCreateRequestType
+    ApiErrorResourceType:
+      type: string
+      enum:
+      - CUSTOMER
+      - CUSTOM_FIELD
+      - PLATFORM
+      - PLATFORM_UPTODATE
+      - METER
+      - METER_VALUE
+      - METER_PROPERTY
+      - METER_VALUE_CALCULATION
+      - INGEST_DATA
+      - METER_DATA
+      - CHARGE_DATA
+      - PERSIST_DATA
+      - ADJUSTMENT_DATA
+      - PRODUCT_CATEGORY
+      - PRODUCT
+      - PRODUCT_ITEM
+      - PRICING
+      - PRICING_GROUP
+      - PRICING_ITEM
+      - PRICING_ITEM_CONFIG
+      - PRICING_PLAN_SUBSCRIPTION
+      - PRICING_PLAN_SUBSCRIPTION_GROUP
+      - PRICING_PLAN_SCHEDULE
+      - PRICING_PLAN
+      - PRICING_PLAN_VERSION
+      - QUOTE
+      - QUOTE_VERSION
+      - QUOTE_TEMPLATE
+      - API_KEY
+      - USER
+      - ROLE
+      - PROXY_USER
+      - EXTERNAL_CREDENTIALS
+      - TOKEN
+      - INVOICE
+      - E_INVOICE
+      - PDF
+      - BILLING_ENTITY
+      - FEATURE
+      - MEMBERSHIP
+      - PAYMENT
+      - PAYMENT_ACCEPTOR
+      - PAYMENT_METHOD
+      - PAYMENT_METHOD_OPTIONS
+      - PAYMENT_SCHEDULE
+      - PAYMENT_REQUEST
+      - INTEGRATION
+      - WEBHOOK
+      - FILE
+      - FILE_PROCESSING_SETTINGS
+      - TEAM
+      - DOWNLOAD_URL
+      - CSV_REPORT
+      - REPORT
+      - REPORT_GENERATE_REQUEST
+      - REPORT_CONFIGURATION
+      - REPORT_SUBSCRIPTION
+      - REPORT_DEFINITION
+      - ACCOUNT_GROUP
+      - ENTITY
+      - EVENT_TRACE
+      - EVENT_TRACE_LINK
+      - PRICING_CATEGORY
+      - CONTACT
+      - ALERT_RULE
+      - ALERT
+      - AUDIT_RECORD
+      - PORTAL_URL
+      - AUTHENTICATION_PROVIDER
+      - REPROCESS
+      - APPROVAL_POLICY
+      - APPROVAL_REQUEST
+      - BULK_ACTION
+      - COUPON
+      - PROMOTION_CODE
+      - WALLET
+      - WALLET_TYPE
+      - WALLET_GRANT
+      - WORKFLOW
+      - WORKFLOW_TRIGGER
+      - WORKFLOW_ACTION
+      - CREDIT_TYPE
+      - SIGNATURE_REQUEST
+      - ATTACHMENT
+      - DOCUMENT
+      title: ApiErrorResourceType
+    CustomTaxCode:
+      type: object
+      properties:
+        field:
+          $ref: '#/components/schemas/CustomTaxCodeField'
+          description: The field to use a custom code for
+        value:
+          type: string
+      title: CustomTaxCode
+    IntegrationUpdateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+          description: A custom reference assigned to the integration.
+        name:
+          type: string
+          description: A custom name assigned to the integration.
+        description:
+          type: string
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/IntegrationUpdateRequestStatus'
+          - type: 'null'
+          description: The status of the integration.
+        message:
+          type:
+          - string
+          - 'null'
+          description: The message associated with the status of the integration.
+        type:
+          $ref: '#/components/schemas/IntegrationUpdateRequestType'
+          description: The type of integration.
+        authentication:
+          $ref: '#/components/schemas/AuthenticationSettingsUpdateRequest'
+          description: The authentication information used for the integration
+        payment_gateway:
+          $ref: '#/components/schemas/PaymentGatewayIntegrationUpdateRequest'
+        e_invoicing:
+          $ref: '#/components/schemas/EInvoicingIntegrationUpdateRequest'
+          description: Integration to do eInvoicing
+        data_export:
+          $ref: '#/components/schemas/DataExportIntegrationUpdateRequest'
+        tax_calculation:
+          $ref: '#/components/schemas/TaxCalculationIntegrationUpdateRequest'
+          description: Integration to calculate tax
+        linked_resources_configurations:
+          type: array
+          items:
+            $ref: '#/components/schemas/IntegrationLinkedResourceConfigurationUpdateRequest'
+          description: Details from the resources configurations from Solvimon linked to external integration system
+        email_provider:
+          $ref: '#/components/schemas/EmailProviderIntegrationUpdateRequest'
+          description: Email provider integration settings. Applicable when the integration type is EMAIL_PROVIDER.
+      title: IntegrationUpdateRequest
+    PaymentGatewayIntegrationCreateRequest:
+      type: object
+      properties:
+        variant:
+          $ref: '#/components/schemas/PaymentGatewayIntegrationCreateRequestVariant'
+          description: The variant of payment integration.
+        adyen:
+          $ref: '#/components/schemas/AdyenPaymentGatewayIntegration'
+        stripe:
+          $ref: '#/components/schemas/StripePaymentGatewayIntegration'
+      title: PaymentGatewayIntegrationCreateRequest
+    PaymentGatewayIntegration:
+      type: object
+      properties:
+        variant:
+          $ref: '#/components/schemas/PaymentGatewayIntegrationVariant'
+          description: The variant of payment integration.
+        adyen:
+          $ref: '#/components/schemas/AdyenPaymentGatewayIntegration'
+        stripe:
+          $ref: '#/components/schemas/StripePaymentGatewayIntegration'
+      title: PaymentGatewayIntegration
+  securitySchemes:
+    API-Key:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+    JWT-Authentication:
+      type: http
+      scheme: bearer

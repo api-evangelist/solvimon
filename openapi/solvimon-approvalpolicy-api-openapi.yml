@@ -1,0 +1,1362 @@
+openapi: 3.1.0
+info:
+  title: Configuration alertRules approvalPolicy API
+  version: 1.0.0
+servers:
+- url: https://test.api.solvimon.com
+  description: The TEST environment for our API
+- url: https://api.solvimon.com
+  description: The live environment for our API
+tags:
+- name: approvalPolicy
+paths:
+  /v{version}/approval-policies:
+    get:
+      operationId: getApprovalPolicies
+      summary: Get all the approval policies.
+      description: Requires the APPROVAL_POLICY.VIEW permission.
+      tags:
+      - approvalPolicy
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: limit
+        in: query
+        description: The amount of records shown in the list
+        required: false
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: The page which is going to be shown
+        required: false
+        schema:
+          type: integer
+      - name: order_by
+        in: query
+        description: The parameter by which the response is ordered.
+        required: false
+        schema:
+          type: string
+      - name: order_direction
+        in: query
+        description: The order direction by which the response is ordered.
+        required: false
+        schema:
+          type: string
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAllApprovalPoliciesResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      operationId: postApprovalPolicies
+      summary: Create a new Approval Policy
+      description: Requires the APPROVAL_POLICY.CREATE permission.
+      tags:
+      - approvalPolicy
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalPolicy'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApprovalPolicyCreateRequest'
+  /v{version}/approval-policies/{resourceId}:
+    get:
+      operationId: getApprovalPoliciesByResourceId
+      summary: Get approval policy.
+      description: Requires the APPROVAL_POLICY.VIEW permission.
+      tags:
+      - approvalPolicy
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalPolicy'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    delete:
+      operationId: deleteApprovalPoliciesByResourceId
+      summary: Delete an approval policy by resource ID
+      description: Requires the APPROVAL_POLICY.DELETE permission.
+      tags:
+      - approvalPolicy
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalPolicy'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    patch:
+      operationId: patchApprovalPoliciesByResourceId
+      summary: Update an approval policy
+      description: Requires the APPROVAL_POLICY.UPDATE permission.
+      tags:
+      - approvalPolicy
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalPolicy'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApprovalPolicyUpdateRequest'
+  /v{version}/approval-policies/{resourceId}/activate:
+    post:
+      operationId: postApprovalPoliciesByResourceIdActivate
+      summary: Activate approval policy
+      description: Requires the APPROVAL_POLICY.UPDATE permission.
+      tags:
+      - approvalPolicy
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource for which the action is posted.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalPolicy'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /v{version}/approval-policies/{resourceId}/deprecate:
+    post:
+      operationId: postApprovalPoliciesByResourceIdDeprecate
+      summary: Deprecate approval policy
+      description: Requires the APPROVAL_POLICY.UPDATE permission.
+      tags:
+      - approvalPolicy
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource for which the action is posted.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalPolicy'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /v{version}/approval-policies/{resourceId}/archive:
+    post:
+      operationId: postApprovalPoliciesByResourceIdArchive
+      summary: Archive approval policy
+      description: Requires the APPROVAL_POLICY.UPDATE permission.
+      tags:
+      - approvalPolicy
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource for which the action is posted.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalPolicy'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+components:
+  schemas:
+    ApprovalGroup:
+      type: object
+      properties:
+        level:
+          type: integer
+          description: The hierarchy of the users
+        approvers:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalPolicyApprover'
+          description: The users who are allowed to review and approve/decline the approval review.
+      title: ApprovalGroup
+    ApproversUpdateRequestType:
+      type: string
+      enum:
+      - ALL_LEVELS_MUST_APPROVE
+      - HIGHER_LEVEL_CAN_OVERRIDE
+      - ANYONE_CAN_DECIDE
+      description: The type of approval level needs to approve it.
+      title: ApproversUpdateRequestType
+    ApprovalPolicy:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        source_type:
+          $ref: '#/components/schemas/ApprovalPolicySourceType'
+          description: The object type of this approval policy.
+        reference:
+          type: string
+          description: The human-readable reference to this approval policy.
+        name:
+          type: string
+          description: The name of this approval policy.
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/ApprovalPolicyStatus'
+          - type: 'null'
+          description: The current status of the approval policy.
+        approval_type:
+          $ref: '#/components/schemas/ApprovalPolicyApprovalType'
+          description: The type of approval process which needs to be followed if this approval policy is invoked.
+        created_at:
+          type:
+          - string
+          - 'null'
+          description: When the approval policy was created.
+        update_at:
+          type:
+          - string
+          - 'null'
+          description: When the approval policy was updated last.
+        approvers:
+          $ref: '#/components/schemas/Approvers'
+          description: The type of approve level and users who are allowed to approve/decline the approval review.
+        rule_groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalPolicyRuleGroup'
+          description: The groups of rules that are applicable for this approval policy. These will be chained using OR.
+      title: ApprovalPolicy
+    ApprovalPolicyUpdateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        source_type:
+          $ref: '#/components/schemas/ApprovalPolicyUpdateRequestSourceType'
+          description: The object type of this approval policy.
+        reference:
+          type: string
+          description: The human-readable reference to this approval policy.
+        name:
+          type: string
+          description: The name of this approval policy.
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/ApprovalPolicyUpdateRequestStatus'
+          - type: 'null'
+          description: The current status of the approval policy.
+        approval_type:
+          $ref: '#/components/schemas/ApprovalPolicyUpdateRequestApprovalType'
+          description: The type of approval process which needs to be followed if this approval policy is invoked.
+        created_at:
+          type:
+          - string
+          - 'null'
+          description: When the approval policy was created.
+        update_at:
+          type:
+          - string
+          - 'null'
+          description: When the approval policy was updated last.
+        approvers:
+          $ref: '#/components/schemas/ApproversUpdateRequest'
+          description: The type of approve level and users who are allowed to approve/decline the approval review.
+        rule_groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalPolicyRuleGroupUpdateRequest'
+          description: The groups of rules that are applicable for this approval policy. These will be chained using OR.
+      title: ApprovalPolicyUpdateRequest
+    Approvers:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApproversType'
+          description: The type of approval level needs to approve it.
+        approval_groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalGroup'
+          description: The users who are allowed to review and approve/decline the approval review and their hierarchy in the group.
+      title: Approvers
+    ApprovalPolicyBillingEntity:
+      type: object
+      properties:
+        is_custom:
+          type: boolean
+          description: Whether the billing entity is custom.
+      title: ApprovalPolicyBillingEntity
+    ApprovalPolicyCreateRequestSourceType:
+      type: string
+      enum:
+      - QUOTE_VERSION
+      - INVOICE
+      description: The object type of this approval policy.
+      title: ApprovalPolicyCreateRequestSourceType
+    ApprovalPolicyRuleComparator:
+      type: string
+      enum:
+      - LESS_THAN
+      - LESS_THAN_OR_EQUALS
+      - EQUALS
+      - GREATER_THAN_OR_EQUALS
+      - GREATER_THAN
+      description: Indicates how the value(s) will be compared.
+      title: ApprovalPolicyRuleComparator
+    Amount:
+      type: object
+      properties:
+        quantity:
+          type: string
+        currency:
+          $ref: '#/components/schemas/AmountCurrency'
+      title: Amount
+    ApprovalPolicyUpdateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - DEPRECATED
+      - ARCHIVED
+      description: The current status of the approval policy.
+      title: ApprovalPolicyUpdateRequestStatus
+    ApprovalPolicyDueDate:
+      type: object
+      properties:
+        is_custom:
+          type: boolean
+          description: Whether the due date is custom.
+      title: ApprovalPolicyDueDate
+    ApprovalPolicyBillingPeriod:
+      type: object
+      properties:
+        is_custom:
+          type: boolean
+          description: Whether the billing period is custom.
+      title: ApprovalPolicyBillingPeriod
+    ApproversType:
+      type: string
+      enum:
+      - ALL_LEVELS_MUST_APPROVE
+      - HIGHER_LEVEL_CAN_OVERRIDE
+      - ANYONE_CAN_DECIDE
+      description: The type of approval level needs to approve it.
+      title: ApproversType
+    ApprovalPolicyRuleGroupCreateRequest:
+      type: object
+      properties:
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalPolicyRule'
+          description: The rules that are applicable for the approval policy. These will be chained using AND.
+      title: ApprovalPolicyRuleGroupCreateRequest
+    ApproversCreateRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApproversCreateRequestType'
+          description: The type of approval level needs to approve it.
+        approval_groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalGroup'
+          description: The users who are allowed to review and approve/decline the approval review and their hierarchy in the group.
+      title: ApproversCreateRequest
+    ApprovalPolicyDiscount:
+      type: object
+      properties:
+        percentage:
+          type: string
+          description: The discount percentage value that will be tested for the rule.
+        amount:
+          $ref: '#/components/schemas/Amount'
+          description: The discount amount that will be tested for the rule.
+      title: ApprovalPolicyDiscount
+    ApprovalPolicyApproverType:
+      type: string
+      enum:
+      - USER
+      description: The type of approver. I.e. User, Team, etc.
+      title: ApprovalPolicyApproverType
+    ApprovalPolicyRuleGroup:
+      type: object
+      properties:
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalPolicyRule'
+          description: The rules that are applicable for the approval policy. These will be chained using AND.
+      title: ApprovalPolicyRuleGroup
+    ApproversUpdateRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApproversUpdateRequestType'
+          description: The type of approval level needs to approve it.
+        approval_groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalGroup'
+          description: The users who are allowed to review and approve/decline the approval review and their hierarchy in the group.
+      title: ApproversUpdateRequest
+    ApprovalPolicyRuleGroupUpdateRequest:
+      type: object
+      properties:
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalPolicyRule'
+          description: The rules that are applicable for the approval policy. These will be chained using AND.
+      title: ApprovalPolicyRuleGroupUpdateRequest
+    ApprovalPolicyCreateRequestApprovalType:
+      type: string
+      enum:
+      - GROUP
+      - LEVEL
+      description: The type of approval process which needs to be followed if this approval policy is invoked.
+      title: ApprovalPolicyCreateRequestApprovalType
+    ApprovalPolicyApprover:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApprovalPolicyApproverType'
+          description: The type of approver. I.e. User, Team, etc.
+        user:
+          $ref: '#/components/schemas/ApprovalPolicyUser'
+          description: The details of the user who is allowed to approve.
+      title: ApprovalPolicyApprover
+    GetAllApprovalPoliciesResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalPolicy'
+      required:
+      - data
+      title: GetAllApprovalPoliciesResponse
+    ApprovalPolicyStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - DEPRECATED
+      - ARCHIVED
+      description: The current status of the approval policy.
+      title: ApprovalPolicyStatus
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    ApprovalPolicyPaymentAcceptor:
+      type: object
+      properties:
+        is_custom:
+          type: boolean
+          description: Whether the payment acceptors are custom.
+      title: ApprovalPolicyPaymentAcceptor
+    ApprovalPolicyUser:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the user who can review the approval request.
+      title: ApprovalPolicyUser
+    ApprovalPolicyUpdateRequestSourceType:
+      type: string
+      enum:
+      - QUOTE_VERSION
+      - INVOICE
+      description: The object type of this approval policy.
+      title: ApprovalPolicyUpdateRequestSourceType
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    ApprovalPolicyPricing:
+      type: object
+      properties:
+        has_override:
+          type: boolean
+          description: Whether there is a pricing override present.
+      title: ApprovalPolicyPricing
+    ApprovalPolicyCommitment:
+      type: object
+      properties:
+        amount:
+          $ref: '#/components/schemas/Amount'
+          description: The commitment amount that will be tested for the rule.
+      title: ApprovalPolicyCommitment
+    ApiErrorResourceType:
+      type: string
+      enum:
+      - CUSTOMER
+      - CUSTOM_FIELD
+      - PLATFORM
+      - PLATFORM_UPTODATE
+      - METER
+      - METER_VALUE
+      - METER_PROPERTY
+      - METER_VALUE_CALCULATION
+      - INGEST_DATA
+      - METER_DATA
+      - CHARGE_DATA
+      - PERSIST_DATA
+      - ADJUSTMENT_DATA
+      - PRODUCT_CATEGORY
+      - PRODUCT
+      - PRODUCT_ITEM
+      - PRICING
+      - PRICING_GROUP
+      - PRICING_ITEM
+      - PRICING_ITEM_CONFIG
+      - PRICING_PLAN_SUBSCRIPTION
+      - PRICING_PLAN_SUBSCRIPTION_GROUP
+      - PRICING_PLAN_SCHEDULE
+      - PRICING_PLAN
+      - PRICING_PLAN_VERSION
+      - QUOTE
+      - QUOTE_VERSION
+      - QUOTE_TEMPLATE
+      - API_KEY
+      - USER
+      - ROLE
+      - PROXY_USER
+      - EXTERNAL_CREDENTIALS
+      - TOKEN
+      - INVOICE
+      - E_INVOICE
+      - PDF
+      - BILLING_ENTITY
+      - FEATURE
+      - MEMBERSHIP
+      - PAYMENT
+      - PAYMENT_ACCEPTOR
+      - PAYMENT_METHOD
+      - PAYMENT_METHOD_OPTIONS
+      - PAYMENT_SCHEDULE
+      - PAYMENT_REQUEST
+      - INTEGRATION
+      - WEBHOOK
+      - FILE
+      - FILE_PROCESSING_SETTINGS
+      - TEAM
+      - DOWNLOAD_URL
+      - CSV_REPORT
+      - REPORT
+      - REPORT_GENERATE_REQUEST
+      - REPORT_CONFIGURATION
+      - REPORT_SUBSCRIPTION
+      - REPORT_DEFINITION
+      - ACCOUNT_GROUP
+      - ENTITY
+      - EVENT_TRACE
+      - EVENT_TRACE_LINK
+      - PRICING_CATEGORY
+      - CONTACT
+      - ALERT_RULE
+      - ALERT
+      - AUDIT_RECORD
+      - PORTAL_URL
+      - AUTHENTICATION_PROVIDER
+      - REPROCESS
+      - APPROVAL_POLICY
+      - APPROVAL_REQUEST
+      - BULK_ACTION
+      - COUPON
+      - PROMOTION_CODE
+      - WALLET
+      - WALLET_TYPE
+      - WALLET_GRANT
+      - WORKFLOW
+      - WORKFLOW_TRIGGER
+      - WORKFLOW_ACTION
+      - CREDIT_TYPE
+      - SIGNATURE_REQUEST
+      - ATTACHMENT
+      - DOCUMENT
+      title: ApiErrorResourceType
+    ApprovalPolicyCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        source_type:
+          $ref: '#/components/schemas/ApprovalPolicyCreateRequestSourceType'
+          description: The object type of this approval policy.
+        reference:
+          type: string
+          description: The human-readable reference to this approval policy.
+        name:
+          type: string
+          description: The name of this approval policy.
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/ApprovalPolicyCreateRequestStatus'
+          - type: 'null'
+          description: The current status of the approval policy.
+        approval_type:
+          $ref: '#/components/schemas/ApprovalPolicyCreateRequestApprovalType'
+          description: The type of approval process which needs to be followed if this approval policy is invoked.
+        created_at:
+          type:
+          - string
+          - 'null'
+          description: When the approval policy was created.
+        update_at:
+          type:
+          - string
+          - 'null'
+          description: When the approval policy was updated last.
+        approvers:
+          $ref: '#/components/schemas/ApproversCreateRequest'
+          description: The type of approve level and users who are allowed to approve/decline the approval review.
+        rule_groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalPolicyRuleGroupCreateRequest'
+          description: The groups of rules that are applicable for this approval policy. These will be chained using OR.
+      required:
+      - source_type
+      - reference
+      - name
+      - approval_type
+      - approvers
+      - rule_groups
+      title: ApprovalPolicyCreateRequest
+    ApprovalPolicyRuleType:
+      type: string
+      enum:
+      - ALWAYS_APPROVE
+      - DISCOUNT
+      - COMMITMENT
+      - PRICING
+      - CUSTOM_FIELD
+      - BILLING_ENTITY
+      - BILLING_PERIOD
+      - DUE_DATE
+      - PAYMENT_ACCEPTOR
+      description: The type of rule that will be applied.
+      title: ApprovalPolicyRuleType
+    ApprovalPolicySourceType:
+      type: string
+      enum:
+      - QUOTE_VERSION
+      - INVOICE
+      description: The object type of this approval policy.
+      title: ApprovalPolicySourceType
+    ApproversCreateRequestType:
+      type: string
+      enum:
+      - ALL_LEVELS_MUST_APPROVE
+      - HIGHER_LEVEL_CAN_OVERRIDE
+      - ANYONE_CAN_DECIDE
+      description: The type of approval level needs to approve it.
+      title: ApproversCreateRequestType
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    ApprovalPolicyCreateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - DEPRECATED
+      - ARCHIVED
+      description: The current status of the approval policy.
+      title: ApprovalPolicyCreateRequestStatus
+    ApprovalPolicyRule:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApprovalPolicyRuleType'
+          description: The type of rule that will be applied.
+        comparator:
+          $ref: '#/components/schemas/ApprovalPolicyRuleComparator'
+          description: Indicates how the value(s) will be compared.
+        discount:
+          $ref: '#/components/schemas/ApprovalPolicyDiscount'
+          description: The values for a discount rule.
+        commitment:
+          $ref: '#/components/schemas/ApprovalPolicyCommitment'
+          description: The values for a commitment rule.
+        pricing:
+          $ref: '#/components/schemas/ApprovalPolicyPricing'
+          description: The values for a pricing rule.
+        custom_field:
+          $ref: '#/components/schemas/ApprovalPolicyCustomField'
+          description: The values for a custom field rule.
+        billing_entity:
+          $ref: '#/components/schemas/ApprovalPolicyBillingEntity'
+          description: The values for a billing entity rule.
+        billing_period:
+          $ref: '#/components/schemas/ApprovalPolicyBillingPeriod'
+          description: The values for a billing period rule.
+        due_date:
+          $ref: '#/components/schemas/ApprovalPolicyDueDate'
+          description: The values for a due date rule.
+        payment_acceptor:
+          $ref: '#/components/schemas/ApprovalPolicyPaymentAcceptor'
+          description: The values for a payment term rule.
+      title: ApprovalPolicyRule
+    ApprovalPolicyApprovalType:
+      type: string
+      enum:
+      - GROUP
+      - LEVEL
+      description: The type of approval process which needs to be followed if this approval policy is invoked.
+      title: ApprovalPolicyApprovalType
+    ApprovalPolicyUpdateRequestApprovalType:
+      type: string
+      enum:
+      - GROUP
+      - LEVEL
+      description: The type of approval process which needs to be followed if this approval policy is invoked.
+      title: ApprovalPolicyUpdateRequestApprovalType
+    ApprovalPolicyCustomField:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the custom field that should to be evaluated.
+        value:
+          type: string
+          description: The value of the custom field that will be used for the rule.
+      title: ApprovalPolicyCustomField
+    AmountCurrency:
+      type: string
+      enum:
+      - AED
+      - AFN
+      - ALL
+      - AMD
+      - ANG
+      - AOA
+      - ARS
+      - AUD
+      - AWG
+      - AZN
+      - BAM
+      - BBD
+      - BDT
+      - BGN
+      - BHD
+      - BIF
+      - BMD
+      - BND
+      - BOB
+      - BRL
+      - BSD
+      - BTN
+      - BWP
+      - BYN
+      - BZD
+      - CAD
+      - CDF
+      - CHF
+      - CLF
+      - CLP
+      - CNY
+      - COP
+      - CRC
+      - CUC
+      - CUP
+      - CVE
+      - CZK
+      - DJF
+      - DKK
+      - DOP
+      - DZD
+      - EGP
+      - ERN
+      - ETB
+      - EUR
+      - FJD
+      - FKP
+      - GBP
+      - GEL
+      - GHS
+      - GIP
+      - GMD
+      - GNF
+      - GTQ
+      - GYD
+      - HKD
+      - HNL
+      - HRK
+      - HTG
+      - HUF
+      - IDR
+      - ILS
+      - INR
+      - IQD
+      - IRR
+      - ISK
+      - JMD
+      - JOD
+      - JPY
+      - KES
+      - KGS
+      - KHR
+      - KMF
+      - KPW
+      - KRW
+      - KWD
+      - KYD
+      - KZT
+      - LAK
+      - LBP
+      - LKR
+      - LRD
+      - LSL
+      - LYD
+      - MAD
+      - MDL
+      - MGA
+      - MKD
+      - MMK
+      - MNT
+      - MOP
+      - MRO
+      - MRU
+      - MUR
+      - MVR
+      - MWK
+      - MXN
+      - MXV
+      - MYR
+      - MZN
+      - NAD
+      - NGN
+      - NIO
+      - NOK
+      - NPR
+      - NZD
+      - OMR
+      - PAB
+      - PEN
+      - PGK
+      - PHP
+      - PKR
+      - PLN
+      - PYG
+      - QAR
+      - RON
+      - RSD
+      - RUB
+      - RWF
+      - SAR
+      - SBD
+      - SCR
+      - SDG
+      - SEK
+      - SGD
+      - SHP
+      - SLE
+      - SOS
+      - SRD
+      - SSP
+      - STN
+      - SVC
+      - SYP
+      - SZL
+      - THB
+      - TJS
+      - TMT
+      - TND
+      - TOP
+      - TRY
+      - TTD
+      - TWD
+      - TZS
+      - UAH
+      - UGX
+      - USD
+      - USN
+      - UYI
+      - UYU
+      - UZS
+      - VEF
+      - VES
+      - VND
+      - VUV
+      - WST
+      - XAF
+      - XAG
+      - XAU
+      - XBA
+      - XBB
+      - XBC
+      - XBD
+      - XCD
+      - XDR
+      - XOF
+      - XPD
+      - XPF
+      - XPT
+      - XSU
+      - XTS
+      - XUA
+      - XXX
+      - YER
+      - ZAR
+      - ZMW
+      - ZWL
+      title: AmountCurrency
+  securitySchemes:
+    API-Key:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+    JWT-Authentication:
+      type: http
+      scheme: bearer

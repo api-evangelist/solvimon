@@ -1,0 +1,1351 @@
+openapi: 3.1.0
+info:
+  title: Configuration alertRules webhooks API
+  version: 1.0.0
+servers:
+- url: https://test.api.solvimon.com
+  description: The TEST environment for our API
+- url: https://api.solvimon.com
+  description: The live environment for our API
+tags:
+- name: webhooks
+paths:
+  /v{version}/webhooks/{resourceId}:
+    get:
+      operationId: getWebhooksByResourceId
+      summary: Get a webhook by resource ID
+      description: Requires the WEBHOOK.VIEW permission.
+      tags:
+      - webhooks
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Webhook'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    delete:
+      operationId: deleteWebhooksByResourceId
+      summary: Delete an existing webhook
+      description: Requires the WEBHOOK.DELETE permission.
+      tags:
+      - webhooks
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Webhook'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    patch:
+      operationId: patchWebhooksByResourceId
+      summary: Patch an existing webhook
+      description: Requires the WEBHOOK.UPDATE permission.
+      tags:
+      - webhooks
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Webhook'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookUpdateRequest'
+  /v{version}/webhooks/{resourceId}/secret-key:
+    delete:
+      operationId: deleteWebhooksByResourceIdSecretKey
+      summary: Remove the webhook secret, this will roll the existing one
+      description: Requires the WEBHOOK.UPDATE permission.
+      tags:
+      - webhooks
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Webhook'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    patch:
+      operationId: patchWebhooksByResourceIdSecretKey
+      summary: Get a new webhook secret, this rolls the current token
+      description: Requires the WEBHOOK.UPDATE permission.
+      tags:
+      - webhooks
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Webhook'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookUpdateRequest'
+  /v{version}/webhooks/{resourceId}/send-penalty-box-payload:
+    post:
+      operationId: postWebhooksByResourceIdSendPenaltyBoxPayload
+      summary: Trigger notification for a webhook in penalty box
+      tags:
+      - webhooks
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource for which the action is posted.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookConnectionResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /v{version}/webhooks/{resourceId}/send-test:
+    post:
+      operationId: postWebhooksByResourceIdSendTest
+      summary: Test a webhook connection
+      tags:
+      - webhooks
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource for which the action is posted.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookConnectionResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /v{version}/webhooks:
+    get:
+      operationId: getWebhooks
+      summary: Get a list of all webhooks
+      description: Requires the WEBHOOK.VIEW permission.
+      tags:
+      - webhooks
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: limit
+        in: query
+        description: The amount of records shown in the list
+        required: false
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: The page which is going to be shown
+        required: false
+        schema:
+          type: integer
+      - name: order_by
+        in: query
+        description: The parameter by which the response is ordered.
+        required: false
+        schema:
+          type: string
+      - name: order_direction
+        in: query
+        description: The order direction by which the response is ordered.
+        required: false
+        schema:
+          type: string
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookResponseWrapper'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      operationId: postWebhooks
+      summary: Create a web hook
+      description: Requires the WEBHOOK.CREATE permission.
+      tags:
+      - webhooks
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Webhook'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookCreateRequest'
+  /v{version}/webhooks/actions:
+    get:
+      operationId: getWebhooksActions
+      summary: Get a list of all available actions
+      description: Requires the WEBHOOK.VIEW permission.
+      tags:
+      - webhooks
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: limit
+        in: query
+        description: The amount of records shown in the list
+        required: false
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: The page which is going to be shown
+        required: false
+        schema:
+          type: integer
+      - name: order_by
+        in: query
+        description: The parameter by which the response is ordered.
+        required: false
+        schema:
+          type: string
+      - name: order_direction
+        in: query
+        description: The order direction by which the response is ordered.
+        required: false
+        schema:
+          type: string
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookActionResponseWrapper'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /v{version}/webhooks/test-connection:
+    post:
+      operationId: postWebhooksTestConnection
+      summary: Test a webhook connection before create a webhook
+      tags:
+      - webhooks
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WebhookConnectionResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookCreateRequest'
+components:
+  schemas:
+    ApiErrorResourceType:
+      type: string
+      enum:
+      - CUSTOMER
+      - CUSTOM_FIELD
+      - PLATFORM
+      - PLATFORM_UPTODATE
+      - METER
+      - METER_VALUE
+      - METER_PROPERTY
+      - METER_VALUE_CALCULATION
+      - INGEST_DATA
+      - METER_DATA
+      - CHARGE_DATA
+      - PERSIST_DATA
+      - ADJUSTMENT_DATA
+      - PRODUCT_CATEGORY
+      - PRODUCT
+      - PRODUCT_ITEM
+      - PRICING
+      - PRICING_GROUP
+      - PRICING_ITEM
+      - PRICING_ITEM_CONFIG
+      - PRICING_PLAN_SUBSCRIPTION
+      - PRICING_PLAN_SUBSCRIPTION_GROUP
+      - PRICING_PLAN_SCHEDULE
+      - PRICING_PLAN
+      - PRICING_PLAN_VERSION
+      - QUOTE
+      - QUOTE_VERSION
+      - QUOTE_TEMPLATE
+      - API_KEY
+      - USER
+      - ROLE
+      - PROXY_USER
+      - EXTERNAL_CREDENTIALS
+      - TOKEN
+      - INVOICE
+      - E_INVOICE
+      - PDF
+      - BILLING_ENTITY
+      - FEATURE
+      - MEMBERSHIP
+      - PAYMENT
+      - PAYMENT_ACCEPTOR
+      - PAYMENT_METHOD
+      - PAYMENT_METHOD_OPTIONS
+      - PAYMENT_SCHEDULE
+      - PAYMENT_REQUEST
+      - INTEGRATION
+      - WEBHOOK
+      - FILE
+      - FILE_PROCESSING_SETTINGS
+      - TEAM
+      - DOWNLOAD_URL
+      - CSV_REPORT
+      - REPORT
+      - REPORT_GENERATE_REQUEST
+      - REPORT_CONFIGURATION
+      - REPORT_SUBSCRIPTION
+      - REPORT_DEFINITION
+      - ACCOUNT_GROUP
+      - ENTITY
+      - EVENT_TRACE
+      - EVENT_TRACE_LINK
+      - PRICING_CATEGORY
+      - CONTACT
+      - ALERT_RULE
+      - ALERT
+      - AUDIT_RECORD
+      - PORTAL_URL
+      - AUTHENTICATION_PROVIDER
+      - REPROCESS
+      - APPROVAL_POLICY
+      - APPROVAL_REQUEST
+      - BULK_ACTION
+      - COUPON
+      - PROMOTION_CODE
+      - WALLET
+      - WALLET_TYPE
+      - WALLET_GRANT
+      - WORKFLOW
+      - WORKFLOW_TRIGGER
+      - WORKFLOW_ACTION
+      - CREDIT_TYPE
+      - SIGNATURE_REQUEST
+      - ATTACHMENT
+      - DOCUMENT
+      title: ApiErrorResourceType
+    WebhookCreateRequestAuthenticationType:
+      type: string
+      enum:
+      - PASSWORD
+      - API_KEY
+      - NONE
+      description: The type of authentication used for the webhook.
+      title: WebhookCreateRequestAuthenticationType
+    WebhookAction:
+      type: object
+      properties:
+        object_type:
+          type: string
+        actions:
+          type: array
+          items:
+            type: string
+      title: WebhookAction
+    WebhookResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Webhook'
+        limit:
+          type:
+          - integer
+          - 'null'
+        page:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      - links
+      title: WebhookResponseWrapper
+    PenaltyBoxDataCreateRequest:
+      type: object
+      properties:
+        retry_count:
+          type:
+          - integer
+          - 'null'
+          description: Indicates the number of retries
+        retry_at:
+          type:
+          - string
+          - 'null'
+          description: Indicates when it will be retried
+        cause:
+          type:
+          - string
+          - 'null'
+          description: Indicates the cause why this webhook is in the penalty box
+        payload:
+          type:
+          - string
+          - 'null'
+          description: Indicates the payload sent for the webhook
+      title: PenaltyBoxDataCreateRequest
+    Webhook:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        username:
+          type:
+          - string
+          - 'null'
+          description: The username used for basic authentication.
+        password:
+          type:
+          - string
+          - 'null'
+          description: The password used for basic authentication.
+        api_header_field:
+          type:
+          - string
+          - 'null'
+          description: The name of the header field for authentication with an API key.
+        api_key:
+          type:
+          - string
+          - 'null'
+          description: The value of for authentication with an API key.
+        url:
+          type:
+          - string
+          - 'null'
+          description: The url of the webhook where webhooks will be sent.
+        included_actions:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: The actions of which a webhook will be sent.
+        excluded_actions:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: The actions of which a webhook will not be sent.
+        active:
+          type: boolean
+          description: The status of the webhook.
+        penalty_box:
+          type:
+          - string
+          - 'null'
+        secret_key:
+          type:
+          - string
+          - 'null'
+        signing_protocol:
+          type:
+          - string
+          - 'null'
+          description: The signing protocol for the webhook.
+        previous_secret_key:
+          type:
+          - string
+          - 'null'
+        previous_signing_protocol:
+          type:
+          - string
+          - 'null'
+        secret_rolled_at:
+          type:
+          - string
+          - 'null'
+          description: The instant when the secret was rolled.
+        include_previous_data:
+          type: boolean
+          description: Define whether the webhook payload include the previous status or only the current status
+        authentication_type:
+          $ref: '#/components/schemas/WebhookAuthenticationType'
+          description: The type of authentication used for the webhook.
+        penalty_box_data:
+          oneOf:
+          - $ref: '#/components/schemas/PenaltyBoxData'
+          - type: 'null'
+          description: Indicates if this webhook is in the penalty box
+        name:
+          type:
+          - string
+          - 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+      title: Webhook
+    PenaltyBoxDataUpdateRequest:
+      type: object
+      properties:
+        retry_count:
+          type:
+          - integer
+          - 'null'
+          description: Indicates the number of retries
+        retry_at:
+          type:
+          - string
+          - 'null'
+          description: Indicates when it will be retried
+        cause:
+          type:
+          - string
+          - 'null'
+          description: Indicates the cause why this webhook is in the penalty box
+        payload:
+          type:
+          - string
+          - 'null'
+          description: Indicates the payload sent for the webhook
+      title: PenaltyBoxDataUpdateRequest
+    PenaltyBoxData:
+      type: object
+      properties:
+        retry_count:
+          type:
+          - integer
+          - 'null'
+          description: Indicates the number of retries
+        retry_at:
+          type:
+          - string
+          - 'null'
+          description: Indicates when it will be retried
+        cause:
+          type:
+          - string
+          - 'null'
+          description: Indicates the cause why this webhook is in the penalty box
+        payload:
+          type:
+          - string
+          - 'null'
+          description: Indicates the payload sent for the webhook
+      title: PenaltyBoxData
+    WebhookActionResponseWrapper:
+      type: object
+      properties:
+        data:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/WebhookAction'
+      title: WebhookActionResponseWrapper
+    PaginationLinks:
+      type: object
+      properties:
+        first:
+          type:
+          - string
+          - 'null'
+        previous:
+          type:
+          - string
+          - 'null'
+        current:
+          type:
+          - string
+          - 'null'
+        next:
+          type:
+          - string
+          - 'null'
+      title: PaginationLinks
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    WebhookUpdateRequestAuthenticationType:
+      type: string
+      enum:
+      - PASSWORD
+      - API_KEY
+      - NONE
+      description: The type of authentication used for the webhook.
+      title: WebhookUpdateRequestAuthenticationType
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    WebhookConnectionResponse:
+      type: object
+      properties:
+        successful:
+          type:
+          - boolean
+          - 'null'
+        message:
+          type:
+          - string
+          - 'null'
+      title: WebhookConnectionResponse
+    WebhookUpdateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        username:
+          type:
+          - string
+          - 'null'
+          description: The username used for basic authentication.
+        password:
+          type:
+          - string
+          - 'null'
+          description: The password used for basic authentication.
+        api_header_field:
+          type:
+          - string
+          - 'null'
+          description: The name of the header field for authentication with an API key.
+        api_key:
+          type:
+          - string
+          - 'null'
+          description: The value of for authentication with an API key.
+        url:
+          type:
+          - string
+          - 'null'
+          description: The url of the webhook where webhooks will be sent.
+        included_actions:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: The actions of which a webhook will be sent.
+        excluded_actions:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: The actions of which a webhook will not be sent.
+        active:
+          type: boolean
+          description: The status of the webhook.
+        penalty_box:
+          type:
+          - string
+          - 'null'
+        secret_key:
+          type:
+          - string
+          - 'null'
+        signing_protocol:
+          type:
+          - string
+          - 'null'
+          description: The signing protocol for the webhook.
+        previous_secret_key:
+          type:
+          - string
+          - 'null'
+        previous_signing_protocol:
+          type:
+          - string
+          - 'null'
+        secret_rolled_at:
+          type:
+          - string
+          - 'null'
+          description: The instant when the secret was rolled.
+        include_previous_data:
+          type: boolean
+          description: Define whether the webhook payload include the previous status or only the current status
+        authentication_type:
+          $ref: '#/components/schemas/WebhookUpdateRequestAuthenticationType'
+          description: The type of authentication used for the webhook.
+        penalty_box_data:
+          oneOf:
+          - $ref: '#/components/schemas/PenaltyBoxDataUpdateRequest'
+          - type: 'null'
+          description: Indicates if this webhook is in the penalty box
+        name:
+          type:
+          - string
+          - 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+      title: WebhookUpdateRequest
+    WebhookCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        username:
+          type:
+          - string
+          - 'null'
+          description: The username used for basic authentication.
+        password:
+          type:
+          - string
+          - 'null'
+          description: The password used for basic authentication.
+        api_header_field:
+          type:
+          - string
+          - 'null'
+          description: The name of the header field for authentication with an API key.
+        api_key:
+          type:
+          - string
+          - 'null'
+          description: The value of for authentication with an API key.
+        url:
+          type:
+          - string
+          - 'null'
+          description: The url of the webhook where webhooks will be sent.
+        included_actions:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: The actions of which a webhook will be sent.
+        excluded_actions:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: The actions of which a webhook will not be sent.
+        active:
+          type: boolean
+          description: The status of the webhook.
+        penalty_box:
+          type:
+          - string
+          - 'null'
+        secret_key:
+          type:
+          - string
+          - 'null'
+        signing_protocol:
+          type:
+          - string
+          - 'null'
+          description: The signing protocol for the webhook.
+        previous_secret_key:
+          type:
+          - string
+          - 'null'
+        previous_signing_protocol:
+          type:
+          - string
+          - 'null'
+        secret_rolled_at:
+          type:
+          - string
+          - 'null'
+          description: The instant when the secret was rolled.
+        include_previous_data:
+          type: boolean
+          description: Define whether the webhook payload include the previous status or only the current status
+        authentication_type:
+          $ref: '#/components/schemas/WebhookCreateRequestAuthenticationType'
+          description: The type of authentication used for the webhook.
+        penalty_box_data:
+          oneOf:
+          - $ref: '#/components/schemas/PenaltyBoxDataCreateRequest'
+          - type: 'null'
+          description: Indicates if this webhook is in the penalty box
+        name:
+          type:
+          - string
+          - 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+      required:
+      - url
+      - name
+      - reference
+      title: WebhookCreateRequest
+    WebhookAuthenticationType:
+      type: string
+      enum:
+      - PASSWORD
+      - API_KEY
+      - NONE
+      description: The type of authentication used for the webhook.
+      title: WebhookAuthenticationType
+  securitySchemes:
+    API-Key:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+    JWT-Authentication:
+      type: http
+      scheme: bearer
