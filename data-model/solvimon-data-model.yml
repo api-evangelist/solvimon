@@ -1,0 +1,96 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/ (component schemas + id/reference fields)
+docs: https://docs.solvimon.com/api-docs/solvimon-api/resources
+summary: >-
+  Entity-relationship graph derived from the four Solvimon OpenAPI definitions by
+  following id/reference fields between marquee billing resources. The Customer is
+  the hub; Product Catalog -> Pricing Plans -> Subscriptions -> Invoices is the
+  core monetization spine, with Meters/Events feeding usage-based charges and
+  Wallets/Credits, Quotes and Payment Acceptors on the periphery. Common resource
+  fields: id, name, reference, object_type, description, status, created_at.
+id_prefixes:
+  # observed in docs examples and spec samples
+  customer: cust_
+  pricing_plan: ppl_
+  portal_url: purl_
+  webhook: whk_
+  webhook_event: whev_
+  request_id: reqr_
+entities:
+  - name: Customer
+    service: configuration
+    relationships:
+      - { via: parent_customer_id, to: Customer, kind: belongs_to }
+  - name: Contact
+    service: configuration
+    relationships:
+      - { via: customer_id, to: Customer, kind: belongs_to }
+  - name: Meter
+    service: configuration
+    relationships: []
+  - name: Feature
+    service: configuration
+    relationships:
+      - { via: meter_value_calculation_id, to: MeterValueCalculation, kind: belongs_to }
+  - name: PricingPlan
+    service: configuration
+    relationships:
+      - { via: customer_id, to: Customer, kind: belongs_to }
+  - name: ProductCategory
+    service: configuration
+    relationships:
+      - { via: customer_id, to: Customer, kind: belongs_to }
+  - name: Product
+    service: configuration
+    relationships:
+      - { via: category_id, to: ProductCategory, kind: belongs_to }
+      - { via: parent_product_id, to: Product, kind: belongs_to }
+      - { via: billing_entity_id, to: BillingEntity, kind: belongs_to }
+      - { via: customer_id, to: Customer, kind: belongs_to }
+  - name: ProductItem
+    service: configuration
+    relationships:
+      - { via: product_id, to: Product, kind: belongs_to }
+      - { via: meter_value_calculation_id, to: MeterValueCalculation, kind: belongs_to }
+      - { via: customer_id, to: Customer, kind: belongs_to }
+  - name: BillingEntity
+    service: configuration
+    relationships:
+      - { via: tax_id, to: TaxRegistration, kind: belongs_to }
+  - name: PaymentAcceptor
+    service: configuration
+    relationships:
+      - { via: billing_entity_id, to: BillingEntity, kind: belongs_to }
+      - { via: customer_id, to: Customer, kind: belongs_to }
+  - name: PricingPlanSubscription
+    service: configuration
+    relationships:
+      - { via: customer_id, to: Customer, kind: belongs_to }
+      - { via: billing_entity_id, to: BillingEntity, kind: belongs_to }
+      - { via: quote_version_id, to: QuoteVersion, kind: belongs_to }
+      - { via: upgraded_from_pricing_plan_subscription_id, to: PricingPlanSubscription, kind: belongs_to }
+      - { via: upgraded_to_pricing_plan_subscription_id, to: PricingPlanSubscription, kind: belongs_to }
+      - { via: payment_method_id, to: PaymentMethod, kind: belongs_to }
+      - { via: pricing_plan_subscription_group_id, to: PricingPlanSubscriptionGroup, kind: belongs_to }
+  - name: Invoice
+    service: transaction
+    relationships:
+      - { via: platform_id, to: Platform, kind: belongs_to }
+      - { via: customer_id, to: Customer, kind: belongs_to }
+      - { via: billing_entity_id, to: BillingEntity, kind: belongs_to }
+  - name: Quote
+    service: configuration
+    relationships:
+      - { via: customer_id, to: Customer, kind: belongs_to }
+      - { via: contact_id, to: Contact, kind: belongs_to }
+      - { via: owner_user_id, to: User, kind: belongs_to }
+      - { via: template_id, to: QuoteTemplate, kind: belongs_to }
+  - name: Coupon
+    service: configuration
+    relationships: []
+  - name: Wallet
+    service: configuration
+    relationships:
+      - { via: wallet_type_id, to: WalletType, kind: belongs_to }
+      - { via: customer_id, to: Customer, kind: belongs_to }

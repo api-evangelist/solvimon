@@ -1,0 +1,41 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.solvimon.com/sdk/frontend-components/overview
+docs: https://docs.solvimon.com/sdk/frontend-components/quickstart
+summary: >-
+  The Solvimon Frontend SDK embeds live billing UI directly in a product: full
+  screens and single-responsibility components rendered against Solvimon data for
+  one customer. Every element mounts with a short-lived portalObject minted by the
+  backend, so the secret API key never reaches the browser. Distinct from the
+  server-side SDKs in packages/.
+loader:
+  package: "@solvimon/solvimon-web"
+  entry: "@solvimon/solvimon-web/core"
+  factory: createSolvimonCore
+  mount_screen: createScreen
+  session_token: portalObject (PORTAL_URL resource; minted via POST /v1/portal-urls)
+  environments: [TEST, LIVE]
+  theming: branding.colors (primary/secondary), locale
+  events:
+    type: action-request DOM custom events
+    actions: [view-invoice, pay-invoice, view-subscription-details, cancel-subscription, renew-subscription, edit-billing-information, add-payment-method]
+families:
+  - family: Screens
+    description: Full-page compositions mounted as a single unit.
+    components:
+      - { name: checkout, renders: A full checkout flow for initiating a subscription }
+      - { name: customer-overview, renders: A customer's active subscriptions and payment methods }
+  - family: UI Components
+    description: Single-responsibility widgets you compose yourself.
+    components:
+      - { name: invoices-list, renders: Paginated list of invoices with pay and view actions }
+      - { name: invoice, renders: A single invoice with line items, billing info, payment attempts }
+      - { name: invoice-details, renders: Invoice details by ID }
+      - { name: subscriptions-list, renders: Subscriptions with cancel, renew and view actions }
+      - { name: subscription-schedules, renders: A customer's subscription schedules }
+      - { name: billing-information, renders: Customer billing address and details }
+      - { name: billing-information-form, renders: Editable billing information form }
+      - { name: customer-payment-methods, renders: Saved payment methods with add and manage actions }
+      - { name: payment-method-form, renders: Add/edit a payment method }
+      - { name: customer-wallet-balances, renders: Customer wallet and credit balances }
+      - { name: payment-history, renders: Payment attempts for a specific invoice }

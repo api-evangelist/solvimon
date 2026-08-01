@@ -1,0 +1,125 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.solvimon.com/platform-guides/for-developers/introduction
+docs:
+  authentication: https://docs.solvimon.com/api-docs/solvimon-api/authentication
+  idempotency: https://docs.solvimon.com/platform-guides/for-developers/idempotency
+  query_parameters: https://docs.solvimon.com/platform-guides/for-developers/query-parameters
+  expanding_responses: https://docs.solvimon.com/platform-guides/for-developers/expanding-responses
+  errors: https://docs.solvimon.com/platform-guides/for-developers/errors
+  standardisation: https://docs.solvimon.com/api-docs/solvimon-api/standardisation
+summary: >-
+  Cross-cutting request/response semantics for the Solvimon billing platform,
+  captured from the developer docs and the four OpenAPI definitions (Configuration,
+  Transaction, Identity, Event APIs). All resources share a common envelope,
+  header-based idempotency, page/limit pagination and a custom typed error object.
+
+authentication:
+  style: api-key-header
+  header: X-API-KEY
+  notes: >-
+    Every account has a secret API key sent in the X-API-KEY header. A JWT bearer
+    scheme (JWT-Authentication) is also defined for token-based access, and the
+    Identity API mints tokens via /v1/oauth/token, /v1/oauth/refresh-token,
+    /v1/oauth/sandbox-token and /v1/oauth/demo-token. Frontend SDK sessions use a
+    short-lived portal-object token so the secret key never reaches the browser.
+  cross_reference: authentication/solvimon-authentication.yml
+
+idempotency:
+  supported: true
+  mechanisms:
+    - name: Idempotency-Key header
+      applies_to: all endpoints except event ingestion
+      header: Idempotency-Key
+      generation: sender-provided; V4 UUID recommended
+      max_length: 255
+      retention: 48 hours
+      replay_signal_header: Idempotent-Replayed
+      retryable_signal_header: Idempotency-Retryable
+      recommended_on: POST requests
+    - name: Reference-based idempotency (events)
+      applies_to: event ingestion endpoint only
+      field: reference
+      behavior: >-
+        Duplicate events sharing a reference each return 201 Created, but only one
+        takes effect; a webhook can notify on duplicates. Opt-in.
+  retry_guidance:
+    - status: 2xx
+      action: safe to retry with same key; stored response is replayed
+    - status: 400
+      action: safe to retry with same key after correcting the request
+    - status: 409
+      action: safe to retry; returns the same 409 conflict (key reused with changed body)
+    - status: 422
+      action: safe to retry; previous request still processing (concurrent)
+    - status: 500
+      action: retry only if Idempotency-Retryable header is true
+    - status: 503
+      action: always retryable with same key (Transient-error header may be present)
+
+pagination:
+  style: page-number
+  request_params:
+    page: { default: 1 }
+    limit: { default: 50 }
+  response_fields: [data, page, limit, total_number_of_pages, links]
+  links: [first, previous, current, next]
+  paginated_resources:
+    - /ingest/meter-data
+    - /customers
+    - /invoices
+    - /contacts
+    - /pricing-plans
+    - /pricing-plan-subscriptions
+
+filtering:
+  supported: true
+  style: query-parameter
+  value_types: [string, list-of-strings, date-range]
+  date_range_syntax: "field=[startISO8601,endISO8601]"
+
+ordering:
+  supported: true
+  params:
+    order_by: field name
+    order_direction: { values: [asc, desc], default: desc }
+  orderable_resources:
+    /pricing-plan-subscriptions: [reference, pricing_plan_name, start_at, billing_currency, billing_period, created_at, updated_at, type]
+    /invoices: [invoice_number, invoice_date, due_date, invoice_amount_including_tax, status, created_at]
+    /quotes: [customer_id, owner_user_id, status, created_at]
+    /customers: [reference, email, created_at, status]
+
+field_expansion:
+  supported: true
+  docs: https://docs.solvimon.com/platform-guides/for-developers/expanding-responses
+
+request_tracing:
+  request_id_header: X-REQUEST-ID
+  format_example: reqr_HwDeRw0dFUrJrjCKk31w
+  guidance: provide the value to Solvimon support for troubleshooting
+
+versioning:
+  scheme: uri-path
+  pattern: /v{version}/...
+  current: v1
+  cross_reference: lifecycle/solvimon-lifecycle.yml
+
+error_envelope:
+  media_type: application/json
+  format: custom
+  fields:
+    type: enum [API_ERROR, INVALID_REQUEST]
+    code: programmatic error code (see errors/solvimon-error-codes.yml)
+    field: optional; the invalid field path
+    message: human-readable explanation
+  cross_reference: errors/solvimon-error-codes.yml
+
+common_resource_fields: [id, name, reference, object_type, description, status, created_at]
+
+standardisation:
+  dates: ISO 8601 strings, no milliseconds (e.g. 2023-10-12T06:47:00Z)
+  timezones: IANA name / GMT-UTC offset / abbreviation
+  country_codes: ISO 3166-1 alpha-2
+
+webhooks:
+  cross_reference: webhooks/solvimon-webhooks.yml

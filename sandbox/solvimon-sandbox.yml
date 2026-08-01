@@ -1,0 +1,35 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.solvimon.com/api-docs/solvimon-api/base-url
+docs:
+  - https://docs.solvimon.com/mcp-server/claude-integration
+  - https://docs.solvimon.com/sdk/frontend-components/quickstart
+summary: >-
+  Solvimon separates test (sandbox) and production behind distinct API hosts and a
+  per-request/session environment flag. Test API keys are issued from Desk
+  (Settings -> API keys) and only work against the test host and test MCP endpoint.
+  A read-only demo sandbox is linked from the docs. No published test card numbers
+  (Solvimon is PSP-agnostic; card testing is delegated to the connected PSP such as
+  Stripe/Adyen/Checkout.com).
+environments:
+  test:
+    api_base_url: https://test.api.solvimon.com/v1
+    mcp_endpoint: https://test.mcp.solvimon.com
+    sdk_environment_flag: TEST
+    key_source: Desk -> Settings -> API keys (test key)
+    notes: Live keys are rejected on the test MCP endpoint.
+  live:
+    api_base_url: https://[dedicated].solvimon.com/v1
+    dedicated_host: true
+    production_access: enabled per account by Solvimon
+tokens:
+  identity_api:
+    - operation: openapi/solvimon-identity-api-openapi.yml#postOauthSandboxToken
+      path: /v1/oauth/sandbox-token
+    - operation: openapi/solvimon-identity-api-openapi.yml#postOauthDemoToken
+      path: /v1/oauth/demo-token
+demo:
+  read_only_demo: linked from docs top nav ("Demo sandbox (read-only)")
+event_idempotency_note: >-
+  In test, event ingestion can be replayed safely using the reference field
+  (reference-based idempotency); other resources use the Idempotency-Key header.

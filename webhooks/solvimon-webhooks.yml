@@ -1,0 +1,78 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.solvimon.com/platform-guides/for-developers/webhooks
+spec_type: Webhooks
+summary: >-
+  Solvimon delivers machine-to-machine webhooks with at-least-once delivery and
+  ordering guarantees. Events are configured per resource action and secured with
+  an HMAC-SHA256 payload signature. There is no published AsyncAPI document; this
+  is the captured webhook catalog. Delivery attempts are inspectable and resendable
+  via the webhook-events API.
+delivery:
+  guarantee: at-least-once, ordered
+  ack: HTTP 2XX within 10 seconds (200/201/202)
+  retries_schedule: [2m, 4m, 8m, 16m, 32m, 1h, 2h, 4h, 8h, "then every 8h"]
+  give_up_after: 7 days
+payload_structure:
+  fields:
+    created_at: when the webhook event was created
+    type: the event type (resource + action, e.g. INVOICE.CREATED)
+    original_request_id: optional id of the request that preceded this event
+    environment: originating environment (TEST/LIVE)
+    data: the resource data
+actions: [CREATED, UPDATED, DELETE]
+resources:
+  - CUSTOMER
+  - PLATFORM
+  - PRICING_PLAN
+  - PRICING_PLAN_VERSION
+  - PRICING_PLAN_SUBSCRIPTION
+  - PRICING_PLAN_SCHEDULE
+  - QUOTE
+  - QUOTE_VERSION
+  - CONTACT
+  - ALERT_RULE
+  - METER
+  - METER_PROPERTY
+  - METER_VALUE
+  - METER_VALUE_CALCULATION
+  - BILLABLE_METRIC
+  - PRODUCT
+  - PRODUCT_ITEM
+  - PRODUCT_CATEGORY
+  - BILLING_ENTITY
+  - FEATURE
+  - PAYMENT_ACCEPTOR
+  - INVOICE
+  - FILE_PROCESSING_SETTINGS
+  - WEBHOOK
+  - FILE
+configuration:
+  managed_via: API (Desk coming soon)
+  create_operation: openapi/solvimon-configuration-api-openapi.yml#postWebhooks
+  options: [included_actions, excluded_actions, active]
+  endpoint_recommendation: HTTPS with TLSv1.2 or TLSv1.3
+security:
+  endpoint_auth:
+    - api_key: stored key, sent in X-API-KEY (or a custom header)
+    - basic_auth: username/password combination
+  signature:
+    algorithm: HMAC-SHA256
+    headers:
+      X-PAYLOAD-SIGNATURE-TIMESTAMP: ISO8601 time the signature was created
+      X-PAYLOAD-SIGNATURE: one or more version=signature pairs, e.g. v1=6DEA8E...
+    signed_content: "{timestamp}.{payload}"
+    recommended_tolerance: reject webhooks older than 5 minutes
+    secret_rotation: >-
+      Rolling the secret keeps signatures valid for both the new and previous
+      secret for up to 24 hours.
+    secret_operation: openapi/solvimon-configuration-api-openapi.yml#patchWebhooksByResourceIdSecretKey
+  test_delivery: openapi/solvimon-configuration-api-openapi.yml#postWebhooksByResourceIdSendTest
+webhook_events_api:
+  description: inspect and replay individual webhook deliveries (docs; endpoints newer than the captured spec)
+  docs: https://docs.solvimon.com/platform-guides/for-developers/webhook-events
+  statuses: [PENDING, SUCCEEDED, FAILED]
+  list_endpoint: GET /v1/webhook-events
+  get_endpoint: GET /v1/webhook-events/{id}
+  resend_endpoint: POST /v1/webhook-events/{id}/resend
+  resend_permission: WEBHOOK_EVENT_RESEND

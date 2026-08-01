@@ -1,0 +1,26 @@
+generated: '2026-07-21'
+method: searched
+summary: >-
+  Solvimon's docs host publishes an RFC 9727 API catalog (/.well-known/api-catalog)
+  that links the four OpenAPI definitions. No security.txt, OpenID/OAuth discovery
+  or ai-plugin.json were found on the docs, marketing or API hosts.
+hosts_probed: [docs.solvimon.com, www.solvimon.com, test.api.solvimon.com]
+documents:
+  - path: /.well-known/api-catalog
+    host: https://docs.solvimon.com
+    status: 200
+    content_type: application/linkset+json (RFC 9727)
+    file: solvimon-api-catalog.json
+    links:
+      - openapi/solvimon-configuration-api-openapi.yml
+      - openapi/solvimon-identity-api-openapi.yml
+      - openapi/solvimon-transaction-api-openapi.yml
+      - openapi/solvimon-event-api-openapi.yml
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404

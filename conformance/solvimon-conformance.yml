@@ -1,0 +1,39 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/ + docs (developer conventions)
+summary: >-
+  Cross-cutting standards conformance derived from the four OpenAPI 3.1 definitions
+  and the developer docs. Solvimon uses API-key + JWT bearer auth (no OAuth2 scope
+  scheme, no OIDC discovery), a custom error envelope (not RFC 9457), header-based
+  idempotency, and an RFC 9727 API catalog.
+standards:
+  - id: openapi-3.1
+    conforms: true
+    evidence: all four service definitions declare openapi 3.1.0
+  - id: rfc9727-api-catalog
+    conforms: true
+    evidence: /.well-known/api-catalog served as application/linkset+json
+  - id: idempotency
+    conforms: true
+    evidence: Idempotency-Key header + reference-based idempotency for events
+  - id: pagination
+    conforms: true
+    evidence: page/limit query params with data/links envelope
+  - id: webhooks-hmac
+    conforms: true
+    evidence: HMAC-SHA256 signed webhooks (X-PAYLOAD-SIGNATURE)
+  - id: iso8601-dates
+    conforms: true
+    evidence: docs standardisation requires ISO 8601 timestamps
+  - id: iso3166-country-codes
+    conforms: true
+    evidence: country codes follow ISO 3166-1 alpha-2
+  - id: oauth2
+    conforms: false
+    evidence: JWT bearer scheme only; no oauth2 securityScheme with scopes
+  - id: openid-connect
+    conforms: false
+    evidence: no /.well-known/openid-configuration
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: custom error envelope (type/code/field/message), not application/problem+json

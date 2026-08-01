@@ -1,0 +1,52 @@
+generated: '2026-07-21'
+method: searched
+source: https://docs.solvimon.com/platform-guides/for-developers/errors
+format: custom
+summary: >-
+  Solvimon returns conventional HTTP status codes and, for handled 4xx errors, a
+  typed error object. This is the API-level error registry (non-payments sibling of
+  a decline-code table; Solvimon is PSP-agnostic and does not publish card decline
+  codes of its own). Envelope fields: type, code, field (optional), message.
+envelope:
+  fields:
+    type:
+      values: [API_ERROR, INVALID_REQUEST]
+      meaning: >-
+        INVALID_REQUEST = the submitted request was invalid; API_ERROR = processing
+        failed due to internal issues or other non-recoverable problems.
+    code: programmatic error code (see codes[])
+    field: optional path of the invalid field, e.g. schedules.0.included_volumes.0.number
+    message: human-readable explanation
+  request_id_header: X-REQUEST-ID
+  example:
+    type: INVALID_REQUEST
+    code: INVALID_FIELD
+    field: schedules.0.included_volumes.0.number
+    message: value required, but not set
+http_status_codes:
+  - { status: 200, meaning: OK }
+  - { status: 201, meaning: Created }
+  - { status: 400, meaning: Bad Request }
+  - { status: 401, meaning: Your identity could not be verified }
+  - { status: 403, meaning: Your access rights are insufficient }
+  - { status: 409, meaning: Conflict }
+  - { status: 500, meaning: Internal Server Error }
+codes:
+  - { code: RESOURCE_NOT_FOUND, description: The requested resource is not found }
+  - { code: RESOURCES_NOT_FOUND, description: The requested resources are not found }
+  - { code: UNABLE_TO_PROCESS_INSTRUCTIONS, description: The payload of the request can not be processed }
+  - { code: UNSUPPORTED_MEDIA_TYPE, description: The Content-Type of the request is not set or is incorrect }
+  - { code: RESOURCE_ALREADY_EXISTS, description: There is an existing resource with the provided identifier }
+  - { code: COULD_NOT_CREATE_RESOURCE, description: The resource could not be created }
+  - { code: COULD_NOT_UPDATE_RESOURCE, description: The resource could not be updated }
+  - { code: COULD_NOT_DELETE_RESOURCE, description: The resource could not be deleted }
+  - { code: MISSING_VERSION, description: The version in the path is missing }
+  - { code: UNSUPPORTED_VERSION, description: The version in the path is not supported }
+  - { code: MISSING_ID, description: The id is missing from the path }
+  - { code: INVALID_ID, description: The id from the path is not valid }
+  - { code: MISSING_REFERENCE, description: The reference is missing from the request }
+  - { code: MISSING_FIELD, description: A mandatory field is missing from the request }
+  - { code: INVALID_FIELD, description: A field from the request is not valid }
+  - { code: INTERNAL_ERROR, description: An internal error has occurred }
+  - { code: UNAUTHORISED, description: The credentials provided are invalid }
+  - { code: USER_NOT_ALLOWED, description: The user has no permission to make the request }

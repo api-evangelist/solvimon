@@ -1,0 +1,34 @@
+generated: '2026-07-21'
+method: generated
+source: openapi/ + docs conventions/idempotency/errors
+provider_published_skill:
+  name: solvimon
+  install: npx skills add https://docs.solvimon.com
+  standard: https://agentskills.io
+  description: >-
+    Solvimon publishes an official 'solvimon' Agent Skill (installable via the
+    skills.sh CLI) covering the API surface across all four domains, status
+    lifecycles, the meter-to-invoice setup workflow, event ingestion semantics and
+    common pitfalls. The skills below are API-Evangelist-authored, grounded in
+    verified operationIds, to complement it.
+skills:
+  - file: solvimon-create-customer-and-invoice.md
+    name: Create a customer and issue an invoice
+    api: openapi/solvimon-configuration-api-openapi.yml, openapi/solvimon-transaction-api-openapi.yml
+    operations: [postCustomers, getCustomersByResourceIdOrReference, postInvoices]
+  - file: solvimon-ingest-usage-events.md
+    name: Ingest usage events against a meter
+    api: openapi/solvimon-event-api-openapi.yml, openapi/solvimon-configuration-api-openapi.yml
+    operations: [postMeters, postEventsIngest, postIngestMeterData]
+  - file: solvimon-price-and-subscribe.md
+    name: Create a pricing plan and subscribe a customer
+    api: openapi/solvimon-configuration-api-openapi.yml
+    operations: [postPricingPlans, postPricingPlanSubscriptions]
+  - file: solvimon-hosted-checkout.md
+    name: Mint a hosted checkout / portal session
+    api: openapi/solvimon-transaction-api-openapi.yml
+    operations: [postPortalUrls, postPortalUrlsByResourceIdRevoke]
+  - file: solvimon-configure-webhooks.md
+    name: Configure and secure a webhook
+    api: openapi/solvimon-configuration-api-openapi.yml
+    operations: [postWebhooks, patchWebhooksByResourceIdSecretKey, postWebhooksByResourceIdSendTest]

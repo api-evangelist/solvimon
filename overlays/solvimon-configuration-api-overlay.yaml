@@ -1,0 +1,18 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Solvimon Configuration API
+  version: 1.0.0
+extends: openapi/solvimon-configuration-api-openapi.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-enriched: '2026-07-21'
+    x-apievangelist-provider: solvimon
+    x-apievangelist-auth: X-API-KEY header (apiKey) + JWT bearer
+    x-apievangelist-idempotency: Idempotency-Key header (48h); reference-based for
+      events
+    x-apievangelist-conventions: conventions/solvimon-conventions.yml
+    x-apievangelist-errors: errors/solvimon-error-codes.yml
+- target: $.info
+  update:
+    x-apievangelist-source: https://docs.solvimon.com/.well-known/api-catalog
