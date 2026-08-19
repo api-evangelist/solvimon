@@ -3,12 +3,10 @@ method: searched
 status: published
 source: https://docs.solvimon.com/platform-guides/for-developers/developing-for-solvimon
 docs: https://docs.solvimon.com/mcp-server/claude-integration
-summary: >-
-  Solvimon publishes an official hosted MCP server that exposes its billing API as
-  13 tools, letting an AI agent build pricing plans, meters, customers,
-  subscriptions and hosted checkout links and query analytics in plain language.
-  The test endpoint is open to any account with a test API key; production access
-  is enabled per account.
+summary: Solvimon publishes an official hosted MCP server that exposes its billing API as 13 tools, letting
+  an AI agent build pricing plans, meters, customers, subscriptions and hosted checkout links and query
+  analytics in plain language. The test endpoint is open to any account with a test API key; production
+  access is enabled per account.
 server:
   name: solvimon
   transport: http
@@ -19,8 +17,9 @@ server:
     header: X-API-KEY
     note: test API key for test endpoint; live keys rejected there
   install:
-    claude_code: 'claude mcp add solvimon-test --transport http https://test.mcp.solvimon.com --header "X-API-KEY:<your-api-key>"'
-    remote_bridge: 'npx mcp-remote https://test.mcp.solvimon.com --header "X-API-KEY:<key>"'
+    claude_code: claude mcp add solvimon-test --transport http https://test.mcp.solvimon.com --header
+      "X-API-KEY:<your-api-key>"
+    remote_bridge: npx mcp-remote https://test.mcp.solvimon.com --header "X-API-KEY:<key>"
   learn_more: https://www.solvimon.com/forai/mcp
 tool_input_pattern:
   action: list | get | create | update | tool-specific
@@ -29,29 +28,36 @@ tool_input_pattern:
   body: request body (same shape as REST API)
   filter: query params for list actions
 tools:
-  - name: get_solvimon_account
-    description: Verify the API key and list billing entities. Call first.
-  - name: manage_billing_entities
-    description: Billing entities and tax registrations.
-  - name: manage_product_catalog
-    description: Product categories, products, product items, features.
-  - name: create_meter_setup
-    description: Shortcut to create a meter, meter value and calculation in one call.
-  - name: manage_metering
-    description: Meters, event ingestion, meter data.
-  - name: manage_pricing_plans
-    description: Pricing plans and plan versions.
-  - name: manage_customers
-    description: Customers, including search, GDPR forget, entitlements.
-  - name: manage_subscriptions
-    description: Subscriptions and subscription groups.
-  - name: create_checkout_link
-    description: Hosted checkout URL for self-serve signup.
-  - name: manage_invoices
-    description: Invoices, payments, payment schedules.
-  - name: manage_wallets_credits
-    description: Credit types, wallet types, wallets.
-  - name: analytics
-    description: Read-only queries on dashboard data (revenue, MRR, churn, usage) across 10 datasets.
-  - name: solvimon_api_call
-    description: Raw API passthrough for anything not covered by the other tools.
+- name: get_solvimon_account
+  description: Verify the API key and list billing entities. Call first.
+- name: manage_billing_entities
+  description: Billing entities and tax registrations.
+- name: manage_product_catalog
+  description: Product categories, products, product items, features.
+- name: create_meter_setup
+  description: Shortcut to create a meter, meter value and calculation in one call.
+- name: manage_metering
+  description: Meters, event ingestion, meter data.
+- name: manage_pricing_plans
+  description: Pricing plans and plan versions.
+- name: manage_customers
+  description: Customers, including search, GDPR forget, entitlements.
+- name: manage_subscriptions
+  description: Subscriptions and subscription groups.
+- name: create_checkout_link
+  description: Hosted checkout URL for self-serve signup.
+- name: manage_invoices
+  description: Invoices, payments, payment schedules.
+- name: manage_wallets_credits
+  description: Credit types, wallet types, wallets.
+- name: analytics
+  description: Read-only queries on dashboard data (revenue, MRR, churn, usage) across 10 datasets.
+- name: solvimon_api_call
+  description: Raw API passthrough for anything not covered by the other tools.
+deployment:
+  mode: remote
+  endpoint: https://test.mcp.solvimon.com
+  verified: probed
+  probe: wall
+  checked: '2026-08-12'
+  source: catalog MCP census

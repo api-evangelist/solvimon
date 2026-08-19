@@ -1,0 +1,352 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Configuration alertRules workflows API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "workflows",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get all workflows",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://test.api.solvimon.com/v:version/workflows",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The amount of records shown in the list"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page which is going to be shown"
+              },
+              {
+                "name": "order_by",
+                "value": "",
+                "type": "query",
+                "description": "The parameter by which the response is ordered."
+              },
+              {
+                "name": "order_direction",
+                "value": "",
+                "type": "query",
+                "description": "The order direction by which the response is ordered."
+              }
+            ]
+          },
+          "docs": "Returns paginated workflow definitions for the authenticated platform. Use this to inspect workflow definitions, their target use cases, and their current status. Requires the WORKFLOW.VIEW permission."
+        },
+        {
+          "info": {
+            "name": "Create a workflow",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/workflows",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a workflow definition. Set the target type, provide the corresponding configuration block, and use workflow triggers later to execute the workflow for a concrete resource instance. Requires the WORKFLOW.CREATE permission."
+        },
+        {
+          "info": {
+            "name": "Get workflow by ID or reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://test.api.solvimon.com/v:version/workflows/:resourceIdOrReference",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceIdOrReference",
+                "value": "",
+                "type": "path",
+                "description": "The ID or reference of the resource."
+              }
+            ]
+          },
+          "docs": "Fetches a single workflow definition using either its resource ID or reference. Requires the WORKFLOW.VIEW permission."
+        },
+        {
+          "info": {
+            "name": "Update a workflow by ID or reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://test.api.solvimon.com/v:version/workflows/:resourceIdOrReference",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceIdOrReference",
+                "value": "",
+                "type": "path",
+                "description": "The ID or reference of the resource."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates workflow fields. Requires the WORKFLOW.UPDATE permission."
+        },
+        {
+          "info": {
+            "name": "Deactivate a workflow",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/workflows/:resourceIdOrReference/deactivate",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceIdOrReference",
+                "value": "",
+                "type": "path",
+                "description": "The ID or reference of the resource."
+              }
+            ]
+          },
+          "docs": "Transitions a workflow to INACTIVE. so it's stops matching and executing the workflow without archiving it. Requires the WORKFLOW.UPDATE permission."
+        },
+        {
+          "info": {
+            "name": "Activate a workflow",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/workflows/:resourceIdOrReference/activate",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceIdOrReference",
+                "value": "",
+                "type": "path",
+                "description": "The ID or reference of the resource."
+              }
+            ]
+          },
+          "docs": "Transitions a workflow to ACTIVE so it can be matched by workflow trigger creation. Requires the WORKFLOW.UPDATE permission."
+        },
+        {
+          "info": {
+            "name": "Archive a workflow",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/workflows/:resourceIdOrReference/archive",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceIdOrReference",
+                "value": "",
+                "type": "path",
+                "description": "The ID or reference of the resource."
+              }
+            ]
+          },
+          "docs": "Transitions a workflow to ARCHIVED. Archived workflows cannot be updated again. Requires the WORKFLOW.UPDATE permission."
+        },
+        {
+          "info": {
+            "name": "Search workflows",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/workflows/search",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "expand[]",
+                "value": "",
+                "type": "query",
+                "description": "The id fields of the resources that are going to be expanded."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The amount of records shown in the list"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page which is going to be shown"
+              },
+              {
+                "name": "order_by",
+                "value": "",
+                "type": "query",
+                "description": "The parameter by which the response is ordered."
+              },
+              {
+                "name": "order_direction",
+                "value": "",
+                "type": "query",
+                "description": "The order direction by which the response is ordered."
+              },
+              {
+                "name": "statuses[]",
+                "value": "",
+                "type": "query",
+                "description": "Filter workflows by one or more statuses such as ACTIVE, INACTIVE, DRAFT, or ARCHIVED."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Searches workflow definitions with the provided search body and optional query filters. Requires the WORKFLOW.VIEW permission."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

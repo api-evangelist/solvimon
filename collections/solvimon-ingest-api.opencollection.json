@@ -1,0 +1,730 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Configuration alertRules ingest API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "ingest",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a list of events for provided filters",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://test.api.solvimon.com/v:version/ingest/meter-data",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "customer_id",
+                "value": "",
+                "type": "query",
+                "description": "The resource id of the customer."
+              },
+              {
+                "name": "reference",
+                "value": "",
+                "type": "query",
+                "description": "The reference of the ingest."
+              },
+              {
+                "name": "meter_id",
+                "value": "",
+                "type": "query",
+                "description": "The resource id of the meter."
+              },
+              {
+                "name": "deleted",
+                "value": "",
+                "type": "query",
+                "description": "Filter the response by deleted field value."
+              },
+              {
+                "name": "processed_details_type",
+                "value": "",
+                "type": "query",
+                "description": "Filter the response by processing_details.type value. Ex.: NOT_MATCHED, DUPLICATE"
+              },
+              {
+                "name": "expand[]",
+                "value": "",
+                "type": "query",
+                "description": "The id fields of the resources that are going to be expanded."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The amount of records shown in the list"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page which is going to be shown"
+              }
+            ]
+          },
+          "docs": "Requires the METER_DATA.VIEW permission."
+        },
+        {
+          "info": {
+            "name": "Ingest an event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/ingest/meter-data",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "cost_prediction",
+                "value": "",
+                "type": "query",
+                "description": "The option to return cost prediction."
+              },
+              {
+                "name": "meter_validation",
+                "value": "",
+                "type": "query",
+                "description": "The validation strategy applied to the referenced meter. STATIC (the default) requires the meter, its values and properties to already exist. DYNAMIC creates the meter and its missing values/properties/enum values on the fly during ingest."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the METER_DATA.INGEST permission."
+        },
+        {
+          "info": {
+            "name": "Mark an event as deleted",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/ingest/meter-data/delete",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the METER_DATA.DELETE permission."
+        },
+        {
+          "info": {
+            "name": "Get an event by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://test.api.solvimon.com/v:version/ingest/meter-data/:resourceId",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource to be requested."
+              }
+            ]
+          },
+          "docs": "Requires the METER_DATA.VIEW permission."
+        },
+        {
+          "info": {
+            "name": "Get the event trace history of the event.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://test.api.solvimon.com/v:version/ingest/meter-data/:resourceId/event_trace",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource to be requested."
+              },
+              {
+                "name": "expand[]",
+                "value": "",
+                "type": "query",
+                "description": "The id fields of the resources that are going to be expanded."
+              },
+              {
+                "name": "cost_prediction",
+                "value": "",
+                "type": "query",
+                "description": "The option to return cost prediction."
+              }
+            ]
+          },
+          "docs": "Requires the METER_DATA.EVENT_TRACE.VIEW permission."
+        },
+        {
+          "info": {
+            "name": "Mark an event as deleted",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/ingest/meter-data/:resourceId/delete",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource for which the action is posted."
+              }
+            ]
+          },
+          "docs": "Requires the METER_DATA.DELETE permission."
+        },
+        {
+          "info": {
+            "name": "Ingest a list of meter events",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/ingest/meter-datas",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "cost_prediction",
+                "value": "",
+                "type": "query",
+                "description": "The option to return cost prediction."
+              },
+              {
+                "name": "meter_validation",
+                "value": "",
+                "type": "query",
+                "description": "The validation strategy applied to the referenced meter. STATIC (the default) requires the meter, its values and properties to already exist. DYNAMIC creates the meter and its missing values/properties/enum values on the fly during ingest."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the METER_DATA.INGEST permission."
+        },
+        {
+          "info": {
+            "name": "Ingest persist events",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/ingest/persist-data",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the METER_DATA.INGEST permission."
+        },
+        {
+          "info": {
+            "name": "Get a list of events for provided filters",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://test.api.solvimon.com/v:version/events",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "customer_id",
+                "value": "",
+                "type": "query",
+                "description": "The resource id of the customer."
+              },
+              {
+                "name": "reference",
+                "value": "",
+                "type": "query",
+                "description": "The reference of the ingest."
+              },
+              {
+                "name": "meter_id",
+                "value": "",
+                "type": "query",
+                "description": "The resource id of the meter."
+              },
+              {
+                "name": "deleted",
+                "value": "",
+                "type": "query",
+                "description": "Filter the response by deleted field value."
+              },
+              {
+                "name": "processed_details_type",
+                "value": "",
+                "type": "query",
+                "description": "Filter the response by processing_details.type value. Ex.: NOT_MATCHED, DUPLICATE"
+              },
+              {
+                "name": "expand[]",
+                "value": "",
+                "type": "query",
+                "description": "The id fields of the resources that are going to be expanded."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The amount of records shown in the list"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page which is going to be shown"
+              }
+            ]
+          },
+          "docs": "Requires the METER_DATA.VIEW permission."
+        },
+        {
+          "info": {
+            "name": "Mark an event as deleted",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/events/delete",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the METER_DATA.DELETE permission."
+        },
+        {
+          "info": {
+            "name": "Ingest an event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/events/ingest",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "cost_prediction",
+                "value": "",
+                "type": "query",
+                "description": "The option to return cost prediction."
+              },
+              {
+                "name": "meter_validation",
+                "value": "",
+                "type": "query",
+                "description": "The validation strategy applied to the referenced meter. STATIC (the default) requires the meter, its values and properties to already exist. DYNAMIC creates the meter and its missing values/properties/enum values on the fly during ingest."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the METER_DATA.INGEST permission."
+        },
+        {
+          "info": {
+            "name": "Ingest a list of meter events",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/events/ingest-list",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "cost_prediction",
+                "value": "",
+                "type": "query",
+                "description": "The option to return cost prediction."
+              },
+              {
+                "name": "meter_validation",
+                "value": "",
+                "type": "query",
+                "description": "The validation strategy applied to the referenced meter. STATIC (the default) requires the meter, its values and properties to already exist. DYNAMIC creates the meter and its missing values/properties/enum values on the fly during ingest."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the METER_DATA.INGEST permission."
+        },
+        {
+          "info": {
+            "name": "Calculate the costs for an event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/events/calculate",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "cost_prediction",
+                "value": "",
+                "type": "query",
+                "description": "The option to return cost prediction."
+              },
+              {
+                "name": "meter_validation",
+                "value": "",
+                "type": "query",
+                "description": "The validation strategy applied to the referenced meter. STATIC (the default) requires the meter, its values and properties to already exist. DYNAMIC creates the meter and its missing values/properties/enum values on the fly during ingest."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the METER_DATA.INGEST permission."
+        },
+        {
+          "info": {
+            "name": "Get an event by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://test.api.solvimon.com/v:version/events/:resourceId",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource to be requested."
+              }
+            ]
+          },
+          "docs": "Requires the METER_DATA.VIEW permission."
+        },
+        {
+          "info": {
+            "name": "Get the event trace history of the event.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://test.api.solvimon.com/v:version/events/:resourceId/event_trace",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource to be requested."
+              },
+              {
+                "name": "expand[]",
+                "value": "",
+                "type": "query",
+                "description": "The id fields of the resources that are going to be expanded."
+              },
+              {
+                "name": "cost_prediction",
+                "value": "",
+                "type": "query",
+                "description": "The option to return cost prediction."
+              }
+            ]
+          },
+          "docs": "Requires the METER_DATA.EVENT_TRACE.VIEW permission."
+        },
+        {
+          "info": {
+            "name": "Mark an event as deleted",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/events/:resourceId/delete",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource for which the action is posted."
+              }
+            ]
+          },
+          "docs": "Requires the METER_DATA.DELETE permission."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

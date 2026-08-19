@@ -1,0 +1,202 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Configuration alertRules workflowTriggers API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "workflowTriggers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get all workflow triggers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://test.api.solvimon.com/v:version/workflow-triggers",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The amount of records shown in the list"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page which is going to be shown"
+              },
+              {
+                "name": "order_by",
+                "value": "",
+                "type": "query",
+                "description": "The parameter by which the response is ordered."
+              },
+              {
+                "name": "order_direction",
+                "value": "",
+                "type": "query",
+                "description": "The order direction by which the response is ordered."
+              }
+            ]
+          },
+          "docs": "Returns paginated workflow trigger records for the platform. Triggers represent concrete workflow executions bound to a specific resource instance. Requires the WORKFLOW_TRIGGER.VIEW permission."
+        },
+        {
+          "info": {
+            "name": "Create a workflow trigger",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/workflow-triggers",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a manual workflow trigger for a concrete resource instance. Provide the payload for exactly one supported target type. Requires the WORKFLOW_TRIGGER.CREATE permission."
+        },
+        {
+          "info": {
+            "name": "Get workflow trigger by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://test.api.solvimon.com/v:version/workflow-triggers/:resourceId",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource to be requested."
+              }
+            ]
+          },
+          "docs": "Fetches a single workflow trigger by resource ID. Requires the WORKFLOW_TRIGGER.VIEW permission."
+        },
+        {
+          "info": {
+            "name": "Search workflow triggers",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/workflow-triggers/search",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "expand[]",
+                "value": "",
+                "type": "query",
+                "description": "The id fields of the resources that are going to be expanded."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The amount of records shown in the list"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page which is going to be shown"
+              },
+              {
+                "name": "order_by",
+                "value": "",
+                "type": "query",
+                "description": "The parameter by which the response is ordered. default = name"
+              },
+              {
+                "name": "order_direction",
+                "value": "",
+                "type": "query",
+                "description": "The parameter for the response ordering direction (asc, desc) default asc"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Searches workflow trigger records with the provided search body plus pagination and ordering query parameters. Requires the WORKFLOW_TRIGGER.VIEW permission."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

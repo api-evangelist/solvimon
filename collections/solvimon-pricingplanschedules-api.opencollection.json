@@ -1,0 +1,398 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Configuration alertRules pricingPlanSchedules API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "pricingPlanSchedules",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a list of PricingPlanSchedules for provided filters",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://test.api.solvimon.com/v:version/pricing-plan-schedules",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "pricing_plan_subscription_id",
+                "value": "",
+                "type": "query",
+                "description": "The resource id of the pricingPlanSubscription."
+              },
+              {
+                "name": "expand[]",
+                "value": "",
+                "type": "query",
+                "description": "The id fields of the resources that are going to be expanded."
+              }
+            ]
+          },
+          "docs": "Requires the PRICING_PLAN_SCHEDULE.VIEW or QUOTE.PRICING_PLAN_SCHEDULE.VIEW permission."
+        },
+        {
+          "info": {
+            "name": "Create a pricing plan schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/pricing-plan-schedules",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "expand[]",
+                "value": "",
+                "type": "query",
+                "description": "The id fields of the resources that are going to be expanded."
+              },
+              {
+                "name": "set_previous_end_at",
+                "value": "",
+                "type": "query",
+                "description": "Setting the value to true will set the end_at of the previous schedule to the start_at of this schedule. Mutually exclusive with set_next_start_at"
+              },
+              {
+                "name": "set_next_start_at",
+                "value": "",
+                "type": "query",
+                "description": "Setting the value to true will set the start_at of the next schedule to the end_at of this schedule. Mutually exclusive with set_previous_end_at"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the PRICING_PLAN_SCHEDULE.CREATE or QUOTE.PRICING_PLAN_SCHEDULE.CREATE permission."
+        },
+        {
+          "info": {
+            "name": "Get a pricingPlanSchedule by resourceID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://test.api.solvimon.com/v:version/pricing-plan-schedules/:resourceId",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource to be requested."
+              },
+              {
+                "name": "expand[]",
+                "value": "",
+                "type": "query",
+                "description": "The id fields of the resources that are going to be expanded."
+              },
+              {
+                "name": "include_combined_pricing_plan_version",
+                "value": "",
+                "type": "query",
+                "description": "Get the pricing plan version with the pricing overrides."
+              }
+            ]
+          },
+          "docs": "Requires the PRICING_PLAN_SCHEDULE.VIEW or QUOTE.PRICING_PLAN_SCHEDULE.VIEW permission."
+        },
+        {
+          "info": {
+            "name": "Update a pricingPlanSchedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://test.api.solvimon.com/v:version/pricing-plan-schedules/:resourceId",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource to be requested."
+              },
+              {
+                "name": "expand[]",
+                "value": "",
+                "type": "query",
+                "description": "The id fields of the resources that are going to be expanded."
+              },
+              {
+                "name": "set_previous_end_at",
+                "value": "",
+                "type": "query",
+                "description": "Setting the value to true will set the end of the previous schedule to the start of this schedule. Mutually exclusive with set_next_start_at"
+              },
+              {
+                "name": "set_next_start_at",
+                "value": "",
+                "type": "query",
+                "description": "Setting the value to true will set the start of the next schedule to the end of this schedule. Mutually exclusive with set_previous_end_at"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the PRICING_PLAN_SCHEDULE.UPDATE or QUOTE.PRICING_PLAN_SCHEDULE.UPDATE permission."
+        },
+        {
+          "info": {
+            "name": "Delete a pricingPlanSchedule by resource ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://test.api.solvimon.com/v:version/pricing-plan-schedules/:resourceId",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource to be requested."
+              }
+            ]
+          },
+          "docs": "Requires the PRICING_PLAN_SCHEDULE.DELETE permission."
+        },
+        {
+          "info": {
+            "name": "Get all available on demand pricing items for a pricing plan schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://test.api.solvimon.com/v:version/pricing-plan-schedules/:resourceId/on-demand-pricing-items",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource to be requested."
+              },
+              {
+                "name": "timestamp",
+                "value": "",
+                "type": "query",
+                "description": "Timestamp used to resolve the applicable pricing plan version for rate-card schedules. Defaults to now."
+              }
+            ]
+          },
+          "docs": "Requires the PRICING_PLAN_SCHEDULE.VIEW or QUOTE.PRICING_PLAN_SCHEDULE.VIEW permission."
+        },
+        {
+          "info": {
+            "name": "Copy a pricing plan schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/pricing-plan-schedules/:resourceId/copy",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource to be requested."
+              },
+              {
+                "name": "expand[]",
+                "value": "",
+                "type": "query",
+                "description": "The id fields of the resources that are going to be expanded."
+              },
+              {
+                "name": "set_previous_end_at",
+                "value": "",
+                "type": "query",
+                "description": "Setting the value to true will set the end of the previous schedule to the start of this schedule. Mutually exclusive with set_next_start_at"
+              },
+              {
+                "name": "set_next_start_at",
+                "value": "",
+                "type": "query",
+                "description": "Setting the value to true will set the start of the next schedule to the end of this schedule. Mutually exclusive with set_previous_end_at"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the PRICING_PLAN_SCHEDULE.CREATE permission."
+        },
+        {
+          "info": {
+            "name": "Migrate a pricing plan schedule to a new pricing plan version",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/pricing-plan-schedules/:resourceId/migrate",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource to be requested."
+              },
+              {
+                "name": "expand[]",
+                "value": "",
+                "type": "query",
+                "description": "The id fields of the resources that are going to be expanded."
+              },
+              {
+                "name": "set_previous_end_at",
+                "value": "",
+                "type": "query",
+                "description": "Setting the value to true will set the end of the previous schedule to the start of this schedule. Mutually exclusive with set_next_start_at"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the PRICING_PLAN_SCHEDULE.CREATE permission."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

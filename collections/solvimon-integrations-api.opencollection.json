@@ -1,0 +1,422 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Configuration alertRules integrations API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "integrations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a list of integrations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://test.api.solvimon.com/v:version/integrations",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The amount of records shown in the list"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page which is going to be shown"
+              },
+              {
+                "name": "order_by",
+                "value": "",
+                "type": "query",
+                "description": "The parameter by which the response is ordered."
+              },
+              {
+                "name": "order_direction",
+                "value": "",
+                "type": "query",
+                "description": "The order direction by which the response is ordered."
+              }
+            ]
+          },
+          "docs": "Requires the INTEGRATION.VIEW permission."
+        },
+        {
+          "info": {
+            "name": "Create an integration",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/integrations",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the INTEGRATION.CREATE permission."
+        },
+        {
+          "info": {
+            "name": "Get a list of mandates",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://test.api.solvimon.com/v:version/integrations/e-invoicing/default-mandates",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The amount of records shown in the list"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page which is going to be shown"
+              },
+              {
+                "name": "order_by",
+                "value": "",
+                "type": "query",
+                "description": "The parameter by which the response is ordered."
+              },
+              {
+                "name": "order_direction",
+                "value": "",
+                "type": "query",
+                "description": "The order direction by which the response is ordered."
+              }
+            ]
+          },
+          "docs": "Requires the INTEGRATION.VIEW permission."
+        },
+        {
+          "info": {
+            "name": "Test whether the integration connection is successful",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/integrations/test-connection",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "integration_type",
+                "value": "",
+                "type": "query",
+                "description": "The type of integration to test the connection for"
+              },
+              {
+                "name": "e_invoicing_processor",
+                "value": "",
+                "type": "query",
+                "description": "The processor to connect with when testing an eInvoicing integration"
+              },
+              {
+                "name": "tax_calculation_variant",
+                "value": "",
+                "type": "query",
+                "description": "The variant to connect with when testing a tax calculation integration"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the INTEGRATION.VIEW permission."
+        },
+        {
+          "info": {
+            "name": "Get an integration by its ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://test.api.solvimon.com/v:version/integrations/:resourceId",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource to be requested."
+              }
+            ]
+          },
+          "docs": "Requires the INTEGRATION.VIEW permission."
+        },
+        {
+          "info": {
+            "name": "Update an integration by its ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://test.api.solvimon.com/v:version/integrations/:resourceId",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource to be requested."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the INTEGRATION.UPDATE permission."
+        },
+        {
+          "info": {
+            "name": "Deleting an integration by its ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://test.api.solvimon.com/v:version/integrations/:resourceId",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource to be requested."
+              }
+            ]
+          },
+          "docs": "Requires the INTEGRATION.DELETE permission."
+        },
+        {
+          "info": {
+            "name": "Deprecate an integration",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/integrations/:resourceId/deprecate",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource for which the action is posted."
+              }
+            ]
+          },
+          "docs": "Requires the INTEGRATION.UPDATE permission."
+        },
+        {
+          "info": {
+            "name": "Activate an integration",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/integrations/:resourceId/activate",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource for which the action is posted."
+              }
+            ]
+          },
+          "docs": "Requires the INTEGRATION.UPDATE permission."
+        },
+        {
+          "info": {
+            "name": "Archive an integration",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/integrations/:resourceId/archive",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource for which the action is posted."
+              }
+            ]
+          },
+          "docs": "Requires the INTEGRATION.UPDATE permission."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

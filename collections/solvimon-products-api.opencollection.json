@@ -1,0 +1,474 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Configuration alertRules products API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "products",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a list of all products",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://test.api.solvimon.com/v:version/products",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "statuses[]",
+                "value": "",
+                "type": "query",
+                "description": "Filter products based on product status(es)"
+              },
+              {
+                "name": "expand[]",
+                "value": "",
+                "type": "query",
+                "description": "The id fields of the resources that are going to be expanded."
+              },
+              {
+                "name": "custom_field",
+                "value": "",
+                "type": "query",
+                "description": "Filter the response by a custom field value."
+              },
+              {
+                "name": "product_category_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter the response by a product category value."
+              },
+              {
+                "name": "customer_id",
+                "value": "",
+                "type": "query",
+                "description": "The resource id of the customer."
+              }
+            ]
+          },
+          "docs": "Requires the PRODUCT.VIEW permission."
+        },
+        {
+          "info": {
+            "name": "Create a product",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/products",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the PRODUCT.CREATE permission."
+        },
+        {
+          "info": {
+            "name": "Update or create a product (upsert)",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://test.api.solvimon.com/v:version/products",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "identifier_field",
+                "value": "",
+                "type": "query",
+                "description": "Which field to use to identify whether the resource exists or not"
+              },
+              {
+                "name": "custom_field_reference",
+                "value": "",
+                "type": "query",
+                "description": "Which custom field to use to identify whether the resource exists or not"
+              },
+              {
+                "name": "field_actions",
+                "value": "",
+                "type": "query",
+                "description": "The list of actions for specific fields."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the PRODUCT.CREATE or PRODUCT.UPDATE permission."
+        },
+        {
+          "info": {
+            "name": "Get a product",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://test.api.solvimon.com/v:version/products/:resourceIdOrReference",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceIdOrReference",
+                "value": "",
+                "type": "path",
+                "description": "The ID or reference of the resource."
+              },
+              {
+                "name": "expand[]",
+                "value": "",
+                "type": "query",
+                "description": "The id fields of the resources that are going to be expanded."
+              }
+            ]
+          },
+          "docs": "Requires the PRODUCT.VIEW permission."
+        },
+        {
+          "info": {
+            "name": "Update a product",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://test.api.solvimon.com/v:version/products/:resourceIdOrReference",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceIdOrReference",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource for which the action is posted."
+              },
+              {
+                "name": "align_product_item_status",
+                "value": "",
+                "type": "query",
+                "description": "Updates the status of product items to the status of the Product, e.g. if theDD Product is Activated, the product items are activated"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the PRODUCT.UPDATE permission."
+        },
+        {
+          "info": {
+            "name": "Delete a product",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://test.api.solvimon.com/v:version/products/:resourceIdOrReference",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceIdOrReference",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource for which the action is posted."
+              },
+              {
+                "name": "align_product_item_status",
+                "value": "",
+                "type": "query",
+                "description": "Updates the status of product items to the status of the Product, e.g. if theDD Product is Activated, the product items are activated"
+              }
+            ]
+          },
+          "docs": "Requires the PRODUCT.DELETE permission."
+        },
+        {
+          "info": {
+            "name": "Activate a product",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/products/:resourceIdOrReference/activate",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceIdOrReference",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource for which the action is posted."
+              },
+              {
+                "name": "align_product_item_status",
+                "value": "",
+                "type": "query",
+                "description": "Updates the status of product items to the status of the Product, e.g. if theDD Product is Activated, the product items are activated"
+              }
+            ]
+          },
+          "docs": "Requires the PRODUCT.STATUS.UPDATE permission."
+        },
+        {
+          "info": {
+            "name": "Deprecate a product",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/products/:resourceIdOrReference/deprecate",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceIdOrReference",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource for which the action is posted."
+              },
+              {
+                "name": "align_product_item_status",
+                "value": "",
+                "type": "query",
+                "description": "Updates the status of product items to the status of the Product, e.g. if theDD Product is Activated, the product items are activated"
+              }
+            ]
+          },
+          "docs": "Requires the PRODUCT.STATUS.UPDATE permission."
+        },
+        {
+          "info": {
+            "name": "Archive a product",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/products/:resourceIdOrReference/archive",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceIdOrReference",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource for which the action is posted."
+              },
+              {
+                "name": "align_product_item_status",
+                "value": "",
+                "type": "query",
+                "description": "Updates the status of product items to the status of the Product, e.g. if theDD Product is Activated, the product items are activated"
+              }
+            ]
+          },
+          "docs": "Requires the PRODUCT.STATUS.UPDATE permission."
+        },
+        {
+          "info": {
+            "name": "Search products.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/products/search",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "expand[]",
+                "value": "",
+                "type": "query",
+                "description": "The id fields of the resources that are going to be expanded."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The amount of records shown in the list"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page which is going to be shown"
+              },
+              {
+                "name": "order_by",
+                "value": "",
+                "type": "query",
+                "description": "The parameter by which the response is ordered. default = name"
+              },
+              {
+                "name": "order_direction",
+                "value": "",
+                "type": "query",
+                "description": "The parameter for the response ordering direction (asc, desc) default asc"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the PRODUCT.VIEW permission."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

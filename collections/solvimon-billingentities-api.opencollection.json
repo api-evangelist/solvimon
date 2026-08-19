@@ -1,0 +1,217 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Configuration alertRules billingEntities API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "billingEntities",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a list of all billing entities",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://test.api.solvimon.com/v:version/billing-entities",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "expand[]",
+                "value": "",
+                "type": "query",
+                "description": "The id fields of the resources that are going to be expanded."
+              },
+              {
+                "name": "custom_field",
+                "value": "",
+                "type": "query",
+                "description": "Filter the response by a custom field value."
+              }
+            ]
+          },
+          "docs": "Requires the BILLING_ENTITY.VIEW permission."
+        },
+        {
+          "info": {
+            "name": "Create a billing entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/billing-entities",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the BILLING_ENTITY.CREATE permission."
+        },
+        {
+          "info": {
+            "name": "Update or create a billing entity (upsert)",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://test.api.solvimon.com/v:version/billing-entities",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "identifier_field",
+                "value": "",
+                "type": "query",
+                "description": "Which field to use to identify whether the resource exists or not"
+              },
+              {
+                "name": "custom_field_reference",
+                "value": "",
+                "type": "query",
+                "description": "Which custom field to use to identify whether the resource exists or not"
+              },
+              {
+                "name": "field_actions",
+                "value": "",
+                "type": "query",
+                "description": "The list of actions for specific fields."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the BILLING_ENTITY.CREATE or BILLING_ENTITY.UPDATE permission."
+        },
+        {
+          "info": {
+            "name": "Get a billing entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://test.api.solvimon.com/v:version/billing-entities/:resourceIdOrReference",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceIdOrReference",
+                "value": "",
+                "type": "path",
+                "description": "The ID or reference of the resource."
+              }
+            ]
+          },
+          "docs": "Requires the BILLING_ENTITY.VIEW permission."
+        },
+        {
+          "info": {
+            "name": "Update a billing entity",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://test.api.solvimon.com/v:version/billing-entities/:resourceIdOrReference",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceIdOrReference",
+                "value": "",
+                "type": "path",
+                "description": "The ID or reference of the resource."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the BILLING_ENTITY.UPDATE permission."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

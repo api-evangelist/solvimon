@@ -1,0 +1,1217 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Configuration alertRules invoices API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "invoices",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a list of invoices",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://test.api.solvimon.com/v:version/invoices",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "customer_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter based of customer ID"
+              },
+              {
+                "name": "statuses[]",
+                "value": "",
+                "type": "query",
+                "description": "Filter invoices based on invoice status(es)"
+              },
+              {
+                "name": "invoice_date",
+                "value": "",
+                "type": "query",
+                "description": "Range filter for the start_at of the first schedule in the pricing plan subscription (ISO-8601)."
+              },
+              {
+                "name": "paid",
+                "value": "",
+                "type": "query",
+                "description": "Filter invoices based on whether they're paid or not (true or false)"
+              },
+              {
+                "name": "on_hold",
+                "value": "",
+                "type": "query",
+                "description": "Filter invoices based on whether they're on hold or not (true or false)"
+              },
+              {
+                "name": "pricing_plan_subscription_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter invoices by the pricing plan subscription id"
+              },
+              {
+                "name": "include_periods",
+                "value": "",
+                "type": "query",
+                "description": "Indicates whether the response should include period and group data (true or false)"
+              },
+              {
+                "name": "include_lines",
+                "value": "",
+                "type": "query",
+                "description": "Indicates whether the response should include invoice lines (true or false)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The amount of records shown in the list"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page which is going to be shown"
+              },
+              {
+                "name": "order_by",
+                "value": "",
+                "type": "query",
+                "description": "The parameter by which the response is ordered."
+              },
+              {
+                "name": "order_direction",
+                "value": "",
+                "type": "query",
+                "description": "The order direction by which the response is ordered."
+              }
+            ]
+          },
+          "docs": "Requires the INVOICE.VIEW permission."
+        },
+        {
+          "info": {
+            "name": "Create a one-off invoice or credit invoice",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/invoices",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the INVOICE.ONE_OFF.CREATE permission."
+        },
+        {
+          "info": {
+            "name": "Create a preview invoice",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/invoices/preview",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the INVOICE.PREVIEW permission."
+        },
+        {
+          "info": {
+            "name": "Search invoices",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/invoices/search",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "order_by",
+                "value": "",
+                "type": "query",
+                "description": "The parameter by which the response is ordered."
+              },
+              {
+                "name": "order_direction",
+                "value": "",
+                "type": "query",
+                "description": "The order direction by which the response is ordered."
+              },
+              {
+                "name": "expand[]",
+                "value": "",
+                "type": "query",
+                "description": "The id fields of the resources that are going to be expanded."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The amount of records shown in the list"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page which is going to be shown"
+              },
+              {
+                "name": "include_periods",
+                "value": "",
+                "type": "query",
+                "description": "Indicates whether the response should include period and group data (true or false)"
+              },
+              {
+                "name": "include_lines",
+                "value": "",
+                "type": "query",
+                "description": "Indicates whether the response should include invoice lines (true or false)"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the INVOICE.VIEW permission."
+        },
+        {
+          "info": {
+            "name": "Charge on-demand pricing items for a pricing plan schedule",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/invoices/charge-on-demand-pricing-items",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the INVOICE.ONE_OFF.CREATE permission."
+        },
+        {
+          "info": {
+            "name": "Get an invoice by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://test.api.solvimon.com/v:version/invoices/:resourceId",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource to be requested."
+              },
+              {
+                "name": "processing_only_customer_id",
+                "value": "",
+                "type": "query",
+                "description": "The id of the child customer to filter the invoice details."
+              }
+            ]
+          },
+          "docs": "Requires the INVOICE.VIEW permission."
+        },
+        {
+          "info": {
+            "name": "Update an invoice",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://test.api.solvimon.com/v:version/invoices/:resourceId",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource to be requested."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the INVOICE.UPDATE permission."
+        },
+        {
+          "info": {
+            "name": "Add a line to an invoice",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/invoices/:resourceId/add-line",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource for which the action is posted."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the INVOICE.LINE.EDIT permission."
+        },
+        {
+          "info": {
+            "name": "Add a line to an invoice",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/invoices/:resourceId/lines",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource for which the action is posted."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the INVOICE.LINE.EDIT permission."
+        },
+        {
+          "info": {
+            "name": "Replaces an one-off invoice line in an invoice based on the invoice line id",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://test.api.solvimon.com/v:version/invoices/:resourceId/lines/:invoiceLineResourceId",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the invoice of the line."
+              },
+              {
+                "name": "invoiceLineResourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the invoice line."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the INVOICE.LINE.EDIT permission."
+        },
+        {
+          "info": {
+            "name": "Delete an invoice line by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://test.api.solvimon.com/v:version/invoices/:resourceId/lines/:invoiceLineResourceId",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the invoice of the line."
+              },
+              {
+                "name": "invoiceLineResourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the invoice line."
+              }
+            ]
+          },
+          "docs": "Requires the INVOICE.LINE.EDIT permission."
+        },
+        {
+          "info": {
+            "name": "Deprecated. Instead use /payments to get the payments for the invoice",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://test.api.solvimon.com/v:version/invoices/:resourceId/payment-attempts",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource to be requested."
+              }
+            ]
+          },
+          "docs": "Requires the INVOICE.VIEW permission."
+        },
+        {
+          "info": {
+            "name": "Get the payments made for the invoice",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://test.api.solvimon.com/v:version/invoices/:resourceId/payments",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource to be requested."
+              }
+            ]
+          },
+          "docs": "Requires the INVOICE.VIEW permission."
+        },
+        {
+          "info": {
+            "name": "Delete a line from an invoice",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/invoices/:resourceId/delete-line",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource to be requested."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the INVOICE.LINE.EDIT permission."
+        },
+        {
+          "info": {
+            "name": "Send an invoice via email.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/invoices/:resourceId/send_by_email",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource for which the action is posted."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the INVOICE.SEND_EMAIL permission."
+        },
+        {
+          "info": {
+            "name": "Export an invoice to an ERP.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/invoices/:resourceId/export_to_erp",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource for which the action is posted."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the INVOICE.EXPORT_ERP permission."
+        },
+        {
+          "info": {
+            "name": "Get the invoice as a PDF",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://test.api.solvimon.com/v:version/invoices/:resourceId/pdf",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource to be requested."
+              }
+            ]
+          },
+          "docs": "Requires the INVOICE.PDF.DOWNLOAD permission."
+        },
+        {
+          "info": {
+            "name": "Get the invoice as a UBL 2.1",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://test.api.solvimon.com/v:version/invoices/:resourceId/ubl21",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource to be requested."
+              },
+              {
+                "name": "include_invoice_pdf",
+                "value": "",
+                "type": "query",
+                "description": "Include the PDF as an AdditionalDocumentReference in the UBL document."
+              }
+            ]
+          },
+          "docs": "Requires the INVOICE.UBL.DOWNLOAD permission."
+        },
+        {
+          "info": {
+            "name": "Create a credit invoice for the provided invoice resource ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/invoices/:resourceId/credit",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource for which the action is posted."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the INVOICE.CREDIT.CREATE permission."
+        },
+        {
+          "info": {
+            "name": "Credit an invoice and create an editable copy of it",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/invoices/:resourceId/credit_and_copy",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource for which the action is posted."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the INVOICE.ONE_OFF.CREATE or INVOICE.CREDIT.CREATE permission."
+        },
+        {
+          "info": {
+            "name": "Refresh the invoice and get it",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/invoices/:resourceId/refresh",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource for which the action is posted."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the INVOICE.REFRESH permission."
+        },
+        {
+          "info": {
+            "name": "Refresh the eInvoices that belong to this invoice and get the invoice itself",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/invoices/:resourceId/refresh-e-invoices",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource for which the action is posted."
+              }
+            ]
+          },
+          "docs": "Requires the INVOICE.E_INVOICE.REFRESH permission."
+        },
+        {
+          "info": {
+            "name": "Refresh the eInvoices that belong to this invoice and get the invoice itself",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/invoices/:resourceId/resubmit-e-invoice",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource for which the action is posted."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the INVOICE.E_INVOICE.RESUBMIT permission."
+        },
+        {
+          "info": {
+            "name": "Get the eInvoice that was submitted to the Tax Authority",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://test.api.solvimon.com/v:version/invoices/:resourceId/download-e-invoice",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource for which the action is posted."
+              },
+              {
+                "name": "external_reference",
+                "value": "",
+                "type": "query",
+                "description": "The external reference of the eInvoice to be downloaded"
+              },
+              {
+                "name": "file_format",
+                "value": "",
+                "type": "query",
+                "description": "The type of eInvoice to download, e.g the input to the eInvoicing integration, or the output to the centralised tax authority"
+              }
+            ]
+          },
+          "docs": "Requires the INVOICE.E_INVOICE.DOWNLOAD permission."
+        },
+        {
+          "info": {
+            "name": "Patch the eInvoice that was submitted to the Tax Authority",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://test.api.solvimon.com/v:version/invoices/:resourceId/update-e-invoice-status",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource to be requested."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the INVOICE.E_INVOICE.STATUS.UPDATE permission."
+        },
+        {
+          "info": {
+            "name": "Archive an invoice",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/invoices/:resourceId/archive",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource for which the action is posted."
+              }
+            ]
+          },
+          "docs": "Requires the INVOICE.UPDATE permission."
+        },
+        {
+          "info": {
+            "name": "Cancel invoice dunning actions",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/invoices/:resourceId/cancel-dunning-actions",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource for which the action is posted."
+              }
+            ]
+          },
+          "docs": "Requires the INVOICE.UPDATE permission."
+        },
+        {
+          "info": {
+            "name": "Pay the invoice using customer stored payment method",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/invoices/:resourceId/pay",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource for which the action is posted."
+              }
+            ]
+          },
+          "docs": "Requires the INVOICE.PAY permission."
+        },
+        {
+          "info": {
+            "name": "Refund a credit invoice via the original payment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/invoices/:resourceId/refund",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource for which the action is posted."
+              }
+            ]
+          },
+          "docs": "Requires the INVOICE.REFUND permission."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,1260 @@
+{
+  "item": [
+    {
+      "id": "bd1399e1-ee7f-4a5b-8269-ba2c0b485a29",
+      "name": "workflowActions",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c4a45b7c-5937-4c85-86fd-6910a5916a4b",
+          "name": "Get all workflow actions",
+          "request": {
+            "name": "Get all workflow actions",
+            "description": {
+              "content": "Returns all workflow actions for the platform. Actions define what happens when a workflow trigger executes. Requires the WORKFLOW_ACTION.VIEW permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v{{version}}",
+                "workflow-actions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "The amount of records shown in the list"
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "<integer>",
+                  "description": "The page which is going to be shown"
+                },
+                {
+                  "disabled": false,
+                  "key": "order_by",
+                  "value": "<string>",
+                  "description": "The parameter by which the response is ordered."
+                },
+                {
+                  "disabled": false,
+                  "key": "order_direction",
+                  "value": "<string>",
+                  "description": "The order direction by which the response is ordered."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) ",
+                "key": "X-API-KEY",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Platform ID.",
+                "key": "x-platform-id",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "fc778742-084c-48dd-81fc-b6b6cd08abe5",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v{{version}}",
+                    "workflow-actions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "order_by",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "order_direction",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "X-API-KEY",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Platform ID.",
+                    "key": "x-platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"object_type\": \"string\",\n    \"id\": \"string\",\n    \"workflow_id\": \"string\",\n    \"type\": \"SEND_EMAIL_TO_CUSTOMER\",\n    \"description\": \"string\",\n    \"status\": \"ARCHIVED\",\n    \"created_at\": \"string\",\n    \"updated_at\": \"string\",\n    \"send_email_to_customer\": {\n      \"integration_id\": \"string\",\n      \"subject\": \"string\",\n      \"from\": {\n        \"name\": \"string\",\n        \"email\": \"string\"\n      },\n      \"reply_to\": {\n        \"name\": \"string\",\n        \"email\": \"string\"\n      },\n      \"cc_recipients\": [\n        \"string\",\n        \"string\"\n      ],\n      \"bcc_recipients\": [\n        \"string\",\n        \"string\"\n      ],\n      \"template_name\": \"string\",\n      \"variant\": \"INVOICE\",\n      \"invoice\": {\n        \"type\": \"UPCOMING_PAYMENT_REMINDER\",\n        \"include_pdf\": false,\n        \"include_payment_link\": true,\n        \"include_customer_contacts_as_cc\": false\n      },\n      \"payment\": {\n        \"include_customer_contacts_as_cc\": true\n      },\n      \"pricing_plan_subscription\": {\n        \"include_customer_contacts_as_cc\": true\n      }\n    }\n  },\n  {\n    \"object_type\": \"string\",\n    \"id\": \"string\",\n    \"workflow_id\": \"string\",\n    \"type\": \"SEND_EMAIL_TO_CUSTOMER\",\n    \"description\": \"string\",\n    \"status\": \"DRAFT\",\n    \"created_at\": \"string\",\n    \"updated_at\": \"string\",\n    \"send_email_to_customer\": {\n      \"integration_id\": \"string\",\n      \"subject\": \"string\",\n      \"from\": {\n        \"name\": \"string\",\n        \"email\": \"string\"\n      },\n      \"reply_to\": {\n        \"name\": \"string\",\n        \"email\": \"string\"\n      },\n      \"cc_recipients\": [\n        \"string\",\n        \"string\"\n      ],\n      \"bcc_recipients\": [\n        \"string\",\n        \"string\"\n      ],\n      \"template_name\": \"string\",\n      \"variant\": \"PAYMENT\",\n      \"invoice\": {\n        \"type\": \"OVERDUE\",\n        \"include_pdf\": true,\n        \"include_payment_link\": false,\n        \"include_customer_contacts_as_cc\": false\n      },\n      \"payment\": {\n        \"include_customer_contacts_as_cc\": true\n      },\n      \"pricing_plan_subscription\": {\n        \"include_customer_contacts_as_cc\": true\n      }\n    }\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "df00e719-57cf-4ef0-9cdc-3b1697506abb",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v{{version}}",
+                    "workflow-actions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "order_by",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "order_direction",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "X-API-KEY",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Platform ID.",
+                    "key": "x-platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"INVALID_REQUEST\",\n  \"code\": \"COULD_NOT_CREATE_RESOURCE\",\n  \"message\": \"string\",\n  \"field\": \"string\",\n  \"resource_id\": \"string\",\n  \"resource_type\": \"PRICING_PLAN\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f0d5d014-7982-4d2e-a5e1-60f1cb1067fe",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v{{version}}",
+                    "workflow-actions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "order_by",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "order_direction",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "X-API-KEY",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Platform ID.",
+                    "key": "x-platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"INVALID_REQUEST\",\n  \"code\": \"COULD_NOT_CREATE_RESOURCE\",\n  \"message\": \"string\",\n  \"field\": \"string\",\n  \"resource_id\": \"string\",\n  \"resource_type\": \"PRICING_PLAN\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a70c70e0-23f4-4c51-973f-35836296c84a",
+          "name": "Create a workflow action",
+          "request": {
+            "name": "Create a workflow action",
+            "description": {
+              "content": "Creates a workflow action linked to an existing workflow. The action payload must match the selected action type. Requires the WORKFLOW_ACTION.CREATE permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v{{version}}",
+                "workflow-actions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) ",
+                "key": "X-API-KEY",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Platform ID.",
+                "key": "x-platform-id",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workflow_id\": \"<string>\",\n  \"type\": \"<string>\",\n  \"status\": \"<string>\",\n  \"object_type\": \"<string,null>\",\n  \"id\": \"<string,null>\",\n  \"description\": \"<string,null>\",\n  \"created_at\": \"<string,null>\",\n  \"updated_at\": \"<string,null>\",\n  \"send_email_to_customer\": {\n    \"integration_id\": \"<string>\",\n    \"subject\": \"<string,null>\",\n    \"from\": {\n      \"name\": \"<string,null>\",\n      \"email\": \"<string>\"\n    },\n    \"reply_to\": {\n      \"name\": \"<string,null>\",\n      \"email\": \"<string>\"\n    },\n    \"cc_recipients\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"bcc_recipients\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"template_name\": \"<string>\",\n    \"variant\": \"<string>\",\n    \"invoice\": {\n      \"type\": \"<string>\",\n      \"include_pdf\": \"<boolean>\",\n      \"include_payment_link\": \"<boolean>\",\n      \"include_customer_contacts_as_cc\": \"<boolean>\"\n    },\n    \"payment\": {\n      \"include_customer_contacts_as_cc\": \"<boolean>\"\n    },\n    \"pricing_plan_subscription\": {\n      \"include_customer_contacts_as_cc\": \"<boolean>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "7db070f1-22f9-4ea0-bff2-bc16a3b64871",
+              "name": "Created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v{{version}}",
+                    "workflow-actions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "X-API-KEY",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Platform ID.",
+                    "key": "x-platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"workflow_id\": \"<string>\",\n  \"type\": \"SEND_EMAIL_TO_CUSTOMER\",\n  \"status\": \"DRAFT\",\n  \"object_type\": \"<string,null>\",\n  \"id\": \"<string,null>\",\n  \"description\": \"<string,null>\",\n  \"created_at\": \"<string,null>\",\n  \"updated_at\": \"<string,null>\",\n  \"send_email_to_customer\": {\n    \"integration_id\": \"string\",\n    \"subject\": \"string\",\n    \"from\": {\n      \"name\": \"string\",\n      \"email\": \"string\"\n    },\n    \"reply_to\": {\n      \"name\": \"string\",\n      \"email\": \"string\"\n    },\n    \"cc_recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"bcc_recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"template_name\": \"string\",\n    \"variant\": \"INVOICE\",\n    \"invoice\": {\n      \"type\": \"UPCOMING_PAYMENT_REMINDER\",\n      \"include_pdf\": true,\n      \"include_payment_link\": false,\n      \"include_customer_contacts_as_cc\": true\n    },\n    \"payment\": {\n      \"include_customer_contacts_as_cc\": true\n    },\n    \"pricing_plan_subscription\": {\n      \"include_customer_contacts_as_cc\": false\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"object_type\": \"string\",\n  \"id\": \"string\",\n  \"workflow_id\": \"string\",\n  \"type\": \"SEND_EMAIL_TO_CUSTOMER\",\n  \"description\": \"string\",\n  \"status\": \"INACTIVE\",\n  \"created_at\": \"string\",\n  \"updated_at\": \"string\",\n  \"send_email_to_customer\": {\n    \"integration_id\": \"string\",\n    \"subject\": \"string\",\n    \"from\": {\n      \"name\": \"string\",\n      \"email\": \"string\"\n    },\n    \"reply_to\": {\n      \"name\": \"string\",\n      \"email\": \"string\"\n    },\n    \"cc_recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"bcc_recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"template_name\": \"string\",\n    \"variant\": \"PRICING_PLAN_SUBSCRIPTION\",\n    \"invoice\": {\n      \"type\": \"OVERDUE\",\n      \"include_pdf\": false,\n      \"include_payment_link\": false,\n      \"include_customer_contacts_as_cc\": false\n    },\n    \"payment\": {\n      \"include_customer_contacts_as_cc\": true\n    },\n    \"pricing_plan_subscription\": {\n      \"include_customer_contacts_as_cc\": true\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9e3e23cb-10b0-48a8-af80-f137b97d7353",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v{{version}}",
+                    "workflow-actions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "X-API-KEY",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Platform ID.",
+                    "key": "x-platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"workflow_id\": \"<string>\",\n  \"type\": \"SEND_EMAIL_TO_CUSTOMER\",\n  \"status\": \"DRAFT\",\n  \"object_type\": \"<string,null>\",\n  \"id\": \"<string,null>\",\n  \"description\": \"<string,null>\",\n  \"created_at\": \"<string,null>\",\n  \"updated_at\": \"<string,null>\",\n  \"send_email_to_customer\": {\n    \"integration_id\": \"string\",\n    \"subject\": \"string\",\n    \"from\": {\n      \"name\": \"string\",\n      \"email\": \"string\"\n    },\n    \"reply_to\": {\n      \"name\": \"string\",\n      \"email\": \"string\"\n    },\n    \"cc_recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"bcc_recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"template_name\": \"string\",\n    \"variant\": \"INVOICE\",\n    \"invoice\": {\n      \"type\": \"UPCOMING_PAYMENT_REMINDER\",\n      \"include_pdf\": true,\n      \"include_payment_link\": false,\n      \"include_customer_contacts_as_cc\": true\n    },\n    \"payment\": {\n      \"include_customer_contacts_as_cc\": true\n    },\n    \"pricing_plan_subscription\": {\n      \"include_customer_contacts_as_cc\": false\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"INVALID_REQUEST\",\n  \"code\": \"COULD_NOT_CREATE_RESOURCE\",\n  \"message\": \"string\",\n  \"field\": \"string\",\n  \"resource_id\": \"string\",\n  \"resource_type\": \"PRICING_PLAN\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c2b15059-5a4b-4134-908c-cba0e7eaeafe",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v{{version}}",
+                    "workflow-actions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "X-API-KEY",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Platform ID.",
+                    "key": "x-platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"workflow_id\": \"<string>\",\n  \"type\": \"SEND_EMAIL_TO_CUSTOMER\",\n  \"status\": \"DRAFT\",\n  \"object_type\": \"<string,null>\",\n  \"id\": \"<string,null>\",\n  \"description\": \"<string,null>\",\n  \"created_at\": \"<string,null>\",\n  \"updated_at\": \"<string,null>\",\n  \"send_email_to_customer\": {\n    \"integration_id\": \"string\",\n    \"subject\": \"string\",\n    \"from\": {\n      \"name\": \"string\",\n      \"email\": \"string\"\n    },\n    \"reply_to\": {\n      \"name\": \"string\",\n      \"email\": \"string\"\n    },\n    \"cc_recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"bcc_recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"template_name\": \"string\",\n    \"variant\": \"INVOICE\",\n    \"invoice\": {\n      \"type\": \"UPCOMING_PAYMENT_REMINDER\",\n      \"include_pdf\": true,\n      \"include_payment_link\": false,\n      \"include_customer_contacts_as_cc\": true\n    },\n    \"payment\": {\n      \"include_customer_contacts_as_cc\": true\n    },\n    \"pricing_plan_subscription\": {\n      \"include_customer_contacts_as_cc\": false\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"INVALID_REQUEST\",\n  \"code\": \"COULD_NOT_CREATE_RESOURCE\",\n  \"message\": \"string\",\n  \"field\": \"string\",\n  \"resource_id\": \"string\",\n  \"resource_type\": \"PRICING_PLAN\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "251e5446-03d1-4af0-93b1-945c3af72f04",
+          "name": "Get workflow action by ID",
+          "request": {
+            "name": "Get workflow action by ID",
+            "description": {
+              "content": "Fetches a single workflow action by resource ID. Requires the WORKFLOW_ACTION.VIEW permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v{{version}}",
+                "workflow-actions",
+                ":resourceId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "",
+                  "key": "resourceId",
+                  "description": "(Required) The ID of the resource to be requested."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) ",
+                "key": "X-API-KEY",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Platform ID.",
+                "key": "x-platform-id",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "66eb5cc0-3773-4bdc-bef6-82878232f171",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v{{version}}",
+                    "workflow-actions",
+                    ":resourceId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "resourceId",
+                      "description": "(Required) The ID of the resource to be requested."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "X-API-KEY",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Platform ID.",
+                    "key": "x-platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"object_type\": \"string\",\n  \"id\": \"string\",\n  \"workflow_id\": \"string\",\n  \"type\": \"SEND_EMAIL_TO_CUSTOMER\",\n  \"description\": \"string\",\n  \"status\": \"INACTIVE\",\n  \"created_at\": \"string\",\n  \"updated_at\": \"string\",\n  \"send_email_to_customer\": {\n    \"integration_id\": \"string\",\n    \"subject\": \"string\",\n    \"from\": {\n      \"name\": \"string\",\n      \"email\": \"string\"\n    },\n    \"reply_to\": {\n      \"name\": \"string\",\n      \"email\": \"string\"\n    },\n    \"cc_recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"bcc_recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"template_name\": \"string\",\n    \"variant\": \"PRICING_PLAN_SUBSCRIPTION\",\n    \"invoice\": {\n      \"type\": \"OVERDUE\",\n      \"include_pdf\": false,\n      \"include_payment_link\": false,\n      \"include_customer_contacts_as_cc\": false\n    },\n    \"payment\": {\n      \"include_customer_contacts_as_cc\": true\n    },\n    \"pricing_plan_subscription\": {\n      \"include_customer_contacts_as_cc\": true\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7711dc90-bdc0-4540-b410-89e56b71975d",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v{{version}}",
+                    "workflow-actions",
+                    ":resourceId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "resourceId",
+                      "description": "(Required) The ID of the resource to be requested."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "X-API-KEY",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Platform ID.",
+                    "key": "x-platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"INVALID_REQUEST\",\n  \"code\": \"COULD_NOT_CREATE_RESOURCE\",\n  \"message\": \"string\",\n  \"field\": \"string\",\n  \"resource_id\": \"string\",\n  \"resource_type\": \"PRICING_PLAN\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "02a872b7-547e-4212-8bee-972820d635b8",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v{{version}}",
+                    "workflow-actions",
+                    ":resourceId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "resourceId",
+                      "description": "(Required) The ID of the resource to be requested."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "X-API-KEY",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Platform ID.",
+                    "key": "x-platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"INVALID_REQUEST\",\n  \"code\": \"COULD_NOT_CREATE_RESOURCE\",\n  \"message\": \"string\",\n  \"field\": \"string\",\n  \"resource_id\": \"string\",\n  \"resource_type\": \"PRICING_PLAN\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "21b9ce76-e52e-497c-9b31-b412509a381b",
+          "name": "Delete a workflow action by ID",
+          "request": {
+            "name": "Delete a workflow action by ID",
+            "description": {
+              "content": "Deletes the workflow action identified by the provided resource ID and returns the deleted action. Requires the WORKFLOW_ACTION.DELETE permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v{{version}}",
+                "workflow-actions",
+                ":resourceId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "",
+                  "key": "resourceId",
+                  "description": "(Required) The ID of the resource to be requested."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) ",
+                "key": "X-API-KEY",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Platform ID.",
+                "key": "x-platform-id",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "70b628d3-6406-4d8b-adc9-0bd861efbcdc",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v{{version}}",
+                    "workflow-actions",
+                    ":resourceId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "resourceId",
+                      "description": "(Required) The ID of the resource to be requested."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "X-API-KEY",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Platform ID.",
+                    "key": "x-platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"object_type\": \"string\",\n  \"id\": \"string\",\n  \"workflow_id\": \"string\",\n  \"type\": \"SEND_EMAIL_TO_CUSTOMER\",\n  \"description\": \"string\",\n  \"status\": \"INACTIVE\",\n  \"created_at\": \"string\",\n  \"updated_at\": \"string\",\n  \"send_email_to_customer\": {\n    \"integration_id\": \"string\",\n    \"subject\": \"string\",\n    \"from\": {\n      \"name\": \"string\",\n      \"email\": \"string\"\n    },\n    \"reply_to\": {\n      \"name\": \"string\",\n      \"email\": \"string\"\n    },\n    \"cc_recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"bcc_recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"template_name\": \"string\",\n    \"variant\": \"PRICING_PLAN_SUBSCRIPTION\",\n    \"invoice\": {\n      \"type\": \"OVERDUE\",\n      \"include_pdf\": false,\n      \"include_payment_link\": false,\n      \"include_customer_contacts_as_cc\": false\n    },\n    \"payment\": {\n      \"include_customer_contacts_as_cc\": true\n    },\n    \"pricing_plan_subscription\": {\n      \"include_customer_contacts_as_cc\": true\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "34ff37b9-22e8-4c9e-a6e9-8ffbf4d5b5d0",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v{{version}}",
+                    "workflow-actions",
+                    ":resourceId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "resourceId",
+                      "description": "(Required) The ID of the resource to be requested."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "X-API-KEY",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Platform ID.",
+                    "key": "x-platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"INVALID_REQUEST\",\n  \"code\": \"COULD_NOT_CREATE_RESOURCE\",\n  \"message\": \"string\",\n  \"field\": \"string\",\n  \"resource_id\": \"string\",\n  \"resource_type\": \"PRICING_PLAN\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fcb541d9-5aa4-4d22-b636-c125331031c1",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v{{version}}",
+                    "workflow-actions",
+                    ":resourceId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "resourceId",
+                      "description": "(Required) The ID of the resource to be requested."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "X-API-KEY",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Platform ID.",
+                    "key": "x-platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"INVALID_REQUEST\",\n  \"code\": \"COULD_NOT_CREATE_RESOURCE\",\n  \"message\": \"string\",\n  \"field\": \"string\",\n  \"resource_id\": \"string\",\n  \"resource_type\": \"PRICING_PLAN\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "97ad57bb-c1ea-410c-9d6b-ecb6b140c3a7",
+          "name": "Update a workflow action by ID",
+          "request": {
+            "name": "Update a workflow action by ID",
+            "description": {
+              "content": "Updates workflow action fields. Requires the WORKFLOW_ACTION.UPDATE permission.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v{{version}}",
+                "workflow-actions",
+                ":resourceId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "",
+                  "key": "resourceId",
+                  "description": "(Required) The ID of the resource to be requested."
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) ",
+                "key": "X-API-KEY",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Platform ID.",
+                "key": "x-platform-id",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"object_type\": \"<string,null>\",\n  \"id\": \"<string,null>\",\n  \"workflow_id\": \"<string>\",\n  \"type\": \"<string>\",\n  \"description\": \"<string,null>\",\n  \"status\": \"<string>\",\n  \"created_at\": \"<string,null>\",\n  \"updated_at\": \"<string,null>\",\n  \"send_email_to_customer\": {\n    \"integration_id\": \"<string>\",\n    \"subject\": \"<string,null>\",\n    \"from\": {\n      \"name\": \"<string,null>\",\n      \"email\": \"<string>\"\n    },\n    \"reply_to\": {\n      \"name\": \"<string,null>\",\n      \"email\": \"<string>\"\n    },\n    \"cc_recipients\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"bcc_recipients\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"template_name\": \"<string>\",\n    \"variant\": \"<string>\",\n    \"invoice\": {\n      \"type\": \"<string>\",\n      \"include_pdf\": \"<boolean>\",\n      \"include_payment_link\": \"<boolean>\",\n      \"include_customer_contacts_as_cc\": \"<boolean>\"\n    },\n    \"payment\": {\n      \"include_customer_contacts_as_cc\": \"<boolean>\"\n    },\n    \"pricing_plan_subscription\": {\n      \"include_customer_contacts_as_cc\": \"<boolean>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4aea09aa-1422-4491-84cd-db5ec25b7685",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v{{version}}",
+                    "workflow-actions",
+                    ":resourceId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "resourceId",
+                      "description": "(Required) The ID of the resource to be requested."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "X-API-KEY",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Platform ID.",
+                    "key": "x-platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"object_type\": \"<string,null>\",\n  \"id\": \"<string,null>\",\n  \"workflow_id\": \"<string>\",\n  \"type\": \"SEND_EMAIL_TO_CUSTOMER\",\n  \"description\": \"<string,null>\",\n  \"status\": \"INACTIVE\",\n  \"created_at\": \"<string,null>\",\n  \"updated_at\": \"<string,null>\",\n  \"send_email_to_customer\": {\n    \"integration_id\": \"string\",\n    \"subject\": \"string\",\n    \"from\": {\n      \"name\": \"string\",\n      \"email\": \"string\"\n    },\n    \"reply_to\": {\n      \"name\": \"string\",\n      \"email\": \"string\"\n    },\n    \"cc_recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"bcc_recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"template_name\": \"string\",\n    \"variant\": \"PAYMENT\",\n    \"invoice\": {\n      \"type\": \"UPCOMING_PAYMENT_REMINDER\",\n      \"include_pdf\": true,\n      \"include_payment_link\": true,\n      \"include_customer_contacts_as_cc\": false\n    },\n    \"payment\": {\n      \"include_customer_contacts_as_cc\": true\n    },\n    \"pricing_plan_subscription\": {\n      \"include_customer_contacts_as_cc\": true\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"object_type\": \"string\",\n  \"id\": \"string\",\n  \"workflow_id\": \"string\",\n  \"type\": \"SEND_EMAIL_TO_CUSTOMER\",\n  \"description\": \"string\",\n  \"status\": \"INACTIVE\",\n  \"created_at\": \"string\",\n  \"updated_at\": \"string\",\n  \"send_email_to_customer\": {\n    \"integration_id\": \"string\",\n    \"subject\": \"string\",\n    \"from\": {\n      \"name\": \"string\",\n      \"email\": \"string\"\n    },\n    \"reply_to\": {\n      \"name\": \"string\",\n      \"email\": \"string\"\n    },\n    \"cc_recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"bcc_recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"template_name\": \"string\",\n    \"variant\": \"PRICING_PLAN_SUBSCRIPTION\",\n    \"invoice\": {\n      \"type\": \"OVERDUE\",\n      \"include_pdf\": false,\n      \"include_payment_link\": false,\n      \"include_customer_contacts_as_cc\": false\n    },\n    \"payment\": {\n      \"include_customer_contacts_as_cc\": true\n    },\n    \"pricing_plan_subscription\": {\n      \"include_customer_contacts_as_cc\": true\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "df3aa81e-8914-4f52-85c7-5a1b13566600",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v{{version}}",
+                    "workflow-actions",
+                    ":resourceId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "resourceId",
+                      "description": "(Required) The ID of the resource to be requested."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "X-API-KEY",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Platform ID.",
+                    "key": "x-platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"object_type\": \"<string,null>\",\n  \"id\": \"<string,null>\",\n  \"workflow_id\": \"<string>\",\n  \"type\": \"SEND_EMAIL_TO_CUSTOMER\",\n  \"description\": \"<string,null>\",\n  \"status\": \"INACTIVE\",\n  \"created_at\": \"<string,null>\",\n  \"updated_at\": \"<string,null>\",\n  \"send_email_to_customer\": {\n    \"integration_id\": \"string\",\n    \"subject\": \"string\",\n    \"from\": {\n      \"name\": \"string\",\n      \"email\": \"string\"\n    },\n    \"reply_to\": {\n      \"name\": \"string\",\n      \"email\": \"string\"\n    },\n    \"cc_recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"bcc_recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"template_name\": \"string\",\n    \"variant\": \"PAYMENT\",\n    \"invoice\": {\n      \"type\": \"UPCOMING_PAYMENT_REMINDER\",\n      \"include_pdf\": true,\n      \"include_payment_link\": true,\n      \"include_customer_contacts_as_cc\": false\n    },\n    \"payment\": {\n      \"include_customer_contacts_as_cc\": true\n    },\n    \"pricing_plan_subscription\": {\n      \"include_customer_contacts_as_cc\": true\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"INVALID_REQUEST\",\n  \"code\": \"COULD_NOT_CREATE_RESOURCE\",\n  \"message\": \"string\",\n  \"field\": \"string\",\n  \"resource_id\": \"string\",\n  \"resource_type\": \"PRICING_PLAN\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f3ce110c-834f-4771-ab74-9063f15b5121",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v{{version}}",
+                    "workflow-actions",
+                    ":resourceId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "",
+                      "key": "resourceId",
+                      "description": "(Required) The ID of the resource to be requested."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "X-API-KEY",
+                    "value": "<string>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Platform ID.",
+                    "key": "x-platform-id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"object_type\": \"<string,null>\",\n  \"id\": \"<string,null>\",\n  \"workflow_id\": \"<string>\",\n  \"type\": \"SEND_EMAIL_TO_CUSTOMER\",\n  \"description\": \"<string,null>\",\n  \"status\": \"INACTIVE\",\n  \"created_at\": \"<string,null>\",\n  \"updated_at\": \"<string,null>\",\n  \"send_email_to_customer\": {\n    \"integration_id\": \"string\",\n    \"subject\": \"string\",\n    \"from\": {\n      \"name\": \"string\",\n      \"email\": \"string\"\n    },\n    \"reply_to\": {\n      \"name\": \"string\",\n      \"email\": \"string\"\n    },\n    \"cc_recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"bcc_recipients\": [\n      \"string\",\n      \"string\"\n    ],\n    \"template_name\": \"string\",\n    \"variant\": \"PAYMENT\",\n    \"invoice\": {\n      \"type\": \"UPCOMING_PAYMENT_REMINDER\",\n      \"include_pdf\": true,\n      \"include_payment_link\": true,\n      \"include_customer_contacts_as_cc\": false\n    },\n    \"payment\": {\n      \"include_customer_contacts_as_cc\": true\n    },\n    \"pricing_plan_subscription\": {\n      \"include_customer_contacts_as_cc\": true\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"INVALID_REQUEST\",\n  \"code\": \"COULD_NOT_CREATE_RESOURCE\",\n  \"message\": \"string\",\n  \"field\": \"string\",\n  \"resource_id\": \"string\",\n  \"resource_type\": \"PRICING_PLAN\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://test.api.solvimon.com",
+      "key": "baseUrl"
+    },
+    {
+      "disabled": false,
+      "description": {
+        "content": "(Required) version",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "1",
+      "key": "version"
+    }
+  ],
+  "info": {
+    "_postman_id": "a19ec519-df7f-4dce-8490-900b4f55d542",
+    "name": "Configuration alertRules workflowActions API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

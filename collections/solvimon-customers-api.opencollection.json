@@ -1,0 +1,586 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Configuration alertRules customers API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "customers",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a list of all customers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://test.api.solvimon.com/v:version/customers",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The amount of records shown in the list"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page which is going to be shown"
+              },
+              {
+                "name": "order_by",
+                "value": "",
+                "type": "query",
+                "description": "The parameter by which the response is ordered."
+              },
+              {
+                "name": "custom_field",
+                "value": "",
+                "type": "query",
+                "description": "Filter the response by a custom field value."
+              },
+              {
+                "name": "order_direction",
+                "value": "",
+                "type": "query",
+                "description": "The order direction by which the response is ordered."
+              },
+              {
+                "name": "reference",
+                "value": "",
+                "type": "query",
+                "description": "The reference by which the resource will be filtered."
+              }
+            ]
+          },
+          "docs": "Requires the CUSTOMER.VIEW permission."
+        },
+        {
+          "info": {
+            "name": "Create a customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/customers",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the CUSTOMER.CREATE permission."
+        },
+        {
+          "info": {
+            "name": "Update or create a customer (upsert)",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://test.api.solvimon.com/v:version/customers",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "identifier_field",
+                "value": "",
+                "type": "query",
+                "description": "Which field to use to identify whether the resource exists or not"
+              },
+              {
+                "name": "custom_field_reference",
+                "value": "",
+                "type": "query",
+                "description": "Which custom field to use to identify whether the resource exists or not"
+              },
+              {
+                "name": "field_actions",
+                "value": "",
+                "type": "query",
+                "description": "The list of actions for specific fields."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the CUSTOMER.CREATE, CUSTOMER.UPDATE or CUSTOMER.STATUS.DRAFT.UPDATE permission."
+        },
+        {
+          "info": {
+            "name": "Get a customer by ID or reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://test.api.solvimon.com/v:version/customers/:resourceIdOrReference",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceIdOrReference",
+                "value": "",
+                "type": "path",
+                "description": "The ID or reference of the resource."
+              }
+            ]
+          },
+          "docs": "Requires the CUSTOMER.VIEW permission."
+        },
+        {
+          "info": {
+            "name": "Update a customer by ID or reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://test.api.solvimon.com/v:version/customers/:resourceIdOrReference",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceIdOrReference",
+                "value": "",
+                "type": "path",
+                "description": "The ID or reference of the resource."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the CUSTOMER.UPDATE or CUSTOMER.STATUS.DRAFT.UPDATE permission."
+        },
+        {
+          "info": {
+            "name": "Delete a customer by ID or reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://test.api.solvimon.com/v:version/customers/:resourceIdOrReference",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceIdOrReference",
+                "value": "",
+                "type": "path",
+                "description": "The ID or reference of the resource."
+              }
+            ]
+          },
+          "docs": "Requires the CUSTOMER.DELETE or CUSTOMER.STATUS.DRAFT.DELETE permission."
+        },
+        {
+          "info": {
+            "name": "Get a customer its entitlements",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://test.api.solvimon.com/v:version/customers/:resourceIdOrReference/entitlements",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceIdOrReference",
+                "value": "",
+                "type": "path",
+                "description": "The ID or reference of the resource."
+              }
+            ]
+          },
+          "docs": "Requires the CUSTOMER.VIEW permission."
+        },
+        {
+          "info": {
+            "name": "Activate a customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/customers/:resourceIdOrReference/activate",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceIdOrReference",
+                "value": "",
+                "type": "path",
+                "description": "The ID or reference of the resource."
+              }
+            ]
+          },
+          "docs": "Requires the CUSTOMER.UPDATE or CUSTOMER.STATUS.DRAFT.UPDATE permission."
+        },
+        {
+          "info": {
+            "name": "Deprecate a customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/customers/:resourceIdOrReference/deprecate",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceIdOrReference",
+                "value": "",
+                "type": "path",
+                "description": "The ID or reference of the resource."
+              }
+            ]
+          },
+          "docs": "Requires the CUSTOMER.UPDATE permission."
+        },
+        {
+          "info": {
+            "name": "Archive a customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/customers/:resourceIdOrReference/archive",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceIdOrReference",
+                "value": "",
+                "type": "path",
+                "description": "The ID or reference of the resource."
+              }
+            ]
+          },
+          "docs": "Requires the CUSTOMER.UPDATE permission."
+        },
+        {
+          "info": {
+            "name": "Forget a customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/customers/:resourceIdOrReference/forget",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceIdOrReference",
+                "value": "",
+                "type": "path",
+                "description": "The ID or reference of the resource."
+              }
+            ]
+          },
+          "docs": "Requires the CUSTOMER.UPDATE permission."
+        },
+        {
+          "info": {
+            "name": "Get the balance of all wallets of a customer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/customers/:resourceIdOrReference/wallets/balance",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceIdOrReference",
+                "value": "",
+                "type": "path",
+                "description": "The ID or reference of the resource."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the CUSTOMER.VIEW or WALLET.VIEW permission."
+        },
+        {
+          "info": {
+            "name": "Search customers",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/customers/search",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "expand[]",
+                "value": "",
+                "type": "query",
+                "description": "The id fields of the resources that are going to be expanded."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The amount of records shown in the list"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page which is going to be shown"
+              },
+              {
+                "name": "order_by",
+                "value": "",
+                "type": "query",
+                "description": "The parameter by which the response is ordered. default = name"
+              },
+              {
+                "name": "order_direction",
+                "value": "",
+                "type": "query",
+                "description": "The parameter for the response ordering direction (asc, desc) default asc"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the CUSTOMER.VIEW permission."
+        },
+        {
+          "info": {
+            "name": "Validate tax id values",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/customers/validate-tax-id",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the CUSTOMER.CREATE permission."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

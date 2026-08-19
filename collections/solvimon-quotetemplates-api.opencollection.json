@@ -1,0 +1,254 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Configuration alertRules quoteTemplates API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "quoteTemplates",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a list of all quote templates",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://test.api.solvimon.com/v:version/quote-templates",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "statuses[]",
+                "value": "",
+                "type": "query",
+                "description": "Filter quote templates based on status(es)"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The amount of records shown in the list"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page which is going to be shown"
+              },
+              {
+                "name": "order_by",
+                "value": "",
+                "type": "query",
+                "description": "The parameter by which the response is ordered."
+              },
+              {
+                "name": "order_direction",
+                "value": "",
+                "type": "query",
+                "description": "The order direction by which the response is ordered."
+              }
+            ]
+          },
+          "docs": "Requires the QUOTE.TEMPLATE.VIEW permission."
+        },
+        {
+          "info": {
+            "name": "Create a quote template",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/quote-templates",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the QUOTE.TEMPLATE.CREATE permission."
+        },
+        {
+          "info": {
+            "name": "Get a quote template by resource ID or reference",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://test.api.solvimon.com/v:version/quote-templates/:resourceIdOrReference",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceIdOrReference",
+                "value": "",
+                "type": "path",
+                "description": "The ID or reference of the resource."
+              }
+            ]
+          },
+          "docs": "Requires the QUOTE.TEMPLATE.VIEW permission."
+        },
+        {
+          "info": {
+            "name": "Update a quote template",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://test.api.solvimon.com/v:version/quote-templates/:resourceIdOrReference",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceIdOrReference",
+                "value": "",
+                "type": "path",
+                "description": "The ID or reference of the resource."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the QUOTE.TEMPLATE.UPDATE permission."
+        },
+        {
+          "info": {
+            "name": "Activate a quote template",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/quote-templates/:resourceIdOrReference/activate",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceIdOrReference",
+                "value": "",
+                "type": "path",
+                "description": "The ID or reference of the resource."
+              }
+            ]
+          },
+          "docs": "Transitions a quote template to ACTIVE so it can be instantiated. Requires the QUOTE.TEMPLATE.UPDATE permission."
+        },
+        {
+          "info": {
+            "name": "Archive a quote template",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/quote-templates/:resourceIdOrReference/archive",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceIdOrReference",
+                "value": "",
+                "type": "path",
+                "description": "The ID or reference of the resource."
+              }
+            ]
+          },
+          "docs": "Transitions a quote template to ARCHIVED. Archived quote templates can no longer be instantiated. Requires the QUOTE.TEMPLATE.UPDATE permission."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

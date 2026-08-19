@@ -1,0 +1,619 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Configuration alertRules pricingPlanSubscriptions API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "pricingPlanSubscriptions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a list of pricing plan subscriptions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://test.api.solvimon.com/v:version/pricing-plan-subscriptions",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "expand[]",
+                "value": "",
+                "type": "query",
+                "description": "The id fields of the resources that are going to be expanded."
+              },
+              {
+                "name": "customer_id",
+                "value": "",
+                "type": "query",
+                "description": "The resource id of the customer."
+              },
+              {
+                "name": "pricing_plan_subscription_group_id",
+                "value": "",
+                "type": "query",
+                "description": "The resource id of the pricing plan subscription group."
+              },
+              {
+                "name": "reference",
+                "value": "",
+                "type": "query",
+                "description": "The reference by which the resource will be filtered. To use this filter, the customer_id must also be present."
+              },
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "The type of the pricing plan subscription."
+              },
+              {
+                "name": "variant",
+                "value": "",
+                "type": "query",
+                "description": "The variant of the pricing plan subscription."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "The status of the pricing plan subscription."
+              },
+              {
+                "name": "statuses[]",
+                "value": "",
+                "type": "query",
+                "description": "The status(es) of the pricing plan subscription."
+              },
+              {
+                "name": "custom_field",
+                "value": "",
+                "type": "query",
+                "description": "Filter the response by a custom field value."
+              },
+              {
+                "name": "start_at",
+                "value": "",
+                "type": "query",
+                "description": "Range filter for the start_at of the first schedule in the pricing plan subscription (ISO-8601)."
+              },
+              {
+                "name": "created_at",
+                "value": "",
+                "type": "query",
+                "description": "Range filter for the created_at in the pricing plan subscription (ISO-8601)."
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page which is going to be shown"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The amount of records shown in the list"
+              },
+              {
+                "name": "order_by",
+                "value": "",
+                "type": "query",
+                "description": "The parameter by which the response is ordered."
+              },
+              {
+                "name": "order_direction",
+                "value": "",
+                "type": "query",
+                "description": "The order direction by which the response is ordered."
+              }
+            ]
+          },
+          "docs": "Requires the PRICING_PLAN_SUBSCRIPTION.VIEW or QUOTE.PRICING_PLAN_SUBSCRIPTION.VIEW permission."
+        },
+        {
+          "info": {
+            "name": "Create a pricing plan subscription",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/pricing-plan-subscriptions",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the PRICING_PLAN_SUBSCRIPTION.CREATE or QUOTE.PRICING_PLAN_SUBSCRIPTION.CREATE permission."
+        },
+        {
+          "info": {
+            "name": "Update or create a pricing plan subscription (upsert)",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://test.api.solvimon.com/v:version/pricing-plan-subscriptions",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "identifier_field",
+                "value": "",
+                "type": "query",
+                "description": "Which field to use to identify whether the resource exists or not"
+              },
+              {
+                "name": "custom_field_reference",
+                "value": "",
+                "type": "query",
+                "description": "Which custom field to use to identify whether the resource exists or not"
+              },
+              {
+                "name": "field_actions",
+                "value": "",
+                "type": "query",
+                "description": "The list of actions for specific fields."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the PRICING_PLAN_SUBSCRIPTION.CREATE, QUOTE.PRICING_PLAN_SUBSCRIPTION.CREATE, PRICING_PLAN_SUBSCRIPTION.UPDATE or QUOTE.PRICING_PLAN_SUBSCRIPTION.UPDATE permission."
+        },
+        {
+          "info": {
+            "name": "Create a pricing plan subscription and schedule. This will also result in a first invoice being created for the provided pricing plan schedule and subscription.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/pricing-plan-subscriptions/init",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the PRICING_PLAN_SUBSCRIPTION.CREATE permission."
+        },
+        {
+          "info": {
+            "name": "Search a pricing plan subscription",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/pricing-plan-subscriptions/search",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "expand[]",
+                "value": "",
+                "type": "query",
+                "description": "The id fields of the resources that are going to be expanded."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The amount of records shown in the list"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "The page which is going to be shown"
+              },
+              {
+                "name": "order_by",
+                "value": "",
+                "type": "query",
+                "description": "The parameter by which the response is ordered. default = name"
+              },
+              {
+                "name": "order_direction",
+                "value": "",
+                "type": "query",
+                "description": "The parameter for the response ordering direction (asc, desc) default asc"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the PRICING_PLAN_SUBSCRIPTION.VIEW permission."
+        },
+        {
+          "info": {
+            "name": "Get a pricing plan subscription by its ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://test.api.solvimon.com/v:version/pricing-plan-subscriptions/:resourceId",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource to be requested."
+              },
+              {
+                "name": "expand[]",
+                "value": "",
+                "type": "query",
+                "description": "The id fields of the resources that are going to be expanded."
+              }
+            ]
+          },
+          "docs": "Requires the PRICING_PLAN_SUBSCRIPTION.VIEW or QUOTE.PRICING_PLAN_SUBSCRIPTION.VIEW permission."
+        },
+        {
+          "info": {
+            "name": "Update a pricing plan subscription by resource ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://test.api.solvimon.com/v:version/pricing-plan-subscriptions/:resourceId",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource to be requested."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the PRICING_PLAN_SUBSCRIPTION.UPDATE or QUOTE.PRICING_PLAN_SUBSCRIPTION.UPDATE permission."
+        },
+        {
+          "info": {
+            "name": "Delete a pricing plan subscription by resource ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://test.api.solvimon.com/v:version/pricing-plan-subscriptions/:resourceId",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource to be requested."
+              }
+            ]
+          },
+          "docs": "Requires the PRICING_PLAN_SUBSCRIPTION.DELETE permission."
+        },
+        {
+          "info": {
+            "name": "Void a pricing plan subscription by resource ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/pricing-plan-subscriptions/:resourceId/void",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource for which the action is posted."
+              }
+            ]
+          },
+          "docs": "Requires the PRICING_PLAN_SUBSCRIPTION.STATUS.UPDATE permission."
+        },
+        {
+          "info": {
+            "name": "Archive a pricing plan subscription by resource ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/pricing-plan-subscriptions/:resourceId/archive",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource for which the action is posted."
+              }
+            ]
+          },
+          "docs": "Requires the PRICING_PLAN_SUBSCRIPTION.STATUS.UPDATE permission."
+        },
+        {
+          "info": {
+            "name": "Cancel a pricing plan subscription by resource ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/pricing-plan-subscriptions/:resourceId/cancel",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource for which the action is posted."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the PRICING_PLAN_SUBSCRIPTION.CANCEL permission."
+        },
+        {
+          "info": {
+            "name": "Copy a pricing plan subscription by resource ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/pricing-plan-subscriptions/:resourceId/copy",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource for which the action is posted."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the PRICING_PLAN_SUBSCRIPTION.CREATE permission."
+        },
+        {
+          "info": {
+            "name": "Change the payment method of a pricing plan subscription",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://test.api.solvimon.com/v:version/pricing-plan-subscriptions/:resourceId/update-payment-method",
+            "headers": [
+              {
+                "name": "X-API-KEY",
+                "value": ""
+              },
+              {
+                "name": "x-platform-id",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "version"
+              },
+              {
+                "name": "resourceId",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the resource for which the action is posted."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Requires the PRICING_PLAN_SUBSCRIPTION.UPDATE permission."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
