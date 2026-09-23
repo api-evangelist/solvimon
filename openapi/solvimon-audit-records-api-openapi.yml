@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Configuration alertRules reportDefinitions API
+  title: Identity Audit Records API
   version: 1.0.0
 servers:
 - url: https://test.api.solvimon.com
@@ -8,14 +8,15 @@ servers:
 - url: https://api.solvimon.com
   description: The live environment for our API
 tags:
-- name: reportDefinitions
+- name: Audit Records
 paths:
-  /v{version}/report-definitions:
+  /v{version}/audit-records:
     get:
-      operationId: getReportDefinitions
-      summary: Get all ReportDefinitions
+      operationId: getAuditRecords
+      summary: Get a list of audit records
+      description: Requires the AUDIT_RECORD.VIEW permission.
       tags:
-      - reportDefinitions
+      - Audit Records
       parameters:
       - name: version
         in: path
@@ -24,6 +25,36 @@ paths:
         schema:
           type: string
           default: '1'
+      - name: user_id
+        in: query
+        description: Filter based on user ID
+        required: false
+        schema:
+          type: string
+      - name: target_entity_id
+        in: query
+        description: Filter based on entity resource ID the object belongs to
+        required: false
+        schema:
+          type: string
+      - name: target_id
+        in: query
+        description: Filter based on the resource ID of the object
+        required: false
+        schema:
+          type: string
+      - name: target_type
+        in: query
+        description: Filter based on resource type
+        required: false
+        schema:
+          type: string
+      - name: created_at
+        in: query
+        description: Range filter for the start_at of the audit logs (ISO-8601).
+        required: false
+        schema:
+          type: string
       - name: limit
         in: query
         description: The amount of records shown in the list
@@ -65,7 +96,77 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ReportDefinitionResponseWrapper'
+                $ref: '#/components/schemas/AuditRecordResponseWrapper'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /v{version}/audit-records/{resourceId}:
+    get:
+      operationId: getAuditRecordsByResourceId
+      summary: Get an invoice by resource ID
+      description: Requires the AUDIT_RECORD.VIEW permission.
+      tags:
+      - Audit Records
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditRecord'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
         '401':
           description: Unauthorized
           content:
@@ -86,6 +187,30 @@ paths:
                 $ref: '#/components/schemas/ApiError'
 components:
   schemas:
+    AuditRecordResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditRecord'
+        page:
+          type:
+          - integer
+          - 'null'
+        limit:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      title: AuditRecordResponseWrapper
     ApiErrorResourceType:
       type: string
       enum:
@@ -175,62 +300,62 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
-    ReportParameterName:
-      type: string
-      enum:
-      - report_date
-      - from_date
-      - to_date
-      - updated_to_final_from_date
-      - updated_to_final_to_date
-      - meter
-      - meter_id
-      - customer_id
-      - invoice_id
-      - statuses
-      title: ReportParameterName
-    ReportDefinitionReportCode:
-      type: string
-      enum:
-      - INVOICE
-      - INVOICE_USAGE
-      - INVOICE_HEADER
-      - INVOICE_LINE
-      - INVOICE_TAX
-      - INVOICE_COMMITMENT
-      - CHILD_PARENT_BREAKDOWN
-      - CHILD_PARENT_BREAKDOWN_PLATFORM
-      - NOT_MATCHED_METER_DATA
-      - DUPLICATE_METER_DATA
-      - METERING
-      - CUSTOMER
-      - PRODUCT
-      - PRICING_PLAN_SUBSCRIPTION
-      - PAYMENT
-      - PRICING
-      - REVENUE_RECOGNITION
-      - CLAUSES
-      title: ReportDefinitionReportCode
-    ReportParameter:
+    AuditRecord:
       type: object
       properties:
-        name:
-          $ref: '#/components/schemas/ReportParameterName'
-        type:
-          $ref: '#/components/schemas/ReportParameterType'
-        required:
-          type: boolean
-      title: ReportParameter
-    ReportParameterType:
-      type: string
-      enum:
-      - CUSTOMER_ID
-      - INVOICE_ID
-      - METER_ID
-      - LOCALE_DATE
-      - TIMESTAMP
-      - INVOICE_STATUSES
-      title: ReportParameterType
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        user_id:
+          type:
+          - string
+          - 'null'
+        target_entity_id:
+          type:
+          - string
+          - 'null'
+        target_platform_id:
+          type:
+          - string
+          - 'null'
+        target_resource_type:
+          type:
+          - string
+          - 'null'
+        target_id:
+          type:
+          - string
+          - 'null'
+        target_environment:
+          type:
+          - string
+          - 'null'
+        action:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        message:
+          type:
+          - string
+          - 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+        idempotency_key:
+          type:
+          - string
+          - 'null'
+      title: AuditRecord
     ApiErrorCode:
       type: string
       enum:
@@ -270,57 +395,12 @@ components:
       - IDEMPOTENCY_CHECK_FAILED
       - INVALID_REQUEST
       title: ApiErrorCode
-    ReportColumn:
-      type: object
-      properties:
-        name:
-          type:
-          - string
-          - 'null'
-        order:
-          type:
-          - integer
-          - 'null'
-        default:
-          type:
-          - boolean
-          - 'null'
-        optional:
-          type:
-          - boolean
-          - 'null'
-      title: ReportColumn
     ApiErrorType:
       type: string
       enum:
       - API_ERROR
       - INVALID_REQUEST
       title: ApiErrorType
-    ReportDefinitionResponseWrapper:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ReportDefinition'
-        limit:
-          type:
-          - integer
-          - 'null'
-        page:
-          type:
-          - integer
-          - 'null'
-        total_number_of_pages:
-          type:
-          - integer
-          - 'null'
-        links:
-          $ref: '#/components/schemas/PaginationLinks'
-      required:
-      - data
-      - links
-      title: ReportDefinitionResponseWrapper
     ApiError:
       type: object
       properties:
@@ -367,74 +447,6 @@ components:
           - string
           - 'null'
       title: PaginationLinks
-    ReportDefinitionCategory:
-      type: string
-      enum:
-      - INVOICE
-      - PLATFORM
-      title: ReportDefinitionCategory
-    ReportDefinition:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        report_code:
-          $ref: '#/components/schemas/ReportDefinitionReportCode'
-        category:
-          oneOf:
-          - $ref: '#/components/schemas/ReportDefinitionCategory'
-          - type: 'null'
-        name:
-          type:
-          - string
-          - 'null'
-        description:
-          type:
-          - string
-          - 'null'
-        file_name_format:
-          type:
-          - string
-          - 'null'
-        run_types:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-        target_resource_types:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-        columns:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ReportColumn'
-        one_off_parameters:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ReportParameter'
-        scheduled_parameters:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ReportParameter'
-        trigger_parameters:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ReportParameter'
-      title: ReportDefinition
   securitySchemes:
     API-Key:
       type: apiKey

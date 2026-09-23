@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Configuration alertRules products API
+  title: Configuration Products API
   version: 1.0.0
 servers:
 - url: https://test.api.solvimon.com
@@ -8,7 +8,7 @@ servers:
 - url: https://api.solvimon.com
   description: The live environment for our API
 tags:
-- name: products
+- name: Products
 paths:
   /v{version}/products:
     get:
@@ -16,7 +16,7 @@ paths:
       summary: Get a list of all products
       description: Requires the PRODUCT.VIEW permission.
       tags:
-      - products
+      - Products
       parameters:
       - name: version
         in: path
@@ -106,7 +106,7 @@ paths:
       summary: Create a product
       description: Requires the PRODUCT.CREATE permission.
       tags:
-      - products
+      - Products
       parameters:
       - name: version
         in: path
@@ -173,7 +173,7 @@ paths:
       summary: Update or create a product (upsert)
       description: Requires the PRODUCT.CREATE or PRODUCT.UPDATE permission.
       tags:
-      - products
+      - Products
       parameters:
       - name: version
         in: path
@@ -261,7 +261,7 @@ paths:
       summary: Get a product
       description: Requires the PRODUCT.VIEW permission.
       tags:
-      - products
+      - Products
       parameters:
       - name: version
         in: path
@@ -332,7 +332,7 @@ paths:
       summary: Delete a product
       description: Requires the PRODUCT.DELETE permission.
       tags:
-      - products
+      - Products
       parameters:
       - name: version
         in: path
@@ -401,7 +401,7 @@ paths:
       summary: Update a product
       description: Requires the PRODUCT.UPDATE permission.
       tags:
-      - products
+      - Products
       parameters:
       - name: version
         in: path
@@ -476,7 +476,7 @@ paths:
       summary: Activate a product
       description: Requires the PRODUCT.STATUS.UPDATE permission.
       tags:
-      - products
+      - Products
       parameters:
       - name: version
         in: path
@@ -546,7 +546,7 @@ paths:
       summary: Deprecate a product
       description: Requires the PRODUCT.STATUS.UPDATE permission.
       tags:
-      - products
+      - Products
       parameters:
       - name: version
         in: path
@@ -616,7 +616,7 @@ paths:
       summary: Archive a product
       description: Requires the PRODUCT.STATUS.UPDATE permission.
       tags:
-      - products
+      - Products
       parameters:
       - name: version
         in: path
@@ -683,10 +683,10 @@ paths:
   /v{version}/products/search:
     post:
       operationId: postProductsSearch
-      summary: Search products.
+      summary: Search products
       description: Requires the PRODUCT.VIEW permission.
       tags:
-      - products
+      - Products
       parameters:
       - name: version
         in: path
@@ -776,120 +776,6 @@ paths:
               $ref: '#/components/schemas/SearchCreateRequest'
 components:
   schemas:
-    ProductCategoryTaxCategory:
-      type: string
-      enum:
-      - STANDARD
-      - NO_TAX
-      - EXEMPT
-      description: The default tax category applied to the products in the product category.
-      title: ProductCategoryTaxCategory
-    ProductCreateRequestProductType:
-      type: string
-      enum:
-      - DEFAULT
-      - ADDON
-      title: ProductCreateRequestProductType
-    CustomFieldValue:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type CUSTOM_FIELD
-        reference:
-          type:
-          - string
-          - 'null'
-        value:
-          type:
-          - string
-          - 'null'
-        values:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-        integration_details:
-          oneOf:
-          - $ref: '#/components/schemas/IntegrationDetails'
-          - type: 'null'
-        integration_id:
-          type: string
-          description: The resource ID of the integration linked to the custom field
-      title: CustomFieldValue
-    SearchCreateRequest:
-      type: object
-      properties:
-        search_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/SearchFieldCreateRequest'
-        filter_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/FilterFieldCreateRequest'
-        selection_rule_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/SelectionRuleFieldCreateRequest'
-      title: SearchCreateRequest
-    FilterFieldCreateRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        reference:
-          type:
-          - string
-          - 'null'
-        value:
-          type:
-          - string
-          - 'null'
-        values:
-          type: array
-          items:
-            type: string
-      title: FilterFieldCreateRequest
-    ProductUpdateRequestTaxCategory:
-      type: string
-      enum:
-      - STANDARD
-      - NO_TAX
-      - EXEMPT
-      description: The default tax category applied to the product.
-      title: ProductUpdateRequestTaxCategory
-    LinkedIntegration:
-      type: object
-      properties:
-        id:
-          type: string
-        link_details:
-          type: array
-          items:
-            $ref: '#/components/schemas/LinkDetail'
-      title: LinkedIntegration
-    IntegrationDetails:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-        reference:
-          type:
-          - string
-          - 'null'
-        payment_gateway_variant:
-          $ref: '#/components/schemas/IntegrationDetailsPaymentGatewayVariant'
-        adyen:
-          $ref: '#/components/schemas/AdyenIntegrationDetails'
-        stripe:
-          $ref: '#/components/schemas/StripeIntegrationDetails'
-      title: IntegrationDetails
     ProductCategory:
       type: object
       properties:
@@ -924,57 +810,18 @@ components:
           - 'null'
           description: Resource ID of type CUSTOMER
       title: ProductCategory
-    FeatureResourceReference:
+    LinkDetail:
       type: object
       properties:
-        id:
+        url:
           type:
           - string
           - 'null'
-          description: The ID of the feature.
-        reference:
-          type: string
-          description: The reference of the feature.
-      title: FeatureResourceReference
-    ProductResponseWrapper:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Product'
-        limit:
+        custom_field_name:
           type:
-          - integer
+          - string
           - 'null'
-        page:
-          type:
-          - integer
-          - 'null'
-        total_number_of_pages:
-          type:
-          - integer
-          - 'null'
-        links:
-          $ref: '#/components/schemas/PaginationLinks'
-      required:
-      - data
-      - links
-      title: ProductResponseWrapper
-    ProductCreateRequestTaxCategory:
-      type: string
-      enum:
-      - STANDARD
-      - NO_TAX
-      - EXEMPT
-      description: The default tax category applied to the product.
-      title: ProductCreateRequestTaxCategory
-    StripeIntegrationDetails:
-      type: object
-      properties:
-        payment_method_id:
-          type: string
-      title: StripeIntegrationDetails
+      title: LinkDetail
     ProductCreateRequest:
       type: object
       properties:
@@ -1052,45 +899,198 @@ components:
           - string
           - 'null'
       title: ProductCreateRequest
-    IntegrationDetailsPaymentGatewayVariant:
+    ProductProductType:
       type: string
       enum:
-      - ADYEN
-      - STRIPE
-      title: IntegrationDetailsPaymentGatewayVariant
-    ProductStatus:
+      - DEFAULT
+      - ADDON
+      title: ProductProductType
+    ApiErrorCode:
       type: string
       enum:
-      - DRAFT
-      - ACTIVE
-      - ARCHIVED
-      - DEPRECATED
-      description: The status of the product.
-      title: ProductStatus
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    SearchCreateRequest:
+      type: object
+      properties:
+        search_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchFieldCreateRequest'
+        filter_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/FilterFieldCreateRequest'
+        selection_rule_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/SelectionRuleFieldCreateRequest'
+      title: SearchCreateRequest
+    ProductTaxCategory:
+      type: string
+      enum:
+      - STANDARD
+      - NO_TAX
+      - EXEMPT
+      description: The default tax category applied to the product.
+      title: ProductTaxCategory
+    Product:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        category_id:
+          type: string
+          description: The resource ID of the product category, that belongs to the product.
+        category:
+          oneOf:
+          - $ref: '#/components/schemas/ProductCategory'
+          - type: 'null'
+        parent_product_id:
+          type:
+          - string
+          - 'null'
+          description: The resource ID of the original product, to which the product will belong to.
+        name:
+          type: string
+        reference:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/ProductStatus'
+          - type: 'null'
+          description: The status of the product.
+        product_type:
+          $ref: '#/components/schemas/ProductProductType'
+        tax_category:
+          oneOf:
+          - $ref: '#/components/schemas/ProductTaxCategory'
+          - type: 'null'
+          description: The default tax category applied to the product.
+        features:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FeatureResourceReference'
+          description: The features associated with the product.
+        custom_fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomFieldValue'
+        display_order:
+          type:
+          - integer
+          - 'null'
+          description: Determines the order in which products are displayed on overview pages and invoices. The lowest number gets the highest priority.
+        linked_integrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/LinkedIntegration'
+        billing_entity_id:
+          type:
+          - string
+          - 'null'
+          description: The resource ID of the billing entity linked to this product.
+        customer_id:
+          type:
+          - string
+          - 'null'
+      title: Product
+    SelectionRuleFieldCreateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type:
+          - string
+          - 'null'
+      title: SelectionRuleFieldCreateRequest
+    StripeIntegrationDetails:
+      type: object
+      properties:
+        payment_method_id:
+          type: string
+      title: StripeIntegrationDetails
+    FilterFieldCreateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        reference:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+        values:
+          type: array
+          items:
+            type: string
+      title: FilterFieldCreateRequest
+    AdyenIntegrationDetails:
+      type: object
+      properties:
+        recurring_detail_reference:
+          type: string
+      title: AdyenIntegrationDetails
     ProductUpdateRequestProductType:
       type: string
       enum:
       - DEFAULT
       - ADDON
       title: ProductUpdateRequestProductType
-    LinkDetail:
-      type: object
-      properties:
-        url:
-          type:
-          - string
-          - 'null'
-        custom_field_name:
-          type:
-          - string
-          - 'null'
-      title: LinkDetail
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
     ApiError:
       type: object
       properties:
@@ -1117,16 +1117,194 @@ components:
       - code
       - message
       title: ApiError
-    SelectionRuleFieldCreateRequest:
+    ProductResponseWrapper:
       type: object
       properties:
-        name:
-          type: string
-        value:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+        limit:
+          type:
+          - integer
+          - 'null'
+        page:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      - links
+      title: ProductResponseWrapper
+    IntegrationDetails:
+      type: object
+      properties:
+        id:
           type:
           - string
           - 'null'
-      title: SelectionRuleFieldCreateRequest
+        reference:
+          type:
+          - string
+          - 'null'
+        payment_gateway_variant:
+          $ref: '#/components/schemas/IntegrationDetailsPaymentGatewayVariant'
+        adyen:
+          $ref: '#/components/schemas/AdyenIntegrationDetails'
+        stripe:
+          $ref: '#/components/schemas/StripeIntegrationDetails'
+      title: IntegrationDetails
+    ProductUpdateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the product.
+      title: ProductUpdateRequestStatus
+    ProductUpdateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        category_id:
+          type: string
+          description: The resource ID of the product category, that belongs to the product.
+        category:
+          oneOf:
+          - $ref: '#/components/schemas/ProductCategory'
+          - type: 'null'
+        parent_product_id:
+          type:
+          - string
+          - 'null'
+          description: The resource ID of the original product, to which the product will belong to.
+        name:
+          type: string
+        reference:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/ProductUpdateRequestStatus'
+          - type: 'null'
+          description: The status of the product.
+        product_type:
+          $ref: '#/components/schemas/ProductUpdateRequestProductType'
+        tax_category:
+          oneOf:
+          - $ref: '#/components/schemas/ProductUpdateRequestTaxCategory'
+          - type: 'null'
+          description: The default tax category applied to the product.
+        features:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/FeatureResourceReference'
+          description: The features associated with the product.
+        custom_fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomFieldValue'
+        display_order:
+          type:
+          - integer
+          - 'null'
+          description: Determines the order in which products are displayed on overview pages and invoices. The lowest number gets the highest priority.
+        linked_integrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/LinkedIntegration'
+        billing_entity_id:
+          type:
+          - string
+          - 'null'
+          description: The resource ID of the billing entity linked to this product.
+        customer_id:
+          type:
+          - string
+          - 'null'
+      title: ProductUpdateRequest
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    SearchFieldCreateRequest:
+      type: object
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+        value:
+          type: string
+        wildcard_start:
+          type: boolean
+        wildcard_end:
+          type: boolean
+        ignore_case:
+          type: boolean
+      title: SearchFieldCreateRequest
+    ProductCreateRequestProductType:
+      type: string
+      enum:
+      - DEFAULT
+      - ADDON
+      title: ProductCreateRequestProductType
+    FeatureResourceReference:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The ID of the feature.
+        reference:
+          type: string
+          description: The reference of the feature.
+      title: FeatureResourceReference
+    ProductStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the product.
+      title: ProductStatus
+    LinkedIntegration:
+      type: object
+      properties:
+        id:
+          type: string
+        link_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/LinkDetail'
+      title: LinkedIntegration
     ApiErrorResourceType:
       type: string
       enum:
@@ -1216,12 +1394,20 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
-    AdyenIntegrationDetails:
-      type: object
-      properties:
-        recurring_detail_reference:
-          type: string
-      title: AdyenIntegrationDetails
+    IntegrationDetailsPaymentGatewayVariant:
+      type: string
+      enum:
+      - ADYEN
+      - STRIPE
+      title: IntegrationDetailsPaymentGatewayVariant
+    ProductUpdateRequestTaxCategory:
+      type: string
+      enum:
+      - STANDARD
+      - NO_TAX
+      - EXEMPT
+      description: The default tax category applied to the product.
+      title: ProductUpdateRequestTaxCategory
     ProductCreateRequestStatus:
       type: string
       enum:
@@ -1231,130 +1417,22 @@ components:
       - DEPRECATED
       description: The status of the product.
       title: ProductCreateRequestStatus
-    ApiErrorCode:
-      type: string
-      enum:
-      - RESOURCE_NOT_FOUND
-      - RESOURCES_NOT_FOUND
-      - UNABLE_TO_PROCESS_INSTRUCTIONS
-      - BAD_REQUEST
-      - UNSUPPORTED_MEDIA_TYPE
-      - RESOURCE_ALREADY_EXISTS
-      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
-      - COULD_NOT_CREATE_RESOURCE
-      - COULD_NOT_UPDATE_RESOURCE
-      - COULD_NOT_DELETE_RESOURCE
-      - MISSING_VERSION
-      - UNSUPPORTED_VERSION
-      - UNAUTHORISED
-      - CUSTOMER_NOT_FOUND
-      - PLATFORM_NOT_FOUND
-      - PRICING_PLAN_NOT_FOUND
-      - PRODUCT_NOT_FOUND
-      - PRODUCT_ITEM_NOT_FOUND
-      - PRICING_NOT_FOUND
-      - PRICING_ITEM_NOT_FOUND
-      - USER_NOT_FOUND
-      - METER_NOT_FOUND
-      - METER_VALUE_NOT_FOUND
-      - METER_PROPERTY_NOT_FOUND
-      - PRICING_ITEM_SUMMARIES_NOT_FOUND
-      - MISSING_ID
-      - INVALID_ID
-      - MISSING_REFERENCE
-      - MISSING_FIELD
-      - INVALID_FIELD
-      - INVALID_OPERATION
-      - INTERNAL_ERROR
-      - USER_NOT_ALLOWED
-      - IDEMPOTENCY_CHECK_FAILED
-      - INVALID_REQUEST
-      title: ApiErrorCode
-    ProductTaxCategory:
+    ProductCreateRequestTaxCategory:
       type: string
       enum:
       - STANDARD
       - NO_TAX
       - EXEMPT
       description: The default tax category applied to the product.
-      title: ProductTaxCategory
-    Product:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        category_id:
-          type: string
-          description: The resource ID of the product category, that belongs to the product.
-        category:
-          oneOf:
-          - $ref: '#/components/schemas/ProductCategory'
-          - type: 'null'
-        parent_product_id:
-          type:
-          - string
-          - 'null'
-          description: The resource ID of the original product, to which the product will belong to.
-        name:
-          type: string
-        reference:
-          type: string
-        description:
-          type:
-          - string
-          - 'null'
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/ProductStatus'
-          - type: 'null'
-          description: The status of the product.
-        product_type:
-          $ref: '#/components/schemas/ProductProductType'
-        tax_category:
-          oneOf:
-          - $ref: '#/components/schemas/ProductTaxCategory'
-          - type: 'null'
-          description: The default tax category applied to the product.
-        features:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/FeatureResourceReference'
-          description: The features associated with the product.
-        custom_fields:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CustomFieldValue'
-        display_order:
-          type:
-          - integer
-          - 'null'
-          description: Determines the order in which products are displayed on overview pages and invoices. The lowest number gets the highest priority.
-        linked_integrations:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/LinkedIntegration'
-        billing_entity_id:
-          type:
-          - string
-          - 'null'
-          description: The resource ID of the billing entity linked to this product.
-        customer_id:
-          type:
-          - string
-          - 'null'
-      title: Product
+      title: ProductCreateRequestTaxCategory
+    ProductCategoryTaxCategory:
+      type: string
+      enum:
+      - STANDARD
+      - NO_TAX
+      - EXEMPT
+      description: The default tax category applied to the products in the product category.
+      title: ProductCategoryTaxCategory
     PaginationLinks:
       type: object
       properties:
@@ -1375,114 +1453,36 @@ components:
           - string
           - 'null'
       title: PaginationLinks
-    ProductProductType:
-      type: string
-      enum:
-      - DEFAULT
-      - ADDON
-      title: ProductProductType
-    ProductUpdateRequest:
+    CustomFieldValue:
       type: object
       properties:
-        object_type:
-          type:
-          - string
-          - 'null'
         id:
           type:
           - string
           - 'null'
-        category_id:
-          type: string
-          description: The resource ID of the product category, that belongs to the product.
-        category:
-          oneOf:
-          - $ref: '#/components/schemas/ProductCategory'
-          - type: 'null'
-        parent_product_id:
-          type:
-          - string
-          - 'null'
-          description: The resource ID of the original product, to which the product will belong to.
-        name:
-          type: string
+          description: Resource ID of type CUSTOM_FIELD
         reference:
-          type: string
-        description:
-          type:
-          - string
-          - 'null'
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/ProductUpdateRequestStatus'
-          - type: 'null'
-          description: The status of the product.
-        product_type:
-          $ref: '#/components/schemas/ProductUpdateRequestProductType'
-        tax_category:
-          oneOf:
-          - $ref: '#/components/schemas/ProductUpdateRequestTaxCategory'
-          - type: 'null'
-          description: The default tax category applied to the product.
-        features:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/FeatureResourceReference'
-          description: The features associated with the product.
-        custom_fields:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CustomFieldValue'
-        display_order:
-          type:
-          - integer
-          - 'null'
-          description: Determines the order in which products are displayed on overview pages and invoices. The lowest number gets the highest priority.
-        linked_integrations:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/LinkedIntegration'
-        billing_entity_id:
-          type:
-          - string
-          - 'null'
-          description: The resource ID of the billing entity linked to this product.
-        customer_id:
-          type:
-          - string
-          - 'null'
-      title: ProductUpdateRequest
-    SearchFieldCreateRequest:
-      type: object
-      properties:
-        name:
           type:
           - string
           - 'null'
         value:
+          type:
+          - string
+          - 'null'
+        values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        integration_details:
+          oneOf:
+          - $ref: '#/components/schemas/IntegrationDetails'
+          - type: 'null'
+        integration_id:
           type: string
-        wildcard_start:
-          type: boolean
-        wildcard_end:
-          type: boolean
-        ignore_case:
-          type: boolean
-      title: SearchFieldCreateRequest
-    ProductUpdateRequestStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - ARCHIVED
-      - DEPRECATED
-      description: The status of the product.
-      title: ProductUpdateRequestStatus
+          description: The resource ID of the integration linked to the custom field
+      title: CustomFieldValue
   securitySchemes:
     API-Key:
       type: apiKey

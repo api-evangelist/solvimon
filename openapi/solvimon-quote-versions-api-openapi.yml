@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Configuration alertRules quoteVersions API
+  title: Configuration Quote Versions API
   version: 1.0.0
 servers:
 - url: https://test.api.solvimon.com
@@ -8,7 +8,7 @@ servers:
 - url: https://api.solvimon.com
   description: The live environment for our API
 tags:
-- name: quoteVersions
+- name: quote Versions
 paths:
   /v{version}/quote-versions:
     get:
@@ -16,7 +16,7 @@ paths:
       summary: Get a list of all quote versions
       description: Requires the QUOTE.VIEW permission.
       tags:
-      - quoteVersions
+      - quote Versions
       parameters:
       - name: version
         in: path
@@ -78,7 +78,7 @@ paths:
       summary: Create a quote version
       description: Requires the QUOTE.CREATE permission.
       tags:
-      - quoteVersions
+      - quote Versions
       parameters:
       - name: version
         in: path
@@ -146,7 +146,7 @@ paths:
       summary: Get a quote version by resource ID
       description: Requires the QUOTE.VIEW permission.
       tags:
-      - quoteVersions
+      - quote Versions
       parameters:
       - name: version
         in: path
@@ -217,7 +217,7 @@ paths:
       summary: Delete a quote version
       description: Requires the QUOTE.DELETE permission.
       tags:
-      - quoteVersions
+      - quote Versions
       parameters:
       - name: version
         in: path
@@ -280,7 +280,7 @@ paths:
       summary: Update a quote version
       description: Requires the QUOTE.UPDATE permission.
       tags:
-      - quoteVersions
+      - quote Versions
       parameters:
       - name: version
         in: path
@@ -349,7 +349,7 @@ paths:
       summary: Get the quote version as PDF
       description: Requires the QUOTE.VIEW permission.
       tags:
-      - quoteVersions
+      - quote Versions
       parameters:
       - name: version
         in: path
@@ -407,7 +407,7 @@ paths:
       operationId: postQuoteVersionsByResourceIdFinalize
       summary: Finalize the quote version
       tags:
-      - quoteVersions
+      - quote Versions
       parameters:
       - name: version
         in: path
@@ -476,7 +476,7 @@ paths:
       operationId: postQuoteVersionsByResourceIdSend
       summary: Send the quote version
       tags:
-      - quoteVersions
+      - quote Versions
       parameters:
       - name: version
         in: path
@@ -550,7 +550,7 @@ paths:
       operationId: postQuoteVersionsByResourceIdAccept
       summary: Accept the quote version
       tags:
-      - quoteVersions
+      - quote Versions
       parameters:
       - name: version
         in: path
@@ -624,7 +624,7 @@ paths:
       operationId: postQuoteVersionsByResourceIdReject
       summary: Reject the quote version
       tags:
-      - quoteVersions
+      - quote Versions
       parameters:
       - name: version
         in: path
@@ -698,7 +698,7 @@ paths:
       operationId: postQuoteVersionsByResourceIdRequestSignature
       summary: Request signature for the quote version
       tags:
-      - quoteVersions
+      - quote Versions
       parameters:
       - name: version
         in: path
@@ -772,7 +772,7 @@ paths:
       operationId: postQuoteVersionsByResourceIdCreateSubscription
       summary: Create the subscription based on a approved quote version
       tags:
-      - quoteVersions
+      - quote Versions
       parameters:
       - name: version
         in: path
@@ -843,153 +843,115 @@ paths:
               $ref: '#/components/schemas/QuoteVersionActionCreateSubscriptionCreateRequest'
 components:
   schemas:
-    SignatureRequestQuoteVersion:
-      type: object
-      properties:
-        quote_version_id:
-          type:
-          - string
-          - 'null'
-          description: The ID of the quote version this signature request belongs to.
-      title: SignatureRequestQuoteVersion
-    QuoteVersionRecipientDataUpdateRequestRole:
-      type: string
-      enum:
-      - SIGNER
-      - VIEWER
-      description: The role of the recipient.
-      title: QuoteVersionRecipientDataUpdateRequestRole
-    QuoteVersionActionAcceptCreateRequest:
+    RecipientDetailsData:
       type: object
       properties:
         name:
-          $ref: '#/components/schemas/NameCreateRequest'
-          description: The name of the accepter
-        role:
+          $ref: '#/components/schemas/Name'
+        email:
           type:
           - string
           - 'null'
-          description: The role of the accepter
-      title: QuoteVersionActionAcceptCreateRequest
-    QuoteVersionActionCreateSubscriptionCreateRequest:
-      type: object
-      properties:
-        pricing_plan_subscription_id:
-          type:
-          - string
-          - 'null'
-          description: The create pricing plan subscription based on the quote version
-      title: QuoteVersionActionCreateSubscriptionCreateRequest
-    QuoteVersionAction:
-      type: object
-      properties:
-        created_at:
-          type:
-          - string
-          - 'null'
-        type:
-          type:
-          - string
-          - 'null'
-        status:
-          type:
-          - string
-          - 'null'
-        send:
-          oneOf:
-          - $ref: '#/components/schemas/QuoteVersionActionSend'
-          - type: 'null'
-        accept:
-          oneOf:
-          - $ref: '#/components/schemas/QuoteVersionActionAccept'
-          - type: 'null'
-        reject:
-          oneOf:
-          - $ref: '#/components/schemas/QuoteVersionActionReject'
-          - type: 'null'
-        create_subscription:
-          oneOf:
-          - $ref: '#/components/schemas/QuoteVersionActionCreateSubscription'
-          - type: 'null'
-        request_signature:
-          oneOf:
-          - $ref: '#/components/schemas/QuoteVersionActionRequestSignature'
-          - type: 'null'
-        sign:
-          oneOf:
-          - $ref: '#/components/schemas/QuoteVersionActionSign'
-          - type: 'null'
-      title: QuoteVersionAction
-    QuoteVersionContentUpdateRequestType:
+      title: RecipientDetailsData
+    QuoteVersionContentCreateRequestType:
       type: string
       enum:
       - DEFAULT
       - TIPTAP
       description: The type of content used by the quote version.
-      title: QuoteVersionContentUpdateRequestType
-    LinkedIntegration:
-      type: object
-      properties:
-        id:
-          type: string
-        link_details:
-          type: array
-          items:
-            $ref: '#/components/schemas/LinkDetail'
-      title: LinkedIntegration
-    IntegrationDetails:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-        reference:
-          type:
-          - string
-          - 'null'
-        payment_gateway_variant:
-          $ref: '#/components/schemas/IntegrationDetailsPaymentGatewayVariant'
-        adyen:
-          $ref: '#/components/schemas/AdyenIntegrationDetails'
-        stripe:
-          $ref: '#/components/schemas/StripeIntegrationDetails'
-      title: IntegrationDetails
-    QuoteVersionStatus:
+      title: QuoteVersionContentCreateRequestType
+    ApiErrorCode:
       type: string
       enum:
-      - DRAFT
-      - FINAL
-      - WAITING_APPROVAL
-      - APPROVED
-      - DECLINED
-      - SEND
-      - SIGNATURE_REQUESTED
-      - SIGNED
-      - ACCEPTED
-      - REJECTED
-      - CLOSED
-      title: QuoteVersionStatus
-    PortalUrlLink:
-      type: object
-      properties:
-        expiry_period:
-          $ref: '#/components/schemas/Period'
-        portal_url_id:
-          type:
-          - string
-          - 'null'
-        url:
-          type:
-          - string
-          - 'null'
-      title: PortalUrlLink
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
       - INVALID_REQUEST
-      title: ApiErrorType
+      title: ApiErrorCode
+    QuoteVersionActionSend:
+      type: object
+      properties:
+        to_email_addresses:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Extra email addresses for the TO
+        overwrite_to:
+          type:
+          - boolean
+          - 'null'
+          description: Overwrite the TO with the email addresses in the to_email_addresses
+        cc_email_addresses:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Extra email addresses for the CC
+        bcc_email_addresses:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Extra email addresses for the BCC
+      title: QuoteVersionActionSend
+    QuoteVersionRecipientDataRole:
+      type: string
+      enum:
+      - SIGNER
+      - VIEWER
+      description: The role of the recipient.
+      title: QuoteVersionRecipientDataRole
+    Name:
+      type: object
+      properties:
+        first_name:
+          type:
+          - string
+          - 'null'
+        last_name:
+          type:
+          - string
+          - 'null'
+        infix:
+          type:
+          - string
+          - 'null'
+      title: Name
     Contact:
       type: object
       properties:
@@ -1033,80 +995,6 @@ components:
           items:
             $ref: '#/components/schemas/LinkedIntegration'
       title: Contact
-    ApiError:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/ApiErrorType'
-        code:
-          $ref: '#/components/schemas/ApiErrorCode'
-        field:
-          type:
-          - string
-          - 'null'
-        message:
-          type: string
-        resource_id:
-          type:
-          - string
-          - 'null'
-        resource_type:
-          oneOf:
-          - $ref: '#/components/schemas/ApiErrorResourceType'
-          - type: 'null'
-      required:
-      - type
-      - code
-      - message
-      title: ApiError
-    SignatureRequestRecipientData:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: The unique identifier of this recipient.
-        contact_id:
-          type:
-          - string
-          - 'null'
-          description: The contact ID, present when the recipient originates from a contact.
-        name:
-          oneOf:
-          - $ref: '#/components/schemas/Name'
-          - type: 'null'
-          description: The name of the recipient.
-        email:
-          type:
-          - string
-          - 'null'
-          description: The email of the recipient.
-        role:
-          oneOf:
-          - $ref: '#/components/schemas/SignatureRequestRecipientDataRole'
-          - type: 'null'
-          description: The role of the recipient.
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/SignatureRequestRecipientDataStatus'
-          - type: 'null'
-          description: The status of the recipient.
-      title: SignatureRequestRecipientData
-    QuoteVersionDefaultContent:
-      type: object
-      properties:
-        header:
-          type:
-          - string
-          - 'null'
-          description: Text shown above the pricing plan.
-        footer:
-          type:
-          - string
-          - 'null'
-          description: Text shown below the pricing plan.
-      title: QuoteVersionDefaultContent
     PricingPlanSubscriptionInfo:
       type: object
       properties:
@@ -1119,67 +1007,6 @@ components:
           - string
           - 'null'
       title: PricingPlanSubscriptionInfo
-    QuoteVersionRecipientDataUpdateRequestType:
-      type: string
-      enum:
-      - CONTACT
-      - DETAILS
-      description: The type of the recipient.
-      title: QuoteVersionRecipientDataUpdateRequestType
-    QuoteVersionResponseWrapper:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/QuoteVersion'
-        page:
-          type:
-          - integer
-          - 'null'
-        limit:
-          type:
-          - integer
-          - 'null'
-        total_number_of_pages:
-          type:
-          - integer
-          - 'null'
-        links:
-          $ref: '#/components/schemas/PaginationLinks'
-      required:
-      - data
-      title: QuoteVersionResponseWrapper
-    SignatureRequestType:
-      type: string
-      enum:
-      - QUOTE_VERSION
-      description: The type of the signature request.
-      title: SignatureRequestType
-    QuoteVersionRecipientDataType:
-      type: string
-      enum:
-      - CONTACT
-      - DETAILS
-      description: The type of the recipient.
-      title: QuoteVersionRecipientDataType
-    QuoteVersionActionReject:
-      type: object
-      properties:
-        name:
-          $ref: '#/components/schemas/Name'
-          description: The name of the rejecter
-        role:
-          type:
-          - string
-          - 'null'
-          description: The role of the rejecter
-        reason:
-          type:
-          - string
-          - 'null'
-          description: The reason of the rejection
-      title: QuoteVersionActionReject
     QuoteVersionInvoicesInfoUpdateRequest:
       type: object
       properties:
@@ -1189,116 +1016,29 @@ components:
           - type: 'null'
           description: Base, tax, and total costs on the first invoice generated by quote version.
       title: QuoteVersionInvoicesInfoUpdateRequest
-    QuoteVersionActionUpdateRequest:
-      type: object
-      properties:
-        created_at:
-          type:
-          - string
-          - 'null'
-        type:
-          type:
-          - string
-          - 'null'
-        status:
-          type:
-          - string
-          - 'null'
-        send:
-          oneOf:
-          - $ref: '#/components/schemas/QuoteVersionActionSend'
-          - type: 'null'
-        accept:
-          oneOf:
-          - $ref: '#/components/schemas/QuoteVersionActionAccept'
-          - type: 'null'
-        reject:
-          oneOf:
-          - $ref: '#/components/schemas/QuoteVersionActionReject'
-          - type: 'null'
-        create_subscription:
-          oneOf:
-          - $ref: '#/components/schemas/QuoteVersionActionCreateSubscription'
-          - type: 'null'
-        request_signature:
-          oneOf:
-          - $ref: '#/components/schemas/QuoteVersionActionRequestSignature'
-          - type: 'null'
-        sign:
-          oneOf:
-          - $ref: '#/components/schemas/QuoteVersionActionSign'
-          - type: 'null'
-      title: QuoteVersionActionUpdateRequest
-    NotificationChannelType:
+    QuoteVersionRecipientDataCreateRequestType:
       type: string
       enum:
-      - EMAIL
-      description: The channel type to use.
-      title: NotificationChannelType
-    CustomFieldValue:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type CUSTOM_FIELD
-        reference:
-          type:
-          - string
-          - 'null'
-        value:
-          type:
-          - string
-          - 'null'
-        values:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-        integration_details:
-          oneOf:
-          - $ref: '#/components/schemas/IntegrationDetails'
-          - type: 'null'
-        integration_id:
-          type: string
-          description: The resource ID of the integration linked to the custom field
-      title: CustomFieldValue
-    PeriodType:
+      - CONTACT
+      - DETAILS
+      description: The type of the recipient.
+      title: QuoteVersionRecipientDataCreateRequestType
+    QuoteVersionRecipientDataUpdateRequestRole:
       type: string
       enum:
-      - DAY
-      - WEEK
-      - MONTH
-      - YEAR
-      title: PeriodType
-    IntegrationDetailsPaymentGatewayVariant:
-      type: string
-      enum:
-      - ADYEN
-      - STRIPE
-      title: IntegrationDetailsPaymentGatewayVariant
-    QuoteVersionRecipientDataCreateRequest:
+      - SIGNER
+      - VIEWER
+      description: The role of the recipient.
+      title: QuoteVersionRecipientDataUpdateRequestRole
+    QuoteVersionInvoicesInfo:
       type: object
       properties:
-        type:
+        first_invoice_summary:
           oneOf:
-          - $ref: '#/components/schemas/QuoteVersionRecipientDataCreateRequestType'
+          - $ref: '#/components/schemas/InvoiceTaxTotalSummary'
           - type: 'null'
-          description: The type of the recipient.
-        contact:
-          $ref: '#/components/schemas/RecipientContactData'
-          description: Contact information, when type is CONTACT.
-        details:
-          $ref: '#/components/schemas/RecipientDetailsData'
-          description: Recipient details, when type is DETAILS.
-        role:
-          oneOf:
-          - $ref: '#/components/schemas/QuoteVersionRecipientDataCreateRequestRole'
-          - type: 'null'
-          description: The role of the recipient.
-      title: QuoteVersionRecipientDataCreateRequest
+          description: Base, tax, and total costs on the first invoice generated by quote version.
+      title: QuoteVersionInvoicesInfo
     QuoteVersion:
       type: object
       properties:
@@ -1386,89 +1126,313 @@ components:
           - type: 'null'
           description: Information pertaining to the invoices generated by this quote version.
       title: QuoteVersion
-    AdyenIntegrationDetails:
-      type: object
-      properties:
-        recurring_detail_reference:
-          type: string
-      title: AdyenIntegrationDetails
-    RecipientContactData:
-      type: object
-      properties:
-        contact_id:
-          type: string
-          description: Resource ID of type CONTACT
-        contact:
-          oneOf:
-          - $ref: '#/components/schemas/Contact'
-          - type: 'null'
-      title: RecipientContactData
-    ApiErrorCode:
-      type: string
-      enum:
-      - RESOURCE_NOT_FOUND
-      - RESOURCES_NOT_FOUND
-      - UNABLE_TO_PROCESS_INSTRUCTIONS
-      - BAD_REQUEST
-      - UNSUPPORTED_MEDIA_TYPE
-      - RESOURCE_ALREADY_EXISTS
-      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
-      - COULD_NOT_CREATE_RESOURCE
-      - COULD_NOT_UPDATE_RESOURCE
-      - COULD_NOT_DELETE_RESOURCE
-      - MISSING_VERSION
-      - UNSUPPORTED_VERSION
-      - UNAUTHORISED
-      - CUSTOMER_NOT_FOUND
-      - PLATFORM_NOT_FOUND
-      - PRICING_PLAN_NOT_FOUND
-      - PRODUCT_NOT_FOUND
-      - PRODUCT_ITEM_NOT_FOUND
-      - PRICING_NOT_FOUND
-      - PRICING_ITEM_NOT_FOUND
-      - USER_NOT_FOUND
-      - METER_NOT_FOUND
-      - METER_VALUE_NOT_FOUND
-      - METER_PROPERTY_NOT_FOUND
-      - PRICING_ITEM_SUMMARIES_NOT_FOUND
-      - MISSING_ID
-      - INVALID_ID
-      - MISSING_REFERENCE
-      - MISSING_FIELD
-      - INVALID_FIELD
-      - INVALID_OPERATION
-      - INTERNAL_ERROR
-      - USER_NOT_ALLOWED
-      - IDEMPOTENCY_CHECK_FAILED
-      - INVALID_REQUEST
-      title: ApiErrorCode
-    QuoteVersionContentCreateRequest:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/QuoteVersionContentCreateRequestType'
-          description: The type of content used by the quote version.
-        default:
-          $ref: '#/components/schemas/QuoteVersionDefaultContent'
-          description: If type is DEFAULT, the content of the quote version.
-        tiptap:
-          type:
-          - string
-          - 'null'
-          description: If type is TIPTAP, the content of the quote version, stringified JSON following the ProseMirror schema.
-      title: QuoteVersionContentCreateRequest
-    QuoteVersionActionAccept:
+    QuoteVersionActionReject:
       type: object
       properties:
         name:
           $ref: '#/components/schemas/Name'
-          description: The name of the accepter
+          description: The name of the rejecter
         role:
           type:
           - string
           - 'null'
-          description: The role of the accepter
-      title: QuoteVersionActionAccept
+          description: The role of the rejecter
+        reason:
+          type:
+          - string
+          - 'null'
+          description: The reason of the rejection
+      title: QuoteVersionActionReject
+    QuoteVersionRecipientDataCreateRequest:
+      type: object
+      properties:
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionRecipientDataCreateRequestType'
+          - type: 'null'
+          description: The type of the recipient.
+        contact:
+          $ref: '#/components/schemas/RecipientContactData'
+          description: Contact information, when type is CONTACT.
+        details:
+          $ref: '#/components/schemas/RecipientDetailsData'
+          description: Recipient details, when type is DETAILS.
+        role:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionRecipientDataCreateRequestRole'
+          - type: 'null'
+          description: The role of the recipient.
+      title: QuoteVersionRecipientDataCreateRequest
+    QuoteVersionRecipientData:
+      type: object
+      properties:
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionRecipientDataType'
+          - type: 'null'
+          description: The type of the recipient.
+        contact:
+          $ref: '#/components/schemas/RecipientContactData'
+          description: Contact information, when type is CONTACT.
+        details:
+          $ref: '#/components/schemas/RecipientDetailsData'
+          description: Recipient details, when type is DETAILS.
+        role:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionRecipientDataRole'
+          - type: 'null'
+          description: The role of the recipient.
+      title: QuoteVersionRecipientData
+    QuoteVersionActionRejectCreateRequest:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/NameCreateRequest'
+          description: The name of the rejecter
+        role:
+          type:
+          - string
+          - 'null'
+          description: The role of the rejecter
+        reason:
+          type:
+          - string
+          - 'null'
+          description: The reason of the rejection
+      title: QuoteVersionActionRejectCreateRequest
+    InvoiceTaxAmounts:
+      type: object
+      properties:
+        base_amount:
+          $ref: '#/components/schemas/Amount'
+        tax_amount:
+          $ref: '#/components/schemas/Amount'
+        total_amount:
+          $ref: '#/components/schemas/Amount'
+        used_exchange_rate:
+          $ref: '#/components/schemas/UsedExchangeRate'
+        display:
+          type: boolean
+      title: InvoiceTaxAmounts
+    PaginationLinks:
+      type: object
+      properties:
+        first:
+          type:
+          - string
+          - 'null'
+        previous:
+          type:
+          - string
+          - 'null'
+        current:
+          type:
+          - string
+          - 'null'
+        next:
+          type:
+          - string
+          - 'null'
+      title: PaginationLinks
+    SignatureRequestType:
+      type: string
+      enum:
+      - QUOTE_VERSION
+      description: The type of the signature request.
+      title: SignatureRequestType
+    NameCreateRequest:
+      type: object
+      properties:
+        first_name:
+          type:
+          - string
+          - 'null'
+        last_name:
+          type:
+          - string
+          - 'null'
+        infix:
+          type:
+          - string
+          - 'null'
+      title: NameCreateRequest
+    QuoteVersionCreateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - FINAL
+      - WAITING_APPROVAL
+      - APPROVED
+      - DECLINED
+      - SEND
+      - SIGNATURE_REQUESTED
+      - SIGNED
+      - ACCEPTED
+      - REJECTED
+      - CLOSED
+      title: QuoteVersionCreateRequestStatus
+    InvoiceTaxTotalSummary:
+      type: object
+      properties:
+        base_amount:
+          $ref: '#/components/schemas/Amount'
+        tax_amount:
+          $ref: '#/components/schemas/Amount'
+        total_amount:
+          $ref: '#/components/schemas/Amount'
+        local_amounts:
+          $ref: '#/components/schemas/InvoiceTaxAmounts'
+        notes:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        country_code:
+          type: string
+      title: InvoiceTaxTotalSummary
+    QuoteVersionUpdateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - FINAL
+      - WAITING_APPROVAL
+      - APPROVED
+      - DECLINED
+      - SEND
+      - SIGNATURE_REQUESTED
+      - SIGNED
+      - ACCEPTED
+      - REJECTED
+      - CLOSED
+      title: QuoteVersionUpdateRequestStatus
+    QuoteVersionUpdateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        updated_at:
+          type:
+          - string
+          - 'null'
+        expires_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: The expiration date of the quote version.
+        quote_id:
+          type: string
+          description: The ID of the quote.
+        version:
+          type: integer
+          description: The value describing the version of the quote.
+        pricing_plan_subscription_info:
+          oneOf:
+          - $ref: '#/components/schemas/PricingPlanSubscriptionInfoUpdateRequest'
+          - type: 'null'
+          description: The info of the linked pricing plan subscription.
+        content:
+          $ref: '#/components/schemas/QuoteVersionContentUpdateRequest'
+          description: Content of the body of the quote.
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionUpdateRequestStatus'
+          - type: 'null'
+        actions:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/QuoteVersionActionUpdateRequest'
+          description: The history of all actions done.
+        link:
+          oneOf:
+          - $ref: '#/components/schemas/PortalUrlLinkUpdateRequest'
+          - type: 'null'
+          description: The public portal link of the quote.
+        internal_notes:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Internal notes on this quote versions.
+        notes:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Notes on this quote versions.
+        approval_request_id:
+          type:
+          - string
+          - 'null'
+          description: The ID of the Approval Request that was created for this Quote Version.
+        recipients:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/QuoteVersionRecipientDataUpdateRequest'
+          description: The recipients for signature on this quote version.
+        invoices_info:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionInvoicesInfoUpdateRequest'
+          - type: 'null'
+          description: Information pertaining to the invoices generated by this quote version.
+      title: QuoteVersionUpdateRequest
+    UsedExchangeRate:
+      type: object
+      properties:
+        currency:
+          type: string
+        base_currency:
+          type: string
+        rate_timestamp:
+          type: string
+        rate:
+          type: string
+        source:
+          type:
+          - string
+          - 'null'
+      title: UsedExchangeRate
+    QuoteVersionResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuoteVersion'
+        page:
+          type:
+          - integer
+          - 'null'
+        limit:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      title: QuoteVersionResponseWrapper
     AmountCurrency:
       type: string
       enum:
@@ -1649,158 +1613,24 @@ components:
       - ZMW
       - ZWL
       title: AmountCurrency
-    QuoteVersionActionSign:
+    IntegrationDetails:
       type: object
       properties:
-        signature_request_id:
+        id:
           type:
           - string
           - 'null'
-      title: QuoteVersionActionSign
-    NotificationChannel:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/NotificationChannelType'
-          description: The channel type to use.
-        enabled:
-          type:
-          - boolean
-          - 'null'
-          description: Whether the channel is enabled for the notification type.
-      title: NotificationChannel
-    InvoiceTaxTotalSummary:
-      type: object
-      properties:
-        base_amount:
-          $ref: '#/components/schemas/Amount'
-        tax_amount:
-          $ref: '#/components/schemas/Amount'
-        total_amount:
-          $ref: '#/components/schemas/Amount'
-        local_amounts:
-          $ref: '#/components/schemas/InvoiceTaxAmounts'
-        notes:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-        country_code:
-          type: string
-      title: InvoiceTaxTotalSummary
-    Amount:
-      type: object
-      properties:
-        quantity:
-          type: string
-        currency:
-          $ref: '#/components/schemas/AmountCurrency'
-      title: Amount
-    SignatureRequestRecipientDataStatus:
-      type: string
-      enum:
-      - PENDING
-      - COMPLETED
-      description: The status of the recipient.
-      title: SignatureRequestRecipientDataStatus
-    SignatureRequestStatus:
-      type: string
-      enum:
-      - IN_PROGRESS
-      - COMPLETED
-      - VOID
-      description: The status of the signature request.
-      title: SignatureRequestStatus
-    StripeIntegrationDetails:
-      type: object
-      properties:
-        payment_method_id:
-          type: string
-      title: StripeIntegrationDetails
-    UsedExchangeRate:
-      type: object
-      properties:
-        currency:
-          type: string
-        base_currency:
-          type: string
-        rate_timestamp:
-          type: string
-        rate:
-          type: string
-        source:
+        reference:
           type:
           - string
           - 'null'
-      title: UsedExchangeRate
-    NotificationPreference:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/NotificationPreferenceType'
-          description: The notification type to configure.
-        channels:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/NotificationChannel'
-          description: The channels for this notification type.
-      title: NotificationPreference
-    PortalUrlLinkCreateRequest:
-      type: object
-      properties:
-        expiry_period:
-          $ref: '#/components/schemas/Period'
-        portal_url_id:
-          type:
-          - string
-          - 'null'
-        url:
-          type:
-          - string
-          - 'null'
-      title: PortalUrlLinkCreateRequest
-    PortalUrlLinkUpdateRequest:
-      type: object
-      properties:
-        expiry_period:
-          $ref: '#/components/schemas/Period'
-        portal_url_id:
-          type:
-          - string
-          - 'null'
-        url:
-          type:
-          - string
-          - 'null'
-      title: PortalUrlLinkUpdateRequest
-    Name:
-      type: object
-      properties:
-        first_name:
-          type:
-          - string
-          - 'null'
-        last_name:
-          type:
-          - string
-          - 'null'
-        infix:
-          type:
-          - string
-          - 'null'
-      title: Name
-    QuoteVersionActionCreateSubscription:
-      type: object
-      properties:
-        pricing_plan_subscription_id:
-          type:
-          - string
-          - 'null'
-          description: The create pricing plan subscription based on the quote version
-      title: QuoteVersionActionCreateSubscription
+        payment_gateway_variant:
+          $ref: '#/components/schemas/IntegrationDetailsPaymentGatewayVariant'
+        adyen:
+          $ref: '#/components/schemas/AdyenIntegrationDetails'
+        stripe:
+          $ref: '#/components/schemas/StripeIntegrationDetails'
+      title: IntegrationDetails
     SignatureRequest:
       type: object
       properties:
@@ -1840,43 +1670,169 @@ components:
             $ref: '#/components/schemas/SignatureRequestRecipientData'
           description: The recipients of the signature request.
       title: SignatureRequest
+    SignatureRequestRecipientDataRole:
+      type: string
+      enum:
+      - SIGNER
+      - VIEWER
+      description: The role of the recipient.
+      title: SignatureRequestRecipientDataRole
+    IntegrationDetailsPaymentGatewayVariant:
+      type: string
+      enum:
+      - ADYEN
+      - STRIPE
+      title: IntegrationDetailsPaymentGatewayVariant
+    QuoteVersionActionAccept:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/Name'
+          description: The name of the accepter
+        role:
+          type:
+          - string
+          - 'null'
+          description: The role of the accepter
+      title: QuoteVersionActionAccept
+    CustomFieldValue:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOM_FIELD
+        reference:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+        values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        integration_details:
+          oneOf:
+          - $ref: '#/components/schemas/IntegrationDetails'
+          - type: 'null'
+        integration_id:
+          type: string
+          description: The resource ID of the integration linked to the custom field
+      title: CustomFieldValue
+    PortalUrlLinkCreateRequest:
+      type: object
+      properties:
+        expiry_period:
+          $ref: '#/components/schemas/Period'
+        portal_url_id:
+          type:
+          - string
+          - 'null'
+        url:
+          type:
+          - string
+          - 'null'
+      title: PortalUrlLinkCreateRequest
+    Period:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/PeriodType'
+        value:
+          type:
+          - integer
+          - 'null'
+      title: Period
     NotificationPreferenceType:
       type: string
       enum:
       - INVOICE
       description: The notification type to configure.
       title: NotificationPreferenceType
-    QuoteVersionContentUpdateRequest:
+    Amount:
       type: object
       properties:
-        type:
-          $ref: '#/components/schemas/QuoteVersionContentUpdateRequestType'
-          description: The type of content used by the quote version.
-        default:
-          $ref: '#/components/schemas/QuoteVersionDefaultContent'
-          description: If type is DEFAULT, the content of the quote version.
-        tiptap:
-          type:
-          - string
-          - 'null'
-          description: If type is TIPTAP, the content of the quote version, stringified JSON following the ProseMirror schema.
-      title: QuoteVersionContentUpdateRequest
-    QuoteVersionInvoicesInfoCreateRequest:
-      type: object
-      properties:
-        first_invoice_summary:
-          oneOf:
-          - $ref: '#/components/schemas/InvoiceTaxTotalSummary'
-          - type: 'null'
-          description: Base, tax, and total costs on the first invoice generated by quote version.
-      title: QuoteVersionInvoicesInfoCreateRequest
-    QuoteVersionRecipientDataCreateRequestType:
+        quantity:
+          type: string
+        currency:
+          $ref: '#/components/schemas/AmountCurrency'
+      title: Amount
+    QuoteVersionRecipientDataType:
       type: string
       enum:
       - CONTACT
       - DETAILS
       description: The type of the recipient.
-      title: QuoteVersionRecipientDataCreateRequestType
+      title: QuoteVersionRecipientDataType
+    QuoteVersionActionRequestSignature:
+      type: object
+      properties:
+        signature_request_id:
+          type:
+          - string
+          - 'null'
+        signature_request:
+          oneOf:
+          - $ref: '#/components/schemas/SignatureRequest'
+          - type: 'null'
+      title: QuoteVersionActionRequestSignature
+    QuoteVersionActionCreateSubscription:
+      type: object
+      properties:
+        pricing_plan_subscription_id:
+          type:
+          - string
+          - 'null'
+          description: The create pricing plan subscription based on the quote version
+      title: QuoteVersionActionCreateSubscription
+    StripeIntegrationDetails:
+      type: object
+      properties:
+        payment_method_id:
+          type: string
+      title: StripeIntegrationDetails
+    AdyenIntegrationDetails:
+      type: object
+      properties:
+        recurring_detail_reference:
+          type: string
+      title: AdyenIntegrationDetails
+    QuoteVersionActionRequestSignatureBodyCreateRequest:
+      type: object
+      properties: {}
+      title: QuoteVersionActionRequestSignatureBodyCreateRequest
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
     QuoteVersionRecipientDataUpdateRequest:
       type: object
       properties:
@@ -1897,78 +1853,22 @@ components:
           - type: 'null'
           description: The role of the recipient.
       title: QuoteVersionRecipientDataUpdateRequest
-    RecipientDetailsData:
-      type: object
-      properties:
-        name:
-          $ref: '#/components/schemas/Name'
-        email:
-          type:
-          - string
-          - 'null'
-      title: RecipientDetailsData
-    PaginationLinks:
-      type: object
-      properties:
-        first:
-          type:
-          - string
-          - 'null'
-        previous:
-          type:
-          - string
-          - 'null'
-        current:
-          type:
-          - string
-          - 'null'
-        next:
-          type:
-          - string
-          - 'null'
-      title: PaginationLinks
-    QuoteVersionActionRejectCreateRequest:
-      type: object
-      properties:
-        name:
-          $ref: '#/components/schemas/NameCreateRequest'
-          description: The name of the rejecter
-        role:
-          type:
-          - string
-          - 'null'
-          description: The role of the rejecter
-        reason:
-          type:
-          - string
-          - 'null'
-          description: The reason of the rejection
-      title: QuoteVersionActionRejectCreateRequest
-    QuoteVersionContentType:
-      type: string
-      enum:
-      - DEFAULT
-      - TIPTAP
-      description: The type of content used by the quote version.
-      title: QuoteVersionContentType
-    QuoteVersionRecipientDataCreateRequestRole:
-      type: string
-      enum:
-      - SIGNER
-      - VIEWER
-      description: The role of the recipient.
-      title: QuoteVersionRecipientDataCreateRequestRole
-    Period:
+    QuoteVersionContentCreateRequest:
       type: object
       properties:
         type:
-          $ref: '#/components/schemas/PeriodType'
-        value:
+          $ref: '#/components/schemas/QuoteVersionContentCreateRequestType'
+          description: The type of content used by the quote version.
+        default:
+          $ref: '#/components/schemas/QuoteVersionDefaultContent'
+          description: If type is DEFAULT, the content of the quote version.
+        tiptap:
           type:
-          - integer
+          - string
           - 'null'
-      title: Period
-    QuoteVersionInvoicesInfo:
+          description: If type is TIPTAP, the content of the quote version, stringified JSON following the ProseMirror schema.
+      title: QuoteVersionContentCreateRequest
+    QuoteVersionInvoicesInfoCreateRequest:
       type: object
       properties:
         first_invoice_summary:
@@ -1976,52 +1876,115 @@ components:
           - $ref: '#/components/schemas/InvoiceTaxTotalSummary'
           - type: 'null'
           description: Base, tax, and total costs on the first invoice generated by quote version.
-      title: QuoteVersionInvoicesInfo
-    QuoteVersionActionSend:
+      title: QuoteVersionInvoicesInfoCreateRequest
+    NotificationPreference:
       type: object
       properties:
-        to_email_addresses:
+        type:
+          $ref: '#/components/schemas/NotificationPreferenceType'
+          description: The notification type to configure.
+        channels:
           type:
           - array
           - 'null'
           items:
-            type: string
-          description: Extra email addresses for the TO
-        overwrite_to:
+            $ref: '#/components/schemas/NotificationChannel'
+          description: The channels for this notification type.
+      title: NotificationPreference
+    QuoteVersionActionCreateRequest:
+      type: object
+      properties:
+        created_at:
+          type:
+          - string
+          - 'null'
+        type:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - string
+          - 'null'
+        send:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionActionSend'
+          - type: 'null'
+        accept:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionActionAccept'
+          - type: 'null'
+        reject:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionActionReject'
+          - type: 'null'
+        create_subscription:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionActionCreateSubscription'
+          - type: 'null'
+        request_signature:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionActionRequestSignature'
+          - type: 'null'
+        sign:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionActionSign'
+          - type: 'null'
+      title: QuoteVersionActionCreateRequest
+    QuoteVersionActionSign:
+      type: object
+      properties:
+        signature_request_id:
+          type:
+          - string
+          - 'null'
+      title: QuoteVersionActionSign
+    RecipientContactData:
+      type: object
+      properties:
+        contact_id:
+          type: string
+          description: Resource ID of type CONTACT
+        contact:
+          oneOf:
+          - $ref: '#/components/schemas/Contact'
+          - type: 'null'
+      title: RecipientContactData
+    LinkedIntegration:
+      type: object
+      properties:
+        id:
+          type: string
+        link_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/LinkDetail'
+      title: LinkedIntegration
+    NotificationChannelType:
+      type: string
+      enum:
+      - EMAIL
+      description: The channel type to use.
+      title: NotificationChannelType
+    QuoteVersionContentUpdateRequestType:
+      type: string
+      enum:
+      - DEFAULT
+      - TIPTAP
+      description: The type of content used by the quote version.
+      title: QuoteVersionContentUpdateRequestType
+    NotificationChannel:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/NotificationChannelType'
+          description: The channel type to use.
+        enabled:
           type:
           - boolean
           - 'null'
-          description: Overwrite the TO with the email addresses in the to_email_addresses
-        cc_email_addresses:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Extra email addresses for the CC
-        bcc_email_addresses:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Extra email addresses for the BCC
-      title: QuoteVersionActionSend
-    QuoteVersionUpdateRequestStatus:
-      type: string
-      enum:
-      - DRAFT
-      - FINAL
-      - WAITING_APPROVAL
-      - APPROVED
-      - DECLINED
-      - SEND
-      - SIGNATURE_REQUESTED
-      - SIGNED
-      - ACCEPTED
-      - REJECTED
-      - CLOSED
-      title: QuoteVersionUpdateRequestStatus
+          description: Whether the channel is enabled for the notification type.
+      title: NotificationChannel
     PricingPlanSubscriptionInfoUpdateRequest:
       type: object
       properties:
@@ -2123,105 +2086,27 @@ components:
       required:
       - quote_id
       title: QuoteVersionCreateRequest
-    QuoteVersionUpdateRequest:
+    QuoteVersionActionAcceptCreateRequest:
       type: object
       properties:
-        object_type:
+        name:
+          $ref: '#/components/schemas/NameCreateRequest'
+          description: The name of the accepter
+        role:
           type:
           - string
           - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        created_at:
-          type:
-          - string
-          - 'null'
-        updated_at:
-          type:
-          - string
-          - 'null'
-        expires_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          description: The expiration date of the quote version.
-        quote_id:
-          type: string
-          description: The ID of the quote.
-        version:
-          type: integer
-          description: The value describing the version of the quote.
-        pricing_plan_subscription_info:
-          oneOf:
-          - $ref: '#/components/schemas/PricingPlanSubscriptionInfoUpdateRequest'
-          - type: 'null'
-          description: The info of the linked pricing plan subscription.
-        content:
-          $ref: '#/components/schemas/QuoteVersionContentUpdateRequest'
-          description: Content of the body of the quote.
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/QuoteVersionUpdateRequestStatus'
-          - type: 'null'
-        actions:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/QuoteVersionActionUpdateRequest'
-          description: The history of all actions done.
-        link:
-          oneOf:
-          - $ref: '#/components/schemas/PortalUrlLinkUpdateRequest'
-          - type: 'null'
-          description: The public portal link of the quote.
-        internal_notes:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Internal notes on this quote versions.
-        notes:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Notes on this quote versions.
-        approval_request_id:
-          type:
-          - string
-          - 'null'
-          description: The ID of the Approval Request that was created for this Quote Version.
-        recipients:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/QuoteVersionRecipientDataUpdateRequest'
-          description: The recipients for signature on this quote version.
-        invoices_info:
-          oneOf:
-          - $ref: '#/components/schemas/QuoteVersionInvoicesInfoUpdateRequest'
-          - type: 'null'
-          description: Information pertaining to the invoices generated by this quote version.
-      title: QuoteVersionUpdateRequest
-    QuoteVersionActionRequestSignature:
+          description: The role of the accepter
+      title: QuoteVersionActionAcceptCreateRequest
+    SignatureRequestQuoteVersion:
       type: object
       properties:
-        signature_request_id:
+        quote_version_id:
           type:
           - string
           - 'null'
-        signature_request:
-          oneOf:
-          - $ref: '#/components/schemas/SignatureRequest'
-          - type: 'null'
-      title: QuoteVersionActionRequestSignature
+          description: The ID of the quote version this signature request belongs to.
+      title: SignatureRequestQuoteVersion
     QuoteVersionActionSendCreateRequest:
       type: object
       properties:
@@ -2252,41 +2137,7 @@ components:
             type: string
           description: Extra email addresses for the BCC
       title: QuoteVersionActionSendCreateRequest
-    QuoteVersionRecipientDataRole:
-      type: string
-      enum:
-      - SIGNER
-      - VIEWER
-      description: The role of the recipient.
-      title: QuoteVersionRecipientDataRole
-    QuoteVersionCreateRequestStatus:
-      type: string
-      enum:
-      - DRAFT
-      - FINAL
-      - WAITING_APPROVAL
-      - APPROVED
-      - DECLINED
-      - SEND
-      - SIGNATURE_REQUESTED
-      - SIGNED
-      - ACCEPTED
-      - REJECTED
-      - CLOSED
-      title: QuoteVersionCreateRequestStatus
-    LinkDetail:
-      type: object
-      properties:
-        url:
-          type:
-          - string
-          - 'null'
-        custom_field_name:
-          type:
-          - string
-          - 'null'
-      title: LinkDetail
-    QuoteVersionActionCreateRequest:
+    QuoteVersionAction:
       type: object
       properties:
         created_at:
@@ -2325,46 +2176,108 @@ components:
           oneOf:
           - $ref: '#/components/schemas/QuoteVersionActionSign'
           - type: 'null'
-      title: QuoteVersionActionCreateRequest
-    QuoteVersionRecipientData:
+      title: QuoteVersionAction
+    PricingPlanSubscriptionInfoCreateRequest:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        upgraded_from_pricing_plan_subscription_id:
+          type:
+          - string
+          - 'null'
+      title: PricingPlanSubscriptionInfoCreateRequest
+    LinkDetail:
+      type: object
+      properties:
+        url:
+          type:
+          - string
+          - 'null'
+        custom_field_name:
+          type:
+          - string
+          - 'null'
+      title: LinkDetail
+    PeriodType:
+      type: string
+      enum:
+      - DAY
+      - WEEK
+      - MONTH
+      - YEAR
+      title: PeriodType
+    SignatureRequestStatus:
+      type: string
+      enum:
+      - IN_PROGRESS
+      - COMPLETED
+      - VOID
+      description: The status of the signature request.
+      title: SignatureRequestStatus
+    QuoteVersionActionCreateSubscriptionCreateRequest:
+      type: object
+      properties:
+        pricing_plan_subscription_id:
+          type:
+          - string
+          - 'null'
+          description: The create pricing plan subscription based on the quote version
+      title: QuoteVersionActionCreateSubscriptionCreateRequest
+    SignatureRequestRecipientDataStatus:
+      type: string
+      enum:
+      - PENDING
+      - COMPLETED
+      description: The status of the recipient.
+      title: SignatureRequestRecipientDataStatus
+    QuoteVersionActionUpdateRequest:
+      type: object
+      properties:
+        created_at:
+          type:
+          - string
+          - 'null'
+        type:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - string
+          - 'null'
+        send:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionActionSend'
+          - type: 'null'
+        accept:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionActionAccept'
+          - type: 'null'
+        reject:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionActionReject'
+          - type: 'null'
+        create_subscription:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionActionCreateSubscription'
+          - type: 'null'
+        request_signature:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionActionRequestSignature'
+          - type: 'null'
+        sign:
+          oneOf:
+          - $ref: '#/components/schemas/QuoteVersionActionSign'
+          - type: 'null'
+      title: QuoteVersionActionUpdateRequest
+    QuoteVersionContentUpdateRequest:
       type: object
       properties:
         type:
-          oneOf:
-          - $ref: '#/components/schemas/QuoteVersionRecipientDataType'
-          - type: 'null'
-          description: The type of the recipient.
-        contact:
-          $ref: '#/components/schemas/RecipientContactData'
-          description: Contact information, when type is CONTACT.
-        details:
-          $ref: '#/components/schemas/RecipientDetailsData'
-          description: Recipient details, when type is DETAILS.
-        role:
-          oneOf:
-          - $ref: '#/components/schemas/QuoteVersionRecipientDataRole'
-          - type: 'null'
-          description: The role of the recipient.
-      title: QuoteVersionRecipientData
-    InvoiceTaxAmounts:
-      type: object
-      properties:
-        base_amount:
-          $ref: '#/components/schemas/Amount'
-        tax_amount:
-          $ref: '#/components/schemas/Amount'
-        total_amount:
-          $ref: '#/components/schemas/Amount'
-        used_exchange_rate:
-          $ref: '#/components/schemas/UsedExchangeRate'
-        display:
-          type: boolean
-      title: InvoiceTaxAmounts
-    QuoteVersionContent:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/QuoteVersionContentType'
+          $ref: '#/components/schemas/QuoteVersionContentUpdateRequestType'
           description: The type of content used by the quote version.
         default:
           $ref: '#/components/schemas/QuoteVersionDefaultContent'
@@ -2374,30 +2287,111 @@ components:
           - string
           - 'null'
           description: If type is TIPTAP, the content of the quote version, stringified JSON following the ProseMirror schema.
-      title: QuoteVersionContent
-    NameCreateRequest:
+      title: QuoteVersionContentUpdateRequest
+    QuoteVersionRecipientDataUpdateRequestType:
+      type: string
+      enum:
+      - CONTACT
+      - DETAILS
+      description: The type of the recipient.
+      title: QuoteVersionRecipientDataUpdateRequestType
+    PortalUrlLinkUpdateRequest:
       type: object
       properties:
-        first_name:
+        expiry_period:
+          $ref: '#/components/schemas/Period'
+        portal_url_id:
           type:
           - string
           - 'null'
-        last_name:
+        url:
           type:
           - string
           - 'null'
-        infix:
-          type:
-          - string
-          - 'null'
-      title: NameCreateRequest
-    QuoteVersionContentCreateRequestType:
+      title: PortalUrlLinkUpdateRequest
+    QuoteVersionContentType:
       type: string
       enum:
       - DEFAULT
       - TIPTAP
       description: The type of content used by the quote version.
-      title: QuoteVersionContentCreateRequestType
+      title: QuoteVersionContentType
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    QuoteVersionRecipientDataCreateRequestRole:
+      type: string
+      enum:
+      - SIGNER
+      - VIEWER
+      description: The role of the recipient.
+      title: QuoteVersionRecipientDataCreateRequestRole
+    PortalUrlLink:
+      type: object
+      properties:
+        expiry_period:
+          $ref: '#/components/schemas/Period'
+        portal_url_id:
+          type:
+          - string
+          - 'null'
+        url:
+          type:
+          - string
+          - 'null'
+      title: PortalUrlLink
+    QuoteVersionStatus:
+      type: string
+      enum:
+      - DRAFT
+      - FINAL
+      - WAITING_APPROVAL
+      - APPROVED
+      - DECLINED
+      - SEND
+      - SIGNATURE_REQUESTED
+      - SIGNED
+      - ACCEPTED
+      - REJECTED
+      - CLOSED
+      title: QuoteVersionStatus
+    SignatureRequestRecipientData:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier of this recipient.
+        contact_id:
+          type:
+          - string
+          - 'null'
+          description: The contact ID, present when the recipient originates from a contact.
+        name:
+          oneOf:
+          - $ref: '#/components/schemas/Name'
+          - type: 'null'
+          description: The name of the recipient.
+        email:
+          type:
+          - string
+          - 'null'
+          description: The email of the recipient.
+        role:
+          oneOf:
+          - $ref: '#/components/schemas/SignatureRequestRecipientDataRole'
+          - type: 'null'
+          description: The role of the recipient.
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/SignatureRequestRecipientDataStatus'
+          - type: 'null'
+          description: The status of the recipient.
+      title: SignatureRequestRecipientData
     ApiErrorResourceType:
       type: string
       enum:
@@ -2487,29 +2481,35 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
-    PricingPlanSubscriptionInfoCreateRequest:
+    QuoteVersionDefaultContent:
       type: object
       properties:
-        id:
+        header:
           type:
           - string
           - 'null'
-        upgraded_from_pricing_plan_subscription_id:
+          description: Text shown above the pricing plan.
+        footer:
           type:
           - string
           - 'null'
-      title: PricingPlanSubscriptionInfoCreateRequest
-    SignatureRequestRecipientDataRole:
-      type: string
-      enum:
-      - SIGNER
-      - VIEWER
-      description: The role of the recipient.
-      title: SignatureRequestRecipientDataRole
-    QuoteVersionActionRequestSignatureBodyCreateRequest:
+          description: Text shown below the pricing plan.
+      title: QuoteVersionDefaultContent
+    QuoteVersionContent:
       type: object
-      properties: {}
-      title: QuoteVersionActionRequestSignatureBodyCreateRequest
+      properties:
+        type:
+          $ref: '#/components/schemas/QuoteVersionContentType'
+          description: The type of content used by the quote version.
+        default:
+          $ref: '#/components/schemas/QuoteVersionDefaultContent'
+          description: If type is DEFAULT, the content of the quote version.
+        tiptap:
+          type:
+          - string
+          - 'null'
+          description: If type is TIPTAP, the content of the quote version, stringified JSON following the ProseMirror schema.
+      title: QuoteVersionContent
   securitySchemes:
     API-Key:
       type: apiKey

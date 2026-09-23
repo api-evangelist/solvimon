@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Configuration alertRules meterProperties API
+  title: Configuration Meter Properties API
   version: 1.0.0
 servers:
 - url: https://test.api.solvimon.com
@@ -351,6 +351,24 @@ paths:
               $ref: '#/components/schemas/MeterPropertyUpdateRequest'
 components:
   schemas:
+    MeterPropertyCreateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the meter property indicating the activity and the ability to update properties.
+      title: MeterPropertyCreateRequestStatus
+    MeterPropertyUpdateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the meter property indicating the activity and the ability to update properties.
+      title: MeterPropertyUpdateRequestStatus
     ApiErrorResourceType:
       type: string
       enum:
@@ -440,15 +458,14 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
-    MeterPropertyCreateRequestStatus:
+    MeterPropertyUpdateRequestType:
       type: string
       enum:
-      - DRAFT
-      - ACTIVE
-      - ARCHIVED
-      - DEPRECATED
-      description: The status of the meter property indicating the activity and the ability to update properties.
-      title: MeterPropertyCreateRequestStatus
+      - NUMBER
+      - ENUM
+      - STRING
+      description: The type of the meter property.
+      title: MeterPropertyUpdateRequestType
     MeterProperty:
       type: object
       properties:
@@ -486,41 +503,6 @@ components:
             type: string
           description: The list of available ENUM values.
       title: MeterProperty
-    MeterPropertyCreateRequestType:
-      type: string
-      enum:
-      - NUMBER
-      - ENUM
-      - STRING
-      description: The type of the meter property.
-      title: MeterPropertyCreateRequestType
-    MeterPropertyUpdateRequestType:
-      type: string
-      enum:
-      - NUMBER
-      - ENUM
-      - STRING
-      description: The type of the meter property.
-      title: MeterPropertyUpdateRequestType
-    MeterPropertyUpdateRequestStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - ARCHIVED
-      - DEPRECATED
-      description: The status of the meter property indicating the activity and the ability to update properties.
-      title: MeterPropertyUpdateRequestStatus
-    MeterPropertyResponseWrapper:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/MeterProperty'
-      required:
-      - data
-      title: MeterPropertyResponseWrapper
     MeterPropertyStatus:
       type: string
       enum:
@@ -538,6 +520,24 @@ components:
       - STRING
       description: The type of the meter property.
       title: MeterPropertyType
+    MeterPropertyCreateRequestType:
+      type: string
+      enum:
+      - NUMBER
+      - ENUM
+      - STRING
+      description: The type of the meter property.
+      title: MeterPropertyCreateRequestType
+    MeterPropertyResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/MeterProperty'
+      required:
+      - data
+      title: MeterPropertyResponseWrapper
     ApiErrorCode:
       type: string
       enum:
@@ -577,12 +577,6 @@ components:
       - IDEMPOTENCY_CHECK_FAILED
       - INVALID_REQUEST
       title: ApiErrorCode
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
     MeterPropertyUpdateRequest:
       type: object
       properties:
@@ -620,6 +614,12 @@ components:
             type: string
           description: The list of available ENUM values.
       title: MeterPropertyUpdateRequest
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
     MeterPropertyCreateRequest:
       type: object
       properties:

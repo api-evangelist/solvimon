@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Configuration alertRules files API
+  title: Event Files API
   version: 1.0.0
 servers:
 - url: https://test.api.solvimon.com
@@ -8,7 +8,7 @@ servers:
 - url: https://api.solvimon.com
   description: The live environment for our API
 tags:
-- name: files
+- name: Files
 paths:
   /v{version}/files:
     get:
@@ -16,7 +16,7 @@ paths:
       summary: Get a list of files
       description: Requires the FILE.VIEW permission.
       tags:
-      - files
+      - Files
       parameters:
       - name: version
         in: path
@@ -96,7 +96,7 @@ paths:
       summary: Create a file
       description: Requires the FILE.METER_DATA.CREATE permission.
       tags:
-      - files
+      - Files
       parameters:
       - name: version
         in: path
@@ -164,7 +164,7 @@ paths:
       summary: Get the file lines of a file by the files ID
       description: Requires the FILE.VIEW permission.
       tags:
-      - files
+      - Files
       parameters:
       - name: version
         in: path
@@ -246,7 +246,7 @@ paths:
       summary: Get a file by its ID
       description: Requires the FILE.VIEW permission.
       tags:
-      - files
+      - Files
       parameters:
       - name: version
         in: path
@@ -309,7 +309,7 @@ paths:
       summary: Update a file
       description: Requires the FILE.METER_DATA.UPDATE permission.
       tags:
-      - files
+      - Files
       parameters:
       - name: version
         in: path
@@ -374,7 +374,114 @@ paths:
               $ref: '#/components/schemas/FileUpdateRequest'
 components:
   schemas:
-    FileMeterDataUpdateRequest:
+    FileCreateRequestStatus:
+      type: string
+      enum:
+      - CREATED
+      - TO_BE_DOWNLOADED
+      - DOWNLOADING
+      - DOWNLOADED
+      - UPLOADED
+      - IMPORTING
+      - IMPORTED
+      - TO_BE_PROCESSED
+      - PROCESSING
+      - ERROR
+      - DONE
+      title: FileCreateRequestStatus
+    FileUpdateRequestStatus:
+      type: string
+      enum:
+      - CREATED
+      - TO_BE_DOWNLOADED
+      - DOWNLOADING
+      - DOWNLOADED
+      - UPLOADED
+      - IMPORTING
+      - IMPORTED
+      - TO_BE_PROCESSED
+      - PROCESSING
+      - ERROR
+      - DONE
+      title: FileUpdateRequestStatus
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    FileLineResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileLine'
+        page:
+          type:
+          - integer
+          - 'null'
+        limit:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      title: FileLineResponseWrapper
+    FileDownloadSettings:
+      type: object
+      properties:
+        external_location:
+          type: string
+      title: FileDownloadSettings
+    FileLineStatus:
+      type: string
+      enum:
+      - IMPORTED
+      - ERROR
+      - DONE
+      - SKIPPED
+      title: FileLineStatus
+    FileMeterData:
       type: object
       properties:
         meter_id:
@@ -386,20 +493,239 @@ components:
           - string
           - 'null'
           format: date-time
-      title: FileMeterDataUpdateRequest
+      title: FileMeterData
+    File:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        file_name:
+          type: string
+        created_at:
+          type:
+          - string
+          - 'null'
+        status:
+          $ref: '#/components/schemas/FileStatus'
+        type:
+          $ref: '#/components/schemas/FileType'
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        customer_id:
+          type:
+          - string
+          - 'null'
+        processing_type:
+          oneOf:
+          - $ref: '#/components/schemas/FileProcessingType'
+          - type: 'null'
+        file_processing_settings_id:
+          type:
+          - string
+          - 'null'
+        meter_data:
+          $ref: '#/components/schemas/FileMeterData'
+        content_type:
+          type: string
+        content:
+          type: string
+          description: The content of the file, BASE64 encoded
+        column_headers:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        number_of_lines:
+          type: integer
+          format: int64
+        message:
+          type:
+          - string
+          - 'null'
+        download_settings:
+          $ref: '#/components/schemas/FileDownloadSettings'
+      title: File
+    FileUpdateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        file_name:
+          type: string
+        created_at:
+          type:
+          - string
+          - 'null'
+        status:
+          $ref: '#/components/schemas/FileUpdateRequestStatus'
+        type:
+          $ref: '#/components/schemas/FileUpdateRequestType'
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        customer_id:
+          type:
+          - string
+          - 'null'
+        processing_type:
+          oneOf:
+          - $ref: '#/components/schemas/FileUpdateRequestProcessingType'
+          - type: 'null'
+        file_processing_settings_id:
+          type:
+          - string
+          - 'null'
+        meter_data:
+          $ref: '#/components/schemas/FileMeterDataUpdateRequest'
+        content_type:
+          type: string
+        content:
+          type: string
+          description: The content of the file, BASE64 encoded
+        column_headers:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        number_of_lines:
+          type: integer
+          format: int64
+        message:
+          type:
+          - string
+          - 'null'
+        download_settings:
+          $ref: '#/components/schemas/FileDownloadSettingsUpdateRequest'
+      title: FileUpdateRequest
     FileType:
       type: string
       enum:
       - METER_DATA
       title: FileType
-    FileLineStatus:
+    FileStatus:
       type: string
       enum:
+      - CREATED
+      - TO_BE_DOWNLOADED
+      - DOWNLOADING
+      - DOWNLOADED
+      - UPLOADED
+      - IMPORTING
       - IMPORTED
+      - TO_BE_PROCESSED
+      - PROCESSING
       - ERROR
       - DONE
-      - SKIPPED
-      title: FileLineStatus
+      title: FileStatus
+    FileResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/File'
+        page:
+          type:
+          - integer
+          - 'null'
+        limit:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      title: FileResponseWrapper
+    FileProcessingType:
+      type: string
+      enum:
+      - DEFAULT
+      - SETTINGS
+      - CUSTOM
+      title: FileProcessingType
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    FileLine:
+      type: object
+      properties:
+        file_id:
+          type: string
+          description: Resource ID of type FILE
+        line_item_number:
+          type: integer
+          format: int64
+        data:
+          type: string
+        status:
+          $ref: '#/components/schemas/FileLineStatus'
+        message:
+          type: string
+      title: FileLine
+    FileCreateRequestProcessingType:
+      type: string
+      enum:
+      - DEFAULT
+      - SETTINGS
+      - CUSTOM
+      title: FileCreateRequestProcessingType
     FileCreateRequest:
       type: object
       properties:
@@ -472,306 +798,12 @@ components:
       - processing_type
       - content
       title: FileCreateRequest
-    FileUpdateRequestProcessingType:
-      type: string
-      enum:
-      - DEFAULT
-      - SETTINGS
-      - CUSTOM
-      title: FileUpdateRequestProcessingType
-    FileResponseWrapper:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/File'
-        page:
-          type:
-          - integer
-          - 'null'
-        limit:
-          type:
-          - integer
-          - 'null'
-        total_number_of_pages:
-          type:
-          - integer
-          - 'null'
-        links:
-          $ref: '#/components/schemas/PaginationLinks'
-      required:
-      - data
-      title: FileResponseWrapper
-    FileUpdateRequestStatus:
-      type: string
-      enum:
-      - CREATED
-      - TO_BE_DOWNLOADED
-      - DOWNLOADING
-      - DOWNLOADED
-      - UPLOADED
-      - IMPORTING
-      - IMPORTED
-      - TO_BE_PROCESSED
-      - PROCESSING
-      - ERROR
-      - DONE
-      title: FileUpdateRequestStatus
-    FileCreateRequestStatus:
-      type: string
-      enum:
-      - CREATED
-      - TO_BE_DOWNLOADED
-      - DOWNLOADING
-      - DOWNLOADED
-      - UPLOADED
-      - IMPORTING
-      - IMPORTED
-      - TO_BE_PROCESSED
-      - PROCESSING
-      - ERROR
-      - DONE
-      title: FileCreateRequestStatus
-    FileUpdateRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        reference:
-          type: string
-        file_name:
-          type: string
-        created_at:
-          type:
-          - string
-          - 'null'
-        status:
-          $ref: '#/components/schemas/FileUpdateRequestStatus'
-        type:
-          $ref: '#/components/schemas/FileUpdateRequestType'
-        name:
-          type:
-          - string
-          - 'null'
-        description:
-          type:
-          - string
-          - 'null'
-        customer_id:
-          type:
-          - string
-          - 'null'
-        processing_type:
-          oneOf:
-          - $ref: '#/components/schemas/FileUpdateRequestProcessingType'
-          - type: 'null'
-        file_processing_settings_id:
-          type:
-          - string
-          - 'null'
-        meter_data:
-          $ref: '#/components/schemas/FileMeterDataUpdateRequest'
-        content_type:
-          type: string
-        content:
-          type: string
-          description: The content of the file, BASE64 encoded
-        column_headers:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-        number_of_lines:
-          type: integer
-          format: int64
-        message:
-          type:
-          - string
-          - 'null'
-        download_settings:
-          $ref: '#/components/schemas/FileDownloadSettingsUpdateRequest'
-      title: FileUpdateRequest
-    File:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        reference:
-          type: string
-        file_name:
-          type: string
-        created_at:
-          type:
-          - string
-          - 'null'
-        status:
-          $ref: '#/components/schemas/FileStatus'
-        type:
-          $ref: '#/components/schemas/FileType'
-        name:
-          type:
-          - string
-          - 'null'
-        description:
-          type:
-          - string
-          - 'null'
-        customer_id:
-          type:
-          - string
-          - 'null'
-        processing_type:
-          oneOf:
-          - $ref: '#/components/schemas/FileProcessingType'
-          - type: 'null'
-        file_processing_settings_id:
-          type:
-          - string
-          - 'null'
-        meter_data:
-          $ref: '#/components/schemas/FileMeterData'
-        content_type:
-          type: string
-        content:
-          type: string
-          description: The content of the file, BASE64 encoded
-        column_headers:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-        number_of_lines:
-          type: integer
-          format: int64
-        message:
-          type:
-          - string
-          - 'null'
-        download_settings:
-          $ref: '#/components/schemas/FileDownloadSettings'
-      title: File
-    FileDownloadSettingsUpdateRequest:
-      type: object
-      properties:
-        external_location:
-          type: string
-      title: FileDownloadSettingsUpdateRequest
-    FileCreateRequestProcessingType:
-      type: string
-      enum:
-      - DEFAULT
-      - SETTINGS
-      - CUSTOM
-      title: FileCreateRequestProcessingType
-    FileLineResponseWrapper:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/FileLine'
-        page:
-          type:
-          - integer
-          - 'null'
-        limit:
-          type:
-          - integer
-          - 'null'
-        total_number_of_pages:
-          type:
-          - integer
-          - 'null'
-        links:
-          $ref: '#/components/schemas/PaginationLinks'
-      required:
-      - data
-      title: FileLineResponseWrapper
     ApiErrorType:
       type: string
       enum:
       - API_ERROR
       - INVALID_REQUEST
       title: ApiErrorType
-    FileCreateRequestType:
-      type: string
-      enum:
-      - METER_DATA
-      title: FileCreateRequestType
-    FileMeterData:
-      type: object
-      properties:
-        meter_id:
-          type:
-          - string
-          - 'null'
-        override_ingest_timestamp:
-          type:
-          - string
-          - 'null'
-          format: date-time
-      title: FileMeterData
-    ApiError:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/ApiErrorType'
-        code:
-          $ref: '#/components/schemas/ApiErrorCode'
-        field:
-          type:
-          - string
-          - 'null'
-        message:
-          type: string
-        resource_id:
-          type:
-          - string
-          - 'null'
-        resource_type:
-          oneOf:
-          - $ref: '#/components/schemas/ApiErrorResourceType'
-          - type: 'null'
-      required:
-      - type
-      - code
-      - message
-      title: ApiError
-    FileMeterDataCreateRequest:
-      type: object
-      properties:
-        meter_id:
-          type:
-          - string
-          - 'null'
-        override_ingest_timestamp:
-          type:
-          - string
-          - 'null'
-          format: date-time
-      title: FileMeterDataCreateRequest
-    FileProcessingType:
-      type: string
-      enum:
-      - DEFAULT
-      - SETTINGS
-      - CUSTOM
-      title: FileProcessingType
     ApiErrorResourceType:
       type: string
       enum:
@@ -861,78 +893,48 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
-    FileDownloadSettings:
+    FileDownloadSettingsUpdateRequest:
       type: object
       properties:
         external_location:
           type: string
-      title: FileDownloadSettings
-    FileLine:
+      title: FileDownloadSettingsUpdateRequest
+    FileMeterDataCreateRequest:
       type: object
       properties:
-        file_id:
-          type: string
-          description: Resource ID of type FILE
-        line_item_number:
-          type: integer
-          format: int64
-        data:
-          type: string
-        status:
-          $ref: '#/components/schemas/FileLineStatus'
-        message:
-          type: string
-      title: FileLine
+        meter_id:
+          type:
+          - string
+          - 'null'
+        override_ingest_timestamp:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      title: FileMeterDataCreateRequest
+    FileCreateRequestType:
+      type: string
+      enum:
+      - METER_DATA
+      title: FileCreateRequestType
+    FileUpdateRequestProcessingType:
+      type: string
+      enum:
+      - DEFAULT
+      - SETTINGS
+      - CUSTOM
+      title: FileUpdateRequestProcessingType
+    FileUpdateRequestType:
+      type: string
+      enum:
+      - METER_DATA
+      title: FileUpdateRequestType
     FileDownloadSettingsCreateRequest:
       type: object
       properties:
         external_location:
           type: string
       title: FileDownloadSettingsCreateRequest
-    ApiErrorCode:
-      type: string
-      enum:
-      - RESOURCE_NOT_FOUND
-      - RESOURCES_NOT_FOUND
-      - UNABLE_TO_PROCESS_INSTRUCTIONS
-      - BAD_REQUEST
-      - UNSUPPORTED_MEDIA_TYPE
-      - RESOURCE_ALREADY_EXISTS
-      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
-      - COULD_NOT_CREATE_RESOURCE
-      - COULD_NOT_UPDATE_RESOURCE
-      - COULD_NOT_DELETE_RESOURCE
-      - MISSING_VERSION
-      - UNSUPPORTED_VERSION
-      - UNAUTHORISED
-      - CUSTOMER_NOT_FOUND
-      - PLATFORM_NOT_FOUND
-      - PRICING_PLAN_NOT_FOUND
-      - PRODUCT_NOT_FOUND
-      - PRODUCT_ITEM_NOT_FOUND
-      - PRICING_NOT_FOUND
-      - PRICING_ITEM_NOT_FOUND
-      - USER_NOT_FOUND
-      - METER_NOT_FOUND
-      - METER_VALUE_NOT_FOUND
-      - METER_PROPERTY_NOT_FOUND
-      - PRICING_ITEM_SUMMARIES_NOT_FOUND
-      - MISSING_ID
-      - INVALID_ID
-      - MISSING_REFERENCE
-      - MISSING_FIELD
-      - INVALID_FIELD
-      - INVALID_OPERATION
-      - INTERNAL_ERROR
-      - USER_NOT_ALLOWED
-      - IDEMPOTENCY_CHECK_FAILED
-      - INVALID_REQUEST
-      title: ApiErrorCode
-    FileUpdateRequestType:
-      type: string
-      enum:
-      - METER_DATA
-      title: FileUpdateRequestType
     PaginationLinks:
       type: object
       properties:
@@ -953,21 +955,19 @@ components:
           - string
           - 'null'
       title: PaginationLinks
-    FileStatus:
-      type: string
-      enum:
-      - CREATED
-      - TO_BE_DOWNLOADED
-      - DOWNLOADING
-      - DOWNLOADED
-      - UPLOADED
-      - IMPORTING
-      - IMPORTED
-      - TO_BE_PROCESSED
-      - PROCESSING
-      - ERROR
-      - DONE
-      title: FileStatus
+    FileMeterDataUpdateRequest:
+      type: object
+      properties:
+        meter_id:
+          type:
+          - string
+          - 'null'
+        override_ingest_timestamp:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      title: FileMeterDataUpdateRequest
   securitySchemes:
     API-Key:
       type: apiKey

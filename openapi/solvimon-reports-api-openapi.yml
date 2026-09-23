@@ -1,14 +1,14 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Configuration alertRules reports API
+  title: Transaction Reports API
   version: 1.0.0
 servers:
-- url: https://test.api.solvimon.com
-  description: The TEST environment for our API
 - url: https://api.solvimon.com
   description: The live environment for our API
+- url: https://test.api.solvimon.com
+  description: The TEST environment for our API
 tags:
-- name: reports
+- name: Reports
 paths:
   /v{version}/reports:
     get:
@@ -16,7 +16,7 @@ paths:
       summary: Get Reports
       description: Requires the REPORT.VIEW permission.
       tags:
-      - reports
+      - Reports
       parameters:
       - name: version
         in: path
@@ -91,7 +91,7 @@ paths:
       summary: Get report
       description: Requires the REPORT.VIEW permission.
       tags:
-      - reports
+      - Reports
       parameters:
       - name: version
         in: path
@@ -155,7 +155,7 @@ paths:
       summary: Get report download URL
       description: Requires the REPORT.VIEW permission.
       tags:
-      - reports
+      - Reports
       parameters:
       - name: version
         in: path
@@ -219,7 +219,7 @@ paths:
       summary: Get invoice lines report
       description: Requires the REPORT_GENERATE_REQUEST.CREATE permission.
       tags:
-      - reports
+      - Reports
       parameters:
       - name: version
         in: path
@@ -350,7 +350,7 @@ paths:
       summary: Get invoice tax report
       description: Requires the REPORT_GENERATE_REQUEST.CREATE permission.
       tags:
-      - reports
+      - Reports
       parameters:
       - name: version
         in: path
@@ -481,7 +481,7 @@ paths:
       summary: Get invoice header report
       description: Requires the REPORT_GENERATE_REQUEST.CREATE permission.
       tags:
-      - reports
+      - Reports
       parameters:
       - name: version
         in: path
@@ -612,7 +612,7 @@ paths:
       summary: Search reports
       description: Requires the REPORT.VIEW permission.
       tags:
-      - reports
+      - Reports
       parameters:
       - name: version
         in: path
@@ -706,7 +706,7 @@ paths:
       summary: Get ReportGenerateRequests
       description: Requires the REPORT_GENERATE_REQUEST.VIEW permission.
       tags:
-      - reports
+      - Reports
       parameters:
       - name: version
         in: path
@@ -780,7 +780,7 @@ paths:
       summary: Create a ReportGenerateRequest
       description: Requires the REPORT_GENERATE_REQUEST.CREATE permission.
       tags:
-      - reports
+      - Reports
       parameters:
       - name: version
         in: path
@@ -848,7 +848,7 @@ paths:
       summary: Search ReportGenerateRequests
       description: Requires the REPORT_GENERATE_REQUEST.VIEW permission.
       tags:
-      - reports
+      - Reports
       parameters:
       - name: version
         in: path
@@ -948,7 +948,7 @@ paths:
       summary: Get ReportGenerateRequest
       description: Requires the REPORT_GENERATE_REQUEST.VIEW permission.
       tags:
-      - reports
+      - Reports
       parameters:
       - name: version
         in: path
@@ -1006,7 +1006,7 @@ paths:
       summary: Get Report
       description: Requires the REPORT.VIEW permission.
       tags:
-      - reports
+      - Reports
       parameters:
       - name: version
         in: path
@@ -1060,91 +1060,72 @@ paths:
                 $ref: '#/components/schemas/ApiError'
 components:
   schemas:
-    ResourceIdentifierType:
+    ReportParameterValueCreateRequestName:
       type: string
       enum:
-      - PLATFORM
-      - CUSTOMER
-      - BILLING_ENTITY
-      - METER
-      - METER_VALUE
-      - METER_PROPERTY
-      - METER_VALUE_CALCULATION
-      - PRODUCT
-      - PRODUCT_ITEM
-      - PRODUCT_CATEGORY
-      - PRICING
-      - PRICING_ITEM
-      - PRICING_ITEM_CONFIG
-      - PRICING_ITEM_SUMMARY
-      - METER_VALUE_CALCULATION_SUMMARY
-      - PRICING_PLAN
-      - PRICING_PLAN_VERSION
-      - PRICING_PLAN_SUBSCRIPTION
-      - PRICING_PLAN_SCHEDULE
-      - QUOTE
-      - QUOTE_VERSION
-      - CONTACT
-      - CUSTOM_FIELD
-      - REQUEST_REFERENCE
-      - METER_DATA
-      - CHARGE_DATA
-      - ADJUSTMENT_DATA
-      - PERSIST_DATA
-      - INVOICE
-      - INVOICE_PAYMENT_ATTEMPT
-      - PAYMENT_ACCEPTOR
-      - PAYMENT_SCHEDULE
-      - PAYMENT_REQUEST
-      - FEATURE
-      - ALERT_RULE
-      - ALERT
-      - USER
-      - MEMBERSHIP
-      - TEAM
-      - ENTITY
-      - ACCOUNT_GROUP
-      - AUDIT
-      - WEBHOOK
-      - REPORT_SUBSCRIPTION
-      - REPORT_CONFIGURATION
-      title: ResourceIdentifierType
-    ExportReportLocation:
+      - report_date
+      - from_date
+      - to_date
+      - updated_to_final_from_date
+      - updated_to_final_to_date
+      - meter
+      - meter_id
+      - customer_id
+      - invoice_id
+      - statuses
+      title: ReportParameterValueCreateRequestName
+    ExportReportLocationS3DetailsFormatType:
+      type: string
+      enum:
+      - CSV
+      - PARQUET
+      title: ExportReportLocationS3DetailsFormatType
+    ExportReportLocationBigQueryDetails:
       type: object
       properties:
-        integration_id:
+        dataset_id:
           type: string
-          description: Resource ID of type INTEGRATION
-        variant:
-          $ref: '#/components/schemas/ExportReportLocationVariant'
-        stream_name:
-          type:
-          - string
-          - 'null'
-        bigquery:
-          $ref: '#/components/schemas/ExportReportLocationBigQueryDetails'
-        s3:
-          $ref: '#/components/schemas/ExportReportLocationS3Details'
-        gcs:
-          $ref: '#/components/schemas/ExportReportLocationGcsDetails'
-      title: ExportReportLocation
-    SearchCreateRequest:
-      type: object
-      properties:
-        search_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/SearchFieldCreateRequest'
-        filter_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/FilterFieldCreateRequest'
-        selection_rule_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/SelectionRuleFieldCreateRequest'
-      title: SearchCreateRequest
-    ReportGenerateRequest:
+      title: ExportReportLocationBigQueryDetails
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    ReportGenerateRequestCreateRequest:
       type: object
       properties:
         object_type:
@@ -1169,11 +1150,11 @@ components:
           type: string
           format: date-time
         report_code:
-          $ref: '#/components/schemas/ReportGenerateRequestReportCode'
+          $ref: '#/components/schemas/ReportGenerateRequestCreateRequestReportCode'
         parameter_values:
           type: array
           items:
-            $ref: '#/components/schemas/ReportParameterValue'
+            $ref: '#/components/schemas/ReportParameterValueCreateRequest'
         status:
           type:
           - string
@@ -1190,15 +1171,25 @@ components:
           - string
           - 'null'
         export_location:
-          $ref: '#/components/schemas/ExportReportLocation'
-      title: ReportGenerateRequest
-    ExportReportLocationGcsDetailsFormatType:
-      type: string
-      enum:
-      - CSV
-      - PARQUET
-      title: ExportReportLocationGcsDetailsFormatType
-    ReportGenerateRequestCreateRequestReportCode:
+          $ref: '#/components/schemas/ExportReportLocationCreateRequest'
+      title: ReportGenerateRequestCreateRequest
+    SearchCreateRequest:
+      type: object
+      properties:
+        search_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchFieldCreateRequest'
+        filter_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/FilterFieldCreateRequest'
+        selection_rule_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/SelectionRuleFieldCreateRequest'
+      title: SearchCreateRequest
+    ReportReportCode:
       type: string
       enum:
       - INVOICE
@@ -1219,95 +1210,17 @@ components:
       - PRICING
       - REVENUE_RECOGNITION
       - CLAUSES
-      title: ReportGenerateRequestCreateRequestReportCode
-    FilterFieldCreateRequest:
+      title: ReportReportCode
+    SelectionRuleFieldCreateRequest:
       type: object
       properties:
         name:
           type: string
-        reference:
-          type:
-          - string
-          - 'null'
         value:
           type:
           - string
           - 'null'
-        values:
-          type: array
-          items:
-            type: string
-      title: FilterFieldCreateRequest
-    ReportParameterValueCreateRequestName:
-      type: string
-      enum:
-      - report_date
-      - from_date
-      - to_date
-      - updated_to_final_from_date
-      - updated_to_final_to_date
-      - meter
-      - meter_id
-      - customer_id
-      - invoice_id
-      - statuses
-      title: ReportParameterValueCreateRequestName
-    ReportParameterValue:
-      type: object
-      properties:
-        name:
-          $ref: '#/components/schemas/ReportParameterValueName'
-        value:
-          type: string
-      title: ReportParameterValue
-    ReportParameterValueName:
-      type: string
-      enum:
-      - report_date
-      - from_date
-      - to_date
-      - updated_to_final_from_date
-      - updated_to_final_to_date
-      - meter
-      - meter_id
-      - customer_id
-      - invoice_id
-      - statuses
-      title: ReportParameterValueName
-    ExportReportLocationVariant:
-      type: string
-      enum:
-      - BIGQUERY
-      - S3
-      - GCS
-      - SNOWFLAKE
-      title: ExportReportLocationVariant
-    DownloadUrl:
-      type: object
-      properties:
-        resource:
-          oneOf:
-          - $ref: '#/components/schemas/ResourceIdentifier'
-          - type: 'null'
-        expire_at:
-          type:
-          - string
-          - 'null'
-        url:
-          type:
-          - string
-          - 'null'
-      title: DownloadUrl
-    ExportReportLocationS3Details:
-      type: object
-      properties:
-        bucket_path:
-          type: string
-        path_format:
-          type: string
-        format_type:
-          $ref: '#/components/schemas/ExportReportLocationS3DetailsFormatType'
-      title: ExportReportLocationS3Details
+      title: SelectionRuleFieldCreateRequest
     Report:
       type: object
       properties:
@@ -1375,168 +1288,100 @@ components:
           - string
           - 'null'
       title: Report
-    ExportReportLocationS3DetailsFormatType:
-      type: string
-      enum:
-      - CSV
-      - PARQUET
-      title: ExportReportLocationS3DetailsFormatType
-    ReportResponseWrapper:
+    ExportReportLocationCreateRequest:
       type: object
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Report'
-        limit:
-          type:
-          - integer
-          - 'null'
-        page:
-          type:
-          - integer
-          - 'null'
-        total_number_of_pages:
-          type:
-          - integer
-          - 'null'
-        links:
-          $ref: '#/components/schemas/PaginationLinks'
-      required:
-      - data
-      - links
-      title: ReportResponseWrapper
-    ResourceIdentifier:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/ResourceIdentifierType'
-        id:
+        integration_id:
           type: string
-      title: ResourceIdentifier
-    ReportGenerateRequestCreateRequest:
-      type: object
-      properties:
-        object_type:
+          description: Resource ID of type INTEGRATION
+        variant:
+          $ref: '#/components/schemas/ExportReportLocationCreateRequestVariant'
+        stream_name:
           type:
           - string
           - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        customer_id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type CUSTOMER
-        invoice_id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type INVOICE
-        generate_at:
-          type: string
-          format: date-time
-        report_code:
-          $ref: '#/components/schemas/ReportGenerateRequestCreateRequestReportCode'
-        parameter_values:
-          type: array
-          items:
-            $ref: '#/components/schemas/ReportParameterValueCreateRequest'
-        status:
-          type:
-          - string
-          - 'null'
-        report_subscription_id:
-          type:
-          - string
-          - 'null'
-        report_configuration_id:
-          type: string
-          description: Resource ID of type REPORT_CONFIGURATION
-        run_type:
-          type:
-          - string
-          - 'null'
-        export_location:
-          $ref: '#/components/schemas/ExportReportLocationCreateRequest'
-      title: ReportGenerateRequestCreateRequest
-    ReportGenerateRequestResponseWrapper:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ReportGenerateRequest'
-        limit:
-          type:
-          - integer
-          - 'null'
-        page:
-          type:
-          - integer
-          - 'null'
-        total_number_of_pages:
-          type:
-          - integer
-          - 'null'
-        links:
-          $ref: '#/components/schemas/PaginationLinks'
-      required:
-      - data
-      - links
-      title: ReportGenerateRequestResponseWrapper
-    ReportParameterValueCreateRequest:
-      type: object
-      properties:
-        name:
-          $ref: '#/components/schemas/ReportParameterValueCreateRequestName'
-        value:
-          type: string
-      title: ReportParameterValueCreateRequest
-    ExportReportLocationCreateRequestVariant:
+        bigquery:
+          $ref: '#/components/schemas/ExportReportLocationBigQueryDetails'
+        s3:
+          $ref: '#/components/schemas/ExportReportLocationS3Details'
+        gcs:
+          $ref: '#/components/schemas/ExportReportLocationGcsDetails'
+      title: ExportReportLocationCreateRequest
+    ExportReportLocationVariant:
       type: string
       enum:
       - BIGQUERY
       - S3
       - GCS
       - SNOWFLAKE
-      title: ExportReportLocationCreateRequestVariant
-    ReportReportCode:
-      type: string
-      enum:
-      - INVOICE
-      - INVOICE_USAGE
-      - INVOICE_HEADER
-      - INVOICE_LINE
-      - INVOICE_TAX
-      - INVOICE_COMMITMENT
-      - CHILD_PARENT_BREAKDOWN
-      - CHILD_PARENT_BREAKDOWN_PLATFORM
-      - NOT_MATCHED_METER_DATA
-      - DUPLICATE_METER_DATA
-      - METERING
-      - CUSTOMER
-      - PRODUCT
-      - PRICING_PLAN_SUBSCRIPTION
-      - PAYMENT
-      - PRICING
-      - REVENUE_RECOGNITION
-      - CLAUSES
-      title: ReportReportCode
-    ExportReportLocationBigQueryDetails:
+      title: ExportReportLocationVariant
+    ExportReportLocation:
       type: object
       properties:
-        dataset_id:
+        integration_id:
           type: string
-      title: ExportReportLocationBigQueryDetails
-    ApiErrorType:
+          description: Resource ID of type INTEGRATION
+        variant:
+          $ref: '#/components/schemas/ExportReportLocationVariant'
+        stream_name:
+          type:
+          - string
+          - 'null'
+        bigquery:
+          $ref: '#/components/schemas/ExportReportLocationBigQueryDetails'
+        s3:
+          $ref: '#/components/schemas/ExportReportLocationS3Details'
+        gcs:
+          $ref: '#/components/schemas/ExportReportLocationGcsDetails'
+      title: ExportReportLocation
+    FilterFieldCreateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        reference:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+        values:
+          type: array
+          items:
+            type: string
+      title: FilterFieldCreateRequest
+    DownloadUrl:
+      type: object
+      properties:
+        resource:
+          oneOf:
+          - $ref: '#/components/schemas/ResourceIdentifier'
+          - type: 'null'
+        expire_at:
+          type:
+          - string
+          - 'null'
+        url:
+          type:
+          - string
+          - 'null'
+      title: DownloadUrl
+    ReportParameterValueName:
       type: string
       enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
+      - report_date
+      - from_date
+      - to_date
+      - updated_to_final_from_date
+      - updated_to_final_to_date
+      - meter
+      - meter_id
+      - customer_id
+      - invoice_id
+      - statuses
+      title: ReportParameterValueName
     ApiError:
       type: object
       properties:
@@ -1563,16 +1408,171 @@ components:
       - code
       - message
       title: ApiError
-    SelectionRuleFieldCreateRequest:
+    ReportGenerateRequest:
       type: object
       properties:
-        name:
-          type: string
-        value:
+        object_type:
           type:
           - string
           - 'null'
-      title: SelectionRuleFieldCreateRequest
+        id:
+          type:
+          - string
+          - 'null'
+        customer_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOMER
+        invoice_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type INVOICE
+        generate_at:
+          type: string
+          format: date-time
+        report_code:
+          $ref: '#/components/schemas/ReportGenerateRequestReportCode'
+        parameter_values:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReportParameterValue'
+        status:
+          type:
+          - string
+          - 'null'
+        report_subscription_id:
+          type:
+          - string
+          - 'null'
+        report_configuration_id:
+          type: string
+          description: Resource ID of type REPORT_CONFIGURATION
+        run_type:
+          type:
+          - string
+          - 'null'
+        export_location:
+          $ref: '#/components/schemas/ExportReportLocation'
+      title: ReportGenerateRequest
+    ResourceIdentifierType:
+      type: string
+      enum:
+      - PLATFORM
+      - CUSTOMER
+      - BILLING_ENTITY
+      - METER
+      - METER_VALUE
+      - METER_PROPERTY
+      - METER_VALUE_CALCULATION
+      - PRODUCT
+      - PRODUCT_ITEM
+      - PRODUCT_CATEGORY
+      - PRICING
+      - PRICING_ITEM
+      - PRICING_ITEM_CONFIG
+      - PRICING_ITEM_SUMMARY
+      - METER_VALUE_CALCULATION_SUMMARY
+      - PRICING_PLAN
+      - PRICING_PLAN_VERSION
+      - PRICING_PLAN_SUBSCRIPTION
+      - PRICING_PLAN_SCHEDULE
+      - QUOTE
+      - QUOTE_VERSION
+      - CONTACT
+      - CUSTOM_FIELD
+      - REQUEST_REFERENCE
+      - METER_DATA
+      - CHARGE_DATA
+      - ADJUSTMENT_DATA
+      - PERSIST_DATA
+      - INVOICE
+      - INVOICE_PAYMENT_ATTEMPT
+      - PAYMENT_ACCEPTOR
+      - PAYMENT_SCHEDULE
+      - PAYMENT_REQUEST
+      - FEATURE
+      - ALERT_RULE
+      - ALERT
+      - USER
+      - MEMBERSHIP
+      - TEAM
+      - ENTITY
+      - ACCOUNT_GROUP
+      - AUDIT
+      - WEBHOOK
+      - REPORT_SUBSCRIPTION
+      - REPORT_CONFIGURATION
+      title: ResourceIdentifierType
+    ExportReportLocationGcsDetails:
+      type: object
+      properties:
+        bucket_path:
+          type: string
+        path_format:
+          type: string
+        format_type:
+          $ref: '#/components/schemas/ExportReportLocationGcsDetailsFormatType'
+      title: ExportReportLocationGcsDetails
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    SearchFieldCreateRequest:
+      type: object
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+        value:
+          type: string
+        wildcard_start:
+          type: boolean
+        wildcard_end:
+          type: boolean
+        ignore_case:
+          type: boolean
+      title: SearchFieldCreateRequest
+    ReportGenerateRequestReportCode:
+      type: string
+      enum:
+      - INVOICE
+      - INVOICE_USAGE
+      - INVOICE_HEADER
+      - INVOICE_LINE
+      - INVOICE_TAX
+      - INVOICE_COMMITMENT
+      - CHILD_PARENT_BREAKDOWN
+      - CHILD_PARENT_BREAKDOWN_PLATFORM
+      - NOT_MATCHED_METER_DATA
+      - DUPLICATE_METER_DATA
+      - METERING
+      - CUSTOMER
+      - PRODUCT
+      - PRICING_PLAN_SUBSCRIPTION
+      - PAYMENT
+      - PRICING
+      - REVENUE_RECOGNITION
+      - CLAUSES
+      title: ReportGenerateRequestReportCode
+    ReportParameterValueCreateRequest:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/ReportParameterValueCreateRequestName'
+        value:
+          type: string
+      title: ReportParameterValueCreateRequest
+    ExportReportLocationGcsDetailsFormatType:
+      type: string
+      enum:
+      - CSV
+      - PARQUET
+      title: ExportReportLocationGcsDetailsFormatType
     ApiErrorResourceType:
       type: string
       enum:
@@ -1662,7 +1662,7 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
-    ReportGenerateRequestReportCode:
+    ReportGenerateRequestCreateRequestReportCode:
       type: string
       enum:
       - INVOICE
@@ -1683,65 +1683,91 @@ components:
       - PRICING
       - REVENUE_RECOGNITION
       - CLAUSES
-      title: ReportGenerateRequestReportCode
-    ExportReportLocationCreateRequest:
+      title: ReportGenerateRequestCreateRequestReportCode
+    ResourceIdentifier:
       type: object
       properties:
-        integration_id:
+        type:
+          $ref: '#/components/schemas/ResourceIdentifierType'
+        id:
           type: string
-          description: Resource ID of type INTEGRATION
-        variant:
-          $ref: '#/components/schemas/ExportReportLocationCreateRequestVariant'
-        stream_name:
-          type:
-          - string
-          - 'null'
-        bigquery:
-          $ref: '#/components/schemas/ExportReportLocationBigQueryDetails'
-        s3:
-          $ref: '#/components/schemas/ExportReportLocationS3Details'
-        gcs:
-          $ref: '#/components/schemas/ExportReportLocationGcsDetails'
-      title: ExportReportLocationCreateRequest
-    ApiErrorCode:
+      title: ResourceIdentifier
+    ExportReportLocationCreateRequestVariant:
       type: string
       enum:
-      - RESOURCE_NOT_FOUND
-      - RESOURCES_NOT_FOUND
-      - UNABLE_TO_PROCESS_INSTRUCTIONS
-      - BAD_REQUEST
-      - UNSUPPORTED_MEDIA_TYPE
-      - RESOURCE_ALREADY_EXISTS
-      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
-      - COULD_NOT_CREATE_RESOURCE
-      - COULD_NOT_UPDATE_RESOURCE
-      - COULD_NOT_DELETE_RESOURCE
-      - MISSING_VERSION
-      - UNSUPPORTED_VERSION
-      - UNAUTHORISED
-      - CUSTOMER_NOT_FOUND
-      - PLATFORM_NOT_FOUND
-      - PRICING_PLAN_NOT_FOUND
-      - PRODUCT_NOT_FOUND
-      - PRODUCT_ITEM_NOT_FOUND
-      - PRICING_NOT_FOUND
-      - PRICING_ITEM_NOT_FOUND
-      - USER_NOT_FOUND
-      - METER_NOT_FOUND
-      - METER_VALUE_NOT_FOUND
-      - METER_PROPERTY_NOT_FOUND
-      - PRICING_ITEM_SUMMARIES_NOT_FOUND
-      - MISSING_ID
-      - INVALID_ID
-      - MISSING_REFERENCE
-      - MISSING_FIELD
-      - INVALID_FIELD
-      - INVALID_OPERATION
-      - INTERNAL_ERROR
-      - USER_NOT_ALLOWED
-      - IDEMPOTENCY_CHECK_FAILED
-      - INVALID_REQUEST
-      title: ApiErrorCode
+      - BIGQUERY
+      - S3
+      - GCS
+      - SNOWFLAKE
+      title: ExportReportLocationCreateRequestVariant
+    ReportGenerateRequestResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReportGenerateRequest'
+        limit:
+          type:
+          - integer
+          - 'null'
+        page:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      - links
+      title: ReportGenerateRequestResponseWrapper
+    ReportResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Report'
+        limit:
+          type:
+          - integer
+          - 'null'
+        page:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      - links
+      title: ReportResponseWrapper
+    ExportReportLocationS3Details:
+      type: object
+      properties:
+        bucket_path:
+          type: string
+        path_format:
+          type: string
+        format_type:
+          $ref: '#/components/schemas/ExportReportLocationS3DetailsFormatType'
+      title: ExportReportLocationS3Details
+    ReportParameterValue:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/ReportParameterValueName'
+        value:
+          type: string
+      title: ReportParameterValue
     PaginationLinks:
       type: object
       properties:
@@ -1762,32 +1788,6 @@ components:
           - string
           - 'null'
       title: PaginationLinks
-    SearchFieldCreateRequest:
-      type: object
-      properties:
-        name:
-          type:
-          - string
-          - 'null'
-        value:
-          type: string
-        wildcard_start:
-          type: boolean
-        wildcard_end:
-          type: boolean
-        ignore_case:
-          type: boolean
-      title: SearchFieldCreateRequest
-    ExportReportLocationGcsDetails:
-      type: object
-      properties:
-        bucket_path:
-          type: string
-        path_format:
-          type: string
-        format_type:
-          $ref: '#/components/schemas/ExportReportLocationGcsDetailsFormatType'
-      title: ExportReportLocationGcsDetails
   securitySchemes:
     API-Key:
       type: apiKey

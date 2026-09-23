@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Configuration alertRules documents API
+  title: Configuration Documents API
   version: 1.0.0
 servers:
 - url: https://test.api.solvimon.com
@@ -8,7 +8,7 @@ servers:
 - url: https://api.solvimon.com
   description: The live environment for our API
 tags:
-- name: documents
+- name: Documents
 paths:
   /v{version}/documents:
     post:
@@ -16,7 +16,7 @@ paths:
       summary: Upload a document
       description: Requires the DOCUMENT.CREATE permission.
       tags:
-      - documents
+      - Documents
       parameters:
       - name: version
         in: path
@@ -78,7 +78,7 @@ paths:
       summary: Get a document by ID
       description: Requires the DOCUMENT.VIEW permission.
       tags:
-      - documents
+      - Documents
       parameters:
       - name: version
         in: path
@@ -141,7 +141,7 @@ paths:
       summary: Delete a document
       description: Requires the DOCUMENT.DELETE permission.
       tags:
-      - documents
+      - Documents
       parameters:
       - name: version
         in: path
@@ -205,7 +205,7 @@ paths:
       summary: Download a document
       description: Requires the DOCUMENT.DOWNLOAD permission.
       tags:
-      - documents
+      - Documents
       parameters:
       - name: version
         in: path
@@ -362,96 +362,6 @@ components:
         id:
           type: string
       title: ResourceIdentifier
-    ResourceIdentifierType:
-      type: string
-      enum:
-      - PLATFORM
-      - CUSTOMER
-      - BILLING_ENTITY
-      - METER
-      - METER_VALUE
-      - METER_PROPERTY
-      - METER_VALUE_CALCULATION
-      - PRODUCT
-      - PRODUCT_ITEM
-      - PRODUCT_CATEGORY
-      - PRICING
-      - PRICING_ITEM
-      - PRICING_ITEM_CONFIG
-      - PRICING_ITEM_SUMMARY
-      - METER_VALUE_CALCULATION_SUMMARY
-      - PRICING_PLAN
-      - PRICING_PLAN_VERSION
-      - PRICING_PLAN_SUBSCRIPTION
-      - PRICING_PLAN_SCHEDULE
-      - QUOTE
-      - QUOTE_VERSION
-      - CONTACT
-      - CUSTOM_FIELD
-      - REQUEST_REFERENCE
-      - METER_DATA
-      - CHARGE_DATA
-      - ADJUSTMENT_DATA
-      - PERSIST_DATA
-      - INVOICE
-      - INVOICE_PAYMENT_ATTEMPT
-      - PAYMENT_ACCEPTOR
-      - PAYMENT_SCHEDULE
-      - PAYMENT_REQUEST
-      - FEATURE
-      - ALERT_RULE
-      - ALERT
-      - USER
-      - MEMBERSHIP
-      - TEAM
-      - ENTITY
-      - ACCOUNT_GROUP
-      - AUDIT
-      - WEBHOOK
-      - REPORT_SUBSCRIPTION
-      - REPORT_CONFIGURATION
-      title: ResourceIdentifierType
-    Document:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        created_at:
-          type:
-          - string
-          - 'null'
-        name:
-          type: string
-          description: The name of the document.
-        description:
-          type:
-          - string
-          - 'null'
-          description: An optional description of the document.
-        content_type:
-          type: string
-          description: Content type of the file (e.g. application/pdf).
-        content:
-          type: string
-          description: The file content, BASE64 encoded. Max 10MB.
-        file_size:
-          type:
-          - integer
-          - 'null'
-          format: int64
-          description: The file size in bytes.
-        downloaded_at:
-          type:
-          - string
-          - 'null'
-          description: Timestamp of the most recent download.
-      title: Document
     DocumentCreateRequest:
       type: object
       properties:
@@ -548,6 +458,55 @@ components:
       - IDEMPOTENCY_CHECK_FAILED
       - INVALID_REQUEST
       title: ApiErrorCode
+    ResourceIdentifierType:
+      type: string
+      enum:
+      - PLATFORM
+      - CUSTOMER
+      - BILLING_ENTITY
+      - METER
+      - METER_VALUE
+      - METER_PROPERTY
+      - METER_VALUE_CALCULATION
+      - PRODUCT
+      - PRODUCT_ITEM
+      - PRODUCT_CATEGORY
+      - PRICING
+      - PRICING_ITEM
+      - PRICING_ITEM_CONFIG
+      - PRICING_ITEM_SUMMARY
+      - METER_VALUE_CALCULATION_SUMMARY
+      - PRICING_PLAN
+      - PRICING_PLAN_VERSION
+      - PRICING_PLAN_SUBSCRIPTION
+      - PRICING_PLAN_SCHEDULE
+      - QUOTE
+      - QUOTE_VERSION
+      - CONTACT
+      - CUSTOM_FIELD
+      - REQUEST_REFERENCE
+      - METER_DATA
+      - CHARGE_DATA
+      - ADJUSTMENT_DATA
+      - PERSIST_DATA
+      - INVOICE
+      - INVOICE_PAYMENT_ATTEMPT
+      - PAYMENT_ACCEPTOR
+      - PAYMENT_SCHEDULE
+      - PAYMENT_REQUEST
+      - FEATURE
+      - ALERT_RULE
+      - ALERT
+      - USER
+      - MEMBERSHIP
+      - TEAM
+      - ENTITY
+      - ACCOUNT_GROUP
+      - AUDIT
+      - WEBHOOK
+      - REPORT_SUBSCRIPTION
+      - REPORT_CONFIGURATION
+      title: ResourceIdentifierType
     ApiErrorType:
       type: string
       enum:
@@ -580,6 +539,47 @@ components:
       - code
       - message
       title: ApiError
+    Document:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        name:
+          type: string
+          description: The name of the document.
+        description:
+          type:
+          - string
+          - 'null'
+          description: An optional description of the document.
+        content_type:
+          type: string
+          description: Content type of the file (e.g. application/pdf).
+        content:
+          type: string
+          description: The file content, BASE64 encoded. Max 10MB.
+        file_size:
+          type:
+          - integer
+          - 'null'
+          format: int64
+          description: The file size in bytes.
+        downloaded_at:
+          type:
+          - string
+          - 'null'
+          description: Timestamp of the most recent download.
+      title: Document
   securitySchemes:
     API-Key:
       type: apiKey

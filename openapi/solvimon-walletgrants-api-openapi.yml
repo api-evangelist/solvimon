@@ -1,12 +1,12 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Configuration alertRules walletGrants API
+  title: Transaction Wallet Grants API
   version: 1.0.0
 servers:
-- url: https://test.api.solvimon.com
-  description: The TEST environment for our API
 - url: https://api.solvimon.com
   description: The live environment for our API
+- url: https://test.api.solvimon.com
+  description: The TEST environment for our API
 tags:
 - name: walletGrants
 paths:
@@ -236,6 +236,81 @@ paths:
                 $ref: '#/components/schemas/ApiError'
 components:
   schemas:
+    Credits:
+      type: object
+      properties:
+        quantity:
+          type: string
+        credit_type_id:
+          type: string
+          description: Resource ID of type CREDIT_TYPE
+      title: Credits
+    WalletGrant:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        customer_id:
+          type:
+          - string
+          - 'null'
+          description: The ID of the customer.
+        billing_entity_id:
+          type:
+          - string
+          - 'null'
+          description: The ID of the billing entity granting the wallet grant.
+        wallet_id:
+          type:
+          - string
+          - 'null'
+          description: The ID of the wallet.
+        type:
+          $ref: '#/components/schemas/WalletGrantType'
+          description: The type of wallet grant.
+        description:
+          type:
+          - string
+          - 'null'
+          description: The description of the wallet grant.
+        grant_amount:
+          $ref: '#/components/schemas/Amount'
+          description: The value of the grant in case of an amount wallet type.
+        grant_credits:
+          $ref: '#/components/schemas/Credits'
+          description: The value of the grant in case of a credits wallet type.
+        paid_amount:
+          $ref: '#/components/schemas/Amount'
+        start_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        expire_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        created_at:
+          type:
+          - string
+          - 'null'
+      title: WalletGrant
+    CreditsCreateRequest:
+      type: object
+      properties:
+        quantity:
+          type: string
+        credit_type_id:
+          type: string
+          description: Resource ID of type CREDIT_TYPE
+      title: CreditsCreateRequest
     ApiErrorResourceType:
       type: string
       enum:
@@ -325,14 +400,102 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
-    Amount:
+    PaginationLinks:
+      type: object
+      properties:
+        first:
+          type:
+          - string
+          - 'null'
+        previous:
+          type:
+          - string
+          - 'null'
+        current:
+          type:
+          - string
+          - 'null'
+        next:
+          type:
+          - string
+          - 'null'
+      title: PaginationLinks
+    AmountCreateRequest:
       type: object
       properties:
         quantity:
           type: string
         currency:
-          $ref: '#/components/schemas/AmountCurrency'
-      title: Amount
+          $ref: '#/components/schemas/AmountCreateRequestCurrency'
+      title: AmountCreateRequest
+    WalletGrantCreateRequestType:
+      type: string
+      enum:
+      - DEFAULT
+      - PROMOTION
+      description: The type of wallet grant.
+      title: WalletGrantCreateRequestType
+    WalletGrantCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        customer_id:
+          type:
+          - string
+          - 'null'
+          description: The ID of the customer.
+        billing_entity_id:
+          type:
+          - string
+          - 'null'
+          description: The ID of the billing entity granting the wallet grant.
+        wallet_id:
+          type:
+          - string
+          - 'null'
+          description: The ID of the wallet.
+        type:
+          $ref: '#/components/schemas/WalletGrantCreateRequestType'
+          description: The type of wallet grant.
+        description:
+          type:
+          - string
+          - 'null'
+          description: The description of the wallet grant.
+        grant_amount:
+          $ref: '#/components/schemas/AmountCreateRequest'
+          description: The value of the grant in case of an amount wallet type.
+        grant_credits:
+          $ref: '#/components/schemas/CreditsCreateRequest'
+          description: The value of the grant in case of a credits wallet type.
+        paid_amount:
+          $ref: '#/components/schemas/AmountCreateRequest'
+        start_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        expire_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        created_at:
+          type:
+          - string
+          - 'null'
+      required:
+      - customer_id
+      - billing_entity_id
+      - wallet_id
+      title: WalletGrantCreateRequest
     AmountCurrency:
       type: string
       enum:
@@ -513,110 +676,6 @@ components:
       - ZMW
       - ZWL
       title: AmountCurrency
-    Credits:
-      type: object
-      properties:
-        quantity:
-          type: string
-        credit_type_id:
-          type: string
-          description: Resource ID of type CREDIT_TYPE
-      title: Credits
-    WalletGrantResponseWrapper:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/WalletGrant'
-        limit:
-          type:
-          - integer
-          - 'null'
-        page:
-          type:
-          - integer
-          - 'null'
-        total_number_of_pages:
-          type:
-          - integer
-          - 'null'
-        links:
-          $ref: '#/components/schemas/PaginationLinks'
-      required:
-      - data
-      - links
-      title: WalletGrantResponseWrapper
-    CreditsCreateRequest:
-      type: object
-      properties:
-        quantity:
-          type: string
-        credit_type_id:
-          type: string
-          description: Resource ID of type CREDIT_TYPE
-      title: CreditsCreateRequest
-    WalletGrantCreateRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        customer_id:
-          type:
-          - string
-          - 'null'
-          description: The ID of the customer.
-        billing_entity_id:
-          type:
-          - string
-          - 'null'
-          description: The ID of the billing entity granting the wallet grant.
-        wallet_id:
-          type:
-          - string
-          - 'null'
-          description: The ID of the wallet.
-        type:
-          $ref: '#/components/schemas/WalletGrantCreateRequestType'
-          description: The type of wallet grant.
-        description:
-          type:
-          - string
-          - 'null'
-          description: The description of the wallet grant.
-        grant_amount:
-          $ref: '#/components/schemas/AmountCreateRequest'
-          description: The value of the grant in case of an amount wallet type.
-        grant_credits:
-          $ref: '#/components/schemas/CreditsCreateRequest'
-          description: The value of the grant in case of a credits wallet type.
-        paid_amount:
-          $ref: '#/components/schemas/AmountCreateRequest'
-        start_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        expire_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        created_at:
-          type:
-          - string
-          - 'null'
-      required:
-      - customer_id
-      - billing_entity_id
-      - wallet_id
-      title: WalletGrantCreateRequest
     ApiErrorCode:
       type: string
       enum:
@@ -656,73 +715,6 @@ components:
       - IDEMPOTENCY_CHECK_FAILED
       - INVALID_REQUEST
       title: ApiErrorCode
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
-    AmountCreateRequest:
-      type: object
-      properties:
-        quantity:
-          type: string
-        currency:
-          $ref: '#/components/schemas/AmountCreateRequestCurrency'
-      title: AmountCreateRequest
-    ApiError:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/ApiErrorType'
-        code:
-          $ref: '#/components/schemas/ApiErrorCode'
-        field:
-          type:
-          - string
-          - 'null'
-        message:
-          type: string
-        resource_id:
-          type:
-          - string
-          - 'null'
-        resource_type:
-          oneOf:
-          - $ref: '#/components/schemas/ApiErrorResourceType'
-          - type: 'null'
-      required:
-      - type
-      - code
-      - message
-      title: ApiError
-    PaginationLinks:
-      type: object
-      properties:
-        first:
-          type:
-          - string
-          - 'null'
-        previous:
-          type:
-          - string
-          - 'null'
-        current:
-          type:
-          - string
-          - 'null'
-        next:
-          type:
-          - string
-          - 'null'
-      title: PaginationLinks
-    WalletGrantType:
-      type: string
-      enum:
-      - DEFAULT
-      - PROMOTION
-      description: The type of wallet grant.
-      title: WalletGrantType
     AmountCreateRequestCurrency:
       type: string
       enum:
@@ -903,70 +895,78 @@ components:
       - ZMW
       - ZWL
       title: AmountCreateRequestCurrency
-    WalletGrantCreateRequestType:
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    WalletGrantResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/WalletGrant'
+        limit:
+          type:
+          - integer
+          - 'null'
+        page:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      - links
+      title: WalletGrantResponseWrapper
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    WalletGrantType:
       type: string
       enum:
       - DEFAULT
       - PROMOTION
       description: The type of wallet grant.
-      title: WalletGrantCreateRequestType
-    WalletGrant:
+      title: WalletGrantType
+    Amount:
       type: object
       properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        customer_id:
-          type:
-          - string
-          - 'null'
-          description: The ID of the customer.
-        billing_entity_id:
-          type:
-          - string
-          - 'null'
-          description: The ID of the billing entity granting the wallet grant.
-        wallet_id:
-          type:
-          - string
-          - 'null'
-          description: The ID of the wallet.
-        type:
-          $ref: '#/components/schemas/WalletGrantType'
-          description: The type of wallet grant.
-        description:
-          type:
-          - string
-          - 'null'
-          description: The description of the wallet grant.
-        grant_amount:
-          $ref: '#/components/schemas/Amount'
-          description: The value of the grant in case of an amount wallet type.
-        grant_credits:
-          $ref: '#/components/schemas/Credits'
-          description: The value of the grant in case of a credits wallet type.
-        paid_amount:
-          $ref: '#/components/schemas/Amount'
-        start_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        expire_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        created_at:
-          type:
-          - string
-          - 'null'
-      title: WalletGrant
+        quantity:
+          type: string
+        currency:
+          $ref: '#/components/schemas/AmountCurrency'
+      title: Amount
   securitySchemes:
     API-Key:
       type: apiKey

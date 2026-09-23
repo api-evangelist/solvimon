@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: Configuration Customers API
+  title: Configuration Alert Rules API
   version: 1.0.0
 servers:
 - url: https://test.api.solvimon.com
@@ -8,834 +8,15 @@ servers:
 - url: https://api.solvimon.com
   description: The live environment for our API
 tags:
-- name: Customers
+- name: Alert Rules
 paths:
-  /v{version}/customers:
+  /v{version}/alert-rules:
     get:
-      operationId: getCustomers
-      summary: Get a list of all customers
-      description: Requires the CUSTOMER.VIEW permission.
+      operationId: getAlertRules
+      summary: Get a list of alert rules
+      description: Requires the ALERT_RULE.VIEW permission.
       tags:
-      - Customers
-      parameters:
-      - name: version
-        in: path
-        description: version
-        required: true
-        schema:
-          type: string
-          default: '1'
-      - name: limit
-        in: query
-        description: The amount of records shown in the list
-        required: false
-        schema:
-          type: integer
-      - name: page
-        in: query
-        description: The page which is going to be shown
-        required: false
-        schema:
-          type: integer
-      - name: order_by
-        in: query
-        description: The parameter by which the response is ordered.
-        required: false
-        schema:
-          type: string
-      - name: custom_field
-        in: query
-        description: Filter the response by a custom field value.
-        required: false
-        schema:
-          type: string
-      - name: order_direction
-        in: query
-        description: The order direction by which the response is ordered.
-        required: false
-        schema:
-          type: string
-      - name: reference
-        in: query
-        description: The reference by which the resource will be filtered.
-        required: false
-        schema:
-          type: string
-      - name: X-API-KEY
-        in: header
-        required: true
-        schema:
-          type: string
-      - name: x-platform-id
-        in: header
-        description: Platform ID.
-        required: false
-        schema:
-          type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CustomerResponseWrapper'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-    post:
-      operationId: postCustomers
-      summary: Create a customer
-      description: Requires the CUSTOMER.CREATE permission.
-      tags:
-      - Customers
-      parameters:
-      - name: version
-        in: path
-        description: version
-        required: true
-        schema:
-          type: string
-          default: '1'
-      - name: X-API-KEY
-        in: header
-        required: true
-        schema:
-          type: string
-      - name: x-platform-id
-        in: header
-        description: Platform ID.
-        required: false
-        schema:
-          type: string
-      responses:
-        '201':
-          description: Created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Customer'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CustomerCreateRequest'
-    put:
-      operationId: putCustomers
-      summary: Update or create a customer (upsert)
-      description: Requires the CUSTOMER.CREATE, CUSTOMER.UPDATE or CUSTOMER.STATUS.DRAFT.UPDATE permission.
-      tags:
-      - Customers
-      parameters:
-      - name: version
-        in: path
-        description: version
-        required: true
-        schema:
-          type: string
-          default: '1'
-      - name: identifier_field
-        in: query
-        description: Which field to use to identify whether the resource exists or not
-        required: false
-        schema:
-          type: string
-      - name: custom_field_reference
-        in: query
-        description: Which custom field to use to identify whether the resource exists or not
-        required: false
-        schema:
-          type: string
-      - name: field_actions
-        in: query
-        description: The list of actions for specific fields.
-        required: false
-        schema:
-          type: object
-          additionalProperties:
-            type: string
-      - name: X-API-KEY
-        in: header
-        required: true
-        schema:
-          type: string
-      - name: x-platform-id
-        in: header
-        description: Platform ID.
-        required: false
-        schema:
-          type: string
-      responses:
-        '201':
-          description: Created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Customer'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CustomerCreateRequest'
-  /v{version}/customers/{resourceIdOrReference}:
-    get:
-      operationId: getCustomersByResourceIdOrReference
-      summary: Get a customer by ID or reference
-      description: Requires the CUSTOMER.VIEW permission.
-      tags:
-      - Customers
-      parameters:
-      - name: version
-        in: path
-        description: version
-        required: true
-        schema:
-          type: string
-          default: '1'
-      - name: resourceIdOrReference
-        in: path
-        description: The ID or reference of the resource.
-        required: true
-        schema:
-          type: string
-          default: ''
-      - name: X-API-KEY
-        in: header
-        required: true
-        schema:
-          type: string
-      - name: x-platform-id
-        in: header
-        description: Platform ID.
-        required: false
-        schema:
-          type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Customer'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-    delete:
-      operationId: deleteCustomersByResourceIdOrReference
-      summary: Delete a customer by ID or reference
-      description: Requires the CUSTOMER.DELETE or CUSTOMER.STATUS.DRAFT.DELETE permission.
-      tags:
-      - Customers
-      parameters:
-      - name: version
-        in: path
-        description: version
-        required: true
-        schema:
-          type: string
-          default: '1'
-      - name: resourceIdOrReference
-        in: path
-        description: The ID or reference of the resource.
-        required: true
-        schema:
-          type: string
-          default: ''
-      - name: X-API-KEY
-        in: header
-        required: true
-        schema:
-          type: string
-      - name: x-platform-id
-        in: header
-        description: Platform ID.
-        required: false
-        schema:
-          type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Customer'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-    patch:
-      operationId: patchCustomersByResourceIdOrReference
-      summary: Update a customer by ID or reference
-      description: Requires the CUSTOMER.UPDATE or CUSTOMER.STATUS.DRAFT.UPDATE permission.
-      tags:
-      - Customers
-      parameters:
-      - name: version
-        in: path
-        description: version
-        required: true
-        schema:
-          type: string
-          default: '1'
-      - name: resourceIdOrReference
-        in: path
-        description: The ID or reference of the resource.
-        required: true
-        schema:
-          type: string
-          default: ''
-      - name: X-API-KEY
-        in: header
-        required: true
-        schema:
-          type: string
-      - name: x-platform-id
-        in: header
-        description: Platform ID.
-        required: false
-        schema:
-          type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Customer'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CustomerUpdateRequest'
-  /v{version}/customers/{resourceIdOrReference}/entitlements:
-    get:
-      operationId: getCustomersByResourceIdOrReferenceEntitlements
-      summary: Get a customer its entitlements
-      description: Requires the CUSTOMER.VIEW permission.
-      tags:
-      - Customers
-      parameters:
-      - name: version
-        in: path
-        description: version
-        required: true
-        schema:
-          type: string
-          default: '1'
-      - name: resourceIdOrReference
-        in: path
-        description: The ID or reference of the resource.
-        required: true
-        schema:
-          type: string
-          default: ''
-      - name: X-API-KEY
-        in: header
-        required: true
-        schema:
-          type: string
-      - name: x-platform-id
-        in: header
-        description: Platform ID.
-        required: false
-        schema:
-          type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Entitlements'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-  /v{version}/customers/{resourceIdOrReference}/activate:
-    post:
-      operationId: postCustomersByResourceIdOrReferenceActivate
-      summary: Activate a customer
-      description: Requires the CUSTOMER.UPDATE or CUSTOMER.STATUS.DRAFT.UPDATE permission.
-      tags:
-      - Customers
-      parameters:
-      - name: version
-        in: path
-        description: version
-        required: true
-        schema:
-          type: string
-          default: '1'
-      - name: resourceIdOrReference
-        in: path
-        description: The ID or reference of the resource.
-        required: true
-        schema:
-          type: string
-          default: ''
-      - name: X-API-KEY
-        in: header
-        required: true
-        schema:
-          type: string
-      - name: x-platform-id
-        in: header
-        description: Platform ID.
-        required: false
-        schema:
-          type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Customer'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-  /v{version}/customers/{resourceIdOrReference}/deprecate:
-    post:
-      operationId: postCustomersByResourceIdOrReferenceDeprecate
-      summary: Deprecate a customer
-      description: Requires the CUSTOMER.UPDATE permission.
-      tags:
-      - Customers
-      parameters:
-      - name: version
-        in: path
-        description: version
-        required: true
-        schema:
-          type: string
-          default: '1'
-      - name: resourceIdOrReference
-        in: path
-        description: The ID or reference of the resource.
-        required: true
-        schema:
-          type: string
-          default: ''
-      - name: X-API-KEY
-        in: header
-        required: true
-        schema:
-          type: string
-      - name: x-platform-id
-        in: header
-        description: Platform ID.
-        required: false
-        schema:
-          type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Customer'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-  /v{version}/customers/{resourceIdOrReference}/archive:
-    post:
-      operationId: postCustomersByResourceIdOrReferenceArchive
-      summary: Archive a customer
-      description: Requires the CUSTOMER.UPDATE permission.
-      tags:
-      - Customers
-      parameters:
-      - name: version
-        in: path
-        description: version
-        required: true
-        schema:
-          type: string
-          default: '1'
-      - name: resourceIdOrReference
-        in: path
-        description: The ID or reference of the resource.
-        required: true
-        schema:
-          type: string
-          default: ''
-      - name: X-API-KEY
-        in: header
-        required: true
-        schema:
-          type: string
-      - name: x-platform-id
-        in: header
-        description: Platform ID.
-        required: false
-        schema:
-          type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Customer'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-  /v{version}/customers/{resourceIdOrReference}/forget:
-    post:
-      operationId: postCustomersByResourceIdOrReferenceForget
-      summary: Forget a customer
-      description: Requires the CUSTOMER.UPDATE permission.
-      tags:
-      - Customers
-      parameters:
-      - name: version
-        in: path
-        description: version
-        required: true
-        schema:
-          type: string
-          default: '1'
-      - name: resourceIdOrReference
-        in: path
-        description: The ID or reference of the resource.
-        required: true
-        schema:
-          type: string
-          default: ''
-      - name: X-API-KEY
-        in: header
-        required: true
-        schema:
-          type: string
-      - name: x-platform-id
-        in: header
-        description: Platform ID.
-        required: false
-        schema:
-          type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Customer'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-  /v{version}/customers/{resourceIdOrReference}/wallets/balance:
-    post:
-      operationId: postCustomersByResourceIdOrReferenceWalletsBalance
-      summary: Get the balance of all wallets of a customer
-      description: Requires the CUSTOMER.VIEW or WALLET.VIEW permission.
-      tags:
-      - Customers
-      parameters:
-      - name: version
-        in: path
-        description: version
-        required: true
-        schema:
-          type: string
-          default: '1'
-      - name: resourceIdOrReference
-        in: path
-        description: The ID or reference of the resource.
-        required: true
-        schema:
-          type: string
-          default: ''
-      - name: X-API-KEY
-        in: header
-        required: true
-        schema:
-          type: string
-      - name: x-platform-id
-        in: header
-        description: Platform ID.
-        required: false
-        schema:
-          type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CustomerWalletBalancesStatus'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/WalletBalanceStatusRequestCreateRequest'
-  /v{version}/customers/search:
-    post:
-      operationId: postCustomersSearch
-      summary: Search customers
-      description: Requires the CUSTOMER.VIEW permission.
-      tags:
-      - Customers
+      - Alert Rules
       parameters:
       - name: version
         in: path
@@ -866,13 +47,13 @@ paths:
           type: integer
       - name: order_by
         in: query
-        description: The parameter by which the response is ordered. default = name
+        description: The parameter by which the response is ordered.
         required: false
         schema:
           type: string
       - name: order_direction
         in: query
-        description: The parameter for the response ordering direction (asc, desc) default asc
+        description: The order direction by which the response is ordered.
         required: false
         schema:
           type: string
@@ -893,7 +74,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CustomerResponseWrapper'
+                $ref: '#/components/schemas/AlertRuleResponseWrapper'
         '400':
           description: Bad Request
           content:
@@ -918,18 +99,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SearchCreateRequest'
-  /v{version}/customers/validate-tax-id:
     post:
-      operationId: postCustomersValidateTaxId
-      summary: Validate tax id values
-      description: Requires the CUSTOMER.CREATE permission.
+      operationId: postAlertRules
+      summary: Create an alert rule
+      description: Requires the ALERT_RULE.CREATE permission.
       tags:
-      - Customers
+      - Alert Rules
       parameters:
       - name: version
         in: path
@@ -950,12 +125,221 @@ paths:
         schema:
           type: string
       responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertRule'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlertRuleCreateRequest'
+  /v{version}/alert-rules/{resourceId}:
+    get:
+      operationId: getAlertRulesByResourceId
+      summary: Get an alert rule by its ID
+      description: Requires the ALERT_RULE.VIEW permission.
+      tags:
+      - Alert Rules
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: expand[]
+        in: query
+        description: The id fields of the resources that are going to be expanded.
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TaxIdValidationWrapper'
+                $ref: '#/components/schemas/AlertRule'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    delete:
+      operationId: deleteAlertRulesByResourceId
+      summary: Delete an alert rule
+      description: Requires the ALERT_RULE.DELETE permission.
+      tags:
+      - Alert Rules
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertRule'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    patch:
+      operationId: patchAlertRulesByResourceId
+      summary: Update an alert rule
+      description: Requires the ALERT_RULE.UPDATE permission.
+      tags:
+      - Alert Rules
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: resourceId
+        in: path
+        description: The ID of the resource to be requested.
+        required: true
+        schema:
+          type: string
+          default: ''
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertRule'
         '400':
           description: Bad Request
           content:
@@ -984,7 +368,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CustomerCreateRequest'
+              $ref: '#/components/schemas/AlertRuleUpdateRequest'
 components:
   schemas:
     Address:
@@ -1015,22 +399,6 @@ components:
           - $ref: '#/components/schemas/AddressCountry'
           - type: 'null'
       title: Address
-    Entitlements:
-      type: object
-      properties:
-        entitlements:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/EntitlementSummaryItem'
-        pricing_plan_subscription_entitlements:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/EntitlementSummary'
-      title: Entitlements
     CustomFieldValueCreateRequest:
       type: object
       properties:
@@ -1106,6 +474,22 @@ components:
       - BILLING_ENTITY_REGISTERED_ADDRESS_COUNTRY
       - PRICING_PLAN_REFERENCE
       title: PricingPlanSubscriptionSelectorFilterField
+    AlertRuleEntitlementUpdateRequestComparator:
+      type: string
+      enum:
+      - EQUALS
+      - NOT_EQUALS
+      - IN
+      - NOT_IN
+      - GREATER_THAN
+      - GREATER_THAN_OR_EQUALS
+      - LESS_THAN
+      - LESS_THAN_OR_EQUALS
+      - EMPTY
+      - NOT_EMPTY
+      - CONTAINS
+      - NOT_CONTAINS
+      title: AlertRuleEntitlementUpdateRequestComparator
     CustomerCreateRequestRolesItems:
       type: string
       enum:
@@ -1115,16 +499,6 @@ components:
       - SELLER
       - PROCESSING_ONLY
       title: CustomerCreateRequestRolesItems
-    SelectionRuleFieldCreateRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        value:
-          type:
-          - string
-          - 'null'
-      title: SelectionRuleFieldCreateRequest
     PricingPlanSubscriptionSelectorCreateRequest:
       type: object
       properties:
@@ -1152,14 +526,6 @@ components:
           - type: 'null'
           description: The fallback logic what to do when no subscription is found. By default it is LATEST
       title: PricingPlanSubscriptionSelectorCreateRequest
-    WalletBalanceStatusRequestCreateRequest:
-      type: object
-      properties:
-        balance_at:
-          type: string
-          format: date-time
-          description: The date of the balance determination. Default is now().
-      title: WalletBalanceStatusRequestCreateRequest
     TaxRegistration:
       type: object
       properties:
@@ -1233,6 +599,13 @@ components:
             $ref: '#/components/schemas/TaxRegistration'
           description: Extra tax registrations for the customer
       title: Organization
+    AlertRuleUpdateRequestType:
+      type: string
+      enum:
+      - ENTITLEMENT
+      - INVOICE
+      description: The type of the the alert.
+      title: AlertRuleUpdateRequestType
     Name:
       type: object
       properties:
@@ -1249,6 +622,32 @@ components:
           - string
           - 'null'
       title: Name
+    MeterStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the meter indicating the activity of the meter and the ability to update properties.
+      title: MeterStatus
+    MeterPropertyType:
+      type: string
+      enum:
+      - NUMBER
+      - ENUM
+      - STRING
+      description: The type of the meter property.
+      title: MeterPropertyType
+    MeterValueStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the meter value indicating the activity and the ability to update properties.
+      title: MeterValueStatus
     PricingPlanSubscriptionSelectorFilter:
       type: object
       properties:
@@ -1274,6 +673,16 @@ components:
       - NONE
       description: The fallback logic what to do when no subscription is found. By default it is LATEST
       title: PricingPlanSubscriptionSelectorCreateRequestFallback
+    FeatureType:
+      type: string
+      enum:
+      - SWITCH
+      - NUMBER
+      - ENUM
+      - AMOUNT
+      - STRING
+      description: The indication of the type of feature associated with the pricing plan.
+      title: FeatureType
     CustomerUpdateRequestStatus:
       type: string
       enum:
@@ -1283,6 +692,22 @@ components:
       - DEPRECATED
       - CLOSED
       title: CustomerUpdateRequestStatus
+    AlertRuleInvoiceOverdueComparator:
+      type: string
+      enum:
+      - EQUALS
+      - NOT_EQUALS
+      - IN
+      - NOT_IN
+      - GREATER_THAN
+      - GREATER_THAN_OR_EQUALS
+      - LESS_THAN
+      - LESS_THAN_OR_EQUALS
+      - EMPTY
+      - NOT_EMPTY
+      - CONTAINS
+      - NOT_CONTAINS
+      title: AlertRuleInvoiceOverdueComparator
     Customer:
       type: object
       properties:
@@ -1373,6 +798,56 @@ components:
         seller_details:
           $ref: '#/components/schemas/CustomerSellerDetails'
       title: Customer
+    AlertRuleResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AlertRule'
+        page:
+          type:
+          - integer
+          - 'null'
+        limit:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      title: AlertRuleResponseWrapper
+    MeterMeterProperty:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type METER_PROPERTY
+        object:
+          oneOf:
+          - $ref: '#/components/schemas/MeterProperty'
+          - type: 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+        required:
+          type:
+          - boolean
+          - 'null'
+      title: MeterMeterProperty
+    AlertRuleInvoiceUpdateRequestVariant:
+      type: string
+      enum:
+      - OVERDUE
+      title: AlertRuleInvoiceUpdateRequestVariant
     PaginationLinks:
       type: object
       properties:
@@ -1435,6 +910,132 @@ components:
         residential_address:
           $ref: '#/components/schemas/Address'
       title: Individual
+    AlertRuleEntitlementUpdateRequest:
+      type: object
+      properties:
+        feature_id:
+          type: string
+          description: Resource ID of type FEATURE
+        feature:
+          oneOf:
+          - $ref: '#/components/schemas/Feature'
+          - type: 'null'
+        comparator:
+          $ref: '#/components/schemas/AlertRuleEntitlementUpdateRequestComparator'
+        threshold:
+          $ref: '#/components/schemas/Threshold'
+      title: AlertRuleEntitlementUpdateRequest
+    AlertRuleCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+          description: A custom reference assigned to the alert.
+        name:
+          type:
+          - string
+          - 'null'
+          description: A custom name assigned to the alert.
+        description:
+          type:
+          - string
+          - 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/AlertRuleCreateRequestStatus'
+          - type: 'null'
+          description: The status of the AlertRule. DEPRECATED is not supported.
+        customer_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: The IDs of the customers linked to the alert.
+        customers:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomerCreateRequest'
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/AlertRuleCreateRequestType'
+          - type: 'null'
+          description: The type of the the alert.
+        trigger_type:
+          oneOf:
+          - $ref: '#/components/schemas/AlertRuleCreateRequestTriggerType'
+          - type: 'null'
+        entitlement:
+          $ref: '#/components/schemas/AlertRuleEntitlementCreateRequest'
+          description: The specification of the entitlement for the alert, can only be specified when type is ENTITLEMENT
+        invoice:
+          $ref: '#/components/schemas/AlertRuleInvoiceCreateRequest'
+          description: The specification of the invoice for the alert, can only be specified when type is INVOICE
+      required:
+      - reference
+      - type
+      title: AlertRuleCreateRequest
+    Meter:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/MeterStatus'
+          - type: 'null'
+          description: The status of the meter indicating the activity of the meter and the ability to update properties.
+        meter_values:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/MeterMeterValue'
+          description: The values used as input to calculate billable units, used in the meter.
+        meter_properties:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/MeterMeterProperty'
+          description: The properties that provide information to give context to an event, used in the meter.
+      title: Meter
+    AlertRuleInvoiceOverdue:
+      type: object
+      properties:
+        comparator:
+          oneOf:
+          - $ref: '#/components/schemas/AlertRuleInvoiceOverdueComparator'
+          - type: 'null'
+        threshold:
+          $ref: '#/components/schemas/Period'
+      title: AlertRuleInvoiceOverdue
     CustomerCreateRequest:
       type: object
       properties:
@@ -1541,40 +1142,63 @@ components:
             $ref: '#/components/schemas/NotificationChannel'
           description: The channels for this notification type.
       title: NotificationPreferenceUpdateRequest
-    SearchCreateRequest:
+    AlertRuleInvoiceCreateRequestVariant:
+      type: string
+      enum:
+      - OVERDUE
+      title: AlertRuleInvoiceCreateRequestVariant
+    AlertRuleEntitlementCreateRequest:
       type: object
       properties:
-        search_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/SearchFieldCreateRequest'
-        filter_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/FilterFieldCreateRequest'
-        selection_rule_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/SelectionRuleFieldCreateRequest'
-      title: SearchCreateRequest
-    FilterFieldCreateRequest:
-      type: object
-      properties:
-        name:
+        feature_id:
           type: string
+          description: Resource ID of type FEATURE
+        feature:
+          oneOf:
+          - $ref: '#/components/schemas/Feature'
+          - type: 'null'
+        comparator:
+          $ref: '#/components/schemas/AlertRuleEntitlementCreateRequestComparator'
+        threshold:
+          $ref: '#/components/schemas/Threshold'
+      title: AlertRuleEntitlementCreateRequest
+    MeterProperty:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
         reference:
+          type: string
+        name:
           type:
           - string
           - 'null'
-        value:
+        description:
           type:
           - string
           - 'null'
-        values:
-          type: array
+        status:
+          $ref: '#/components/schemas/MeterPropertyStatus'
+          description: The status of the meter property indicating the activity and the ability to update properties.
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/MeterPropertyType'
+          - type: 'null'
+          description: The type of the meter property.
+        enum_values:
+          type:
+          - array
+          - 'null'
           items:
             type: string
-      title: FilterFieldCreateRequest
+          description: The list of available ENUM values.
+      title: MeterProperty
     AmountCurrency:
       type: string
       enum:
@@ -1820,48 +1444,65 @@ components:
         residential_address:
           $ref: '#/components/schemas/Address'
       title: IndividualUpdateRequest
-    EntitlementSummaryItem:
+    MeterValueCalculation:
       type: object
       properties:
-        feature_reference:
+        object_type:
           type:
           - string
           - 'null'
-        feature_id:
+        id:
           type:
           - string
           - 'null'
-        overwrite:
-          type:
-          - boolean
-          - 'null'
-        override:
-          type:
-          - boolean
-          - 'null'
-        number:
+        reference:
+          type: string
+        name:
           type:
           - string
           - 'null'
-        switch:
+        description:
+          type:
+          - string
+          - 'null'
+        calculation_type:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueCalculationCalculationType'
+          - type: 'null'
+          description: The type of calculation used for this billable metric.
+        persist:
           type:
           - boolean
           - 'null'
-        amount:
-          $ref: '#/components/schemas/Amount'
-        enums:
+          description: Indicate if the data of the billable metric must be persisted to the next billing period of the schedule (default is false).
+        meter_id:
           type:
-          - array
+          - string
           - 'null'
-          items:
-            type: string
-        strings:
+          description: The ID of the meter.
+        meter:
+          oneOf:
+          - $ref: '#/components/schemas/Meter'
+          - type: 'null'
+        meter_value_id:
           type:
-          - array
+          - string
           - 'null'
-          items:
-            type: string
-      title: EntitlementSummaryItem
+          description: The ID of the meter value.
+        meter_value:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValue'
+          - type: 'null'
+        meter_property_id:
+          type:
+          - string
+          - 'null'
+          description: The ID of the meter property.
+        meter_property:
+          oneOf:
+          - $ref: '#/components/schemas/MeterProperty'
+          - type: 'null'
+      title: MeterValueCalculation
     CustomerSellerDetailsCreateRequest:
       type: object
       properties:
@@ -2132,21 +1773,69 @@ components:
       - SELLER
       - PROCESSING_ONLY
       title: CustomerUpdateRequestRolesItems
-    Credits:
-      type: object
-      properties:
-        quantity:
-          type: string
-        credit_type_id:
-          type: string
-          description: Resource ID of type CREDIT_TYPE
-      title: Credits
     IntegrationDetailsPaymentGatewayVariant:
       type: string
       enum:
       - ADYEN
       - STRIPE
       title: IntegrationDetailsPaymentGatewayVariant
+    AlertRuleUpdateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+          description: A custom reference assigned to the alert.
+        name:
+          type:
+          - string
+          - 'null'
+          description: A custom name assigned to the alert.
+        description:
+          type:
+          - string
+          - 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/AlertRuleUpdateRequestStatus'
+          - type: 'null'
+          description: The status of the AlertRule. DEPRECATED is not supported.
+        customer_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: The IDs of the customers linked to the alert.
+        customers:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomerUpdateRequest'
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/AlertRuleUpdateRequestType'
+          - type: 'null'
+          description: The type of the the alert.
+        trigger_type:
+          oneOf:
+          - $ref: '#/components/schemas/AlertRuleUpdateRequestTriggerType'
+          - type: 'null'
+        entitlement:
+          $ref: '#/components/schemas/AlertRuleEntitlementUpdateRequest'
+          description: The specification of the entitlement for the alert, can only be specified when type is ENTITLEMENT
+        invoice:
+          $ref: '#/components/schemas/AlertRuleInvoiceUpdateRequest'
+          description: The specification of the invoice for the alert, can only be specified when type is INVOICE
+      title: AlertRuleUpdateRequest
     CustomerUpdateRequest:
       type: object
       properties:
@@ -2275,6 +1964,28 @@ components:
           type: string
           description: The resource ID of the integration linked to the custom field
       title: CustomFieldValue
+    AlertRuleCreateRequestTriggerType:
+      type: string
+      enum:
+      - STATIC
+      - DYNAMIC
+      title: AlertRuleCreateRequestTriggerType
+    AlertRuleEntitlementCreateRequestComparator:
+      type: string
+      enum:
+      - EQUALS
+      - NOT_EQUALS
+      - IN
+      - NOT_IN
+      - GREATER_THAN
+      - GREATER_THAN_OR_EQUALS
+      - LESS_THAN
+      - LESS_THAN_OR_EQUALS
+      - EMPTY
+      - NOT_EMPTY
+      - CONTAINS
+      - NOT_CONTAINS
+      title: AlertRuleEntitlementCreateRequestComparator
     OrganizationUpdateRequest:
       type: object
       properties:
@@ -2314,6 +2025,22 @@ components:
             $ref: '#/components/schemas/TaxRegistration'
           description: Extra tax registrations for the customer
       title: OrganizationUpdateRequest
+    AlertRuleEntitlementComparator:
+      type: string
+      enum:
+      - EQUALS
+      - NOT_EQUALS
+      - IN
+      - NOT_IN
+      - GREATER_THAN
+      - GREATER_THAN_OR_EQUALS
+      - LESS_THAN
+      - LESS_THAN_OR_EQUALS
+      - EMPTY
+      - NOT_EMPTY
+      - CONTAINS
+      - NOT_CONTAINS
+      title: AlertRuleEntitlementComparator
     OrganizationCreateRequest:
       type: object
       properties:
@@ -2360,6 +2087,16 @@ components:
       - NONE
       description: The fallback logic what to do when no subscription is found. By default it is LATEST
       title: PricingPlanSubscriptionSelectorUpdateRequestFallback
+    Period:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/PeriodType'
+        value:
+          type:
+          - integer
+          - 'null'
+      title: Period
     LinkedIntegrationCreateRequest:
       type: object
       properties:
@@ -2400,12 +2137,46 @@ components:
         payment_method_id:
           type: string
       title: StripeIntegrationDetails
+    MeterPropertyStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the meter property indicating the activity and the ability to update properties.
+      title: MeterPropertyStatus
+    MeterValueCalculationCalculationType:
+      type: string
+      enum:
+      - SUM
+      - MAX
+      - MIN
+      - AVERAGE
+      - UNIQUE
+      description: The type of calculation used for this billable metric.
+      title: MeterValueCalculationCalculationType
     AdyenIntegrationDetails:
       type: object
       properties:
         recurring_detail_reference:
           type: string
       title: AdyenIntegrationDetails
+    AlertRuleEntitlement:
+      type: object
+      properties:
+        feature_id:
+          type: string
+          description: Resource ID of type FEATURE
+        feature:
+          oneOf:
+          - $ref: '#/components/schemas/Feature'
+          - type: 'null'
+        comparator:
+          $ref: '#/components/schemas/AlertRuleEntitlementComparator'
+        threshold:
+          $ref: '#/components/schemas/Threshold'
+      title: AlertRuleEntitlement
     ApiError:
       type: object
       properties:
@@ -2444,6 +2215,92 @@ components:
       - BILLING_ENTITY_REGISTERED_ADDRESS_COUNTRY
       - PRICING_PLAN_REFERENCE
       title: PricingPlanSubscriptionSelectorRuleField
+    AlertRuleCreateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the AlertRule. DEPRECATED is not supported.
+      title: AlertRuleCreateRequestStatus
+    AlertRuleUpdateRequestTriggerType:
+      type: string
+      enum:
+      - STATIC
+      - DYNAMIC
+      title: AlertRuleUpdateRequestTriggerType
+    MeterMeterValue:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type METER_VALUE
+        object:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValue'
+          - type: 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+        required:
+          type:
+          - boolean
+          - 'null'
+      title: MeterMeterValue
+    MeterValue:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueStatus'
+          - type: 'null'
+          description: The status of the meter value indicating the activity and the ability to update properties.
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueType'
+          - type: 'null'
+          description: The type of the meter value.
+      title: MeterValue
+    AlertRuleUpdateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the AlertRule. DEPRECATED is not supported.
+      title: AlertRuleUpdateRequestStatus
+    AlertRuleStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the AlertRule. DEPRECATED is not supported.
+      title: AlertRuleStatus
     CustomerStatus:
       type: string
       enum:
@@ -2453,6 +2310,49 @@ components:
       - DEPRECATED
       - CLOSED
       title: CustomerStatus
+    Feature:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/FeatureType'
+          - type: 'null'
+          description: The indication of the type of feature associated with the pricing plan.
+        enum_values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: If the feature type is ENUM, these fields provide additional information on the values used.
+        meter_value_calculation_id:
+          type:
+          - string
+          - 'null'
+          description: The linked meter value calculation
+        meter_value_calculation:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueCalculation'
+          - type: 'null'
+      title: Feature
     NotificationPreference:
       type: object
       properties:
@@ -2467,6 +2367,19 @@ components:
             $ref: '#/components/schemas/NotificationChannel'
           description: The channels for this notification type.
       title: NotificationPreference
+    AlertRuleType:
+      type: string
+      enum:
+      - ENTITLEMENT
+      - INVOICE
+      description: The type of the the alert.
+      title: AlertRuleType
+    AlertRuleTriggerType:
+      type: string
+      enum:
+      - STATIC
+      - DYNAMIC
+      title: AlertRuleTriggerType
     LinkedIntegration:
       type: object
       properties:
@@ -2495,30 +2408,13 @@ components:
           - 'null'
           description: Whether the channel is enabled for the notification type.
       title: NotificationChannel
-    CustomerResponseWrapper:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Customer'
-        page:
-          type:
-          - integer
-          - 'null'
-        limit:
-          type:
-          - integer
-          - 'null'
-        total_number_of_pages:
-          type:
-          - integer
-          - 'null'
-        links:
-          $ref: '#/components/schemas/PaginationLinks'
-      required:
-      - data
-      title: CustomerResponseWrapper
+    MeterValueType:
+      type: string
+      enum:
+      - NUMBER
+      - AMOUNT
+      description: The type of the meter value.
+      title: MeterValueType
     PricingPlanSubscriptionSelectorFilterType:
       type: string
       enum:
@@ -2542,6 +2438,13 @@ components:
       - INDIVIDUAL
       description: The type of customer entity.
       title: CustomerType
+    AlertRuleCreateRequestType:
+      type: string
+      enum:
+      - ENTITLEMENT
+      - INVOICE
+      description: The type of the the alert.
+      title: AlertRuleCreateRequestType
     TaxIdValidation:
       type: object
       properties:
@@ -2558,6 +2461,14 @@ components:
           - string
           - 'null'
       title: TaxIdValidation
+    AlertRuleInvoice:
+      type: object
+      properties:
+        variant:
+          $ref: '#/components/schemas/AlertRuleInvoiceVariant'
+        overdue:
+          $ref: '#/components/schemas/AlertRuleInvoiceOverdue'
+      title: AlertRuleInvoice
     LinkDetail:
       type: object
       properties:
@@ -2570,6 +2481,14 @@ components:
           - string
           - 'null'
       title: LinkDetail
+    PeriodType:
+      type: string
+      enum:
+      - DAY
+      - WEEK
+      - MONTH
+      - YEAR
+      title: PeriodType
     TaxIdType:
       type: string
       enum:
@@ -2623,36 +2542,14 @@ components:
         tax_id_validation_result:
           $ref: '#/components/schemas/TaxIdValidation'
       title: TaxId
-    WalletBalanceStatus:
+    AlertRuleInvoiceUpdateRequest:
       type: object
       properties:
-        balance:
-          oneOf:
-          - $ref: '#/components/schemas/WalletBalanceValue'
-          - type: 'null'
-        reserved_balance:
-          oneOf:
-          - $ref: '#/components/schemas/WalletBalanceValue'
-          - type: 'null'
-        open_balance:
-          oneOf:
-          - $ref: '#/components/schemas/WalletBalanceValue'
-          - type: 'null'
-        balance_at:
-          type:
-          - string
-          - 'null'
-      title: WalletBalanceStatus
-    EntitlementSummary:
-      type: object
-      properties:
-        pricing_plan_subscription_id:
-          type: string
-        entitlements:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntitlementSummaryItem'
-      title: EntitlementSummary
+        variant:
+          $ref: '#/components/schemas/AlertRuleInvoiceUpdateRequestVariant'
+        overdue:
+          $ref: '#/components/schemas/AlertRuleInvoiceOverdue'
+      title: AlertRuleInvoiceUpdateRequest
     NotificationPreferenceCreateRequestType:
       type: string
       enum:
@@ -2673,18 +2570,63 @@ components:
       - NONE
       description: The fallback logic what to do when no subscription is found. By default it is LATEST
       title: PricingPlanSubscriptionSelectorFallback
-    CustomerWalletBalanceStatus:
+    AlertRule:
       type: object
       properties:
-        wallet_id:
+        object_type:
           type:
           - string
           - 'null'
-        wallet_balance:
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+          description: A custom reference assigned to the alert.
+        name:
+          type:
+          - string
+          - 'null'
+          description: A custom name assigned to the alert.
+        description:
+          type:
+          - string
+          - 'null'
+        status:
           oneOf:
-          - $ref: '#/components/schemas/WalletBalanceStatus'
+          - $ref: '#/components/schemas/AlertRuleStatus'
           - type: 'null'
-      title: CustomerWalletBalanceStatus
+          description: The status of the AlertRule. DEPRECATED is not supported.
+        customer_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: The IDs of the customers linked to the alert.
+        customers:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Customer'
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/AlertRuleType'
+          - type: 'null'
+          description: The type of the the alert.
+        trigger_type:
+          oneOf:
+          - $ref: '#/components/schemas/AlertRuleTriggerType'
+          - type: 'null'
+        entitlement:
+          $ref: '#/components/schemas/AlertRuleEntitlement'
+          description: The specification of the entitlement for the alert, can only be specified when type is ENTITLEMENT
+        invoice:
+          $ref: '#/components/schemas/AlertRuleInvoice'
+          description: The specification of the invoice for the alert, can only be specified when type is INVOICE
+      title: AlertRule
     CustomerCreateRequestType:
       type: string
       enum:
@@ -2692,50 +2634,17 @@ components:
       - INDIVIDUAL
       description: The type of customer entity.
       title: CustomerCreateRequestType
-    WalletBalanceValue:
-      type: object
-      properties:
-        credits:
-          oneOf:
-          - $ref: '#/components/schemas/Credits'
-          - type: 'null'
-        amount:
-          oneOf:
-          - $ref: '#/components/schemas/Amount'
-          - type: 'null'
-      title: WalletBalanceValue
     ApiErrorType:
       type: string
       enum:
       - API_ERROR
       - INVALID_REQUEST
       title: ApiErrorType
-    SearchFieldCreateRequest:
-      type: object
-      properties:
-        name:
-          type:
-          - string
-          - 'null'
-        value:
-          type: string
-        wildcard_start:
-          type: boolean
-        wildcard_end:
-          type: boolean
-        ignore_case:
-          type: boolean
-      title: SearchFieldCreateRequest
-    TaxIdValidationWrapper:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/TaxIdValidation'
-      required:
-      - data
-      title: TaxIdValidationWrapper
+    AlertRuleInvoiceVariant:
+      type: string
+      enum:
+      - OVERDUE
+      title: AlertRuleInvoiceVariant
     PricingPlanSubscriptionSelectorRuleType:
       type: string
       enum:
@@ -2874,6 +2783,20 @@ components:
           - 'null'
           description: Resource ID of type BILLING_ENTITY
       title: CustomerSellerDetails
+    Threshold:
+      type: object
+      properties:
+        number:
+          type:
+          - string
+          - 'null'
+        percentage:
+          type:
+          - string
+          - 'null'
+        amount:
+          $ref: '#/components/schemas/Amount'
+      title: Threshold
     PricingPlanSubscriptionSelector:
       type: object
       properties:
@@ -2901,20 +2824,14 @@ components:
           - type: 'null'
           description: The fallback logic what to do when no subscription is found. By default it is LATEST
       title: PricingPlanSubscriptionSelector
-    CustomerWalletBalancesStatus:
+    AlertRuleInvoiceCreateRequest:
       type: object
       properties:
-        wallet_balances:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CustomerWalletBalanceStatus'
-        balance_at:
-          type:
-          - string
-          - 'null'
-      title: CustomerWalletBalancesStatus
+        variant:
+          $ref: '#/components/schemas/AlertRuleInvoiceCreateRequestVariant'
+        overdue:
+          $ref: '#/components/schemas/AlertRuleInvoiceOverdue'
+      title: AlertRuleInvoiceCreateRequest
   securitySchemes:
     API-Key:
       type: apiKey

@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Configuration alertRules teams API
+  title: Identity Teams API
   version: 1.0.0
 servers:
 - url: https://test.api.solvimon.com
@@ -8,14 +8,14 @@ servers:
 - url: https://api.solvimon.com
   description: The live environment for our API
 tags:
-- name: teams
+- name: Teams
 paths:
   /v{version}/teams:
     get:
       operationId: getTeams
       summary: Get a list of all teams
       tags:
-      - teams
+      - Teams
       parameters:
       - name: version
         in: path
@@ -84,7 +84,7 @@ paths:
       operationId: postTeams
       summary: Create a team
       tags:
-      - teams
+      - Teams
       parameters:
       - name: version
         in: path
@@ -139,7 +139,7 @@ paths:
       operationId: getTeamsByResourceId
       summary: Get a team by id
       tags:
-      - teams
+      - Teams
       parameters:
       - name: version
         in: path
@@ -190,7 +190,7 @@ paths:
       operationId: postTeamsByResourceIdMemberships
       summary: Add an account membership for a team
       tags:
-      - teams
+      - Teams
       parameters:
       - name: version
         in: path
@@ -251,6 +251,132 @@ paths:
               $ref: '#/components/schemas/AccountMembershipRepresentationCreateRequest'
 components:
   schemas:
+    Role:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+          description: Unique identifier for the role
+        name:
+          type: string
+          description: The name of the role
+        description:
+          type: string
+          description: The description of the role
+        entity_id:
+          type:
+          - string
+          - 'null'
+          description: When present the role is created for/by this entity
+        child_role_ids:
+          type: array
+          items:
+            type: string
+          description: Child roles for this role
+        child_roles:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/RoleChildRolesItems'
+          description: Child roles, with a max depth of 2
+      title: Role
+    TeamRepresentationCreateRequest:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The id of the team
+        entity_id:
+          type:
+          - string
+          - 'null'
+          description: The id of the entity that this team belongs to
+        name:
+          type: string
+          description: The name of the team
+        account_memberships:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/AccountMembershipRepresentationCreateRequest'
+          description: The account memberships of this team
+      title: TeamRepresentationCreateRequest
+    TeamRepresentation:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The id of the team
+        entity_id:
+          type:
+          - string
+          - 'null'
+          description: The id of the entity that this team belongs to
+        name:
+          type: string
+          description: The name of the team
+        account_memberships:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/AccountMembershipRepresentation'
+          description: The account memberships of this team
+      title: TeamRepresentation
+    AccountMembershipRepresentationCreateRequestType:
+      type: string
+      enum:
+      - ADMIN
+      - USER
+      - PARTNER
+      description: The type of this membership
+      title: AccountMembershipRepresentationCreateRequestType
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    AccountMembershipRepresentationType:
+      type: string
+      enum:
+      - ADMIN
+      - USER
+      - PARTNER
+      description: The type of this membership
+      title: AccountMembershipRepresentationType
     ApiErrorResourceType:
       type: string
       enum:
@@ -340,50 +466,6 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
-    AccountMembershipRepresentationType:
-      type: string
-      enum:
-      - ADMIN
-      - USER
-      - PARTNER
-      description: The type of this membership
-      title: AccountMembershipRepresentationType
-    Role:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-          description: Unique identifier for the role
-        name:
-          type: string
-          description: The name of the role
-        description:
-          type: string
-          description: The description of the role
-        entity_id:
-          type:
-          - string
-          - 'null'
-          description: When present the role is created for/by this entity
-        child_role_ids:
-          type: array
-          items:
-            type: string
-          description: Child roles for this role
-        child_roles:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/RoleChildRolesItems'
-          description: Child roles, with a max depth of 2
-      title: Role
     AccountMembershipRepresentationCreateRequest:
       type: object
       properties:
@@ -430,6 +512,35 @@ components:
             $ref: '#/components/schemas/Role'
           description: The roles that belong to this membership
       title: AccountMembershipRepresentationCreateRequest
+    AccountRepresentation:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The id of the account
+        reference:
+          type: string
+          description: The reference of the account
+        account_type_code:
+          type: string
+          description: The type code of the account
+        environment:
+          type: string
+          description: The environment of this account
+        account_group_id:
+          type: string
+          description: The id of the account group that this account is associated with
+        parent_id:
+          type:
+          - string
+          - 'null'
+          description: The id of the parent account of this account
+        platform_id:
+          type:
+          - string
+          - 'null'
+          description: The id of the platform that this account belongs to
+      title: AccountRepresentation
     ApiErrorCode:
       type: string
       enum:
@@ -475,121 +586,6 @@ components:
       - API_ERROR
       - INVALID_REQUEST
       title: ApiErrorType
-    TeamRepresentationCreateRequest:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: The id of the team
-        entity_id:
-          type:
-          - string
-          - 'null'
-          description: The id of the entity that this team belongs to
-        name:
-          type: string
-          description: The name of the team
-        account_memberships:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/AccountMembershipRepresentationCreateRequest'
-          description: The account memberships of this team
-      title: TeamRepresentationCreateRequest
-    TeamRepresentation:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: The id of the team
-        entity_id:
-          type:
-          - string
-          - 'null'
-          description: The id of the entity that this team belongs to
-        name:
-          type: string
-          description: The name of the team
-        account_memberships:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/AccountMembershipRepresentation'
-          description: The account memberships of this team
-      title: TeamRepresentation
-    ApiError:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/ApiErrorType'
-        code:
-          $ref: '#/components/schemas/ApiErrorCode'
-        field:
-          type:
-          - string
-          - 'null'
-        message:
-          type: string
-        resource_id:
-          type:
-          - string
-          - 'null'
-        resource_type:
-          oneOf:
-          - $ref: '#/components/schemas/ApiErrorResourceType'
-          - type: 'null'
-      required:
-      - type
-      - code
-      - message
-      title: ApiError
-    RoleChildRolesItems:
-      type: object
-      properties: {}
-      title: RoleChildRolesItems
-    AccountMembershipRepresentationCreateRequestType:
-      type: string
-      enum:
-      - ADMIN
-      - USER
-      - PARTNER
-      description: The type of this membership
-      title: AccountMembershipRepresentationCreateRequestType
-    AccountRepresentation:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The id of the account
-        reference:
-          type: string
-          description: The reference of the account
-        account_type_code:
-          type: string
-          description: The type code of the account
-        environment:
-          type: string
-          description: The environment of this account
-        account_group_id:
-          type: string
-          description: The id of the account group that this account is associated with
-        parent_id:
-          type:
-          - string
-          - 'null'
-          description: The id of the parent account of this account
-        platform_id:
-          type:
-          - string
-          - 'null'
-          description: The id of the platform that this account belongs to
-      title: AccountRepresentation
     AccountMembershipRepresentation:
       type: object
       properties:
@@ -636,6 +632,10 @@ components:
             $ref: '#/components/schemas/Role'
           description: The roles that belong to this membership
       title: AccountMembershipRepresentation
+    RoleChildRolesItems:
+      type: object
+      properties: {}
+      title: RoleChildRolesItems
   securitySchemes:
     API-Key:
       type: apiKey

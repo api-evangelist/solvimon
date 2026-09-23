@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Configuration alertRules productCategories API
+  title: Configuration Custom Fields API
   version: 1.0.0
 servers:
 - url: https://test.api.solvimon.com
@@ -8,15 +8,15 @@ servers:
 - url: https://api.solvimon.com
   description: The live environment for our API
 tags:
-- name: productCategories
+- name: Custom Fields
 paths:
-  /v{version}/product-categories:
+  /v{version}/custom-fields:
     get:
-      operationId: getProductCategories
-      summary: Get a list of all product categories
-      description: Requires the PRODUCT_CATEGORY.VIEW permission.
+      operationId: getCustomFields
+      summary: Get all custom fields
+      description: Requires the CUSTOM_FIELD.VIEW permission.
       tags:
-      - productCategories
+      - Custom Fields
       parameters:
       - name: version
         in: path
@@ -25,12 +25,48 @@ paths:
         schema:
           type: string
           default: '1'
-      - name: customer_id
+      - name: resource_type
         in: query
-        description: The resource id of the customer.
+        description: The resource type of the custom field
         required: false
         schema:
           type: string
+      - name: reference
+        in: query
+        description: The reference of the custom field
+        required: false
+        schema:
+          type: string
+      - name: integration_id
+        in: query
+        description: The ID of the custom field integration
+        required: false
+        schema:
+          type: string
+      - name: order_by
+        in: query
+        description: The parameter by which the response is ordered
+        required: false
+        schema:
+          type: string
+      - name: order_direction
+        in: query
+        description: The order direction by which the response is ordered
+        required: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: The amount of records shown in the list
+        required: false
+        schema:
+          type: integer
+      - name: page
+        in: query
+        description: The page which is going to be shown
+        required: false
+        schema:
+          type: integer
       - name: X-API-KEY
         in: header
         required: true
@@ -48,7 +84,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProductCategoryResponseWrapper'
+                $ref: '#/components/schemas/CustomFieldResponseWrapper'
         '400':
           description: Bad Request
           content:
@@ -67,6 +103,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
         '500':
           description: Internal Server Error
           content:
@@ -74,11 +116,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiError'
     post:
-      operationId: postProductCategories
-      summary: Create a product category
-      description: Requires the PRODUCT_CATEGORY.CREATE permission.
+      operationId: postCustomFields
+      summary: Create a custom field for a customer
+      description: Requires the CUSTOM_FIELD.CREATE permission.
       tags:
-      - productCategories
+      - Custom Fields
       parameters:
       - name: version
         in: path
@@ -104,7 +146,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProductCategory'
+                $ref: '#/components/schemas/CustomField'
         '400':
           description: Bad Request
           content:
@@ -139,81 +181,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ProductCategoryCreateRequest'
-    put:
-      operationId: putProductCategories
-      summary: Update or create a product category (upsert)
-      description: Requires the PRODUCT_CATEGORY.CREATE or PRODUCT_CATEGORY.UPDATE permission.
-      tags:
-      - productCategories
-      parameters:
-      - name: version
-        in: path
-        description: version
-        required: true
-        schema:
-          type: string
-          default: '1'
-      - name: X-API-KEY
-        in: header
-        required: true
-        schema:
-          type: string
-      - name: x-platform-id
-        in: header
-        description: Platform ID.
-        required: false
-        schema:
-          type: string
-      responses:
-        '201':
-          description: Created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProductCategory'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ProductCategoryCreateRequest'
-  /v{version}/product-categories/{resourceIdOrReference}:
+              $ref: '#/components/schemas/CustomFieldCreateRequest'
+  /v{version}/custom-fields/{resourceId}:
     get:
-      operationId: getProductCategoriesByResourceIdOrReference
-      summary: Get a product category
-      description: Requires the PRODUCT_CATEGORY.VIEW permission.
+      operationId: getCustomFieldsByResourceId
+      summary: Get a custom field by ID
+      description: Requires the CUSTOM_FIELD.VIEW permission.
       tags:
-      - productCategories
+      - Custom Fields
       parameters:
       - name: version
         in: path
@@ -222,9 +197,9 @@ paths:
         schema:
           type: string
           default: '1'
-      - name: resourceIdOrReference
+      - name: resourceId
         in: path
-        description: The ID or reference of the resource.
+        description: The ID of the resource to be requested.
         required: true
         schema:
           type: string
@@ -246,7 +221,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProductCategory'
+                $ref: '#/components/schemas/CustomField'
         '400':
           description: Bad Request
           content:
@@ -261,6 +236,12 @@ paths:
                 $ref: '#/components/schemas/ApiError'
         '403':
           description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Conflict
           content:
             application/json:
               schema:
@@ -272,11 +253,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiError'
     delete:
-      operationId: deleteProductCategoriesByResourceIdOrReference
-      summary: Delete a product category
-      description: Requires the PRODUCT_CATEGORY.DELETE permission.
+      operationId: deleteCustomFieldsByResourceId
+      summary: Delete a custom field
+      description: Requires the CUSTOM_FIELD.DELETE permission.
       tags:
-      - productCategories
+      - Custom Fields
       parameters:
       - name: version
         in: path
@@ -285,9 +266,9 @@ paths:
         schema:
           type: string
           default: '1'
-      - name: resourceIdOrReference
+      - name: resourceId
         in: path
-        description: The ID or reference of the resource.
+        description: The ID of the resource to be requested.
         required: true
         schema:
           type: string
@@ -309,7 +290,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProductCategory'
+                $ref: '#/components/schemas/CustomField'
         '400':
           description: Bad Request
           content:
@@ -324,6 +305,12 @@ paths:
                 $ref: '#/components/schemas/ApiError'
         '403':
           description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Conflict
           content:
             application/json:
               schema:
@@ -335,11 +322,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiError'
     patch:
-      operationId: patchProductCategoriesByResourceIdOrReference
-      summary: Update a product category
-      description: Requires the PRODUCT_CATEGORY.UPDATE permission.
+      operationId: patchCustomFieldsByResourceId
+      summary: Update the custom field
+      description: Requires the CUSTOM_FIELD.UPDATE permission.
       tags:
-      - productCategories
+      - Custom Fields
       parameters:
       - name: version
         in: path
@@ -348,9 +335,9 @@ paths:
         schema:
           type: string
           default: '1'
-      - name: resourceIdOrReference
+      - name: resourceId
         in: path
-        description: The ID or reference of the resource.
+        description: The ID of the resource to be requested.
         required: true
         schema:
           type: string
@@ -372,7 +359,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ProductCategory'
+                $ref: '#/components/schemas/CustomField'
         '400':
           description: Bad Request
           content:
@@ -401,111 +388,97 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ProductCategoryUpdateRequest'
-  /v{version}/product-categories/search:
-    post:
-      operationId: postProductCategoriesSearch
-      summary: Search product categories.
-      description: Requires the PRODUCT_CATEGORY.VIEW permission.
-      tags:
-      - productCategories
-      parameters:
-      - name: version
-        in: path
-        description: version
-        required: true
-        schema:
-          type: string
-          default: '1'
-      - name: expand[]
-        in: query
-        description: The id fields of the resources that are going to be expanded.
-        required: false
-        schema:
-          type: array
-          items:
-            type: string
-      - name: limit
-        in: query
-        description: The amount of records shown in the list
-        required: false
-        schema:
-          type: integer
-      - name: page
-        in: query
-        description: The page which is going to be shown
-        required: false
-        schema:
-          type: integer
-      - name: order_by
-        in: query
-        description: The parameter by which the response is ordered. default = name
-        required: false
-        schema:
-          type: string
-      - name: order_direction
-        in: query
-        description: The parameter for the response ordering direction (asc, desc) default asc
-        required: false
-        schema:
-          type: string
-      - name: X-API-KEY
-        in: header
-        required: true
-        schema:
-          type: string
-      - name: x-platform-id
-        in: header
-        description: Platform ID.
-        required: false
-        schema:
-          type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProductCategoryResponseWrapper'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/SearchCreateRequest'
+              $ref: '#/components/schemas/CustomFieldUpdateRequest'
 components:
   schemas:
-    ProductCategoryTaxCategory:
+    CustomFieldCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          $ref: '#/components/schemas/CustomFieldCreateRequestResourceType'
+        multiple_values:
+          type:
+          - boolean
+          - 'null'
+        unique_value:
+          type:
+          - boolean
+          - 'null'
+        copy_value_to_invoice:
+          type:
+          - boolean
+          - 'null'
+        integration_id:
+          type: string
+          description: The resource ID of the integration.
+        integration_reference:
+          type: string
+          description: The reference of the integration.
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/CustomFieldCreateRequestType'
+          - type: 'null'
+        enum_values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+      required:
+      - reference
+      - resource_type
+      title: CustomFieldCreateRequest
+    CustomFieldResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomField'
+        page:
+          type:
+          - integer
+          - 'null'
+        limit:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      - links
+      title: CustomFieldResponseWrapper
+    CustomFieldCreateRequestType:
       type: string
       enum:
-      - STANDARD
-      - NO_TAX
-      - EXEMPT
-      description: The default tax category applied to the products in the product category.
-      title: ProductCategoryTaxCategory
+      - STRING
+      - NUMBER
+      - BOOLEAN
+      - ENUM
+      title: CustomFieldCreateRequestType
     ApiErrorResourceType:
       type: string
       enum:
@@ -595,15 +568,72 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
-    ProductCategoryUpdateRequestTaxCategory:
+    CustomFieldCreateRequestResourceType:
       type: string
       enum:
-      - STANDARD
-      - NO_TAX
-      - EXEMPT
-      description: The default tax category applied to the products in the product category.
-      title: ProductCategoryUpdateRequestTaxCategory
-    ProductCategoryUpdateRequest:
+      - PLATFORM
+      - CUSTOMER
+      - BILLING_ENTITY
+      - METER
+      - METER_VALUE
+      - METER_PROPERTY
+      - METER_VALUE_CALCULATION
+      - PRODUCT
+      - PRODUCT_ITEM
+      - PRODUCT_CATEGORY
+      - PRICING
+      - PRICING_ITEM
+      - PRICING_ITEM_CONFIG
+      - PRICING_ITEM_SUMMARY
+      - METER_VALUE_CALCULATION_SUMMARY
+      - PRICING_PLAN
+      - PRICING_PLAN_VERSION
+      - PRICING_PLAN_SUBSCRIPTION
+      - PRICING_PLAN_SCHEDULE
+      - QUOTE
+      - QUOTE_VERSION
+      - CONTACT
+      - CUSTOM_FIELD
+      - REQUEST_REFERENCE
+      - METER_DATA
+      - CHARGE_DATA
+      - ADJUSTMENT_DATA
+      - PERSIST_DATA
+      - INVOICE
+      - INVOICE_PAYMENT_ATTEMPT
+      - PAYMENT_ACCEPTOR
+      - PAYMENT_SCHEDULE
+      - PAYMENT_REQUEST
+      - FEATURE
+      - ALERT_RULE
+      - ALERT
+      - USER
+      - MEMBERSHIP
+      - TEAM
+      - ENTITY
+      - ACCOUNT_GROUP
+      - AUDIT
+      - WEBHOOK
+      - REPORT_SUBSCRIPTION
+      - REPORT_CONFIGURATION
+      title: CustomFieldCreateRequestResourceType
+    CustomFieldUpdateRequestType:
+      type: string
+      enum:
+      - STRING
+      - NUMBER
+      - BOOLEAN
+      - ENUM
+      title: CustomFieldUpdateRequestType
+    CustomFieldType:
+      type: string
+      enum:
+      - STRING
+      - NUMBER
+      - BOOLEAN
+      - ENUM
+      title: CustomFieldType
+    CustomFieldUpdateRequest:
       type: object
       properties:
         object_type:
@@ -614,161 +644,47 @@ components:
           type:
           - string
           - 'null'
-        name:
-          type: string
         reference:
           type: string
+        name:
+          type:
+          - string
+          - 'null'
         description:
           type:
           - string
           - 'null'
-        tax_category:
+        resource_type:
+          $ref: '#/components/schemas/CustomFieldUpdateRequestResourceType'
+        multiple_values:
+          type:
+          - boolean
+          - 'null'
+        unique_value:
+          type:
+          - boolean
+          - 'null'
+        copy_value_to_invoice:
+          type:
+          - boolean
+          - 'null'
+        integration_id:
+          type: string
+          description: The resource ID of the integration.
+        integration_reference:
+          type: string
+          description: The reference of the integration.
+        type:
           oneOf:
-          - $ref: '#/components/schemas/ProductCategoryUpdateRequestTaxCategory'
+          - $ref: '#/components/schemas/CustomFieldUpdateRequestType'
           - type: 'null'
-          description: The default tax category applied to the products in the product category.
-        display_order:
+        enum_values:
           type:
-          - integer
+          - array
           - 'null'
-        customer_id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type CUSTOMER
-      title: ProductCategoryUpdateRequest
-    ProductCategoryResponseWrapper:
-      type: object
-      properties:
-        data:
-          type: array
           items:
-            $ref: '#/components/schemas/ProductCategory'
-        limit:
-          type:
-          - integer
-          - 'null'
-        page:
-          type:
-          - integer
-          - 'null'
-        total_number_of_pages:
-          type:
-          - integer
-          - 'null'
-        links:
-          $ref: '#/components/schemas/PaginationLinks'
-      required:
-      - data
-      - links
-      title: ProductCategoryResponseWrapper
-    ProductCategory:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        name:
-          type: string
-        reference:
-          type: string
-        description:
-          type:
-          - string
-          - 'null'
-        tax_category:
-          oneOf:
-          - $ref: '#/components/schemas/ProductCategoryTaxCategory'
-          - type: 'null'
-          description: The default tax category applied to the products in the product category.
-        display_order:
-          type:
-          - integer
-          - 'null'
-        customer_id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type CUSTOMER
-      title: ProductCategory
-    ProductCategoryCreateRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        name:
-          type: string
-        reference:
-          type: string
-        description:
-          type:
-          - string
-          - 'null'
-        tax_category:
-          oneOf:
-          - $ref: '#/components/schemas/ProductCategoryCreateRequestTaxCategory'
-          - type: 'null'
-          description: The default tax category applied to the products in the product category.
-        display_order:
-          type:
-          - integer
-          - 'null'
-        customer_id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type CUSTOMER
-      required:
-      - name
-      - reference
-      title: ProductCategoryCreateRequest
-    SearchCreateRequest:
-      type: object
-      properties:
-        search_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/SearchFieldCreateRequest'
-        filter_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/FilterFieldCreateRequest'
-        selection_rule_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/SelectionRuleFieldCreateRequest'
-      title: SearchCreateRequest
-    PaginationLinks:
-      type: object
-      properties:
-        first:
-          type:
-          - string
-          - 'null'
-        previous:
-          type:
-          - string
-          - 'null'
-        current:
-          type:
-          - string
-          - 'null'
-        next:
-          type:
-          - string
-          - 'null'
-      title: PaginationLinks
+            type: string
+      title: CustomFieldUpdateRequest
     ApiErrorCode:
       type: string
       enum:
@@ -808,30 +724,113 @@ components:
       - IDEMPOTENCY_CHECK_FAILED
       - INVALID_REQUEST
       title: ApiErrorCode
+    CustomField:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          $ref: '#/components/schemas/CustomFieldResourceType'
+        multiple_values:
+          type:
+          - boolean
+          - 'null'
+        unique_value:
+          type:
+          - boolean
+          - 'null'
+        copy_value_to_invoice:
+          type:
+          - boolean
+          - 'null'
+        integration_id:
+          type: string
+          description: The resource ID of the integration.
+        integration_reference:
+          type: string
+          description: The reference of the integration.
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/CustomFieldType'
+          - type: 'null'
+        enum_values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+      title: CustomField
+    CustomFieldResourceType:
+      type: string
+      enum:
+      - PLATFORM
+      - CUSTOMER
+      - BILLING_ENTITY
+      - METER
+      - METER_VALUE
+      - METER_PROPERTY
+      - METER_VALUE_CALCULATION
+      - PRODUCT
+      - PRODUCT_ITEM
+      - PRODUCT_CATEGORY
+      - PRICING
+      - PRICING_ITEM
+      - PRICING_ITEM_CONFIG
+      - PRICING_ITEM_SUMMARY
+      - METER_VALUE_CALCULATION_SUMMARY
+      - PRICING_PLAN
+      - PRICING_PLAN_VERSION
+      - PRICING_PLAN_SUBSCRIPTION
+      - PRICING_PLAN_SCHEDULE
+      - QUOTE
+      - QUOTE_VERSION
+      - CONTACT
+      - CUSTOM_FIELD
+      - REQUEST_REFERENCE
+      - METER_DATA
+      - CHARGE_DATA
+      - ADJUSTMENT_DATA
+      - PERSIST_DATA
+      - INVOICE
+      - INVOICE_PAYMENT_ATTEMPT
+      - PAYMENT_ACCEPTOR
+      - PAYMENT_SCHEDULE
+      - PAYMENT_REQUEST
+      - FEATURE
+      - ALERT_RULE
+      - ALERT
+      - USER
+      - MEMBERSHIP
+      - TEAM
+      - ENTITY
+      - ACCOUNT_GROUP
+      - AUDIT
+      - WEBHOOK
+      - REPORT_SUBSCRIPTION
+      - REPORT_CONFIGURATION
+      title: CustomFieldResourceType
     ApiErrorType:
       type: string
       enum:
       - API_ERROR
       - INVALID_REQUEST
       title: ApiErrorType
-    FilterFieldCreateRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        reference:
-          type:
-          - string
-          - 'null'
-        value:
-          type:
-          - string
-          - 'null'
-        values:
-          type: array
-          items:
-            type: string
-      title: FilterFieldCreateRequest
     ApiError:
       type: object
       properties:
@@ -858,40 +857,75 @@ components:
       - code
       - message
       title: ApiError
-    ProductCategoryCreateRequestTaxCategory:
+    CustomFieldUpdateRequestResourceType:
       type: string
       enum:
-      - STANDARD
-      - NO_TAX
-      - EXEMPT
-      description: The default tax category applied to the products in the product category.
-      title: ProductCategoryCreateRequestTaxCategory
-    SelectionRuleFieldCreateRequest:
+      - PLATFORM
+      - CUSTOMER
+      - BILLING_ENTITY
+      - METER
+      - METER_VALUE
+      - METER_PROPERTY
+      - METER_VALUE_CALCULATION
+      - PRODUCT
+      - PRODUCT_ITEM
+      - PRODUCT_CATEGORY
+      - PRICING
+      - PRICING_ITEM
+      - PRICING_ITEM_CONFIG
+      - PRICING_ITEM_SUMMARY
+      - METER_VALUE_CALCULATION_SUMMARY
+      - PRICING_PLAN
+      - PRICING_PLAN_VERSION
+      - PRICING_PLAN_SUBSCRIPTION
+      - PRICING_PLAN_SCHEDULE
+      - QUOTE
+      - QUOTE_VERSION
+      - CONTACT
+      - CUSTOM_FIELD
+      - REQUEST_REFERENCE
+      - METER_DATA
+      - CHARGE_DATA
+      - ADJUSTMENT_DATA
+      - PERSIST_DATA
+      - INVOICE
+      - INVOICE_PAYMENT_ATTEMPT
+      - PAYMENT_ACCEPTOR
+      - PAYMENT_SCHEDULE
+      - PAYMENT_REQUEST
+      - FEATURE
+      - ALERT_RULE
+      - ALERT
+      - USER
+      - MEMBERSHIP
+      - TEAM
+      - ENTITY
+      - ACCOUNT_GROUP
+      - AUDIT
+      - WEBHOOK
+      - REPORT_SUBSCRIPTION
+      - REPORT_CONFIGURATION
+      title: CustomFieldUpdateRequestResourceType
+    PaginationLinks:
       type: object
       properties:
-        name:
-          type: string
-        value:
+        first:
           type:
           - string
           - 'null'
-      title: SelectionRuleFieldCreateRequest
-    SearchFieldCreateRequest:
-      type: object
-      properties:
-        name:
+        previous:
           type:
           - string
           - 'null'
-        value:
-          type: string
-        wildcard_start:
-          type: boolean
-        wildcard_end:
-          type: boolean
-        ignore_case:
-          type: boolean
-      title: SearchFieldCreateRequest
+        current:
+          type:
+          - string
+          - 'null'
+        next:
+          type:
+          - string
+          - 'null'
+      title: PaginationLinks
   securitySchemes:
     API-Key:
       type: apiKey

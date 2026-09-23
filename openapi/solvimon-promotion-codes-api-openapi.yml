@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: Configuration Coupons API
+  title: Configuration Promotion Codes API
   version: 1.0.0
 servers:
 - url: https://test.api.solvimon.com
@@ -8,15 +8,15 @@ servers:
 - url: https://api.solvimon.com
   description: The live environment for our API
 tags:
-- name: Coupons
+- name: Promotion Codes
 paths:
-  /v{version}/coupons:
+  /v{version}/promotion-codes:
     get:
-      operationId: getCoupons
-      summary: Get a list of coupons
-      description: Requires the COUPON.VIEW permission.
+      operationId: getPromotionCodes
+      summary: Get promotion codes
+      description: Requires the PROMOTION_CODE.VIEW permission.
       tags:
-      - Coupons
+      - Promotion Codes
       parameters:
       - name: version
         in: path
@@ -25,9 +25,15 @@ paths:
         schema:
           type: string
           default: '1'
+      - name: coupon_id
+        in: query
+        description: Filter by coupon id.
+        required: false
+        schema:
+          type: string
       - name: statuses[]
         in: query
-        description: Filter by coupon status.
+        description: Filter by promotion code status.
         required: false
         schema:
           type: array
@@ -82,7 +88,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CouponResponseWrapper'
+                $ref: '#/components/schemas/PromotionCodeResponseWrapper'
         '400':
           description: Bad Request
           content:
@@ -108,11 +114,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/ApiError'
     post:
-      operationId: postCoupons
-      summary: Create a coupon
-      description: Requires the COUPON.CREATE permission.
+      operationId: postPromotionCodes
+      summary: Create a promotion code
+      description: Requires the PROMOTION_CODE.CREATE permission.
       tags:
-      - Coupons
+      - Promotion Codes
       parameters:
       - name: version
         in: path
@@ -138,7 +144,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Coupon'
+                $ref: '#/components/schemas/PromotionCode'
         '400':
           description: Bad Request
           content:
@@ -157,12 +163,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-        '409':
-          description: Conflict
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
         '500':
           description: Internal Server Error
           content:
@@ -173,14 +173,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CouponCreateRequest'
-  /v{version}/coupons/{resourceIdOrReference}:
+              $ref: '#/components/schemas/PromotionCodeCreateRequest'
+  /v{version}/promotion-codes/{resourceIdOrReference}:
     get:
-      operationId: getCouponsByResourceIdOrReference
-      summary: Get a coupon
-      description: Requires the COUPON.VIEW permission.
+      operationId: getPromotionCodesByResourceIdOrReference
+      summary: Get a promotion code
+      description: Requires the PROMOTION_CODE.VIEW permission.
       tags:
-      - Coupons
+      - Promotion Codes
       parameters:
       - name: version
         in: path
@@ -221,7 +221,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Coupon'
+                $ref: '#/components/schemas/PromotionCode'
         '400':
           description: Bad Request
           content:
@@ -246,81 +246,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-    patch:
-      operationId: patchCouponsByResourceIdOrReference
-      summary: Update a coupon
-      description: Requires the COUPON.UPDATE permission.
-      tags:
-      - Coupons
-      parameters:
-      - name: version
-        in: path
-        description: version
-        required: true
-        schema:
-          type: string
-          default: '1'
-      - name: resourceIdOrReference
-        in: path
-        description: The ID or reference of the resource.
-        required: true
-        schema:
-          type: string
-          default: ''
-      - name: X-API-KEY
-        in: header
-        required: true
-        schema:
-          type: string
-      - name: x-platform-id
-        in: header
-        description: Platform ID.
-        required: false
-        schema:
-          type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Coupon'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CouponUpdateRequest'
-  /v{version}/coupons/{resourceIdOrReference}/redemptions:
+  /v{version}/promotion-codes/{resourceIdOrReference}/redemptions:
     get:
-      operationId: getCouponsByResourceIdOrReferenceRedemptions
-      summary: Get a list of coupon redemptions
-      description: Requires the COUPON.VIEW permission.
+      operationId: getPromotionCodesByResourceIdOrReferenceRedemptions
+      summary: Get a list of promotion code redemptions
+      description: Requires the PROMOTION_CODE.VIEW permission.
       tags:
-      - Coupons
+      - Promotion Codes
       parameters:
       - name: version
         in: path
@@ -331,7 +263,7 @@ paths:
           default: '1'
       - name: resourceIdOrReference
         in: path
-        description: The ID of the resource to be requested.
+        description: The id of the promotion code or the code itself.
         required: true
         schema:
           type: string
@@ -422,13 +354,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-  /v{version}/coupons/{resourceIdOrReference}/activate:
+  /v{version}/promotion-codes/{resourceIdOrReference}/activate:
     post:
-      operationId: postCouponsByResourceIdOrReferenceActivate
-      summary: Activate a coupon
-      description: Requires the COUPON.UPDATE permission.
+      operationId: postPromotionCodesByResourceIdOrReferenceActivate
+      summary: Activate a promotion code
       tags:
-      - Coupons
+      - Promotion Codes
       parameters:
       - name: version
         in: path
@@ -461,7 +392,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Coupon'
+                $ref: '#/components/schemas/PromotionCode'
         '400':
           description: Bad Request
           content:
@@ -486,13 +417,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-  /v{version}/coupons/{resourceIdOrReference}/deactivate:
+  /v{version}/promotion-codes/{resourceIdOrReference}/deactivate:
     post:
-      operationId: postCouponsByResourceIdOrReferenceDeactivate
-      summary: Deactivate a coupon
-      description: Requires the COUPON.UPDATE permission.
+      operationId: postPromotionCodesByResourceIdOrReferenceDeactivate
+      summary: Deactivate a promotion code
       tags:
-      - Coupons
+      - Promotion Codes
       parameters:
       - name: version
         in: path
@@ -525,7 +455,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Coupon'
+                $ref: '#/components/schemas/PromotionCode'
         '400':
           description: Bad Request
           content:
@@ -550,13 +480,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-  /v{version}/coupons/{resourceIdOrReference}/deprecate:
+  /v{version}/promotion-codes/{resourceIdOrReference}/deprecate:
     post:
-      operationId: postCouponsByResourceIdOrReferenceDeprecate
-      summary: Deprecate a coupon
-      description: Requires the COUPON.UPDATE permission.
+      operationId: postPromotionCodesByResourceIdOrReferenceDeprecate
+      summary: Deprecate a promotion code
       tags:
-      - Coupons
+      - Promotion Codes
       parameters:
       - name: version
         in: path
@@ -589,7 +518,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Coupon'
+                $ref: '#/components/schemas/PromotionCode'
         '400':
           description: Bad Request
           content:
@@ -614,13 +543,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-  /v{version}/coupons/{resourceIdOrReference}/archive:
+  /v{version}/promotion-codes/{resourceIdOrReference}/archive:
     post:
-      operationId: postCouponsByResourceIdOrReferenceArchive
-      summary: Archive a coupon
-      description: Requires the COUPON.UPDATE permission.
+      operationId: postPromotionCodesByResourceIdOrReferenceArchive
+      summary: Archive a promotion code
       tags:
-      - Coupons
+      - Promotion Codes
       parameters:
       - name: version
         in: path
@@ -653,7 +581,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Coupon'
+                $ref: '#/components/schemas/PromotionCode'
         '400':
           description: Bad Request
           content:
@@ -680,15 +608,6 @@ paths:
                 $ref: '#/components/schemas/ApiError'
 components:
   schemas:
-    CouponStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - INACTIVE
-      - DEPRECATED
-      - ARCHIVED
-      title: CouponStatus
     EInvoicingIntegrationProcessor:
       type: string
       enum:
@@ -733,94 +652,11 @@ components:
           $ref: '#/components/schemas/Amount'
           description: Minimum invoice amount.
       title: InvoiceCommitment
-    ProductItem:
+    PricingItemOriginalPricingItem:
       type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        product_id:
-          type:
-          - string
-          - 'null'
-          description: The resource ID of the product, that belongs to the product item.
-        product:
-          oneOf:
-          - $ref: '#/components/schemas/Product'
-          - type: 'null'
-        name:
-          type:
-          - string
-          - 'null'
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/ProductItemStatus'
-          - type: 'null'
-        reference:
-          type: string
-        description:
-          type:
-          - string
-          - 'null'
-        type:
-          oneOf:
-          - $ref: '#/components/schemas/ProductItemType'
-          - type: 'null'
-          description: The type of the product item.
-        model_type:
-          oneOf:
-          - $ref: '#/components/schemas/ProductItemModelType'
-          - type: 'null'
-        usage_based:
-          $ref: '#/components/schemas/ProductItemUsageBased'
-          description: Additional settings in case of a USAGE_BASED type.
-        credits:
-          $ref: '#/components/schemas/ProductItemCredits'
-          description: Additional settings in case of a CREDITS type.
-        meter_value_calculation_id:
-          type:
-          - string
-          - 'null'
-          description: The linked meter value calculation, in case of a USAGE_BASED charge type.
-        meter_value_calculation:
-          oneOf:
-          - $ref: '#/components/schemas/MeterValueCalculation'
-          - type: 'null'
-        report_meter_value_calculation_ids:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Optional reporting meter value calculations, in case of a USAGE_BASED charge type.
-        tax_category:
-          oneOf:
-          - $ref: '#/components/schemas/ProductItemTaxCategory'
-          - type: 'null'
-          description: The default tax category applied to the product item.
-        display_order:
-          type:
-          - integer
-          - 'null'
-        unit_name:
-          $ref: '#/components/schemas/UnitName'
-        custom_fields:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CustomFieldValue'
-          description: Custom fields associated to this product item
-        customer_id:
-          type:
-          - string
-          - 'null'
-      title: ProductItem
+      properties: {}
+      description: This property creates a circular reference in the `PricingItem` schema. If you experience any issues with OpenAPI tools related to these circular references, you can try removing this property from the specification.
+      title: PricingItemOriginalPricingItem
     PricingItemOverride:
       type: string
       enum:
@@ -1036,16 +872,99 @@ components:
           - $ref: '#/components/schemas/AddressCountry'
           - type: 'null'
       title: Address
+    ProductItem:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        product_id:
+          type:
+          - string
+          - 'null'
+          description: The resource ID of the product, that belongs to the product item.
+        product:
+          oneOf:
+          - $ref: '#/components/schemas/Product'
+          - type: 'null'
+        name:
+          type:
+          - string
+          - 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/ProductItemStatus'
+          - type: 'null'
+        reference:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/ProductItemType'
+          - type: 'null'
+          description: The type of the product item.
+        model_type:
+          oneOf:
+          - $ref: '#/components/schemas/ProductItemModelType'
+          - type: 'null'
+        usage_based:
+          $ref: '#/components/schemas/ProductItemUsageBased'
+          description: Additional settings in case of a USAGE_BASED type.
+        credits:
+          $ref: '#/components/schemas/ProductItemCredits'
+          description: Additional settings in case of a CREDITS type.
+        meter_value_calculation_id:
+          type:
+          - string
+          - 'null'
+          description: The linked meter value calculation, in case of a USAGE_BASED charge type.
+        meter_value_calculation:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueCalculation'
+          - type: 'null'
+        report_meter_value_calculation_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Optional reporting meter value calculations, in case of a USAGE_BASED charge type.
+        tax_category:
+          oneOf:
+          - $ref: '#/components/schemas/ProductItemTaxCategory'
+          - type: 'null'
+          description: The default tax category applied to the product item.
+        display_order:
+          type:
+          - integer
+          - 'null'
+        unit_name:
+          $ref: '#/components/schemas/UnitName'
+        custom_fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomFieldValue'
+          description: Custom fields associated to this product item
+        customer_id:
+          type:
+          - string
+          - 'null'
+      title: ProductItem
     PricingOriginalPricing:
       type: object
       properties: {}
       description: This property creates a circular reference in the `Pricing` schema. If you experience any issues with OpenAPI tools related to these circular references, you can try removing this property from the specification.
       title: PricingOriginalPricing
-    PricingItemOriginalPricingItem:
-      type: object
-      properties: {}
-      description: This property creates a circular reference in the `PricingItem` schema. If you experience any issues with OpenAPI tools related to these circular references, you can try removing this property from the specification.
-      title: PricingItemOriginalPricingItem
     MeterValueCalculationCommitment:
       type: object
       properties:
@@ -1413,13 +1332,6 @@ components:
           items:
             $ref: '#/components/schemas/MeterPropertySplitPricing'
       title: PricingItemConfigSplitPricing
-    CouponDurationCreateRequestType:
-      type: string
-      enum:
-      - ONE_TIME
-      - FOREVER
-      - PERIOD
-      title: CouponDurationCreateRequestType
     TaxRegistration:
       type: object
       properties:
@@ -1592,20 +1504,40 @@ components:
       - VERSION
       description: The type of the selector to determine pricing plan version (by default LATEST).
       title: PricingPlanVersionSelectorType
-    MeterStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - ARCHIVED
-      - DEPRECATED
-      description: The status of the meter indicating the activity of the meter and the ability to update properties.
-      title: MeterStatus
     SelectionRuleResourceField:
       type: string
       enum:
       - COUNTRY
       title: SelectionRuleResourceField
+    TotalDiscount:
+      type: object
+      properties:
+        start_at:
+          type:
+          - string
+          - 'null'
+        end_at:
+          type:
+          - string
+          - 'null'
+        amount:
+          $ref: '#/components/schemas/Amount'
+        percentage:
+          type:
+          - string
+          - 'null'
+        coupon_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type COUPON
+        promotion_code_details:
+          oneOf:
+          - $ref: '#/components/schemas/PromotionCodeDetails'
+          - type: 'null'
+        condition:
+          $ref: '#/components/schemas/DiscountCondition'
+      title: TotalDiscount
     PricingPlanScheduleInfo:
       type: object
       properties:
@@ -1646,35 +1578,15 @@ components:
           - boolean
           - 'null'
       title: PricingPlanScheduleInfo
-    TotalDiscount:
-      type: object
-      properties:
-        start_at:
-          type:
-          - string
-          - 'null'
-        end_at:
-          type:
-          - string
-          - 'null'
-        amount:
-          $ref: '#/components/schemas/Amount'
-        percentage:
-          type:
-          - string
-          - 'null'
-        coupon_id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type COUPON
-        promotion_code_details:
-          oneOf:
-          - $ref: '#/components/schemas/PromotionCodeDetails'
-          - type: 'null'
-        condition:
-          $ref: '#/components/schemas/DiscountCondition'
-      title: TotalDiscount
+    MeterStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the meter indicating the activity of the meter and the ability to update properties.
+      title: MeterStatus
     PricingPlanSubscriptionBillingCurrency:
       type: string
       enum:
@@ -1868,65 +1780,6 @@ components:
         store_id:
           type: string
       title: SystemOwnershipDetails
-    CouponCreateRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        name:
-          type: string
-        reference:
-          type: string
-        description:
-          type:
-          - string
-          - 'null'
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/CouponCreateRequestStatus'
-          - type: 'null'
-        discount:
-          $ref: '#/components/schemas/CouponDiscountCreateRequest'
-        duration:
-          $ref: '#/components/schemas/CouponDurationCreateRequest'
-        limited_to:
-          $ref: '#/components/schemas/CouponLimitedToCreateRequest'
-        start_at:
-          type:
-          - string
-          - 'null'
-        end_at:
-          type:
-          - string
-          - 'null'
-        maximum_redemptions:
-          type:
-          - integer
-          - 'null'
-        number_of_redemptions:
-          type:
-          - integer
-          - 'null'
-        created_at:
-          type:
-          - string
-          - 'null'
-        updated_at:
-          type:
-          - string
-          - 'null'
-      required:
-      - name
-      - reference
-      - discount
-      - duration
-      title: CouponCreateRequest
     MeterPropertyType:
       type: string
       enum:
@@ -1944,14 +1797,6 @@ components:
       - DEPRECATED
       description: The status of the meter value indicating the activity and the ability to update properties.
       title: MeterValueStatus
-    CouponDurationCreateRequest:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/CouponDurationCreateRequestType'
-        period:
-          $ref: '#/components/schemas/Period'
-      title: CouponDurationCreateRequest
     PricingPlanSubscriptionSelectorFilter:
       type: object
       properties:
@@ -2003,60 +1848,6 @@ components:
       - STRING
       description: The indication of the type of feature associated with the pricing plan.
       title: FeatureType
-    CouponUpdateRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        name:
-          type: string
-        reference:
-          type: string
-        description:
-          type:
-          - string
-          - 'null'
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/CouponUpdateRequestStatus'
-          - type: 'null'
-        discount:
-          $ref: '#/components/schemas/CouponDiscountUpdateRequest'
-        duration:
-          $ref: '#/components/schemas/CouponDurationUpdateRequest'
-        limited_to:
-          $ref: '#/components/schemas/CouponLimitedToUpdateRequest'
-        start_at:
-          type:
-          - string
-          - 'null'
-        end_at:
-          type:
-          - string
-          - 'null'
-        maximum_redemptions:
-          type:
-          - integer
-          - 'null'
-        number_of_redemptions:
-          type:
-          - integer
-          - 'null'
-        created_at:
-          type:
-          - string
-          - 'null'
-        updated_at:
-          type:
-          - string
-          - 'null'
-      title: CouponUpdateRequest
     PricingPlanSubscriptionStatus:
       type: string
       enum:
@@ -2067,16 +1858,6 @@ components:
       - CANCELLED
       description: The status of the subscription.
       title: PricingPlanSubscriptionStatus
-    ProductItemModelType:
-      type: string
-      enum:
-      - USAGE_BASED
-      - USAGE_BASED_CONVERSION
-      - RECURRING
-      - ONE_OFF
-      - PER_SEAT
-      - CREDITS
-      title: ProductItemModelType
     Customer:
       type: object
       properties:
@@ -2216,6 +1997,64 @@ components:
       - REPORT_SUBSCRIPTION
       - REPORT_CONFIGURATION
       title: SelectionRuleResourceType
+    PromotionCode:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        code_format:
+          type: string
+        code:
+          type: string
+        coupon_id:
+          type: string
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/PromotionCodeStatus'
+          - type: 'null'
+        limited_to:
+          $ref: '#/components/schemas/PromotionCodeLimitedTo'
+        start_at:
+          type:
+          - string
+          - 'null'
+        end_at:
+          type:
+          - string
+          - 'null'
+        maximum_redemptions:
+          type:
+          - integer
+          - 'null'
+        number_of_redemptions:
+          type:
+          - integer
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        updated_at:
+          type:
+          - string
+          - 'null'
+      title: PromotionCode
+    ProductItemModelType:
+      type: string
+      enum:
+      - USAGE_BASED
+      - USAGE_BASED_CONVERSION
+      - RECURRING
+      - ONE_OFF
+      - PER_SEAT
+      - CREDITS
+      title: ProductItemModelType
     PricingPlanVersion:
       type: object
       properties:
@@ -2270,30 +2109,6 @@ components:
         rate_card:
           $ref: '#/components/schemas/RateCard'
       title: PricingPlanVersion
-    USLocal:
-      type: object
-      properties:
-        account_number:
-          type:
-          - string
-          - 'null'
-          description: A bank account number if IBAN is not used, e.g a USA or UK bank account number
-        account_type:
-          oneOf:
-          - $ref: '#/components/schemas/UsLocalAccountType'
-          - type: 'null'
-          description: The bank account type.
-        bank_code:
-          type:
-          - string
-          - 'null'
-          description: A bank code that's used to identify the bank that this account belongs to
-        routing_number:
-          type:
-          - string
-          - 'null'
-          description: The 9-digit code that identifies a specific financial institution for transactions in the USA.
-      title: USLocal
     Pricing:
       type: object
       properties:
@@ -2368,14 +2183,37 @@ components:
           items:
             $ref: '#/components/schemas/PricingItem'
       title: Pricing
-    CouponDurationUpdateRequest:
+    USLocal:
       type: object
       properties:
-        type:
-          $ref: '#/components/schemas/CouponDurationUpdateRequestType'
-        period:
-          $ref: '#/components/schemas/Period'
-      title: CouponDurationUpdateRequest
+        account_number:
+          type:
+          - string
+          - 'null'
+          description: A bank account number if IBAN is not used, e.g a USA or UK bank account number
+        account_type:
+          oneOf:
+          - $ref: '#/components/schemas/UsLocalAccountType'
+          - type: 'null'
+          description: The bank account type.
+        bank_code:
+          type:
+          - string
+          - 'null'
+          description: A bank code that's used to identify the bank that this account belongs to
+        routing_number:
+          type:
+          - string
+          - 'null'
+          description: The 9-digit code that identifies a specific financial institution for transactions in the USA.
+      title: USLocal
+    PricingPlanAmountType:
+      type: string
+      enum:
+      - EXCLUDING_TAX
+      - INCLUDING_TAX
+      description: Set to determine whether the pricings in this pricing plan are including or excluding tax. The default, if left empty, is excluding tax.
+      title: PricingPlanAmountType
     MeterConditions:
       type: object
       properties:
@@ -2392,13 +2230,6 @@ components:
         expression:
           $ref: '#/components/schemas/MeterConditionExpression'
       title: MeterConditions
-    PricingPlanAmountType:
-      type: string
-      enum:
-      - EXCLUDING_TAX
-      - INCLUDING_TAX
-      description: Set to determine whether the pricings in this pricing plan are including or excluding tax. The default, if left empty, is excluding tax.
-      title: PricingPlanAmountType
     IntegrationLinkDetail:
       type: object
       properties:
@@ -2417,13 +2248,6 @@ components:
           items:
             $ref: '#/components/schemas/PricingItemConfigMarkup'
       title: Markup
-    CouponDurationType:
-      type: string
-      enum:
-      - ONE_TIME
-      - FOREVER
-      - PERIOD
-      title: CouponDurationType
     AdyenAutoRescue:
       type: object
       properties:
@@ -2566,13 +2390,6 @@ components:
           - boolean
           - 'null'
       title: MeterMeterProperty
-    CouponDiscountUpdateRequestType:
-      type: string
-      enum:
-      - PERCENTAGE
-      - AMOUNT
-      - USAGE
-      title: CouponDiscountUpdateRequestType
     PaymentAcceptorType:
       type: string
       enum:
@@ -2580,12 +2397,6 @@ components:
       - PAYMENT_GATEWAY
       - CUSTOM_REDIRECT
       title: PaymentAcceptorType
-    PricingOverride:
-      type: string
-      enum:
-      - ALL
-      - SPECIFIC
-      title: PricingOverride
     BalancePlatformDetails:
       type: object
       properties:
@@ -2594,6 +2405,12 @@ components:
         authentication:
           $ref: '#/components/schemas/AuthenticationSettings'
       title: BalancePlatformDetails
+    PricingOverride:
+      type: string
+      enum:
+      - ALL
+      - SPECIFIC
+      title: PricingOverride
     LegalEntityManagerDetails:
       type: object
       properties:
@@ -2858,6 +2675,22 @@ components:
           - string
           - 'null'
       title: PaginationLinks
+    PromotionCodeLimitedTo:
+      type: object
+      properties:
+        customer_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        customers:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Customer'
+      title: PromotionCodeLimitedTo
     PricingItemConfigDiscount:
       type: object
       properties:
@@ -2903,46 +2736,6 @@ components:
         period:
           $ref: '#/components/schemas/Period'
       title: DueDate
-    CouponLimitedToUpdateRequest:
-      type: object
-      properties:
-        product_category_ids:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-        product_ids:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-        product_item_ids:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-        product_categories:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ProductCategory'
-        products:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Product'
-        product_items:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ProductItem'
-      title: CouponLimitedToUpdateRequest
     Individual:
       type: object
       properties:
@@ -3390,13 +3183,6 @@ components:
           items:
             $ref: '#/components/schemas/BillingPeriodOption'
       title: BillingPeriodSettings
-    CouponDiscountType:
-      type: string
-      enum:
-      - PERCENTAGE
-      - AMOUNT
-      - USAGE
-      title: CouponDiscountType
     IntegrationLinkedResourceConfiguration:
       type: object
       properties:
@@ -3475,10 +3261,6 @@ components:
         username_password:
           $ref: '#/components/schemas/UsernamePassword'
       title: AuthenticationSettings
-    PricingItemConfigConditionsConfigsItems:
-      type: object
-      properties: {}
-      title: PricingItemConfigConditionsConfigsItems
     PricingItemConfigWalletGrant:
       type: object
       properties:
@@ -3496,6 +3278,10 @@ components:
         expiry_policy:
           $ref: '#/components/schemas/PricingItemConfigWalletGrantExpiryPolicy'
       title: PricingItemConfigWalletGrant
+    PricingItemConfigConditionsConfigsItems:
+      type: object
+      properties: {}
+      title: PricingItemConfigConditionsConfigsItems
     S3:
       type: object
       properties:
@@ -3818,15 +3604,6 @@ components:
           - 'null'
           description: Whether localized email templates should be selected based on customer or request locale when available.
       title: EmailProviderIntegration
-    CouponUpdateRequestStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - INACTIVE
-      - DEPRECATED
-      - ARCHIVED
-      title: CouponUpdateRequestStatus
     UKLocal:
       type: object
       properties:
@@ -3840,19 +3617,6 @@ components:
           - string
           - 'null'
       title: UKLocal
-    CouponDiscountUsage:
-      type: object
-      properties:
-        meter_value_id:
-          type: string
-          description: Resource ID of type METER_VALUE
-        number:
-          type:
-          - string
-          - 'null'
-        amount:
-          $ref: '#/components/schemas/Amount'
-      title: CouponDiscountUsage
     IntegrationDetails:
       type: object
       properties:
@@ -3871,6 +3635,12 @@ components:
         stripe:
           $ref: '#/components/schemas/StripeIntegrationDetails'
       title: IntegrationDetails
+    PricingPlanVariant:
+      type: string
+      enum:
+      - DEFAULT
+      - RATE_CARD
+      title: PricingPlanVariant
     ProductItemCredits:
       type: object
       properties:
@@ -3884,12 +3654,6 @@ components:
           - $ref: '#/components/schemas/CreditType'
           - type: 'null'
       title: ProductItemCredits
-    PricingPlanVariant:
-      type: string
-      enum:
-      - DEFAULT
-      - RATE_CARD
-      title: PricingPlanVariant
     InactivePeriodType:
       type: string
       enum:
@@ -4926,22 +4690,6 @@ components:
       - MAILGUN
       description: The variant of email provider integration.
       title: EmailProviderIntegrationVariant
-    CouponDiscount:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/CouponDiscountType'
-        percentage:
-          type:
-          - string
-          - 'null'
-        amount:
-          $ref: '#/components/schemas/Amount'
-        usage:
-          $ref: '#/components/schemas/CouponDiscountUsage'
-        condition:
-          $ref: '#/components/schemas/DiscountCondition'
-      title: CouponDiscount
     PricingItemConfigMeterValueIncludedVolume:
       type: object
       properties:
@@ -5004,6 +4752,16 @@ components:
         adyen:
           $ref: '#/components/schemas/PaymentGatewayPaymentAcceptorAdyen'
       title: PaymentGatewayPaymentAcceptor
+    Period:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/PeriodType'
+        value:
+          type:
+          - integer
+          - 'null'
+      title: Period
     MeterPropertyConditionComparator:
       type: string
       enum:
@@ -5020,29 +4778,12 @@ components:
       - CONTAINS
       - NOT_CONTAINS
       title: MeterPropertyConditionComparator
-    Period:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/PeriodType'
-        value:
-          type:
-          - integer
-          - 'null'
-      title: Period
     PaymentGatewayPaymentAcceptorLink:
       type: object
       properties:
         expiry_period:
           $ref: '#/components/schemas/Period'
       title: PaymentGatewayPaymentAcceptorLink
-    CouponDurationUpdateRequestType:
-      type: string
-      enum:
-      - ONE_TIME
-      - FOREVER
-      - PERIOD
-      title: CouponDurationUpdateRequestType
     Gcs:
       type: object
       properties:
@@ -5061,31 +4802,6 @@ components:
       - INVOICE
       description: The notification type to configure.
       title: NotificationPreferenceType
-    CouponResponseWrapper:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Coupon'
-        limit:
-          type:
-          - integer
-          - 'null'
-        page:
-          type:
-          - integer
-          - 'null'
-        total_number_of_pages:
-          type:
-          - integer
-          - 'null'
-        links:
-          $ref: '#/components/schemas/PaginationLinks'
-      required:
-      - data
-      - links
-      title: CouponResponseWrapper
     Amount:
       type: object
       properties:
@@ -5094,14 +4810,16 @@ components:
         currency:
           $ref: '#/components/schemas/AmountCurrency'
       title: Amount
-    ProductTaxCategory:
-      type: string
-      enum:
-      - STANDARD
-      - NO_TAX
-      - EXEMPT
-      description: The default tax category applied to the product.
-      title: ProductTaxCategory
+    PricingItemConfigWalletGrantCreditsGrant:
+      type: object
+      properties:
+        credits:
+          $ref: '#/components/schemas/Credits'
+        conversion:
+          type:
+          - string
+          - 'null'
+      title: PricingItemConfigWalletGrantCreditsGrant
     Product:
       type: object
       properties:
@@ -5179,16 +4897,14 @@ components:
           - string
           - 'null'
       title: Product
-    PricingItemConfigWalletGrantCreditsGrant:
-      type: object
-      properties:
-        credits:
-          $ref: '#/components/schemas/Credits'
-        conversion:
-          type:
-          - string
-          - 'null'
-      title: PricingItemConfigWalletGrantCreditsGrant
+    ProductTaxCategory:
+      type: string
+      enum:
+      - STANDARD
+      - NO_TAX
+      - EXEMPT
+      description: The default tax category applied to the product.
+      title: ProductTaxCategory
     StripeIntegrationDetails:
       type: object
       properties:
@@ -5302,6 +5018,15 @@ components:
       - BILLING_ENTITY_REGISTERED_ADDRESS_COUNTRY
       - PRICING_PLAN_REFERENCE
       title: PricingPlanSubscriptionSelectorRuleField
+    PromotionCodeStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - INACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      title: PromotionCodeStatus
     PromotionCodeDetails:
       type: object
       properties:
@@ -5568,14 +5293,6 @@ components:
       - PRODUCT_FALLBACK
       description: The field to use a custom code for
       title: CustomTaxCodeField
-    CouponDuration:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/CouponDurationType'
-        period:
-          $ref: '#/components/schemas/Period'
-      title: CouponDuration
     EInvoicingConditionComparatorType:
       type: string
       enum:
@@ -5592,58 +5309,6 @@ components:
       - CONTAINS
       - NOT_CONTAINS
       title: EInvoicingConditionComparatorType
-    CustomerStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - ARCHIVED
-      - DEPRECATED
-      - CLOSED
-      title: CustomerStatus
-    Feature:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        reference:
-          type: string
-        name:
-          type:
-          - string
-          - 'null'
-        description:
-          type:
-          - string
-          - 'null'
-        type:
-          oneOf:
-          - $ref: '#/components/schemas/FeatureType'
-          - type: 'null'
-          description: The indication of the type of feature associated with the pricing plan.
-        enum_values:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: If the feature type is ENUM, these fields provide additional information on the values used.
-        meter_value_calculation_id:
-          type:
-          - string
-          - 'null'
-          description: The linked meter value calculation
-        meter_value_calculation:
-          oneOf:
-          - $ref: '#/components/schemas/MeterValueCalculation'
-          - type: 'null'
-      title: Feature
     BankAccount:
       type: object
       properties:
@@ -5705,6 +5370,58 @@ components:
         mx_local:
           $ref: '#/components/schemas/MXLocal'
       title: BankAccount
+    CustomerStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      - CLOSED
+      title: CustomerStatus
+    Feature:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/FeatureType'
+          - type: 'null'
+          description: The indication of the type of feature associated with the pricing plan.
+        enum_values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: If the feature type is ENUM, these fields provide additional information on the values used.
+        meter_value_calculation_id:
+          type:
+          - string
+          - 'null'
+          description: The linked meter value calculation
+        meter_value_calculation:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueCalculation'
+          - type: 'null'
+      title: Feature
     ProductCategoryDiscount:
       type: object
       properties:
@@ -5838,6 +5555,33 @@ components:
             $ref: '#/components/schemas/CustomFieldValue'
           description: Custom fields associated to this pricing plan
       title: PricingPlan
+    PricingDiscount:
+      type: object
+      properties:
+        ids:
+          type: array
+          items:
+            type: string
+          description: Resource ID of type PRICING
+        start_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        end_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        amount:
+          $ref: '#/components/schemas/Amount'
+        percentage:
+          type:
+          - string
+          - 'null'
+        condition:
+          $ref: '#/components/schemas/DiscountCondition'
+      title: PricingDiscount
     ProductItemUsageBased:
       type: object
       properties:
@@ -5870,33 +5614,6 @@ components:
           $ref: '#/components/schemas/MeterConditions'
           description: Optional conditions.
       title: ProductItemUsageBased
-    PricingDiscount:
-      type: object
-      properties:
-        ids:
-          type: array
-          items:
-            type: string
-          description: Resource ID of type PRICING
-        start_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        end_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        amount:
-          $ref: '#/components/schemas/Amount'
-        percentage:
-          type:
-          - string
-          - 'null'
-        condition:
-          $ref: '#/components/schemas/DiscountCondition'
-      title: PricingDiscount
     ProductStatus:
       type: string
       enum:
@@ -5964,22 +5681,6 @@ components:
         processor:
           $ref: '#/components/schemas/EInvoicingIntegrationProcessor'
       title: EInvoicingIntegration
-    CouponDiscountCreateRequest:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/CouponDiscountCreateRequestType'
-        percentage:
-          type:
-          - string
-          - 'null'
-        amount:
-          $ref: '#/components/schemas/Amount'
-        usage:
-          $ref: '#/components/schemas/CouponDiscountUsage'
-        condition:
-          $ref: '#/components/schemas/DiscountCondition'
-      title: CouponDiscountCreateRequest
     LinkedIntegration:
       type: object
       properties:
@@ -6313,6 +6014,31 @@ components:
         comparator:
           $ref: '#/components/schemas/MeterPropertyConditionComparator'
       title: MeterPropertyCondition
+    PromotionCodeResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PromotionCode'
+        limit:
+          type:
+          - integer
+          - 'null'
+        page:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      - links
+      title: PromotionCodeResponseWrapper
     MeterValueType:
       type: string
       enum:
@@ -6364,13 +6090,6 @@ components:
       - EU
       description: Mailgun region for the configured domain.
       title: MailgunEmailProviderRegion
-    CouponDiscountCreateRequestType:
-      type: string
-      enum:
-      - PERCENTAGE
-      - AMOUNT
-      - USAGE
-      title: CouponDiscountCreateRequestType
     PricingItemConfigWalletGrantExpiryPolicy:
       type: object
       properties:
@@ -6653,6 +6372,15 @@ components:
       - ZM
       - ZW
       title: BillingEntityDefaultCustomerCountrySelectorItems
+    PromotionCodeCreateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - INACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      title: PromotionCodeCreateRequestStatus
     BigQuery:
       type: object
       properties:
@@ -6998,22 +6726,6 @@ components:
       - ZMW
       - ZWL
       title: PricingItemPricingCurrencyConfigCurrency
-    CouponDiscountUpdateRequest:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/CouponDiscountUpdateRequestType'
-        percentage:
-          type:
-          - string
-          - 'null'
-        amount:
-          $ref: '#/components/schemas/Amount'
-        usage:
-          $ref: '#/components/schemas/CouponDiscountUsage'
-        condition:
-          $ref: '#/components/schemas/DiscountCondition'
-      title: CouponDiscountUpdateRequest
     EInvoicingConditionGroup:
       type: object
       properties:
@@ -7081,15 +6793,6 @@ components:
         type:
           $ref: '#/components/schemas/PricingPlanSubscriptionSelectorRuleType'
       title: PricingPlanSubscriptionSelectorRule
-    CouponCreateRequestStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - INACTIVE
-      - DEPRECATED
-      - ARCHIVED
-      title: CouponCreateRequestStatus
     PricingItemBillingPeriodConfig:
       type: object
       properties:
@@ -7267,66 +6970,12 @@ components:
       - NONE
       description: The fallback logic what to do when no subscription is found. By default it is LATEST
       title: PricingPlanSubscriptionSelectorFallback
-    DiscountConditionValue:
-      type: object
-      properties:
-        amount:
-          $ref: '#/components/schemas/Amount'
-      title: DiscountConditionValue
-    CouponLimitedTo:
-      type: object
-      properties:
-        product_category_ids:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-        product_ids:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-        product_item_ids:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-        product_categories:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ProductCategory'
-        products:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Product'
-        product_items:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ProductItem'
-      title: CouponLimitedTo
     PricingPlanType:
       type: string
       enum:
       - STANDARD
       - CUSTOM
       title: PricingPlanType
-    DiscountCondition:
-      type: object
-      properties:
-        comparator:
-          $ref: '#/components/schemas/DiscountConditionComparator'
-        value:
-          $ref: '#/components/schemas/DiscountConditionValue'
-      title: DiscountCondition
     SelectionRuleResourceComparator:
       type: string
       enum:
@@ -7343,6 +6992,20 @@ components:
       - CONTAINS
       - NOT_CONTAINS
       title: SelectionRuleResourceComparator
+    DiscountConditionValue:
+      type: object
+      properties:
+        amount:
+          $ref: '#/components/schemas/Amount'
+      title: DiscountConditionValue
+    DiscountCondition:
+      type: object
+      properties:
+        comparator:
+          $ref: '#/components/schemas/DiscountConditionComparator'
+        value:
+          $ref: '#/components/schemas/DiscountConditionValue'
+      title: DiscountCondition
     PricingItemConfigTopUp:
       type: object
       properties:
@@ -7351,6 +7014,22 @@ components:
           - boolean
           - 'null'
       title: PricingItemConfigTopUp
+    PromotionCodeLimitedToCreateRequest:
+      type: object
+      properties:
+        customer_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        customers:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Customer'
+      title: PromotionCodeLimitedToCreateRequest
     PricingGroupSelectionConstraint:
       type: string
       enum:
@@ -7447,46 +7126,6 @@ components:
       - API_ERROR
       - INVALID_REQUEST
       title: ApiErrorType
-    CouponLimitedToCreateRequest:
-      type: object
-      properties:
-        product_category_ids:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-        product_ids:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-        product_item_ids:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-        product_categories:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ProductCategory'
-        products:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Product'
-        product_items:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ProductItem'
-      title: CouponLimitedToCreateRequest
     PricingPlanSubscriptionSelectorRuleType:
       type: string
       enum:
@@ -7503,12 +7142,6 @@ components:
       - CONTAINS
       - NOT_CONTAINS
       title: PricingPlanSubscriptionSelectorRuleType
-    PricingPlanSubscriptionSelectorDataField:
-      type: string
-      enum:
-      - BILLING_ENTITY_REGISTERED_ADDRESS_COUNTRY
-      - PRICING_PLAN_REFERENCE
-      title: PricingPlanSubscriptionSelectorDataField
     ProductDiscount:
       type: object
       properties:
@@ -7543,28 +7176,7 @@ components:
         condition:
           $ref: '#/components/schemas/DiscountCondition'
       title: ProductDiscount
-    MeterPropertySplitPricing:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type METER_PROPERTY
-        reference:
-          type:
-          - string
-          - 'null'
-        value:
-          type:
-          - string
-          - 'null'
-        meter_property:
-          oneOf:
-          - $ref: '#/components/schemas/MeterProperty'
-          - type: 'null'
-      title: MeterPropertySplitPricing
-    Coupon:
+    PromotionCodeCreateRequest:
       type: object
       properties:
         object_type:
@@ -7575,24 +7187,18 @@ components:
           type:
           - string
           - 'null'
-        name:
+        code_format:
           type: string
-        reference:
+        code:
           type: string
-        description:
-          type:
-          - string
-          - 'null'
+        coupon_id:
+          type: string
         status:
           oneOf:
-          - $ref: '#/components/schemas/CouponStatus'
+          - $ref: '#/components/schemas/PromotionCodeCreateRequestStatus'
           - type: 'null'
-        discount:
-          $ref: '#/components/schemas/CouponDiscount'
-        duration:
-          $ref: '#/components/schemas/CouponDuration'
         limited_to:
-          $ref: '#/components/schemas/CouponLimitedTo'
+          $ref: '#/components/schemas/PromotionCodeLimitedToCreateRequest'
         start_at:
           type:
           - string
@@ -7617,7 +7223,36 @@ components:
           type:
           - string
           - 'null'
-      title: Coupon
+      required:
+      - coupon_id
+      title: PromotionCodeCreateRequest
+    PricingPlanSubscriptionSelectorDataField:
+      type: string
+      enum:
+      - BILLING_ENTITY_REGISTERED_ADDRESS_COUNTRY
+      - PRICING_PLAN_REFERENCE
+      title: PricingPlanSubscriptionSelectorDataField
+    MeterPropertySplitPricing:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type METER_PROPERTY
+        reference:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+        meter_property:
+          oneOf:
+          - $ref: '#/components/schemas/MeterProperty'
+          - type: 'null'
+      title: MeterPropertySplitPricing
     ApiErrorResourceType:
       type: string
       enum:
@@ -7772,10 +7407,6 @@ components:
           - type: 'null'
           description: The fallback logic what to do when no subscription is found. By default it is LATEST
       title: PricingPlanSubscriptionSelector
-    MeterConditionOperandExpression:
-      type: object
-      properties: {}
-      title: MeterConditionOperandExpression
     PricingItemConfigBand:
       type: object
       properties:
@@ -7806,6 +7437,10 @@ components:
         tier_top_bound:
           $ref: '#/components/schemas/PricingItemConfigMeterValue'
       title: PricingItemConfigBand
+    MeterConditionOperandExpression:
+      type: object
+      properties: {}
+      title: MeterConditionOperandExpression
     SelectionRule:
       type: object
       properties:

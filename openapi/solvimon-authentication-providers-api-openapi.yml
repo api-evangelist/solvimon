@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Configuration alertRules authenticationProviders API
+  title: Identity Authentication Providers API
   version: 1.0.0
 servers:
 - url: https://test.api.solvimon.com
@@ -8,14 +8,14 @@ servers:
 - url: https://api.solvimon.com
   description: The live environment for our API
 tags:
-- name: authenticationProviders
+- name: Authentication Providers
 paths:
   /v{version}/authentication-providers/enabled:
     post:
       operationId: postAuthenticationProvidersEnabled
-      summary: Retrieve a list of enabled authentication providers that can be used to activate an invited user.
+      summary: Retrieve a list of enabled authentication providers that can be used to…
       tags:
-      - authenticationProviders
+      - Authentication Providers
       parameters:
       - name: version
         in: path
@@ -47,7 +47,7 @@ paths:
       operationId: getAuthenticationProviders
       summary: Retrieve a list of configured authentication providers
       tags:
-      - authenticationProviders
+      - Authentication Providers
       parameters:
       - name: version
         in: path
@@ -120,7 +120,7 @@ paths:
       operationId: postAuthenticationProviders
       summary: Create a authentication provider configuration
       tags:
-      - authenticationProviders
+      - Authentication Providers
       parameters:
       - name: version
         in: path
@@ -181,7 +181,7 @@ paths:
       operationId: getAuthenticationProvidersByResourceId
       summary: Get authentication provider by ID
       tags:
-      - authenticationProviders
+      - Authentication Providers
       parameters:
       - name: version
         in: path
@@ -243,7 +243,7 @@ paths:
       operationId: patchAuthenticationProvidersByResourceId
       summary: Get authentication provider by ID
       tags:
-      - authenticationProviders
+      - Authentication Providers
       parameters:
       - name: version
         in: path
@@ -308,51 +308,11 @@ paths:
               $ref: '#/components/schemas/AuthenticationProviderUpdateRequest'
 components:
   schemas:
-    AuthenticationProviderRequestCreateRequest:
-      type: object
-      properties:
-        token:
-          type: string
-        email:
-          type: string
-      title: AuthenticationProviderRequestCreateRequest
-    SsoVariantCreateRequestVariant:
-      type: string
-      enum:
-      - GOOGLE
-      - OKTA
-      - MICROSOFT
-      title: SsoVariantCreateRequestVariant
-    AuthenticationProviderCreateRequestStatus:
-      type: string
-      enum:
-      - ENABLED
-      - DISABLED
-      title: AuthenticationProviderCreateRequestStatus
-    SsoVariantUpdateRequestVariant:
-      type: string
-      enum:
-      - GOOGLE
-      - OKTA
-      - MICROSOFT
-      title: SsoVariantUpdateRequestVariant
-    AuthenticationProviderStatus:
-      type: string
-      enum:
-      - ENABLED
-      - DISABLED
-      title: AuthenticationProviderStatus
-    AuthenticationProviderUpdateRequestStatus:
-      type: string
-      enum:
-      - ENABLED
-      - DISABLED
-      title: AuthenticationProviderUpdateRequestStatus
-    SSOVariant:
+    SSOVariantCreateRequest:
       type: object
       properties:
         variant:
-          $ref: '#/components/schemas/SsoVariantVariant'
+          $ref: '#/components/schemas/SsoVariantCreateRequestVariant'
         allowed_domains:
           type: array
           items:
@@ -361,8 +321,8 @@ components:
           $ref: '#/components/schemas/SSOAuthenticationProviderVariantSettings'
         microsoft:
           $ref: '#/components/schemas/SSOAuthenticationProviderVariantSettings'
-      title: SSOVariant
-    AuthenticationProviderUpdateRequest:
+      title: SSOVariantCreateRequest
+    AuthenticationProviderCreateRequest:
       type: object
       properties:
         id:
@@ -374,34 +334,74 @@ components:
           - string
           - 'null'
         type:
-          $ref: '#/components/schemas/AuthenticationProviderUpdateRequestType'
+          $ref: '#/components/schemas/AuthenticationProviderCreateRequestType'
         name:
           type: string
         status:
-          $ref: '#/components/schemas/AuthenticationProviderUpdateRequestStatus'
+          $ref: '#/components/schemas/AuthenticationProviderCreateRequestStatus'
         sso:
-          $ref: '#/components/schemas/SSOVariantUpdateRequest'
-      title: AuthenticationProviderUpdateRequest
-    AuthenticationProviderCreateRequestType:
+          $ref: '#/components/schemas/SSOVariantCreateRequest'
+      required:
+      - type
+      title: AuthenticationProviderCreateRequest
+    AuthenticationProviderCreateRequestStatus:
       type: string
       enum:
-      - DEFAULT
-      - SSO
-      title: AuthenticationProviderCreateRequestType
-    SSOVariantUpdateRequest:
-      type: object
-      properties:
-        variant:
-          $ref: '#/components/schemas/SsoVariantUpdateRequestVariant'
-        allowed_domains:
-          type: array
-          items:
-            type: string
-        okta:
-          $ref: '#/components/schemas/SSOAuthenticationProviderVariantSettings'
-        microsoft:
-          $ref: '#/components/schemas/SSOAuthenticationProviderVariantSettings'
-      title: SSOVariantUpdateRequest
+      - ENABLED
+      - DISABLED
+      title: AuthenticationProviderCreateRequestStatus
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    SsoVariantCreateRequestVariant:
+      type: string
+      enum:
+      - GOOGLE
+      - OKTA
+      - MICROSOFT
+      title: SsoVariantCreateRequestVariant
+    AuthenticationProviderUpdateRequestStatus:
+      type: string
+      enum:
+      - ENABLED
+      - DISABLED
+      title: AuthenticationProviderUpdateRequestStatus
     AuthenticationProviderResponseWrapper:
       type: object
       properties:
@@ -427,40 +427,26 @@ components:
       - data
       - links
       title: AuthenticationProviderResponseWrapper
-    AuthenticationProviderCreateRequest:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-        entity_id:
-          type:
-          - string
-          - 'null'
-        type:
-          $ref: '#/components/schemas/AuthenticationProviderCreateRequestType'
-        name:
-          type: string
-        status:
-          $ref: '#/components/schemas/AuthenticationProviderCreateRequestStatus'
-        sso:
-          $ref: '#/components/schemas/SSOVariantCreateRequest'
-      required:
-      - type
-      title: AuthenticationProviderCreateRequest
-    AuthenticationProviderType:
+    AuthenticationProviderUpdateRequestType:
       type: string
       enum:
       - DEFAULT
       - SSO
-      title: AuthenticationProviderType
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
+      title: AuthenticationProviderUpdateRequestType
+    SSOVariantUpdateRequest:
+      type: object
+      properties:
+        variant:
+          $ref: '#/components/schemas/SsoVariantUpdateRequestVariant'
+        allowed_domains:
+          type: array
+          items:
+            type: string
+        okta:
+          $ref: '#/components/schemas/SSOAuthenticationProviderVariantSettings'
+        microsoft:
+          $ref: '#/components/schemas/SSOAuthenticationProviderVariantSettings'
+      title: SSOVariantUpdateRequest
     ApiError:
       type: object
       properties:
@@ -487,6 +473,47 @@ components:
       - code
       - message
       title: ApiError
+    SSOVariant:
+      type: object
+      properties:
+        variant:
+          $ref: '#/components/schemas/SsoVariantVariant'
+        allowed_domains:
+          type: array
+          items:
+            type: string
+        okta:
+          $ref: '#/components/schemas/SSOAuthenticationProviderVariantSettings'
+        microsoft:
+          $ref: '#/components/schemas/SSOAuthenticationProviderVariantSettings'
+      title: SSOVariant
+    AuthenticationProviderRequestCreateRequest:
+      type: object
+      properties:
+        token:
+          type: string
+        email:
+          type: string
+      title: AuthenticationProviderRequestCreateRequest
+    AuthenticationProviderStatus:
+      type: string
+      enum:
+      - ENABLED
+      - DISABLED
+      title: AuthenticationProviderStatus
+    SSOAuthenticationProviderVariantSettings:
+      type: object
+      properties:
+        connection:
+          type: string
+      title: SSOAuthenticationProviderVariantSettings
+    SsoVariantUpdateRequestVariant:
+      type: string
+      enum:
+      - GOOGLE
+      - OKTA
+      - MICROSOFT
+      title: SsoVariantUpdateRequestVariant
     AuthenticationProvider:
       type: object
       properties:
@@ -507,6 +534,31 @@ components:
         sso:
           $ref: '#/components/schemas/SSOVariant'
       title: AuthenticationProvider
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    AuthenticationProviderType:
+      type: string
+      enum:
+      - DEFAULT
+      - SSO
+      title: AuthenticationProviderType
+    AuthenticationProviderCreateRequestType:
+      type: string
+      enum:
+      - DEFAULT
+      - SSO
+      title: AuthenticationProviderCreateRequestType
+    SsoVariantVariant:
+      type: string
+      enum:
+      - GOOGLE
+      - OKTA
+      - MICROSOFT
+      title: SsoVariantVariant
     ApiErrorResourceType:
       type: string
       enum:
@@ -596,58 +648,26 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
-    SsoVariantVariant:
-      type: string
-      enum:
-      - GOOGLE
-      - OKTA
-      - MICROSOFT
-      title: SsoVariantVariant
-    AuthenticationProviderUpdateRequestType:
-      type: string
-      enum:
-      - DEFAULT
-      - SSO
-      title: AuthenticationProviderUpdateRequestType
-    ApiErrorCode:
-      type: string
-      enum:
-      - RESOURCE_NOT_FOUND
-      - RESOURCES_NOT_FOUND
-      - UNABLE_TO_PROCESS_INSTRUCTIONS
-      - BAD_REQUEST
-      - UNSUPPORTED_MEDIA_TYPE
-      - RESOURCE_ALREADY_EXISTS
-      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
-      - COULD_NOT_CREATE_RESOURCE
-      - COULD_NOT_UPDATE_RESOURCE
-      - COULD_NOT_DELETE_RESOURCE
-      - MISSING_VERSION
-      - UNSUPPORTED_VERSION
-      - UNAUTHORISED
-      - CUSTOMER_NOT_FOUND
-      - PLATFORM_NOT_FOUND
-      - PRICING_PLAN_NOT_FOUND
-      - PRODUCT_NOT_FOUND
-      - PRODUCT_ITEM_NOT_FOUND
-      - PRICING_NOT_FOUND
-      - PRICING_ITEM_NOT_FOUND
-      - USER_NOT_FOUND
-      - METER_NOT_FOUND
-      - METER_VALUE_NOT_FOUND
-      - METER_PROPERTY_NOT_FOUND
-      - PRICING_ITEM_SUMMARIES_NOT_FOUND
-      - MISSING_ID
-      - INVALID_ID
-      - MISSING_REFERENCE
-      - MISSING_FIELD
-      - INVALID_FIELD
-      - INVALID_OPERATION
-      - INTERNAL_ERROR
-      - USER_NOT_ALLOWED
-      - IDEMPOTENCY_CHECK_FAILED
-      - INVALID_REQUEST
-      title: ApiErrorCode
+    AuthenticationProviderUpdateRequest:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        entity_id:
+          type:
+          - string
+          - 'null'
+        type:
+          $ref: '#/components/schemas/AuthenticationProviderUpdateRequestType'
+        name:
+          type: string
+        status:
+          $ref: '#/components/schemas/AuthenticationProviderUpdateRequestStatus'
+        sso:
+          $ref: '#/components/schemas/SSOVariantUpdateRequest'
+      title: AuthenticationProviderUpdateRequest
     PaginationLinks:
       type: object
       properties:
@@ -668,26 +688,6 @@ components:
           - string
           - 'null'
       title: PaginationLinks
-    SSOAuthenticationProviderVariantSettings:
-      type: object
-      properties:
-        connection:
-          type: string
-      title: SSOAuthenticationProviderVariantSettings
-    SSOVariantCreateRequest:
-      type: object
-      properties:
-        variant:
-          $ref: '#/components/schemas/SsoVariantCreateRequestVariant'
-        allowed_domains:
-          type: array
-          items:
-            type: string
-        okta:
-          $ref: '#/components/schemas/SSOAuthenticationProviderVariantSettings'
-        microsoft:
-          $ref: '#/components/schemas/SSOAuthenticationProviderVariantSettings'
-      title: SSOVariantCreateRequest
   securitySchemes:
     API-Key:
       type: apiKey

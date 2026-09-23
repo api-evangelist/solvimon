@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Configuration alertRules walletTypes API
+  title: Configuration Wallet Types API
   version: 1.0.0
 servers:
 - url: https://test.api.solvimon.com
@@ -514,12 +514,37 @@ paths:
                 $ref: '#/components/schemas/ApiError'
 components:
   schemas:
-    WalletTypeType:
+    WalletTypeResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/WalletType'
+        limit:
+          type:
+          - integer
+          - 'null'
+        page:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      - links
+      title: WalletTypeResponseWrapper
+    WalletTypeCreditUpdateRequestGrantType:
       type: string
       enum:
-      - CREDIT
-      - BALANCE
-      title: WalletTypeType
+      - CREDITS
+      - AMOUNT
+      title: WalletTypeCreditUpdateRequestGrantType
     WalletTypeBalance:
       type: object
       properties:
@@ -527,112 +552,15 @@ components:
           type: string
           description: The default currency for the wallet.
       title: WalletTypeBalance
-    WalletTypeCreditUpdateRequestGrantType:
+    WalletTypeCreateRequestStatus:
       type: string
       enum:
-      - CREDITS
-      - AMOUNT
-      title: WalletTypeCreditUpdateRequestGrantType
-    WalletTypeCreditCreditsGrant:
-      type: object
-      properties:
-        credit_type_id:
-          type: string
-          description: The credit type for wallets of wallet type.
-      title: WalletTypeCreditCreditsGrant
-    WalletTypeCreditCreateRequest:
-      type: object
-      properties:
-        grant_type:
-          $ref: '#/components/schemas/WalletTypeCreditCreateRequestGrantType'
-        amount_grant:
-          $ref: '#/components/schemas/WalletTypeCreditAmountGrant'
-        credits_grant:
-          $ref: '#/components/schemas/WalletTypeCreditCreditsGrant'
-      title: WalletTypeCreditCreateRequest
-    WalletTypeBalanceUpdateRequest:
-      type: object
-      properties:
-        default_currency:
-          type: string
-          description: The default currency for the wallet.
-      title: WalletTypeBalanceUpdateRequest
-    WalletTypeCreateRequestType:
-      type: string
-      enum:
-      - CREDIT
-      - BALANCE
-      title: WalletTypeCreateRequestType
-    WalletType:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        name:
-          type: string
-        reference:
-          type: string
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/WalletTypeStatus'
-          - type: 'null'
-        type:
-          oneOf:
-          - $ref: '#/components/schemas/WalletTypeType'
-          - type: 'null'
-        credit:
-          $ref: '#/components/schemas/WalletTypeCredit'
-        balance:
-          $ref: '#/components/schemas/WalletTypeBalance'
-        created_at:
-          type:
-          - string
-          - 'null'
-        updated_at:
-          type:
-          - string
-          - 'null'
-      title: WalletType
-    WalletTypeCreditAmountGrantTaxCategory:
-      type: string
-      enum:
-      - STANDARD
-      - NO_TAX
-      - EXEMPT
-      description: The tax category to for what the wallet can be applied to.
-      title: WalletTypeCreditAmountGrantTaxCategory
-    WalletTypeUpdateRequestType:
-      type: string
-      enum:
-      - CREDIT
-      - BALANCE
-      title: WalletTypeUpdateRequestType
-    WalletTypeCreditAmountGrant:
-      type: object
-      properties:
-        default_currency:
-          $ref: '#/components/schemas/WalletTypeCreditAmountGrantDefaultCurrency'
-          description: The default currency for the wallet.
-        tax_category:
-          $ref: '#/components/schemas/WalletTypeCreditAmountGrantTaxCategory'
-          description: The tax category to for what the wallet can be applied to.
-      title: WalletTypeCreditAmountGrant
-    WalletTypeCredit:
-      type: object
-      properties:
-        grant_type:
-          $ref: '#/components/schemas/WalletTypeCreditGrantType'
-        amount_grant:
-          $ref: '#/components/schemas/WalletTypeCreditAmountGrant'
-        credits_grant:
-          $ref: '#/components/schemas/WalletTypeCreditCreditsGrant'
-      title: WalletTypeCredit
+      - DRAFT
+      - ACTIVE
+      - INACTIVE
+      - DEPRECATED
+      - ARCHIVED
+      title: WalletTypeCreateRequestStatus
     WalletTypeCreateRequest:
       type: object
       properties:
@@ -673,7 +601,62 @@ components:
       - reference
       - type
       title: WalletTypeCreateRequest
-    WalletTypeUpdateRequest:
+    WalletTypeCreditGrantType:
+      type: string
+      enum:
+      - CREDITS
+      - AMOUNT
+      title: WalletTypeCreditGrantType
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    WalletTypeCreditAmountGrant:
+      type: object
+      properties:
+        default_currency:
+          $ref: '#/components/schemas/WalletTypeCreditAmountGrantDefaultCurrency'
+          description: The default currency for the wallet.
+        tax_category:
+          $ref: '#/components/schemas/WalletTypeCreditAmountGrantTaxCategory'
+          description: The tax category to for what the wallet can be applied to.
+      title: WalletTypeCreditAmountGrant
+    WalletType:
       type: object
       properties:
         object_type:
@@ -690,16 +673,16 @@ components:
           type: string
         status:
           oneOf:
-          - $ref: '#/components/schemas/WalletTypeUpdateRequestStatus'
+          - $ref: '#/components/schemas/WalletTypeStatus'
           - type: 'null'
         type:
           oneOf:
-          - $ref: '#/components/schemas/WalletTypeUpdateRequestType'
+          - $ref: '#/components/schemas/WalletTypeType'
           - type: 'null'
         credit:
-          $ref: '#/components/schemas/WalletTypeCreditUpdateRequest'
+          $ref: '#/components/schemas/WalletTypeCredit'
         balance:
-          $ref: '#/components/schemas/WalletTypeBalanceUpdateRequest'
+          $ref: '#/components/schemas/WalletTypeBalance'
         created_at:
           type:
           - string
@@ -708,43 +691,26 @@ components:
           type:
           - string
           - 'null'
-      title: WalletTypeUpdateRequest
-    WalletTypeStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - INACTIVE
-      - DEPRECATED
-      - ARCHIVED
-      title: WalletTypeStatus
-    WalletTypeUpdateRequestStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - INACTIVE
-      - DEPRECATED
-      - ARCHIVED
-      title: WalletTypeUpdateRequestStatus
-    WalletTypeCreditGrantType:
-      type: string
-      enum:
-      - CREDITS
-      - AMOUNT
-      title: WalletTypeCreditGrantType
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
+      title: WalletType
     WalletTypeCreditCreateRequestGrantType:
       type: string
       enum:
       - CREDITS
       - AMOUNT
       title: WalletTypeCreditCreateRequestGrantType
+    WalletTypeBalanceUpdateRequest:
+      type: object
+      properties:
+        default_currency:
+          type: string
+          description: The default currency for the wallet.
+      title: WalletTypeBalanceUpdateRequest
+    WalletTypeType:
+      type: string
+      enum:
+      - CREDIT
+      - BALANCE
+      title: WalletTypeType
     ApiError:
       type: object
       properties:
@@ -771,6 +737,57 @@ components:
       - code
       - message
       title: ApiError
+    WalletTypeCreditAmountGrantTaxCategory:
+      type: string
+      enum:
+      - STANDARD
+      - NO_TAX
+      - EXEMPT
+      description: The tax category to for what the wallet can be applied to.
+      title: WalletTypeCreditAmountGrantTaxCategory
+    WalletTypeUpdateRequestType:
+      type: string
+      enum:
+      - CREDIT
+      - BALANCE
+      title: WalletTypeUpdateRequestType
+    WalletTypeUpdateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - INACTIVE
+      - DEPRECATED
+      - ARCHIVED
+      title: WalletTypeUpdateRequestStatus
+    WalletTypeStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - INACTIVE
+      - DEPRECATED
+      - ARCHIVED
+      title: WalletTypeStatus
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    WalletTypeBalanceCreateRequest:
+      type: object
+      properties:
+        default_currency:
+          type: string
+          description: The default currency for the wallet.
+      title: WalletTypeBalanceCreateRequest
+    WalletTypeCreateRequestType:
+      type: string
+      enum:
+      - CREDIT
+      - BALANCE
+      title: WalletTypeCreateRequestType
     WalletTypeCreditUpdateRequest:
       type: object
       properties:
@@ -870,6 +887,69 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
+    WalletTypeCreditCreditsGrant:
+      type: object
+      properties:
+        credit_type_id:
+          type: string
+          description: The credit type for wallets of wallet type.
+      title: WalletTypeCreditCreditsGrant
+    WalletTypeCreditCreateRequest:
+      type: object
+      properties:
+        grant_type:
+          $ref: '#/components/schemas/WalletTypeCreditCreateRequestGrantType'
+        amount_grant:
+          $ref: '#/components/schemas/WalletTypeCreditAmountGrant'
+        credits_grant:
+          $ref: '#/components/schemas/WalletTypeCreditCreditsGrant'
+      title: WalletTypeCreditCreateRequest
+    WalletTypeCredit:
+      type: object
+      properties:
+        grant_type:
+          $ref: '#/components/schemas/WalletTypeCreditGrantType'
+        amount_grant:
+          $ref: '#/components/schemas/WalletTypeCreditAmountGrant'
+        credits_grant:
+          $ref: '#/components/schemas/WalletTypeCreditCreditsGrant'
+      title: WalletTypeCredit
+    WalletTypeUpdateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        name:
+          type: string
+        reference:
+          type: string
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/WalletTypeUpdateRequestStatus'
+          - type: 'null'
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/WalletTypeUpdateRequestType'
+          - type: 'null'
+        credit:
+          $ref: '#/components/schemas/WalletTypeCreditUpdateRequest'
+        balance:
+          $ref: '#/components/schemas/WalletTypeBalanceUpdateRequest'
+        created_at:
+          type:
+          - string
+          - 'null'
+        updated_at:
+          type:
+          - string
+          - 'null'
+      title: WalletTypeUpdateRequest
     WalletTypeCreditAmountGrantDefaultCurrency:
       type: string
       enum:
@@ -1051,79 +1131,6 @@ components:
       - ZWL
       description: The default currency for the wallet.
       title: WalletTypeCreditAmountGrantDefaultCurrency
-    WalletTypeResponseWrapper:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/WalletType'
-        limit:
-          type:
-          - integer
-          - 'null'
-        page:
-          type:
-          - integer
-          - 'null'
-        total_number_of_pages:
-          type:
-          - integer
-          - 'null'
-        links:
-          $ref: '#/components/schemas/PaginationLinks'
-      required:
-      - data
-      - links
-      title: WalletTypeResponseWrapper
-    ApiErrorCode:
-      type: string
-      enum:
-      - RESOURCE_NOT_FOUND
-      - RESOURCES_NOT_FOUND
-      - UNABLE_TO_PROCESS_INSTRUCTIONS
-      - BAD_REQUEST
-      - UNSUPPORTED_MEDIA_TYPE
-      - RESOURCE_ALREADY_EXISTS
-      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
-      - COULD_NOT_CREATE_RESOURCE
-      - COULD_NOT_UPDATE_RESOURCE
-      - COULD_NOT_DELETE_RESOURCE
-      - MISSING_VERSION
-      - UNSUPPORTED_VERSION
-      - UNAUTHORISED
-      - CUSTOMER_NOT_FOUND
-      - PLATFORM_NOT_FOUND
-      - PRICING_PLAN_NOT_FOUND
-      - PRODUCT_NOT_FOUND
-      - PRODUCT_ITEM_NOT_FOUND
-      - PRICING_NOT_FOUND
-      - PRICING_ITEM_NOT_FOUND
-      - USER_NOT_FOUND
-      - METER_NOT_FOUND
-      - METER_VALUE_NOT_FOUND
-      - METER_PROPERTY_NOT_FOUND
-      - PRICING_ITEM_SUMMARIES_NOT_FOUND
-      - MISSING_ID
-      - INVALID_ID
-      - MISSING_REFERENCE
-      - MISSING_FIELD
-      - INVALID_FIELD
-      - INVALID_OPERATION
-      - INTERNAL_ERROR
-      - USER_NOT_ALLOWED
-      - IDEMPOTENCY_CHECK_FAILED
-      - INVALID_REQUEST
-      title: ApiErrorCode
-    WalletTypeCreateRequestStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - INACTIVE
-      - DEPRECATED
-      - ARCHIVED
-      title: WalletTypeCreateRequestStatus
     PaginationLinks:
       type: object
       properties:
@@ -1144,13 +1151,6 @@ components:
           - string
           - 'null'
       title: PaginationLinks
-    WalletTypeBalanceCreateRequest:
-      type: object
-      properties:
-        default_currency:
-          type: string
-          description: The default currency for the wallet.
-      title: WalletTypeBalanceCreateRequest
   securitySchemes:
     API-Key:
       type: apiKey

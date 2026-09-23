@@ -1,22 +1,22 @@
 openapi: 3.2.0
 info:
-  title: Transaction Payments API
+  title: Configuration Payment Methods API
   version: 1.0.0
 servers:
-- url: https://api.solvimon.com
-  description: The live environment for our API
 - url: https://test.api.solvimon.com
   description: The TEST environment for our API
+- url: https://api.solvimon.com
+  description: The live environment for our API
 tags:
-- name: Payments
+- name: Payment Methods
 paths:
-  /v{version}/payments:
+  /v{version}/payment-methods:
     get:
-      operationId: getPayments
-      summary: Get a list of payments
-      description: Requires the PAYMENT.VIEW permission.
+      operationId: getPaymentMethods
+      summary: Get a list of payment methods
+      description: Requires the PAYMENT_METHOD.VIEW permission.
       tags:
-      - Payments
+      - Payment Methods
       parameters:
       - name: version
         in: path
@@ -27,39 +27,31 @@ paths:
           default: '1'
       - name: customer_id
         in: query
-        description: Filter based of customer ID
+        description: The customer ID.
         required: false
         schema:
           type: string
-      - name: invoice_id
+      - name: integration_id
         in: query
-        description: Filter based of invoice ID
+        description: The integration ID.
         required: false
         schema:
           type: string
-      - name: external_reference
+      - name: integration_payment_method_reference
         in: query
-        description: Filter based on external reference
+        description: The integration payment method reference.
         required: false
         schema:
           type: string
-      - name: expand[]
-        in: query
-        description: The id fields of the resources that are going to be expanded.
-        required: false
-        schema:
-          type: array
-          items:
-            type: string
       - name: limit
         in: query
-        description: The amount of records shown in the list
+        description: The amount of records shown in the list.
         required: false
         schema:
           type: integer
       - name: page
         in: query
-        description: The page which is going to be shown
+        description: The page which is going to be shown.
         required: false
         schema:
           type: integer
@@ -92,13 +84,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaymentResponseWrapper'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
+                $ref: '#/components/schemas/PaymentMethodResponseWrapper'
         '401':
           description: Unauthorized
           content:
@@ -111,12 +97,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
     post:
-      operationId: postPayments
-      summary: Create a payment
-      description: Requires the PAYMENT.CREATE permission.
+      operationId: postPaymentMethods
+      summary: Create a payment method
+      description: Requires the PAYMENT_METHOD.CREATE permission.
       tags:
-      - Payments
+      - Payment Methods
       parameters:
       - name: version
         in: path
@@ -137,12 +135,12 @@ paths:
         schema:
           type: string
       responses:
-        '200':
-          description: OK
+        '201':
+          description: Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Payment'
+                $ref: '#/components/schemas/PaymentMethod'
         '400':
           description: Bad Request
           content:
@@ -161,18 +159,97 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PaymentCreateRequest'
-  /v{version}/payments/{resourceId}:
+              $ref: '#/components/schemas/PaymentMethodCreateRequest'
+    put:
+      operationId: putPaymentMethods
+      summary: Update or create a payment method (upsert)
+      description: Requires the PAYMENT_METHOD.CREATE or PAYMENT_METHOD.UPDATE permission.
+      tags:
+      - Payment Methods
+      parameters:
+      - name: version
+        in: path
+        description: version
+        required: true
+        schema:
+          type: string
+          default: '1'
+      - name: X-API-KEY
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: x-platform-id
+        in: header
+        description: Platform ID.
+        required: false
+        schema:
+          type: string
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentMethod'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentMethodCreateRequest'
+  /v{version}/payment-methods/{resourceIdOrReference}:
     get:
-      operationId: getPaymentsByResourceId
-      summary: Get a payment by ID
-      description: Requires the PAYMENT.VIEW permission.
+      operationId: getPaymentMethodsByResourceIdOrReference
+      summary: Get a payment method
+      description: Requires the PAYMENT_METHOD.VIEW permission.
       tags:
-      - Payments
+      - Payment Methods
       parameters:
       - name: version
         in: path
@@ -181,21 +258,13 @@ paths:
         schema:
           type: string
           default: '1'
-      - name: resourceId
+      - name: resourceIdOrReference
         in: path
-        description: The ID of the resource to be requested.
+        description: The ID or reference of the resource.
         required: true
         schema:
           type: string
           default: ''
-      - name: expand[]
-        in: query
-        description: The id fields of the resources that are going to be expanded.
-        required: false
-        schema:
-          type: array
-          items:
-            type: string
       - name: X-API-KEY
         in: header
         required: true
@@ -213,7 +282,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Payment'
+                $ref: '#/components/schemas/PaymentMethod'
         '400':
           description: Bad Request
           content:
@@ -238,13 +307,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-  /v{version}/payments/{resourceId}/refund:
-    post:
-      operationId: postPaymentsByResourceIdRefund
-      summary: Refund a payment
-      description: Requires the PAYMENT.REFUND permission.
+    patch:
+      operationId: patchPaymentMethodsByResourceIdOrReference
+      summary: Update a payment method
+      description: Requires the PAYMENT_METHOD.UPDATE permission.
       tags:
-      - Payments
+      - Payment Methods
       parameters:
       - name: version
         in: path
@@ -253,9 +321,9 @@ paths:
         schema:
           type: string
           default: '1'
-      - name: resourceId
+      - name: resourceIdOrReference
         in: path
-        description: The ID of the resource for which the action is posted.
+        description: The ID or reference of the resource.
         required: true
         schema:
           type: string
@@ -277,7 +345,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaymentModificationResponse'
+                $ref: '#/components/schemas/PaymentMethod'
         '400':
           description: Bad Request
           content:
@@ -292,6 +360,12 @@ paths:
                 $ref: '#/components/schemas/ApiError'
         '403':
           description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Conflict
           content:
             application/json:
               schema:
@@ -306,14 +380,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RefundPaymentRequestCreateRequest'
-  /v{version}/payments/{resourceId}/reverse:
+              $ref: '#/components/schemas/PaymentMethodUpdateRequest'
+  /v{version}/payment-methods/refresh:
     post:
-      operationId: postPaymentsByResourceIdReverse
-      summary: Reverse a payment
-      description: Requires the PAYMENT.REVERSE permission.
+      operationId: postPaymentMethodsRefresh
+      summary: Refresh the payment methods of a customer
+      description: Requires the PAYMENT_METHOD.UPDATE permission.
       tags:
-      - Payments
+      - Payment Methods
       parameters:
       - name: version
         in: path
@@ -322,13 +396,6 @@ paths:
         schema:
           type: string
           default: '1'
-      - name: resourceId
-        in: path
-        description: The ID of the resource for which the action is posted.
-        required: true
-        schema:
-          type: string
-          default: ''
       - name: X-API-KEY
         in: header
         required: true
@@ -346,7 +413,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PaymentModificationResponse'
+                $ref: '#/components/schemas/PaymentMethodResponseWrapper'
         '400':
           description: Bad Request
           content:
@@ -365,19 +432,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
         '500':
           description: Internal Server Error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ApiError'
-  /v{version}/payments/authorize:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentMethodActionRefreshCreateRequest'
+  /v{version}/payment-methods/tokenize:
     post:
-      operationId: postPaymentsAuthorize
-      summary: Authorize a payment
-      description: Requires the PAYMENT.AUTHORIZE permission.
+      operationId: postPaymentMethodsTokenize
+      summary: Tokenize a payment method
+      description: Requires the PAYMENT_METHOD.CREATE permission.
       tags:
-      - Payments
+      - Payment Methods
       parameters:
       - name: version
         in: path
@@ -404,12 +482,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaymentMethodPaymentResponse'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
         '401':
           description: Unauthorized
           content:
@@ -426,244 +498,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AuthorizePaymentRequestCreateRequest'
-  /v{version}/payments/verify-details:
-    post:
-      operationId: postPaymentsVerifyDetails
-      summary: Verify payment details
-      description: Requires the PAYMENT.AUTHORIZE permission.
-      tags:
-      - Payments
-      parameters:
-      - name: version
-        in: path
-        description: version
-        required: true
-        schema:
-          type: string
-          default: '1'
-      - name: X-API-KEY
-        in: header
-        required: true
-        schema:
-          type: string
-      - name: x-platform-id
-        in: header
-        description: Platform ID.
-        required: false
-        schema:
-          type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PaymentVerifyDetailResponse'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PaymentVerifyDetailCreateRequest'
-  /v{version}/payment-requests:
-    get:
-      operationId: getPaymentRequests
-      summary: Get Payment Requests
-      description: Requires the PAYMENT_REQUEST.VIEW permission.
-      tags:
-      - Payments
-      parameters:
-      - name: version
-        in: path
-        description: version
-        required: true
-        schema:
-          type: string
-          default: '1'
-      - name: customer_id
-        in: query
-        description: Filter based of customer ID
-        required: false
-        schema:
-          type: string
-      - name: payment_schedule_id
-        in: query
-        description: Filter based of payment schedule ID
-        required: false
-        schema:
-          type: string
-      - name: statuses[]
-        in: query
-        description: Filter payment requests based on status(es)
-        required: false
-        schema:
-          type: array
-          items:
-            type: string
-      - name: expand[]
-        in: query
-        description: The id fields of the resources that are going to be expanded.
-        required: false
-        schema:
-          type: array
-          items:
-            type: string
-      - name: limit
-        in: query
-        description: The amount of records shown in the list
-        required: false
-        schema:
-          type: integer
-      - name: page
-        in: query
-        description: The page which is going to be shown
-        required: false
-        schema:
-          type: integer
-      - name: order_by
-        in: query
-        description: The parameter by which the response is ordered.
-        required: false
-        schema:
-          type: string
-      - name: order_direction
-        in: query
-        description: The order direction by which the response is ordered.
-        required: false
-        schema:
-          type: string
-      - name: X-API-KEY
-        in: header
-        required: true
-        schema:
-          type: string
-      - name: x-platform-id
-        in: header
-        description: Platform ID.
-        required: false
-        schema:
-          type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PaymentRequestResponseWrapper'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-  /v{version}/payment-requests/{resourceId}:
-    get:
-      operationId: getPaymentRequestsByResourceId
-      summary: Get a Payment Request by ID
-      description: Requires the PAYMENT_REQUEST.VIEW permission.
-      tags:
-      - Payments
-      parameters:
-      - name: version
-        in: path
-        description: version
-        required: true
-        schema:
-          type: string
-          default: '1'
-      - name: resourceId
-        in: path
-        description: The ID of the resource to be requested.
-        required: true
-        schema:
-          type: string
-          default: ''
-      - name: expand[]
-        in: query
-        description: The id fields of the resources that are going to be expanded.
-        required: false
-        schema:
-          type: array
-          items:
-            type: string
-      - name: X-API-KEY
-        in: header
-        required: true
-        schema:
-          type: string
-      - name: x-platform-id
-        in: header
-        description: Platform ID.
-        required: false
-        schema:
-          type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PaymentRequest'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '403':
-          description: Forbidden
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
-        '500':
-          description: Internal Server Error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ApiError'
+              $ref: '#/components/schemas/PaymentMethodTokenizationRequestCreateRequest'
 components:
   schemas:
     StripeRequiredAction:
@@ -1031,25 +866,76 @@ components:
       - ZM
       - ZW
       title: PaymentMethodOnlineBankingCountry
-    CustomerCreateRequestRolesItems:
-      type: string
-      enum:
-      - DEFAULT
-      - NON_PROCESSING
-      - SELF_BILLING
-      - SELLER
-      - PROCESSING_ONLY
-      title: CustomerCreateRequestRolesItems
-    PaymentMethodDetailsCreateRequestType:
-      type: string
-      enum:
-      - CARD
-      - ONLINE_BANKING
-      - BUY_NOW_PAY_LATER
-      - DIRECT_DEBIT
-      - DIGITAL_WALLET
-      - UNKNOWN
-      title: PaymentMethodDetailsCreateRequestType
+    PaymentMethodCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        updated_at:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentMethodCreateRequestStatus'
+          - type: 'null'
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentMethodCreateRequestType'
+          - type: 'null'
+        card:
+          $ref: '#/components/schemas/PaymentMethodCard'
+        online_banking:
+          $ref: '#/components/schemas/PaymentMethodOnlineBanking'
+        buy_now_pay_later:
+          $ref: '#/components/schemas/PaymentMethodBuyNowPayLater'
+        direct_debit:
+          $ref: '#/components/schemas/PaymentMethodDirectDebit'
+        digital_wallet:
+          $ref: '#/components/schemas/PaymentMethodDigitalWallet'
+        customer_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOMER
+        integration_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type INTEGRATION
+        integration_reference:
+          type:
+          - string
+          - 'null'
+        integration_details:
+          $ref: '#/components/schemas/IntegrationDetails'
+        billing_address:
+          $ref: '#/components/schemas/Address'
+        is_default:
+          type:
+          - boolean
+          - 'null'
+      title: PaymentMethodCreateRequest
+    PaymentMethodDigitalWalletUpdateRequest:
+      type: object
+      properties:
+        variant:
+          type:
+          - string
+          - 'null'
+      title: PaymentMethodDigitalWalletUpdateRequest
     TaxRegistration:
       type: object
       properties:
@@ -1084,6 +970,258 @@ components:
           $ref: '#/components/schemas/Address'
           description: The address of this tax registration, if different from the billing entity. Currently, only the address will be used for tax calculations
       title: TaxRegistration
+    PaymentMethodOnlineBankingUpdateRequestCountry:
+      type: string
+      enum:
+      - AD
+      - AE
+      - AF
+      - AG
+      - AI
+      - AL
+      - AM
+      - AO
+      - AQ
+      - AR
+      - AS
+      - AT
+      - AU
+      - AW
+      - AX
+      - AZ
+      - BA
+      - BB
+      - BD
+      - BE
+      - BF
+      - BG
+      - BH
+      - BI
+      - BJ
+      - BL
+      - BM
+      - BN
+      - BO
+      - BQ
+      - BR
+      - BS
+      - BT
+      - BV
+      - BW
+      - BY
+      - BZ
+      - CA
+      - CC
+      - CD
+      - CF
+      - CG
+      - CH
+      - CI
+      - CK
+      - CL
+      - CM
+      - CN
+      - CO
+      - CR
+      - CU
+      - CV
+      - CW
+      - CX
+      - CY
+      - CZ
+      - DE
+      - DJ
+      - DK
+      - DM
+      - DO
+      - DZ
+      - EC
+      - EE
+      - EG
+      - EH
+      - ER
+      - ES
+      - ET
+      - FI
+      - FJ
+      - FK
+      - FM
+      - FO
+      - FR
+      - GA
+      - GB
+      - GD
+      - GE
+      - GF
+      - GG
+      - GH
+      - GI
+      - GL
+      - GM
+      - GN
+      - GP
+      - GQ
+      - GR
+      - GS
+      - GT
+      - GU
+      - GW
+      - GY
+      - HK
+      - HM
+      - HN
+      - HR
+      - HT
+      - HU
+      - ID
+      - IE
+      - IL
+      - IM
+      - IN
+      - IO
+      - IQ
+      - IR
+      - IS
+      - IT
+      - JE
+      - JM
+      - JO
+      - JP
+      - KE
+      - KG
+      - KH
+      - KI
+      - KM
+      - KN
+      - KP
+      - KR
+      - KW
+      - KY
+      - KZ
+      - LA
+      - LB
+      - LC
+      - LI
+      - LK
+      - LR
+      - LS
+      - LT
+      - LU
+      - LV
+      - LY
+      - MA
+      - MC
+      - MD
+      - ME
+      - MF
+      - MG
+      - MH
+      - MK
+      - ML
+      - MM
+      - MN
+      - MO
+      - MP
+      - MQ
+      - MR
+      - MS
+      - MT
+      - MU
+      - MV
+      - MW
+      - MX
+      - MY
+      - MZ
+      - NA
+      - NC
+      - NE
+      - NF
+      - NG
+      - NI
+      - NL
+      - 'NO'
+      - NP
+      - NR
+      - NU
+      - NZ
+      - OM
+      - PA
+      - PE
+      - PF
+      - PG
+      - PH
+      - PK
+      - PL
+      - PM
+      - PN
+      - PR
+      - PS
+      - PT
+      - PW
+      - PY
+      - QA
+      - RE
+      - RO
+      - RS
+      - RU
+      - RW
+      - SA
+      - SB
+      - SC
+      - SD
+      - SE
+      - SG
+      - SH
+      - SI
+      - SJ
+      - SK
+      - SL
+      - SM
+      - SN
+      - SO
+      - SR
+      - SS
+      - ST
+      - SV
+      - SX
+      - SY
+      - SZ
+      - TC
+      - TD
+      - TF
+      - TG
+      - TH
+      - TJ
+      - TK
+      - TL
+      - TM
+      - TN
+      - TO
+      - TR
+      - TT
+      - TV
+      - TW
+      - TZ
+      - UA
+      - UG
+      - US
+      - UY
+      - UZ
+      - VA
+      - VC
+      - VE
+      - VG
+      - VI
+      - VN
+      - VU
+      - WF
+      - WS
+      - YE
+      - YT
+      - ZA
+      - ZM
+      - ZW
+      title: PaymentMethodOnlineBankingUpdateRequestCountry
     Organization:
       type: object
       properties:
@@ -1183,6 +1321,14 @@ components:
       - DIGITAL_WALLET
       - UNKNOWN
       title: PaymentMethodDetailsType
+    PaymentMethodUpdateRequestStatus:
+      type: string
+      enum:
+      - SETUP
+      - ACTIVE
+      - INACTIVE
+      - ARCHIVED
+      title: PaymentMethodUpdateRequestStatus
     ChargeOnDemandPaymentContextPricingItem:
       type: object
       properties:
@@ -1190,6 +1336,258 @@ components:
           type: string
           description: Resource ID of type PRICING_ITEM
       title: ChargeOnDemandPaymentContextPricingItem
+    PaymentMethodDirectDebitUpdateRequestCountry:
+      type: string
+      enum:
+      - AD
+      - AE
+      - AF
+      - AG
+      - AI
+      - AL
+      - AM
+      - AO
+      - AQ
+      - AR
+      - AS
+      - AT
+      - AU
+      - AW
+      - AX
+      - AZ
+      - BA
+      - BB
+      - BD
+      - BE
+      - BF
+      - BG
+      - BH
+      - BI
+      - BJ
+      - BL
+      - BM
+      - BN
+      - BO
+      - BQ
+      - BR
+      - BS
+      - BT
+      - BV
+      - BW
+      - BY
+      - BZ
+      - CA
+      - CC
+      - CD
+      - CF
+      - CG
+      - CH
+      - CI
+      - CK
+      - CL
+      - CM
+      - CN
+      - CO
+      - CR
+      - CU
+      - CV
+      - CW
+      - CX
+      - CY
+      - CZ
+      - DE
+      - DJ
+      - DK
+      - DM
+      - DO
+      - DZ
+      - EC
+      - EE
+      - EG
+      - EH
+      - ER
+      - ES
+      - ET
+      - FI
+      - FJ
+      - FK
+      - FM
+      - FO
+      - FR
+      - GA
+      - GB
+      - GD
+      - GE
+      - GF
+      - GG
+      - GH
+      - GI
+      - GL
+      - GM
+      - GN
+      - GP
+      - GQ
+      - GR
+      - GS
+      - GT
+      - GU
+      - GW
+      - GY
+      - HK
+      - HM
+      - HN
+      - HR
+      - HT
+      - HU
+      - ID
+      - IE
+      - IL
+      - IM
+      - IN
+      - IO
+      - IQ
+      - IR
+      - IS
+      - IT
+      - JE
+      - JM
+      - JO
+      - JP
+      - KE
+      - KG
+      - KH
+      - KI
+      - KM
+      - KN
+      - KP
+      - KR
+      - KW
+      - KY
+      - KZ
+      - LA
+      - LB
+      - LC
+      - LI
+      - LK
+      - LR
+      - LS
+      - LT
+      - LU
+      - LV
+      - LY
+      - MA
+      - MC
+      - MD
+      - ME
+      - MF
+      - MG
+      - MH
+      - MK
+      - ML
+      - MM
+      - MN
+      - MO
+      - MP
+      - MQ
+      - MR
+      - MS
+      - MT
+      - MU
+      - MV
+      - MW
+      - MX
+      - MY
+      - MZ
+      - NA
+      - NC
+      - NE
+      - NF
+      - NG
+      - NI
+      - NL
+      - 'NO'
+      - NP
+      - NR
+      - NU
+      - NZ
+      - OM
+      - PA
+      - PE
+      - PF
+      - PG
+      - PH
+      - PK
+      - PL
+      - PM
+      - PN
+      - PR
+      - PS
+      - PT
+      - PW
+      - PY
+      - QA
+      - RE
+      - RO
+      - RS
+      - RU
+      - RW
+      - SA
+      - SB
+      - SC
+      - SD
+      - SE
+      - SG
+      - SH
+      - SI
+      - SJ
+      - SK
+      - SL
+      - SM
+      - SN
+      - SO
+      - SR
+      - SS
+      - ST
+      - SV
+      - SX
+      - SY
+      - SZ
+      - TC
+      - TD
+      - TF
+      - TG
+      - TH
+      - TJ
+      - TK
+      - TL
+      - TM
+      - TN
+      - TO
+      - TR
+      - TT
+      - TV
+      - TW
+      - TZ
+      - UA
+      - UG
+      - US
+      - UY
+      - UZ
+      - VA
+      - VC
+      - VE
+      - VG
+      - VI
+      - VN
+      - VU
+      - WF
+      - WS
+      - YE
+      - YT
+      - ZA
+      - ZM
+      - ZW
+      title: PaymentMethodDirectDebitUpdateRequestCountry
     ExpiryDate:
       type: object
       properties:
@@ -1272,30 +1670,6 @@ components:
         context:
           $ref: '#/components/schemas/PaymentContext'
       title: Payment
-    PaymentRequestResponseWrapper:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/PaymentRequest'
-        page:
-          type:
-          - integer
-          - 'null'
-        limit:
-          type:
-          - integer
-          - 'null'
-        total_number_of_pages:
-          type:
-          - integer
-          - 'null'
-        links:
-          $ref: '#/components/schemas/PaginationLinks'
-      required:
-      - data
-      title: PaymentRequestResponseWrapper
     PricingPlanSubscriptionSelectorFilter:
       type: object
       properties:
@@ -1486,12 +1860,6 @@ components:
       - ZMW
       - ZWL
       title: PricingPlanScheduleCustomizationPricingCurrency
-    PaymentVerifyDetailResponse:
-      type: object
-      properties:
-        payment_status:
-          type: string
-      title: PaymentVerifyDetailResponse
     PaymentMethodDetailsCard:
       type: object
       properties:
@@ -1624,6 +1992,98 @@ components:
         seller_details:
           $ref: '#/components/schemas/CustomerSellerDetails'
       title: Customer
+    PaymentMethodUpdateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        updated_at:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentMethodUpdateRequestStatus'
+          - type: 'null'
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentMethodUpdateRequestType'
+          - type: 'null'
+        card:
+          $ref: '#/components/schemas/PaymentMethodCardUpdateRequest'
+        online_banking:
+          $ref: '#/components/schemas/PaymentMethodOnlineBankingUpdateRequest'
+        buy_now_pay_later:
+          $ref: '#/components/schemas/PaymentMethodBuyNowPayLaterUpdateRequest'
+        direct_debit:
+          $ref: '#/components/schemas/PaymentMethodDirectDebitUpdateRequest'
+        digital_wallet:
+          $ref: '#/components/schemas/PaymentMethodDigitalWalletUpdateRequest'
+        customer_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOMER
+        integration_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type INTEGRATION
+        integration_reference:
+          type:
+          - string
+          - 'null'
+        integration_details:
+          $ref: '#/components/schemas/IntegrationDetailsUpdateRequest'
+        billing_address:
+          $ref: '#/components/schemas/AddressUpdateRequest'
+        is_default:
+          type:
+          - boolean
+          - 'null'
+      title: PaymentMethodUpdateRequest
+    PaymentMethodCreateRequestStatus:
+      type: string
+      enum:
+      - SETUP
+      - ACTIVE
+      - INACTIVE
+      - ARCHIVED
+      title: PaymentMethodCreateRequestStatus
+    PaymentMethodCardUpdateRequest:
+      type: object
+      properties:
+        brand:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentMethodCardUpdateRequestBrand'
+          - type: 'null'
+        name:
+          type:
+          - string
+          - 'null'
+        expiry_date:
+          $ref: '#/components/schemas/ExpiryDate'
+        last_four_digits:
+          type:
+          - string
+          - 'null'
+        country:
+          type:
+          - string
+          - 'null'
+      title: PaymentMethodCardUpdateRequest
     ChargeOnDemandPaymentContext:
       type: object
       properties:
@@ -1640,17 +2100,31 @@ components:
           - 'null'
           format: date-time
       title: ChargeOnDemandPaymentContext
-    PaymentCreateRequestResult:
+    PaymentMethodCardUpdateRequestBrand:
       type: string
       enum:
-      - AUTHORIZED
-      - CANCELLED
-      - CHARGED_BACK
-      - ERROR
-      - PENDING
-      - REFUSED
-      - REFUNDED
-      title: PaymentCreateRequestResult
+      - ACCEL
+      - AMERICAN_EXPRESS
+      - BANCONTACT
+      - CARNET
+      - CARTES_BANCAIRES
+      - DANKORT
+      - DINERS
+      - DISCOVER
+      - EFTPOS
+      - ELO
+      - GIROCARD
+      - HIPERCARD
+      - JCB
+      - MAESTRO
+      - MASTERCARD
+      - NYCE
+      - PULSE
+      - STAR
+      - UNION_PAY
+      - VISA
+      - V_PAY
+      title: PaymentMethodCardUpdateRequestBrand
     PaymentMethodDirectDebitCountry:
       type: string
       enum:
@@ -2189,83 +2663,6 @@ components:
         residential_address:
           $ref: '#/components/schemas/Address'
       title: Individual
-    PaymentCreateRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        created_at:
-          type:
-          - string
-          - 'null'
-        timestamp:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        customer_id:
-          type:
-          - string
-          - 'null'
-        customer:
-          oneOf:
-          - $ref: '#/components/schemas/CustomerCreateRequest'
-          - type: 'null'
-        invoice_id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type INVOICE
-        payment_acceptor_id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type PAYMENT_ACCEPTOR
-        payment_acceptor_reference:
-          type:
-          - string
-          - 'null'
-        payment_method_id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type PAYMENT_METHOD
-        payment_method_details:
-          $ref: '#/components/schemas/PaymentMethodDetailsCreateRequest'
-        integration_payment_method_reference:
-          type:
-          - string
-          - 'null'
-        external_reference:
-          type: string
-        reference:
-          type:
-          - string
-          - 'null'
-        amount:
-          $ref: '#/components/schemas/AmountCreateRequest'
-        result:
-          $ref: '#/components/schemas/PaymentCreateRequestResult'
-        result_details:
-          $ref: '#/components/schemas/PaymentResultDetailsCreateRequest'
-        dunning_action_details:
-          $ref: '#/components/schemas/PaymentDunningActionDetailsCreateRequest'
-        updated_at:
-          type:
-          - string
-          - 'null'
-        context:
-          $ref: '#/components/schemas/PaymentContextCreateRequest'
-      required:
-      - external_reference
-      - result
-      title: PaymentCreateRequest
     PayInvoicePaymentContext:
       type: object
       properties:
@@ -2275,104 +2672,6 @@ components:
           - 'null'
           description: Resource ID of type INVOICE
       title: PayInvoicePaymentContext
-    PaymentModificationResponse:
-      type: object
-      properties:
-        payment:
-          $ref: '#/components/schemas/Payment'
-        status:
-          $ref: '#/components/schemas/PaymentModificationResponseStatus'
-      title: PaymentModificationResponse
-    CustomerCreateRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        created_at:
-          type:
-          - string
-          - 'null'
-        parent_customer_id:
-          type:
-          - string
-          - 'null'
-          description: The parent of the customer. Only returned when there is a single parent.
-        parent_customer_ids:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: A list of parents of the customer. Will also be returned if there is a single parent.
-        reference:
-          type: string
-          description: A custom reference assigned to the customer.
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/CustomerCreateRequestStatus'
-          - type: 'null'
-        timezone:
-          type:
-          - string
-          - 'null'
-        type:
-          $ref: '#/components/schemas/CustomerCreateRequestType'
-          description: The type of customer entity.
-        email:
-          type: string
-          description: The email of the customer.
-        notification_preferences:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/NotificationPreference'
-          description: Notification preferences for customer-related communications.
-        locale:
-          type:
-          - string
-          - 'null'
-          description: The locale of the customer. Format is language-country (like en-US).
-        individual:
-          $ref: '#/components/schemas/Individual'
-          description: Additional description of the individual customer type.
-        organization:
-          $ref: '#/components/schemas/Organization'
-          description: Additional description of the organization customer type.
-        custom_fields:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CustomFieldValue'
-        processing_only:
-          type:
-          - boolean
-          - 'null'
-        pricing_plan_subscription_selector:
-          $ref: '#/components/schemas/PricingPlanSubscriptionSelector'
-          description: Settings to influence dynamically the subscription to use for the ingest data.
-        linked_integrations:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/LinkedIntegration'
-        roles:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CustomerCreateRequestRolesItems'
-        seller_details:
-          $ref: '#/components/schemas/CustomerSellerDetails'
-      title: CustomerCreateRequest
     RequiredAction:
       type: object
       properties:
@@ -2403,13 +2702,6 @@ components:
       - DIGITAL_WALLET
       - UNKNOWN
       title: PaymentMethodType
-    PaymentModificationResponseStatus:
-      type: string
-      enum:
-      - SUCCESS
-      - ACTION_REQUIRED
-      - FAILURE
-      title: PaymentModificationResponseStatus
     ConfiguredMeterValue:
       type: object
       properties:
@@ -2444,6 +2736,258 @@ components:
           - string
           - 'null'
       title: PaymentMethodDetailsUnknown
+    AddressUpdateRequestCountry:
+      type: string
+      enum:
+      - AD
+      - AE
+      - AF
+      - AG
+      - AI
+      - AL
+      - AM
+      - AO
+      - AQ
+      - AR
+      - AS
+      - AT
+      - AU
+      - AW
+      - AX
+      - AZ
+      - BA
+      - BB
+      - BD
+      - BE
+      - BF
+      - BG
+      - BH
+      - BI
+      - BJ
+      - BL
+      - BM
+      - BN
+      - BO
+      - BQ
+      - BR
+      - BS
+      - BT
+      - BV
+      - BW
+      - BY
+      - BZ
+      - CA
+      - CC
+      - CD
+      - CF
+      - CG
+      - CH
+      - CI
+      - CK
+      - CL
+      - CM
+      - CN
+      - CO
+      - CR
+      - CU
+      - CV
+      - CW
+      - CX
+      - CY
+      - CZ
+      - DE
+      - DJ
+      - DK
+      - DM
+      - DO
+      - DZ
+      - EC
+      - EE
+      - EG
+      - EH
+      - ER
+      - ES
+      - ET
+      - FI
+      - FJ
+      - FK
+      - FM
+      - FO
+      - FR
+      - GA
+      - GB
+      - GD
+      - GE
+      - GF
+      - GG
+      - GH
+      - GI
+      - GL
+      - GM
+      - GN
+      - GP
+      - GQ
+      - GR
+      - GS
+      - GT
+      - GU
+      - GW
+      - GY
+      - HK
+      - HM
+      - HN
+      - HR
+      - HT
+      - HU
+      - ID
+      - IE
+      - IL
+      - IM
+      - IN
+      - IO
+      - IQ
+      - IR
+      - IS
+      - IT
+      - JE
+      - JM
+      - JO
+      - JP
+      - KE
+      - KG
+      - KH
+      - KI
+      - KM
+      - KN
+      - KP
+      - KR
+      - KW
+      - KY
+      - KZ
+      - LA
+      - LB
+      - LC
+      - LI
+      - LK
+      - LR
+      - LS
+      - LT
+      - LU
+      - LV
+      - LY
+      - MA
+      - MC
+      - MD
+      - ME
+      - MF
+      - MG
+      - MH
+      - MK
+      - ML
+      - MM
+      - MN
+      - MO
+      - MP
+      - MQ
+      - MR
+      - MS
+      - MT
+      - MU
+      - MV
+      - MW
+      - MX
+      - MY
+      - MZ
+      - NA
+      - NC
+      - NE
+      - NF
+      - NG
+      - NI
+      - NL
+      - 'NO'
+      - NP
+      - NR
+      - NU
+      - NZ
+      - OM
+      - PA
+      - PE
+      - PF
+      - PG
+      - PH
+      - PK
+      - PL
+      - PM
+      - PN
+      - PR
+      - PS
+      - PT
+      - PW
+      - PY
+      - QA
+      - RE
+      - RO
+      - RS
+      - RU
+      - RW
+      - SA
+      - SB
+      - SC
+      - SD
+      - SE
+      - SG
+      - SH
+      - SI
+      - SJ
+      - SK
+      - SL
+      - SM
+      - SN
+      - SO
+      - SR
+      - SS
+      - ST
+      - SV
+      - SX
+      - SY
+      - SZ
+      - TC
+      - TD
+      - TF
+      - TG
+      - TH
+      - TJ
+      - TK
+      - TL
+      - TM
+      - TN
+      - TO
+      - TR
+      - TT
+      - TV
+      - TW
+      - TZ
+      - UA
+      - UG
+      - US
+      - UY
+      - UZ
+      - VA
+      - VC
+      - VE
+      - VG
+      - VI
+      - VN
+      - VU
+      - WF
+      - WS
+      - YE
+      - YT
+      - ZA
+      - ZM
+      - ZW
+      title: AddressUpdateRequestCountry
     PaymentMethodCardBrand:
       type: string
       enum:
@@ -2469,17 +3013,6 @@ components:
       - VISA
       - V_PAY
       title: PaymentMethodCardBrand
-    PaymentRequestStatus:
-      type: string
-      enum:
-      - SCHEDULED
-      - IN_PROGRESS
-      - ON_HOLD
-      - FAILED
-      - DONE
-      - SKIPPED
-      description: The status of the payment request
-      title: PaymentRequestStatus
     AmountCurrency:
       type: string
       enum:
@@ -2690,24 +3223,30 @@ components:
         stripe:
           $ref: '#/components/schemas/StripeIntegrationDetails'
       title: IntegrationDetails
-    PaymentMethodDetailsCreateRequest:
+    PaymentMethodOnlineBankingUpdateRequest:
       type: object
       properties:
-        type:
-          $ref: '#/components/schemas/PaymentMethodDetailsCreateRequestType'
-        card:
-          $ref: '#/components/schemas/PaymentMethodDetailsCard'
-        online_banking:
-          $ref: '#/components/schemas/PaymentMethodDetailsOnlineBanking'
-        buy_now_pay_later:
-          $ref: '#/components/schemas/PaymentMethodDetailsBuyNowPayLater'
-        direct_debit:
-          $ref: '#/components/schemas/PaymentMethodDetailsDirectDebit'
-        digital_wallet:
-          $ref: '#/components/schemas/PaymentMethodDetailsDigitalWallet'
-        unknown:
-          $ref: '#/components/schemas/PaymentMethodDetailsUnknown'
-      title: PaymentMethodDetailsCreateRequest
+        variant:
+          type:
+          - string
+          - 'null'
+        owner_name:
+          type:
+          - string
+          - 'null'
+        iban:
+          type:
+          - string
+          - 'null'
+        bic:
+          type:
+          - string
+          - 'null'
+        country:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentMethodOnlineBankingUpdateRequestCountry'
+          - type: 'null'
+      title: PaymentMethodOnlineBankingUpdateRequest
     CustomerRolesItems:
       type: string
       enum:
@@ -2717,30 +3256,6 @@ components:
       - SELLER
       - PROCESSING_ONLY
       title: CustomerRolesItems
-    PaymentResponseWrapper:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Payment'
-        page:
-          type:
-          - integer
-          - 'null'
-        limit:
-          type:
-          - integer
-          - 'null'
-        total_number_of_pages:
-          type:
-          - integer
-          - 'null'
-        links:
-          $ref: '#/components/schemas/PaginationLinks'
-      required:
-      - data
-      title: PaymentResponseWrapper
     PaymentContextCreateRequestType:
       type: string
       enum:
@@ -3004,64 +3519,12 @@ components:
       - ZM
       - ZW
       title: AddressCountry
-    AdyenVerifyDetailsCreateRequest:
-      type: object
-      properties:
-        details:
-          type:
-          - object
-          - 'null'
-          additionalProperties:
-            type: string
-        redirect_result:
-          type:
-          - string
-          - 'null'
-        threeds_result:
-          type:
-          - string
-          - 'null'
-        payment_data:
-          type:
-          - string
-          - 'null'
-      title: AdyenVerifyDetailsCreateRequest
     IntegrationDetailsPaymentGatewayVariant:
       type: string
       enum:
       - ADYEN
       - STRIPE
       title: IntegrationDetailsPaymentGatewayVariant
-    PaymentVerifyDetailCreateRequest:
-      type: object
-      properties:
-        payment_acceptor_id:
-          type: string
-        payment_gateway_variant:
-          type: string
-        adyen:
-          $ref: '#/components/schemas/AdyenVerifyDetailsCreateRequest'
-      title: PaymentVerifyDetailCreateRequest
-    PaymentResultDetailsCreateRequest:
-      type: object
-      properties:
-        code:
-          type:
-          - string
-          - 'null'
-        reason:
-          type:
-          - string
-          - 'null'
-        external_code:
-          type:
-          - string
-          - 'null'
-        external_reason:
-          type:
-          - string
-          - 'null'
-      title: PaymentResultDetailsCreateRequest
     PricingPlanSubscriptionSelectorData:
       type: object
       properties:
@@ -3106,14 +3569,6 @@ components:
           type: string
           description: The resource ID of the integration linked to the custom field
       title: CustomFieldValue
-    PaymentMethodBuyNowPayLater:
-      type: object
-      properties:
-        variant:
-          type:
-          - string
-          - 'null'
-      title: PaymentMethodBuyNowPayLater
     PaymentMethodOnlineBanking:
       type: object
       properties:
@@ -3138,6 +3593,57 @@ components:
           - $ref: '#/components/schemas/PaymentMethodOnlineBankingCountry'
           - type: 'null'
       title: PaymentMethodOnlineBanking
+    PaymentMethodBuyNowPayLater:
+      type: object
+      properties:
+        variant:
+          type:
+          - string
+          - 'null'
+      title: PaymentMethodBuyNowPayLater
+    PaymentMethodCreateRequestType:
+      type: string
+      enum:
+      - CARD
+      - ONLINE_BANKING
+      - BUY_NOW_PAY_LATER
+      - DIRECT_DEBIT
+      - DIGITAL_WALLET
+      - UNKNOWN
+      title: PaymentMethodCreateRequestType
+    PaymentMethodTokenizationRequestCreateRequest:
+      type: object
+      properties:
+        payment_acceptor_id:
+          type: string
+          description: Resource ID of type PAYMENT_ACCEPTOR
+        customer_id:
+          type: string
+          description: Resource ID of type CUSTOMER
+        payment_gateway_variant:
+          $ref: '#/components/schemas/PaymentMethodTokenizationRequestCreateRequestPaymentGatewayVariant'
+        stripe:
+          $ref: '#/components/schemas/StripeTokenizationRequestCreateRequest'
+        adyen:
+          $ref: '#/components/schemas/AdyenTokenizationRequestCreateRequest'
+        context:
+          $ref: '#/components/schemas/PaymentContextCreateRequest'
+        pricing_plan_subscription_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type PRICING_PLAN_SUBSCRIPTION
+        return_url:
+          type:
+          - string
+          - 'null'
+        shopper_interaction:
+          $ref: '#/components/schemas/PaymentMethodTokenizationRequestCreateRequestShopperInteraction'
+      required:
+      - payment_acceptor_id
+      - customer_id
+      - payment_gateway_variant
+      title: PaymentMethodTokenizationRequestCreateRequest
     PaymentRequestPaymentContext:
       type: object
       properties:
@@ -3155,186 +3661,6 @@ components:
           - integer
           - 'null'
       title: Period
-    AmountCreateRequestCurrency:
-      type: string
-      enum:
-      - AED
-      - AFN
-      - ALL
-      - AMD
-      - ANG
-      - AOA
-      - ARS
-      - AUD
-      - AWG
-      - AZN
-      - BAM
-      - BBD
-      - BDT
-      - BGN
-      - BHD
-      - BIF
-      - BMD
-      - BND
-      - BOB
-      - BRL
-      - BSD
-      - BTN
-      - BWP
-      - BYN
-      - BZD
-      - CAD
-      - CDF
-      - CHF
-      - CLF
-      - CLP
-      - CNY
-      - COP
-      - CRC
-      - CUC
-      - CUP
-      - CVE
-      - CZK
-      - DJF
-      - DKK
-      - DOP
-      - DZD
-      - EGP
-      - ERN
-      - ETB
-      - EUR
-      - FJD
-      - FKP
-      - GBP
-      - GEL
-      - GHS
-      - GIP
-      - GMD
-      - GNF
-      - GTQ
-      - GYD
-      - HKD
-      - HNL
-      - HRK
-      - HTG
-      - HUF
-      - IDR
-      - ILS
-      - INR
-      - IQD
-      - IRR
-      - ISK
-      - JMD
-      - JOD
-      - JPY
-      - KES
-      - KGS
-      - KHR
-      - KMF
-      - KPW
-      - KRW
-      - KWD
-      - KYD
-      - KZT
-      - LAK
-      - LBP
-      - LKR
-      - LRD
-      - LSL
-      - LYD
-      - MAD
-      - MDL
-      - MGA
-      - MKD
-      - MMK
-      - MNT
-      - MOP
-      - MRO
-      - MRU
-      - MUR
-      - MVR
-      - MWK
-      - MXN
-      - MXV
-      - MYR
-      - MZN
-      - NAD
-      - NGN
-      - NIO
-      - NOK
-      - NPR
-      - NZD
-      - OMR
-      - PAB
-      - PEN
-      - PGK
-      - PHP
-      - PKR
-      - PLN
-      - PYG
-      - QAR
-      - RON
-      - RSD
-      - RUB
-      - RWF
-      - SAR
-      - SBD
-      - SCR
-      - SDG
-      - SEK
-      - SGD
-      - SHP
-      - SLE
-      - SOS
-      - SRD
-      - SSP
-      - STN
-      - SVC
-      - SYP
-      - SZL
-      - THB
-      - TJS
-      - TMT
-      - TND
-      - TOP
-      - TRY
-      - TTD
-      - TWD
-      - TZS
-      - UAH
-      - UGX
-      - USD
-      - USN
-      - UYI
-      - UYU
-      - UZS
-      - VEF
-      - VES
-      - VND
-      - VUV
-      - WST
-      - XAF
-      - XAG
-      - XAU
-      - XBA
-      - XBB
-      - XBC
-      - XBD
-      - XCD
-      - XDR
-      - XOF
-      - XPD
-      - XPF
-      - XPT
-      - XSU
-      - XTS
-      - XUA
-      - XXX
-      - YER
-      - ZAR
-      - ZMW
-      - ZWL
-      title: AmountCreateRequestCurrency
     PaymentContextCreateRequest:
       type: object
       properties:
@@ -3365,14 +3691,16 @@ components:
         direct:
           $ref: '#/components/schemas/DirectPaymentContext'
       title: PaymentContextCreateRequest
-    PaymentMethodDetailsDigitalWallet:
-      type: object
-      properties:
-        variant:
-          type:
-          - string
-          - 'null'
-      title: PaymentMethodDetailsDigitalWallet
+    PaymentMethodUpdateRequestType:
+      type: string
+      enum:
+      - CARD
+      - ONLINE_BANKING
+      - BUY_NOW_PAY_LATER
+      - DIRECT_DEBIT
+      - DIGITAL_WALLET
+      - UNKNOWN
+      title: PaymentMethodUpdateRequestType
     NotificationPreferenceType:
       type: string
       enum:
@@ -3387,6 +3715,14 @@ components:
         currency:
           $ref: '#/components/schemas/AmountCurrency'
       title: Amount
+    PaymentMethodDetailsDigitalWallet:
+      type: object
+      properties:
+        variant:
+          type:
+          - string
+          - 'null'
+      title: PaymentMethodDetailsDigitalWallet
     PaymentMethodDetails:
       type: object
       properties:
@@ -3489,28 +3825,40 @@ components:
           - boolean
           - 'null'
       title: PaymentDunningActionDetails
-    PaymentDunningActionDetailsCreateRequest:
-      type: object
-      properties:
-        attempt:
-          type:
-          - integer
-          - 'null'
-        external_reference:
-          type:
-          - string
-          - 'null'
-        next_attempt_scheduled:
-          type:
-          - boolean
-          - 'null'
-      title: PaymentDunningActionDetailsCreateRequest
     AdyenIntegrationDetails:
       type: object
       properties:
         recurring_detail_reference:
           type: string
       title: AdyenIntegrationDetails
+    AddressUpdateRequest:
+      type: object
+      properties:
+        line1:
+          type:
+          - string
+          - 'null'
+        line2:
+          type:
+          - string
+          - 'null'
+        city:
+          type:
+          - string
+          - 'null'
+        postal_code:
+          type:
+          - string
+          - 'null'
+        state:
+          type:
+          - string
+          - 'null'
+        country:
+          oneOf:
+          - $ref: '#/components/schemas/AddressUpdateRequestCountry'
+          - type: 'null'
+      title: AddressUpdateRequest
     ApiError:
       type: object
       properties:
@@ -3537,12 +3885,6 @@ components:
       - code
       - message
       title: ApiError
-    PricingPlanSubscriptionSelectorRuleField:
-      type: string
-      enum:
-      - BILLING_ENTITY_REGISTERED_ADDRESS_COUNTRY
-      - PRICING_PLAN_REFERENCE
-      title: PricingPlanSubscriptionSelectorRuleField
     PricingPlanScheduleCustomization:
       type: object
       properties:
@@ -3575,40 +3917,12 @@ components:
         billing_period:
           $ref: '#/components/schemas/Period'
       title: PricingPlanScheduleCustomization
-    AuthorizePaymentRequestCreateRequest:
-      type: object
-      properties:
-        payment_acceptor_id:
-          type: string
-          description: Resource ID of type PAYMENT_ACCEPTOR
-        customer_id:
-          type: string
-          description: Resource ID of type CUSTOMER
-        payment_method_id:
-          type:
-          - string
-          - 'null'
-        payment_gateway_variant:
-          $ref: '#/components/schemas/AuthorizePaymentRequestCreateRequestPaymentGatewayVariant'
-        stripe:
-          $ref: '#/components/schemas/StripeTokenizationRequestCreateRequest'
-        adyen:
-          $ref: '#/components/schemas/AdyenTokenizationRequestCreateRequest'
-        amount:
-          $ref: '#/components/schemas/AmountCreateRequest'
-        reference:
-          type:
-          - string
-          - 'null'
-        context:
-          $ref: '#/components/schemas/PaymentContextCreateRequest'
-        return_url:
-          type:
-          - string
-          - 'null'
-      required:
-      - payment_acceptor_id
-      title: AuthorizePaymentRequestCreateRequest
+    PricingPlanSubscriptionSelectorRuleField:
+      type: string
+      enum:
+      - BILLING_ENTITY_REGISTERED_ADDRESS_COUNTRY
+      - PRICING_PLAN_REFERENCE
+      title: PricingPlanSubscriptionSelectorRuleField
     PaymentResult:
       type: string
       enum:
@@ -3644,6 +3958,14 @@ components:
           - $ref: '#/components/schemas/PaymentMethodDirectDebitCountry'
           - type: 'null'
       title: PaymentMethodDirectDebit
+    PaymentMethodBuyNowPayLaterUpdateRequest:
+      type: object
+      properties:
+        variant:
+          type:
+          - string
+          - 'null'
+      title: PaymentMethodBuyNowPayLaterUpdateRequest
     CustomerStatus:
       type: string
       enum:
@@ -3702,6 +4024,30 @@ components:
       - REPORT_SUBSCRIPTION
       - REPORT_CONFIGURATION
       title: ResourceIdentifierType
+    PaymentMethodDirectDebitUpdateRequest:
+      type: object
+      properties:
+        variant:
+          type:
+          - string
+          - 'null'
+        owner_name:
+          type:
+          - string
+          - 'null'
+        iban:
+          type:
+          - string
+          - 'null'
+        bic:
+          type:
+          - string
+          - 'null'
+        country:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentMethodDirectDebitUpdateRequestCountry'
+          - type: 'null'
+      title: PaymentMethodDirectDebitUpdateRequest
     PaymentMethodDetailsDirectDebitCountry:
       type: string
       enum:
@@ -4028,6 +4374,36 @@ components:
         id:
           type: string
       title: ResourceIdentifier
+    PaymentMethodActionRefreshCreateRequest:
+      type: object
+      properties:
+        customer_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOMER
+        customer_reference:
+          type:
+          - string
+          - 'null'
+        payment_acceptor_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type PAYMENT_ACCEPTOR
+        payment_acceptor_reference:
+          type:
+          - string
+          - 'null'
+      title: PaymentMethodActionRefreshCreateRequest
+    PaymentMethodTokenizationRequestCreateRequestShopperInteraction:
+      type: string
+      enum:
+      - ECOMMERCE
+      - CONT_AUTH
+      - MOTO
+      - POS
+      title: PaymentMethodTokenizationRequestCreateRequestShopperInteraction
     AdyenDirectPaymentContext:
       type: object
       properties:
@@ -4038,57 +4414,6 @@ components:
         auto_rescue:
           $ref: '#/components/schemas/DirectAutoRescue'
       title: AdyenDirectPaymentContext
-    PaymentRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        payment_schedule_id:
-          type:
-          - string
-          - 'null'
-          description: The id of the payment schedule
-        customer_id:
-          type:
-          - string
-          - 'null'
-          description: The id of the customer
-        customer:
-          oneOf:
-          - $ref: '#/components/schemas/Customer'
-          - type: 'null'
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/PaymentRequestStatus'
-          - type: 'null'
-          description: The status of the payment request
-        created_at:
-          type:
-          - string
-          - 'null'
-          description: The moment the payment request was created
-        execute_at:
-          type:
-          - string
-          - 'null'
-          description: The moment the payment request must be executed
-        index:
-          type:
-          - integer
-          - 'null'
-          description: The index of the payment request of the payment schedule
-        amount:
-          oneOf:
-          - $ref: '#/components/schemas/Amount'
-          - type: 'null'
-          description: The amount of the payment request
-      title: PaymentRequest
     PricingPlanSubscriptionSelectorFilterType:
       type: string
       enum:
@@ -4105,6 +4430,24 @@ components:
       - CONTAINS
       - NOT_CONTAINS
       title: PricingPlanSubscriptionSelectorFilterType
+    IntegrationDetailsUpdateRequest:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+        payment_gateway_variant:
+          $ref: '#/components/schemas/IntegrationDetailsUpdateRequestPaymentGatewayVariant'
+        adyen:
+          $ref: '#/components/schemas/AdyenIntegrationDetails'
+        stripe:
+          $ref: '#/components/schemas/StripeIntegrationDetails'
+      title: IntegrationDetailsUpdateRequest
     CustomerType:
       type: string
       enum:
@@ -4169,6 +4512,14 @@ components:
           - string
           - 'null'
       title: TaxIdValidation
+    PeriodType:
+      type: string
+      enum:
+      - DAY
+      - WEEK
+      - MONTH
+      - YEAR
+      title: PeriodType
     LinkDetail:
       type: object
       properties:
@@ -4181,14 +4532,12 @@ components:
           - string
           - 'null'
       title: LinkDetail
-    PeriodType:
+    IntegrationDetailsUpdateRequestPaymentGatewayVariant:
       type: string
       enum:
-      - DAY
-      - WEEK
-      - MONTH
-      - YEAR
-      title: PeriodType
+      - ADYEN
+      - STRIPE
+      title: IntegrationDetailsUpdateRequestPaymentGatewayVariant
     TaxIdType:
       type: string
       enum:
@@ -4230,12 +4579,6 @@ components:
           - string
           - 'null'
       title: PaymentResultDetails
-    RefundPaymentRequestCreateRequest:
-      type: object
-      properties:
-        amount:
-          $ref: '#/components/schemas/AmountCreateRequest'
-      title: RefundPaymentRequestCreateRequest
     TaxId:
       type: object
       properties:
@@ -4294,12 +4637,6 @@ components:
       - NOT_VALID
       - UNKNOWN
       title: TaxIdValidationValid
-    AuthorizePaymentRequestCreateRequestPaymentGatewayVariant:
-      type: string
-      enum:
-      - ADYEN
-      - STRIPE
-      title: AuthorizePaymentRequestCreateRequestPaymentGatewayVariant
     PricingPlanSubscriptionSelectorFallback:
       type: string
       enum:
@@ -4307,14 +4644,13 @@ components:
       - NONE
       description: The fallback logic what to do when no subscription is found. By default it is LATEST
       title: PricingPlanSubscriptionSelectorFallback
-    PaymentMethodDetailsBuyNowPayLater:
-      type: object
-      properties:
-        variant:
-          type:
-          - string
-          - 'null'
-      title: PaymentMethodDetailsBuyNowPayLater
+    PaymentMethodPaymentResponseStatus:
+      type: string
+      enum:
+      - SUCCESS
+      - ACTION_REQUIRED
+      - FAILURE
+      title: PaymentMethodPaymentResponseStatus
     InitPricingPlanSubscriptionPaymentContext:
       type: object
       properties:
@@ -4344,28 +4680,14 @@ components:
           items:
             $ref: '#/components/schemas/PricingPlanScheduleCustomization'
       title: InitPricingPlanSubscriptionPaymentContext
-    CustomerCreateRequestType:
-      type: string
-      enum:
-      - ORGANIZATION
-      - INDIVIDUAL
-      description: The type of customer entity.
-      title: CustomerCreateRequestType
-    AmountCreateRequest:
+    PaymentMethodDetailsBuyNowPayLater:
       type: object
       properties:
-        quantity:
-          type: string
-        currency:
-          $ref: '#/components/schemas/AmountCreateRequestCurrency'
-      title: AmountCreateRequest
-    PaymentMethodPaymentResponseStatus:
-      type: string
-      enum:
-      - SUCCESS
-      - ACTION_REQUIRED
-      - FAILURE
-      title: PaymentMethodPaymentResponseStatus
+        variant:
+          type:
+          - string
+          - 'null'
+      title: PaymentMethodDetailsBuyNowPayLater
     PaymentMethodDigitalWallet:
       type: object
       properties:
@@ -4380,6 +4702,12 @@ components:
       - API_ERROR
       - INVALID_REQUEST
       title: ApiErrorType
+    PaymentMethodTokenizationRequestCreateRequestPaymentGatewayVariant:
+      type: string
+      enum:
+      - ADYEN
+      - STRIPE
+      title: PaymentMethodTokenizationRequestCreateRequestPaymentGatewayVariant
     PricingPlanSubscriptionSelectorRuleType:
       type: string
       enum:
@@ -4402,15 +4730,6 @@ components:
       - BILLING_ENTITY_REGISTERED_ADDRESS_COUNTRY
       - PRICING_PLAN_REFERENCE
       title: PricingPlanSubscriptionSelectorDataField
-    CustomerCreateRequestStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - ARCHIVED
-      - DEPRECATED
-      - CLOSED
-      title: CustomerCreateRequestStatus
     ApiErrorResourceType:
       type: string
       enum:
@@ -4569,6 +4888,31 @@ components:
           additionalProperties:
             type: string
       title: AdyenRequiredAction
+    PaymentMethodResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentMethod'
+        page:
+          type:
+          - integer
+          - 'null'
+        limit:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      - links
+      title: PaymentMethodResponseWrapper
   securitySchemes:
     API-Key:
       type: apiKey

@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Configuration alertRules wallets API
+  title: Configuration Wallets API
   version: 1.0.0
 servers:
 - url: https://test.api.solvimon.com
@@ -8,7 +8,7 @@ servers:
 - url: https://api.solvimon.com
   description: The live environment for our API
 tags:
-- name: wallets
+- name: Wallets
 paths:
   /v{version}/wallets:
     get:
@@ -16,7 +16,7 @@ paths:
       summary: Get a list of all wallets
       description: Requires the WALLET.VIEW permission.
       tags:
-      - wallets
+      - Wallets
       parameters:
       - name: version
         in: path
@@ -108,7 +108,7 @@ paths:
       summary: Create a wallet
       description: Requires the WALLET.CREATE permission.
       tags:
-      - wallets
+      - Wallets
       parameters:
       - name: version
         in: path
@@ -176,7 +176,7 @@ paths:
       summary: Get a wallet
       description: Requires the WALLET.VIEW permission.
       tags:
-      - wallets
+      - Wallets
       parameters:
       - name: version
         in: path
@@ -240,7 +240,7 @@ paths:
       summary: Activate a wallet
       description: Requires the WALLET.UPDATE permission.
       tags:
-      - wallets
+      - Wallets
       parameters:
       - name: version
         in: path
@@ -292,7 +292,7 @@ paths:
       summary: Deactivate a wallet
       description: Requires the WALLET.UPDATE permission.
       tags:
-      - wallets
+      - Wallets
       parameters:
       - name: version
         in: path
@@ -344,7 +344,7 @@ paths:
       summary: Deprecate a wallet
       description: Requires the WALLET.UPDATE permission.
       tags:
-      - wallets
+      - Wallets
       parameters:
       - name: version
         in: path
@@ -396,7 +396,7 @@ paths:
       summary: Archive a wallet
       description: Requires the WALLET.UPDATE permission.
       tags:
-      - wallets
+      - Wallets
       parameters:
       - name: version
         in: path
@@ -448,7 +448,7 @@ paths:
       summary: Get the balance of a wallet
       description: Requires the WALLET.VIEW permission.
       tags:
-      - wallets
+      - Wallets
       parameters:
       - name: version
         in: path
@@ -501,6 +501,76 @@ paths:
               $ref: '#/components/schemas/WalletBalanceStatusRequestCreateRequest'
 components:
   schemas:
+    Wallet:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/WalletStatus'
+          - type: 'null'
+        wallet_type_id:
+          type: string
+          description: Resource ID of type WALLET_TYPE
+        customer_id:
+          type: string
+          description: Resource ID of type CUSTOMER
+        created_at:
+          type:
+          - string
+          - 'null'
+        updated_at:
+          type:
+          - string
+          - 'null'
+      title: Wallet
+    WalletStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - INACTIVE
+      - DEPRECATED
+      - ARCHIVED
+      title: WalletStatus
+    WalletBalanceValue:
+      type: object
+      properties:
+        credits:
+          oneOf:
+          - $ref: '#/components/schemas/Credits'
+          - type: 'null'
+        amount:
+          oneOf:
+          - $ref: '#/components/schemas/Amount'
+          - type: 'null'
+      title: WalletBalanceValue
+    Credits:
+      type: object
+      properties:
+        quantity:
+          type: string
+        credit_type_id:
+          type: string
+          description: Resource ID of type CREDIT_TYPE
+      title: Credits
+    WalletBalanceStatusRequestCreateRequest:
+      type: object
+      properties:
+        balance_at:
+          type: string
+          format: date-time
+          description: The date of the balance determination. Default is now().
+      title: WalletBalanceStatusRequestCreateRequest
     ApiErrorResourceType:
       type: string
       enum:
@@ -590,34 +660,6 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
-    WalletBalanceStatus:
-      type: object
-      properties:
-        balance:
-          oneOf:
-          - $ref: '#/components/schemas/WalletBalanceValue'
-          - type: 'null'
-        reserved_balance:
-          oneOf:
-          - $ref: '#/components/schemas/WalletBalanceValue'
-          - type: 'null'
-        open_balance:
-          oneOf:
-          - $ref: '#/components/schemas/WalletBalanceValue'
-          - type: 'null'
-        balance_at:
-          type:
-          - string
-          - 'null'
-      title: WalletBalanceStatus
-    Amount:
-      type: object
-      properties:
-        quantity:
-          type: string
-        currency:
-          $ref: '#/components/schemas/AmountCurrency'
-      title: Amount
     WalletCreateRequestStatus:
       type: string
       enum:
@@ -627,228 +669,6 @@ components:
       - DEPRECATED
       - ARCHIVED
       title: WalletCreateRequestStatus
-    Credits:
-      type: object
-      properties:
-        quantity:
-          type: string
-        credit_type_id:
-          type: string
-          description: Resource ID of type CREDIT_TYPE
-      title: Credits
-    WalletResponseWrapper:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Wallet'
-        limit:
-          type:
-          - integer
-          - 'null'
-        page:
-          type:
-          - integer
-          - 'null'
-        total_number_of_pages:
-          type:
-          - integer
-          - 'null'
-        links:
-          $ref: '#/components/schemas/PaginationLinks'
-      required:
-      - data
-      - links
-      title: WalletResponseWrapper
-    WalletStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - INACTIVE
-      - DEPRECATED
-      - ARCHIVED
-      title: WalletStatus
-    ApiErrorCode:
-      type: string
-      enum:
-      - RESOURCE_NOT_FOUND
-      - RESOURCES_NOT_FOUND
-      - UNABLE_TO_PROCESS_INSTRUCTIONS
-      - BAD_REQUEST
-      - UNSUPPORTED_MEDIA_TYPE
-      - RESOURCE_ALREADY_EXISTS
-      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
-      - COULD_NOT_CREATE_RESOURCE
-      - COULD_NOT_UPDATE_RESOURCE
-      - COULD_NOT_DELETE_RESOURCE
-      - MISSING_VERSION
-      - UNSUPPORTED_VERSION
-      - UNAUTHORISED
-      - CUSTOMER_NOT_FOUND
-      - PLATFORM_NOT_FOUND
-      - PRICING_PLAN_NOT_FOUND
-      - PRODUCT_NOT_FOUND
-      - PRODUCT_ITEM_NOT_FOUND
-      - PRICING_NOT_FOUND
-      - PRICING_ITEM_NOT_FOUND
-      - USER_NOT_FOUND
-      - METER_NOT_FOUND
-      - METER_VALUE_NOT_FOUND
-      - METER_PROPERTY_NOT_FOUND
-      - PRICING_ITEM_SUMMARIES_NOT_FOUND
-      - MISSING_ID
-      - INVALID_ID
-      - MISSING_REFERENCE
-      - MISSING_FIELD
-      - INVALID_FIELD
-      - INVALID_OPERATION
-      - INTERNAL_ERROR
-      - USER_NOT_ALLOWED
-      - IDEMPOTENCY_CHECK_FAILED
-      - INVALID_REQUEST
-      title: ApiErrorCode
-    WalletBalanceValue:
-      type: object
-      properties:
-        credits:
-          oneOf:
-          - $ref: '#/components/schemas/Credits'
-          - type: 'null'
-        amount:
-          oneOf:
-          - $ref: '#/components/schemas/Amount'
-          - type: 'null'
-      title: WalletBalanceValue
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
-    WalletCreateRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        reference:
-          type: string
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/WalletCreateRequestStatus'
-          - type: 'null'
-        wallet_type_id:
-          type: string
-          description: Resource ID of type WALLET_TYPE
-        customer_id:
-          type: string
-          description: Resource ID of type CUSTOMER
-        created_at:
-          type:
-          - string
-          - 'null'
-        updated_at:
-          type:
-          - string
-          - 'null'
-      required:
-      - reference
-      - wallet_type_id
-      - customer_id
-      title: WalletCreateRequest
-    WalletBalanceStatusRequestCreateRequest:
-      type: object
-      properties:
-        balance_at:
-          type: string
-          format: date-time
-          description: The date of the balance determination. Default is now().
-      title: WalletBalanceStatusRequestCreateRequest
-    Wallet:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        reference:
-          type: string
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/WalletStatus'
-          - type: 'null'
-        wallet_type_id:
-          type: string
-          description: Resource ID of type WALLET_TYPE
-        customer_id:
-          type: string
-          description: Resource ID of type CUSTOMER
-        created_at:
-          type:
-          - string
-          - 'null'
-        updated_at:
-          type:
-          - string
-          - 'null'
-      title: Wallet
-    ApiError:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/ApiErrorType'
-        code:
-          $ref: '#/components/schemas/ApiErrorCode'
-        field:
-          type:
-          - string
-          - 'null'
-        message:
-          type: string
-        resource_id:
-          type:
-          - string
-          - 'null'
-        resource_type:
-          oneOf:
-          - $ref: '#/components/schemas/ApiErrorResourceType'
-          - type: 'null'
-      required:
-      - type
-      - code
-      - message
-      title: ApiError
-    PaginationLinks:
-      type: object
-      properties:
-        first:
-          type:
-          - string
-          - 'null'
-        previous:
-          type:
-          - string
-          - 'null'
-        current:
-          type:
-          - string
-          - 'null'
-        next:
-          type:
-          - string
-          - 'null'
-      title: PaginationLinks
     AmountCurrency:
       type: string
       enum:
@@ -1029,6 +849,186 @@ components:
       - ZMW
       - ZWL
       title: AmountCurrency
+    WalletResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Wallet'
+        limit:
+          type:
+          - integer
+          - 'null'
+        page:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      - links
+      title: WalletResponseWrapper
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    WalletCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/WalletCreateRequestStatus'
+          - type: 'null'
+        wallet_type_id:
+          type: string
+          description: Resource ID of type WALLET_TYPE
+        customer_id:
+          type: string
+          description: Resource ID of type CUSTOMER
+        created_at:
+          type:
+          - string
+          - 'null'
+        updated_at:
+          type:
+          - string
+          - 'null'
+      required:
+      - reference
+      - wallet_type_id
+      - customer_id
+      title: WalletCreateRequest
+    WalletBalanceStatus:
+      type: object
+      properties:
+        balance:
+          oneOf:
+          - $ref: '#/components/schemas/WalletBalanceValue'
+          - type: 'null'
+        reserved_balance:
+          oneOf:
+          - $ref: '#/components/schemas/WalletBalanceValue'
+          - type: 'null'
+        open_balance:
+          oneOf:
+          - $ref: '#/components/schemas/WalletBalanceValue'
+          - type: 'null'
+        balance_at:
+          type:
+          - string
+          - 'null'
+      title: WalletBalanceStatus
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    PaginationLinks:
+      type: object
+      properties:
+        first:
+          type:
+          - string
+          - 'null'
+        previous:
+          type:
+          - string
+          - 'null'
+        current:
+          type:
+          - string
+          - 'null'
+        next:
+          type:
+          - string
+          - 'null'
+      title: PaginationLinks
+    Amount:
+      type: object
+      properties:
+        quantity:
+          type: string
+        currency:
+          $ref: '#/components/schemas/AmountCurrency'
+      title: Amount
   securitySchemes:
     API-Key:
       type: apiKey

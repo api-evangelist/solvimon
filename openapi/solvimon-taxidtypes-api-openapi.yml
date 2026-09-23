@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Configuration alertRules taxIdTypes API
+  title: Configuration Tax ID Types API
   version: 1.0.0
 servers:
 - url: https://test.api.solvimon.com
@@ -13,7 +13,7 @@ paths:
   /v{version}/tax-id-types:
     get:
       operationId: getTaxIdTypes
-      summary: Get allowed tax id types for a country, or all tax id types when no country is provided
+      summary: Get allowed tax id types for a country, or all tax id types when no country is…
       tags:
       - taxIdTypes
       parameters:
@@ -74,6 +74,29 @@ paths:
                 $ref: '#/components/schemas/ApiError'
 components:
   schemas:
+    TaxIdTypeResponse:
+      type: object
+      properties:
+        allowed_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaxIdTypeResponseAllowedTypesItems'
+          description: Allowed tax id types for the given country, or all tax id types when no country is provided.
+      required:
+      - allowed_types
+      title: TaxIdTypeResponse
+    TaxIdTypeResponseAllowedTypesItems:
+      type: string
+      enum:
+      - GENERIC_TAX_ID
+      - AU_GST
+      - CA_GST_HST
+      - CA_PST
+      - CA_PST_BC
+      - CA_PST_MB
+      - CA_PST_SK
+      - CA_QST
+      title: TaxIdTypeResponseAllowedTypesItems
     ApiErrorResourceType:
       type: string
       enum:
@@ -163,18 +186,6 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
-    TaxIdTypeResponseAllowedTypesItems:
-      type: string
-      enum:
-      - GENERIC_TAX_ID
-      - AU_GST
-      - CA_GST_HST
-      - CA_PST
-      - CA_PST_BC
-      - CA_PST_MB
-      - CA_PST_SK
-      - CA_QST
-      title: TaxIdTypeResponseAllowedTypesItems
     ApiErrorCode:
       type: string
       enum:
@@ -246,17 +257,6 @@ components:
       - code
       - message
       title: ApiError
-    TaxIdTypeResponse:
-      type: object
-      properties:
-        allowed_types:
-          type: array
-          items:
-            $ref: '#/components/schemas/TaxIdTypeResponseAllowedTypesItems'
-          description: Allowed tax id types for the given country, or all tax id types when no country is provided.
-      required:
-      - allowed_types
-      title: TaxIdTypeResponse
   securitySchemes:
     API-Key:
       type: apiKey
