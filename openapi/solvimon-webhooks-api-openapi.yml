@@ -707,55 +707,30 @@ paths:
               $ref: '#/components/schemas/WebhookCreateRequest'
 components:
   schemas:
-    WebhookResponseWrapper:
+    WebhookCreateRequestAuthenticationType:
+      type: string
+      enum:
+      - PASSWORD
+      - API_KEY
+      - NONE
+      description: The type of authentication used for the webhook.
+      title: WebhookCreateRequestAuthenticationType
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    WebhookAction:
       type: object
       properties:
-        data:
+        object_type:
+          type: string
+        actions:
           type: array
           items:
-            $ref: '#/components/schemas/Webhook'
-        limit:
-          type:
-          - integer
-          - 'null'
-        page:
-          type:
-          - integer
-          - 'null'
-        total_number_of_pages:
-          type:
-          - integer
-          - 'null'
-        links:
-          $ref: '#/components/schemas/PaginationLinks'
-      required:
-      - data
-      - links
-      title: WebhookResponseWrapper
-    PenaltyBoxDataCreateRequest:
-      type: object
-      properties:
-        retry_count:
-          type:
-          - integer
-          - 'null'
-          description: Indicates the number of retries
-        retry_at:
-          type:
-          - string
-          - 'null'
-          description: Indicates when it will be retried
-        cause:
-          type:
-          - string
-          - 'null'
-          description: Indicates the cause why this webhook is in the penalty box
-        payload:
-          type:
-          - string
-          - 'null'
-          description: Indicates the payload sent for the webhook
-      title: PenaltyBoxDataCreateRequest
+            type: string
+      title: WebhookAction
     ApiErrorResourceType:
       type: string
       enum:
@@ -845,6 +820,14 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
+    WebhookUpdateRequestAuthenticationType:
+      type: string
+      enum:
+      - PASSWORD
+      - API_KEY
+      - NONE
+      description: The type of authentication used for the webhook.
+      title: WebhookUpdateRequestAuthenticationType
     WebhookActionResponseWrapper:
       type: object
       properties:
@@ -855,14 +838,342 @@ components:
           items:
             $ref: '#/components/schemas/WebhookAction'
       title: WebhookActionResponseWrapper
-    WebhookUpdateRequestAuthenticationType:
+    Webhook:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        username:
+          type:
+          - string
+          - 'null'
+          description: The username used for basic authentication.
+        password:
+          type:
+          - string
+          - 'null'
+          description: The password used for basic authentication.
+        api_header_field:
+          type:
+          - string
+          - 'null'
+          description: The name of the header field for authentication with an API key.
+        api_key:
+          type:
+          - string
+          - 'null'
+          description: The value of for authentication with an API key.
+        url:
+          type:
+          - string
+          - 'null'
+          description: The url of the webhook where webhooks will be sent.
+        included_actions:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: The actions of which a webhook will be sent.
+        excluded_actions:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: The actions of which a webhook will not be sent.
+        active:
+          type: boolean
+          description: The status of the webhook.
+        penalty_box:
+          type:
+          - string
+          - 'null'
+        secret_key:
+          type:
+          - string
+          - 'null'
+        signing_protocol:
+          type:
+          - string
+          - 'null'
+          description: The signing protocol for the webhook.
+        previous_secret_key:
+          type:
+          - string
+          - 'null'
+        previous_signing_protocol:
+          type:
+          - string
+          - 'null'
+        secret_rolled_at:
+          type:
+          - string
+          - 'null'
+          description: The instant when the secret was rolled.
+        include_previous_data:
+          type: boolean
+          description: Define whether the webhook payload include the previous status or only the current status
+        authentication_type:
+          $ref: '#/components/schemas/WebhookAuthenticationType'
+          description: The type of authentication used for the webhook.
+        penalty_box_data:
+          oneOf:
+          - $ref: '#/components/schemas/PenaltyBoxData'
+          - type: 'null'
+          description: Indicates if this webhook is in the penalty box
+        name:
+          type:
+          - string
+          - 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+      title: Webhook
+    PenaltyBoxDataCreateRequest:
+      type: object
+      properties:
+        retry_count:
+          type:
+          - integer
+          - 'null'
+          description: Indicates the number of retries
+        retry_at:
+          type:
+          - string
+          - 'null'
+          description: Indicates when it will be retried
+        cause:
+          type:
+          - string
+          - 'null'
+          description: Indicates the cause why this webhook is in the penalty box
+        payload:
+          type:
+          - string
+          - 'null'
+          description: Indicates the payload sent for the webhook
+      title: PenaltyBoxDataCreateRequest
+    ApiErrorCode:
       type: string
       enum:
-      - PASSWORD
-      - API_KEY
-      - NONE
-      description: The type of authentication used for the webhook.
-      title: WebhookUpdateRequestAuthenticationType
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    PenaltyBoxData:
+      type: object
+      properties:
+        retry_count:
+          type:
+          - integer
+          - 'null'
+          description: Indicates the number of retries
+        retry_at:
+          type:
+          - string
+          - 'null'
+          description: Indicates when it will be retried
+        cause:
+          type:
+          - string
+          - 'null'
+          description: Indicates the cause why this webhook is in the penalty box
+        payload:
+          type:
+          - string
+          - 'null'
+          description: Indicates the payload sent for the webhook
+      title: PenaltyBoxData
+    WebhookResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Webhook'
+        limit:
+          type:
+          - integer
+          - 'null'
+        page:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      - links
+      title: WebhookResponseWrapper
+    WebhookUpdateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        username:
+          type:
+          - string
+          - 'null'
+          description: The username used for basic authentication.
+        password:
+          type:
+          - string
+          - 'null'
+          description: The password used for basic authentication.
+        api_header_field:
+          type:
+          - string
+          - 'null'
+          description: The name of the header field for authentication with an API key.
+        api_key:
+          type:
+          - string
+          - 'null'
+          description: The value of for authentication with an API key.
+        url:
+          type:
+          - string
+          - 'null'
+          description: The url of the webhook where webhooks will be sent.
+        included_actions:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: The actions of which a webhook will be sent.
+        excluded_actions:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: The actions of which a webhook will not be sent.
+        active:
+          type: boolean
+          description: The status of the webhook.
+        penalty_box:
+          type:
+          - string
+          - 'null'
+        secret_key:
+          type:
+          - string
+          - 'null'
+        signing_protocol:
+          type:
+          - string
+          - 'null'
+          description: The signing protocol for the webhook.
+        previous_secret_key:
+          type:
+          - string
+          - 'null'
+        previous_signing_protocol:
+          type:
+          - string
+          - 'null'
+        secret_rolled_at:
+          type:
+          - string
+          - 'null'
+          description: The instant when the secret was rolled.
+        include_previous_data:
+          type: boolean
+          description: Define whether the webhook payload include the previous status or only the current status
+        authentication_type:
+          $ref: '#/components/schemas/WebhookUpdateRequestAuthenticationType'
+          description: The type of authentication used for the webhook.
+        penalty_box_data:
+          oneOf:
+          - $ref: '#/components/schemas/PenaltyBoxDataUpdateRequest'
+          - type: 'null'
+          description: Indicates if this webhook is in the penalty box
+        name:
+          type:
+          - string
+          - 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+      title: WebhookUpdateRequest
     PaginationLinks:
       type: object
       properties:
@@ -883,24 +1194,42 @@ components:
           - string
           - 'null'
       title: PaginationLinks
-    WebhookAction:
+    WebhookConnectionResponse:
       type: object
       properties:
-        object_type:
-          type: string
-        actions:
-          type: array
-          items:
-            type: string
-      title: WebhookAction
-    WebhookCreateRequestAuthenticationType:
-      type: string
-      enum:
-      - PASSWORD
-      - API_KEY
-      - NONE
-      description: The type of authentication used for the webhook.
-      title: WebhookCreateRequestAuthenticationType
+        successful:
+          type:
+          - boolean
+          - 'null'
+        message:
+          type:
+          - string
+          - 'null'
+      title: WebhookConnectionResponse
+    PenaltyBoxDataUpdateRequest:
+      type: object
+      properties:
+        retry_count:
+          type:
+          - integer
+          - 'null'
+          description: Indicates the number of retries
+        retry_at:
+          type:
+          - string
+          - 'null'
+          description: Indicates when it will be retried
+        cause:
+          type:
+          - string
+          - 'null'
+          description: Indicates the cause why this webhook is in the penalty box
+        payload:
+          type:
+          - string
+          - 'null'
+          description: Indicates the payload sent for the webhook
+      title: PenaltyBoxDataUpdateRequest
     WebhookAuthenticationType:
       type: string
       enum:
@@ -1012,335 +1341,6 @@ components:
       - name
       - reference
       title: WebhookCreateRequest
-    PenaltyBoxDataUpdateRequest:
-      type: object
-      properties:
-        retry_count:
-          type:
-          - integer
-          - 'null'
-          description: Indicates the number of retries
-        retry_at:
-          type:
-          - string
-          - 'null'
-          description: Indicates when it will be retried
-        cause:
-          type:
-          - string
-          - 'null'
-          description: Indicates the cause why this webhook is in the penalty box
-        payload:
-          type:
-          - string
-          - 'null'
-          description: Indicates the payload sent for the webhook
-      title: PenaltyBoxDataUpdateRequest
-    ApiErrorCode:
-      type: string
-      enum:
-      - RESOURCE_NOT_FOUND
-      - RESOURCES_NOT_FOUND
-      - UNABLE_TO_PROCESS_INSTRUCTIONS
-      - BAD_REQUEST
-      - UNSUPPORTED_MEDIA_TYPE
-      - RESOURCE_ALREADY_EXISTS
-      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
-      - COULD_NOT_CREATE_RESOURCE
-      - COULD_NOT_UPDATE_RESOURCE
-      - COULD_NOT_DELETE_RESOURCE
-      - MISSING_VERSION
-      - UNSUPPORTED_VERSION
-      - UNAUTHORISED
-      - CUSTOMER_NOT_FOUND
-      - PLATFORM_NOT_FOUND
-      - PRICING_PLAN_NOT_FOUND
-      - PRODUCT_NOT_FOUND
-      - PRODUCT_ITEM_NOT_FOUND
-      - PRICING_NOT_FOUND
-      - PRICING_ITEM_NOT_FOUND
-      - USER_NOT_FOUND
-      - METER_NOT_FOUND
-      - METER_VALUE_NOT_FOUND
-      - METER_PROPERTY_NOT_FOUND
-      - PRICING_ITEM_SUMMARIES_NOT_FOUND
-      - MISSING_ID
-      - INVALID_ID
-      - MISSING_REFERENCE
-      - MISSING_FIELD
-      - INVALID_FIELD
-      - INVALID_OPERATION
-      - INTERNAL_ERROR
-      - USER_NOT_ALLOWED
-      - IDEMPOTENCY_CHECK_FAILED
-      - INVALID_REQUEST
-      title: ApiErrorCode
-    PenaltyBoxData:
-      type: object
-      properties:
-        retry_count:
-          type:
-          - integer
-          - 'null'
-          description: Indicates the number of retries
-        retry_at:
-          type:
-          - string
-          - 'null'
-          description: Indicates when it will be retried
-        cause:
-          type:
-          - string
-          - 'null'
-          description: Indicates the cause why this webhook is in the penalty box
-        payload:
-          type:
-          - string
-          - 'null'
-          description: Indicates the payload sent for the webhook
-      title: PenaltyBoxData
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
-    Webhook:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        username:
-          type:
-          - string
-          - 'null'
-          description: The username used for basic authentication.
-        password:
-          type:
-          - string
-          - 'null'
-          description: The password used for basic authentication.
-        api_header_field:
-          type:
-          - string
-          - 'null'
-          description: The name of the header field for authentication with an API key.
-        api_key:
-          type:
-          - string
-          - 'null'
-          description: The value of for authentication with an API key.
-        url:
-          type:
-          - string
-          - 'null'
-          description: The url of the webhook where webhooks will be sent.
-        included_actions:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: The actions of which a webhook will be sent.
-        excluded_actions:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: The actions of which a webhook will not be sent.
-        active:
-          type: boolean
-          description: The status of the webhook.
-        penalty_box:
-          type:
-          - string
-          - 'null'
-        secret_key:
-          type:
-          - string
-          - 'null'
-        signing_protocol:
-          type:
-          - string
-          - 'null'
-          description: The signing protocol for the webhook.
-        previous_secret_key:
-          type:
-          - string
-          - 'null'
-        previous_signing_protocol:
-          type:
-          - string
-          - 'null'
-        secret_rolled_at:
-          type:
-          - string
-          - 'null'
-          description: The instant when the secret was rolled.
-        include_previous_data:
-          type: boolean
-          description: Define whether the webhook payload include the previous status or only the current status
-        authentication_type:
-          $ref: '#/components/schemas/WebhookAuthenticationType'
-          description: The type of authentication used for the webhook.
-        penalty_box_data:
-          oneOf:
-          - $ref: '#/components/schemas/PenaltyBoxData'
-          - type: 'null'
-          description: Indicates if this webhook is in the penalty box
-        name:
-          type:
-          - string
-          - 'null'
-        reference:
-          type:
-          - string
-          - 'null'
-      title: Webhook
-    ApiError:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/ApiErrorType'
-        code:
-          $ref: '#/components/schemas/ApiErrorCode'
-        field:
-          type:
-          - string
-          - 'null'
-        message:
-          type: string
-        resource_id:
-          type:
-          - string
-          - 'null'
-        resource_type:
-          oneOf:
-          - $ref: '#/components/schemas/ApiErrorResourceType'
-          - type: 'null'
-      required:
-      - type
-      - code
-      - message
-      title: ApiError
-    WebhookConnectionResponse:
-      type: object
-      properties:
-        successful:
-          type:
-          - boolean
-          - 'null'
-        message:
-          type:
-          - string
-          - 'null'
-      title: WebhookConnectionResponse
-    WebhookUpdateRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        username:
-          type:
-          - string
-          - 'null'
-          description: The username used for basic authentication.
-        password:
-          type:
-          - string
-          - 'null'
-          description: The password used for basic authentication.
-        api_header_field:
-          type:
-          - string
-          - 'null'
-          description: The name of the header field for authentication with an API key.
-        api_key:
-          type:
-          - string
-          - 'null'
-          description: The value of for authentication with an API key.
-        url:
-          type:
-          - string
-          - 'null'
-          description: The url of the webhook where webhooks will be sent.
-        included_actions:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: The actions of which a webhook will be sent.
-        excluded_actions:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: The actions of which a webhook will not be sent.
-        active:
-          type: boolean
-          description: The status of the webhook.
-        penalty_box:
-          type:
-          - string
-          - 'null'
-        secret_key:
-          type:
-          - string
-          - 'null'
-        signing_protocol:
-          type:
-          - string
-          - 'null'
-          description: The signing protocol for the webhook.
-        previous_secret_key:
-          type:
-          - string
-          - 'null'
-        previous_signing_protocol:
-          type:
-          - string
-          - 'null'
-        secret_rolled_at:
-          type:
-          - string
-          - 'null'
-          description: The instant when the secret was rolled.
-        include_previous_data:
-          type: boolean
-          description: Define whether the webhook payload include the previous status or only the current status
-        authentication_type:
-          $ref: '#/components/schemas/WebhookUpdateRequestAuthenticationType'
-          description: The type of authentication used for the webhook.
-        penalty_box_data:
-          oneOf:
-          - $ref: '#/components/schemas/PenaltyBoxDataUpdateRequest'
-          - type: 'null'
-          description: Indicates if this webhook is in the penalty box
-        name:
-          type:
-          - string
-          - 'null'
-        reference:
-          type:
-          - string
-          - 'null'
-      title: WebhookUpdateRequest
   securitySchemes:
     API-Key:
       type: apiKey

@@ -286,6 +286,217 @@ paths:
               $ref: '#/components/schemas/ReportConfigurationUpdateRequest'
 components:
   schemas:
+    ReportDefinitionUpdateRequestReportCode:
+      type: string
+      enum:
+      - INVOICE
+      - INVOICE_USAGE
+      - INVOICE_HEADER
+      - INVOICE_LINE
+      - INVOICE_TAX
+      - INVOICE_COMMITMENT
+      - CHILD_PARENT_BREAKDOWN
+      - CHILD_PARENT_BREAKDOWN_PLATFORM
+      - NOT_MATCHED_METER_DATA
+      - DUPLICATE_METER_DATA
+      - METERING
+      - CUSTOMER
+      - PRODUCT
+      - PRICING_PLAN_SUBSCRIPTION
+      - PAYMENT
+      - PRICING
+      - REVENUE_RECOGNITION
+      - CLAUSES
+      title: ReportDefinitionUpdateRequestReportCode
+    AvailableCustomFieldColumn:
+      type: object
+      properties:
+        name:
+          type: string
+        custom_field:
+          $ref: '#/components/schemas/CustomField'
+      title: AvailableCustomFieldColumn
+    ReportConfigurationUpdateRequestReportCode:
+      type: string
+      enum:
+      - INVOICE
+      - INVOICE_USAGE
+      - INVOICE_HEADER
+      - INVOICE_LINE
+      - INVOICE_TAX
+      - INVOICE_COMMITMENT
+      - CHILD_PARENT_BREAKDOWN
+      - CHILD_PARENT_BREAKDOWN_PLATFORM
+      - NOT_MATCHED_METER_DATA
+      - DUPLICATE_METER_DATA
+      - METERING
+      - CUSTOMER
+      - PRODUCT
+      - PRICING_PLAN_SUBSCRIPTION
+      - PAYMENT
+      - PRICING
+      - REVENUE_RECOGNITION
+      - CLAUSES
+      title: ReportConfigurationUpdateRequestReportCode
+    ReportDefinitionReportCode:
+      type: string
+      enum:
+      - INVOICE
+      - INVOICE_USAGE
+      - INVOICE_HEADER
+      - INVOICE_LINE
+      - INVOICE_TAX
+      - INVOICE_COMMITMENT
+      - CHILD_PARENT_BREAKDOWN
+      - CHILD_PARENT_BREAKDOWN_PLATFORM
+      - NOT_MATCHED_METER_DATA
+      - DUPLICATE_METER_DATA
+      - METERING
+      - CUSTOMER
+      - PRODUCT
+      - PRICING_PLAN_SUBSCRIPTION
+      - PAYMENT
+      - PRICING
+      - REVENUE_RECOGNITION
+      - CLAUSES
+      title: ReportDefinitionReportCode
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    ReportDefinitionCreateRequestCategory:
+      type: string
+      enum:
+      - INVOICE
+      - PLATFORM
+      title: ReportDefinitionCreateRequestCategory
+    CustomField:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          $ref: '#/components/schemas/CustomFieldResourceType'
+        multiple_values:
+          type:
+          - boolean
+          - 'null'
+        unique_value:
+          type:
+          - boolean
+          - 'null'
+        copy_value_to_invoice:
+          type:
+          - boolean
+          - 'null'
+        integration_id:
+          type: string
+          description: The resource ID of the integration.
+        integration_reference:
+          type: string
+          description: The reference of the integration.
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/CustomFieldType'
+          - type: 'null'
+        enum_values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+      title: CustomField
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    CustomFieldType:
+      type: string
+      enum:
+      - STRING
+      - NUMBER
+      - BOOLEAN
+      - ENUM
+      title: CustomFieldType
     ReportColumn:
       type: object
       properties:
@@ -306,34 +517,28 @@ components:
           - boolean
           - 'null'
       title: ReportColumn
-    ReportConfiguration:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        report_code:
-          $ref: '#/components/schemas/ReportConfigurationReportCode'
-        report_definition:
-          oneOf:
-          - $ref: '#/components/schemas/ReportDefinition'
-          - type: 'null'
-        override_columns:
-          type: array
-          items:
-            type: string
-        available_custom_field_columns:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/AvailableCustomFieldColumn'
-      title: ReportConfiguration
+    ReportDefinitionCreateRequestReportCode:
+      type: string
+      enum:
+      - INVOICE
+      - INVOICE_USAGE
+      - INVOICE_HEADER
+      - INVOICE_LINE
+      - INVOICE_TAX
+      - INVOICE_COMMITMENT
+      - CHILD_PARENT_BREAKDOWN
+      - CHILD_PARENT_BREAKDOWN_PLATFORM
+      - NOT_MATCHED_METER_DATA
+      - DUPLICATE_METER_DATA
+      - METERING
+      - CUSTOMER
+      - PRODUCT
+      - PRICING_PLAN_SUBSCRIPTION
+      - PAYMENT
+      - PRICING
+      - REVENUE_RECOGNITION
+      - CLAUSES
+      title: ReportDefinitionCreateRequestReportCode
     ReportDefinition:
       type: object
       properties:
@@ -396,122 +601,48 @@ components:
           items:
             $ref: '#/components/schemas/ReportParameter'
       title: ReportDefinition
-    ApiErrorCode:
+    ReportParameterName:
       type: string
       enum:
-      - RESOURCE_NOT_FOUND
-      - RESOURCES_NOT_FOUND
-      - UNABLE_TO_PROCESS_INSTRUCTIONS
-      - BAD_REQUEST
-      - UNSUPPORTED_MEDIA_TYPE
-      - RESOURCE_ALREADY_EXISTS
-      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
-      - COULD_NOT_CREATE_RESOURCE
-      - COULD_NOT_UPDATE_RESOURCE
-      - COULD_NOT_DELETE_RESOURCE
-      - MISSING_VERSION
-      - UNSUPPORTED_VERSION
-      - UNAUTHORISED
-      - CUSTOMER_NOT_FOUND
-      - PLATFORM_NOT_FOUND
-      - PRICING_PLAN_NOT_FOUND
-      - PRODUCT_NOT_FOUND
-      - PRODUCT_ITEM_NOT_FOUND
-      - PRICING_NOT_FOUND
-      - PRICING_ITEM_NOT_FOUND
-      - USER_NOT_FOUND
-      - METER_NOT_FOUND
-      - METER_VALUE_NOT_FOUND
-      - METER_PROPERTY_NOT_FOUND
-      - PRICING_ITEM_SUMMARIES_NOT_FOUND
-      - MISSING_ID
-      - INVALID_ID
-      - MISSING_REFERENCE
-      - MISSING_FIELD
-      - INVALID_FIELD
-      - INVALID_OPERATION
-      - INTERNAL_ERROR
-      - USER_NOT_ALLOWED
-      - IDEMPOTENCY_CHECK_FAILED
-      - INVALID_REQUEST
-      title: ApiErrorCode
-    CustomField:
+      - report_date
+      - from_date
+      - to_date
+      - updated_to_final_from_date
+      - updated_to_final_to_date
+      - meter
+      - meter_id
+      - customer_id
+      - invoice_id
+      - statuses
+      title: ReportParameterName
+    AvailableCustomFieldColumnUpdateRequest:
       type: object
       properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        reference:
-          type: string
         name:
-          type:
-          - string
-          - 'null'
-        description:
-          type:
-          - string
-          - 'null'
-        resource_type:
-          $ref: '#/components/schemas/CustomFieldResourceType'
-        multiple_values:
-          type:
-          - boolean
-          - 'null'
-        unique_value:
-          type:
-          - boolean
-          - 'null'
-        copy_value_to_invoice:
-          type:
-          - boolean
-          - 'null'
-        integration_id:
           type: string
-          description: The resource ID of the integration.
-        integration_reference:
-          type: string
-          description: The reference of the integration.
-        type:
-          oneOf:
-          - $ref: '#/components/schemas/CustomFieldType'
-          - type: 'null'
-        enum_values:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-      title: CustomField
-    ReportConfigurationResponseWrapper:
+        custom_field:
+          $ref: '#/components/schemas/CustomField'
+      title: AvailableCustomFieldColumnUpdateRequest
+    PaginationLinks:
       type: object
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ReportConfiguration'
-        limit:
+        first:
           type:
-          - integer
+          - string
           - 'null'
-        page:
+        previous:
           type:
-          - integer
+          - string
           - 'null'
-        total_number_of_pages:
+        current:
           type:
-          - integer
+          - string
           - 'null'
-        links:
-          $ref: '#/components/schemas/PaginationLinks'
-      required:
-      - data
-      - links
-      title: ReportConfigurationResponseWrapper
+        next:
+          type:
+          - string
+          - 'null'
+      title: PaginationLinks
     ReportConfigurationUpdateRequest:
       type: object
       properties:
@@ -540,235 +671,72 @@ components:
           items:
             $ref: '#/components/schemas/AvailableCustomFieldColumnUpdateRequest'
       title: ReportConfigurationUpdateRequest
-    ReportDefinitionCategory:
-      type: string
-      enum:
-      - INVOICE
-      - PLATFORM
-      title: ReportDefinitionCategory
-    ReportConfigurationReportCode:
-      type: string
-      enum:
-      - INVOICE
-      - INVOICE_USAGE
-      - INVOICE_HEADER
-      - INVOICE_LINE
-      - INVOICE_TAX
-      - INVOICE_COMMITMENT
-      - CHILD_PARENT_BREAKDOWN
-      - CHILD_PARENT_BREAKDOWN_PLATFORM
-      - NOT_MATCHED_METER_DATA
-      - DUPLICATE_METER_DATA
-      - METERING
-      - CUSTOMER
-      - PRODUCT
-      - PRICING_PLAN_SUBSCRIPTION
-      - PAYMENT
-      - PRICING
-      - REVENUE_RECOGNITION
-      - CLAUSES
-      title: ReportConfigurationReportCode
-    ReportDefinitionCreateRequestReportCode:
-      type: string
-      enum:
-      - INVOICE
-      - INVOICE_USAGE
-      - INVOICE_HEADER
-      - INVOICE_LINE
-      - INVOICE_TAX
-      - INVOICE_COMMITMENT
-      - CHILD_PARENT_BREAKDOWN
-      - CHILD_PARENT_BREAKDOWN_PLATFORM
-      - NOT_MATCHED_METER_DATA
-      - DUPLICATE_METER_DATA
-      - METERING
-      - CUSTOMER
-      - PRODUCT
-      - PRICING_PLAN_SUBSCRIPTION
-      - PAYMENT
-      - PRICING
-      - REVENUE_RECOGNITION
-      - CLAUSES
-      title: ReportDefinitionCreateRequestReportCode
-    CustomFieldResourceType:
-      type: string
-      enum:
-      - PLATFORM
-      - CUSTOMER
-      - BILLING_ENTITY
-      - METER
-      - METER_VALUE
-      - METER_PROPERTY
-      - METER_VALUE_CALCULATION
-      - PRODUCT
-      - PRODUCT_ITEM
-      - PRODUCT_CATEGORY
-      - PRICING
-      - PRICING_ITEM
-      - PRICING_ITEM_CONFIG
-      - PRICING_ITEM_SUMMARY
-      - METER_VALUE_CALCULATION_SUMMARY
-      - PRICING_PLAN
-      - PRICING_PLAN_VERSION
-      - PRICING_PLAN_SUBSCRIPTION
-      - PRICING_PLAN_SCHEDULE
-      - QUOTE
-      - QUOTE_VERSION
-      - CONTACT
-      - CUSTOM_FIELD
-      - REQUEST_REFERENCE
-      - METER_DATA
-      - CHARGE_DATA
-      - ADJUSTMENT_DATA
-      - PERSIST_DATA
-      - INVOICE
-      - INVOICE_PAYMENT_ATTEMPT
-      - PAYMENT_ACCEPTOR
-      - PAYMENT_SCHEDULE
-      - PAYMENT_REQUEST
-      - FEATURE
-      - ALERT_RULE
-      - ALERT
-      - USER
-      - MEMBERSHIP
-      - TEAM
-      - ENTITY
-      - ACCOUNT_GROUP
-      - AUDIT
-      - WEBHOOK
-      - REPORT_SUBSCRIPTION
-      - REPORT_CONFIGURATION
-      title: CustomFieldResourceType
-    ApiError:
+    ReportConfiguration:
       type: object
       properties:
-        type:
-          $ref: '#/components/schemas/ApiErrorType'
-        code:
-          $ref: '#/components/schemas/ApiErrorCode'
-        field:
+        object_type:
           type:
           - string
           - 'null'
-        message:
-          type: string
-        resource_id:
+        id:
           type:
           - string
           - 'null'
-        resource_type:
+        report_code:
+          $ref: '#/components/schemas/ReportConfigurationReportCode'
+        report_definition:
           oneOf:
-          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - $ref: '#/components/schemas/ReportDefinition'
           - type: 'null'
-      required:
-      - type
-      - code
-      - message
-      title: ApiError
-    ReportParameterType:
-      type: string
-      enum:
-      - CUSTOMER_ID
-      - INVOICE_ID
-      - METER_ID
-      - LOCALE_DATE
-      - TIMESTAMP
-      - INVOICE_STATUSES
-      title: ReportParameterType
-    ReportDefinitionReportCode:
-      type: string
-      enum:
-      - INVOICE
-      - INVOICE_USAGE
-      - INVOICE_HEADER
-      - INVOICE_LINE
-      - INVOICE_TAX
-      - INVOICE_COMMITMENT
-      - CHILD_PARENT_BREAKDOWN
-      - CHILD_PARENT_BREAKDOWN_PLATFORM
-      - NOT_MATCHED_METER_DATA
-      - DUPLICATE_METER_DATA
-      - METERING
-      - CUSTOMER
-      - PRODUCT
-      - PRICING_PLAN_SUBSCRIPTION
-      - PAYMENT
-      - PRICING
-      - REVENUE_RECOGNITION
-      - CLAUSES
-      title: ReportDefinitionReportCode
-    CustomFieldType:
-      type: string
-      enum:
-      - STRING
-      - NUMBER
-      - BOOLEAN
-      - ENUM
-      title: CustomFieldType
-    ReportParameterName:
-      type: string
-      enum:
-      - report_date
-      - from_date
-      - to_date
-      - updated_to_final_from_date
-      - updated_to_final_to_date
-      - meter
-      - meter_id
-      - customer_id
-      - invoice_id
-      - statuses
-      title: ReportParameterName
-    ReportDefinitionUpdateRequestReportCode:
-      type: string
-      enum:
-      - INVOICE
-      - INVOICE_USAGE
-      - INVOICE_HEADER
-      - INVOICE_LINE
-      - INVOICE_TAX
-      - INVOICE_COMMITMENT
-      - CHILD_PARENT_BREAKDOWN
-      - CHILD_PARENT_BREAKDOWN_PLATFORM
-      - NOT_MATCHED_METER_DATA
-      - DUPLICATE_METER_DATA
-      - METERING
-      - CUSTOMER
-      - PRODUCT
-      - PRICING_PLAN_SUBSCRIPTION
-      - PAYMENT
-      - PRICING
-      - REVENUE_RECOGNITION
-      - CLAUSES
-      title: ReportDefinitionUpdateRequestReportCode
-    ReportDefinitionCreateRequestCategory:
-      type: string
-      enum:
-      - INVOICE
-      - PLATFORM
-      title: ReportDefinitionCreateRequestCategory
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
-    ReportDefinitionUpdateRequestCategory:
-      type: string
-      enum:
-      - INVOICE
-      - PLATFORM
-      title: ReportDefinitionUpdateRequestCategory
-    ReportParameter:
+        override_columns:
+          type: array
+          items:
+            type: string
+        available_custom_field_columns:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/AvailableCustomFieldColumn'
+      title: ReportConfiguration
+    AvailableCustomFieldColumnCreateRequest:
       type: object
       properties:
         name:
-          $ref: '#/components/schemas/ReportParameterName'
-        type:
-          $ref: '#/components/schemas/ReportParameterType'
-        required:
-          type: boolean
-      title: ReportParameter
+          type: string
+        custom_field:
+          $ref: '#/components/schemas/CustomField'
+      title: AvailableCustomFieldColumnCreateRequest
+    ReportConfigurationCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        report_code:
+          $ref: '#/components/schemas/ReportConfigurationCreateRequestReportCode'
+        report_definition:
+          oneOf:
+          - $ref: '#/components/schemas/ReportDefinitionCreateRequest'
+          - type: 'null'
+        override_columns:
+          type: array
+          items:
+            type: string
+        available_custom_field_columns:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/AvailableCustomFieldColumnCreateRequest'
+      required:
+      - report_code
+      title: ReportConfigurationCreateRequest
     ApiErrorResourceType:
       type: string
       enum:
@@ -858,166 +826,31 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
-    AvailableCustomFieldColumn:
+    ReportConfigurationResponseWrapper:
       type: object
       properties:
-        name:
-          type: string
-        custom_field:
-          $ref: '#/components/schemas/CustomField'
-      title: AvailableCustomFieldColumn
-    AvailableCustomFieldColumnUpdateRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        custom_field:
-          $ref: '#/components/schemas/CustomField'
-      title: AvailableCustomFieldColumnUpdateRequest
-    ReportConfigurationCreateRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        report_code:
-          $ref: '#/components/schemas/ReportConfigurationCreateRequestReportCode'
-        report_definition:
-          oneOf:
-          - $ref: '#/components/schemas/ReportDefinitionCreateRequest'
-          - type: 'null'
-        override_columns:
+        data:
           type: array
           items:
-            type: string
-        available_custom_field_columns:
+            $ref: '#/components/schemas/ReportConfiguration'
+        limit:
           type:
-          - array
+          - integer
           - 'null'
-          items:
-            $ref: '#/components/schemas/AvailableCustomFieldColumnCreateRequest'
+        page:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
       required:
-      - report_code
-      title: ReportConfigurationCreateRequest
-    ReportConfigurationUpdateRequestReportCode:
-      type: string
-      enum:
-      - INVOICE
-      - INVOICE_USAGE
-      - INVOICE_HEADER
-      - INVOICE_LINE
-      - INVOICE_TAX
-      - INVOICE_COMMITMENT
-      - CHILD_PARENT_BREAKDOWN
-      - CHILD_PARENT_BREAKDOWN_PLATFORM
-      - NOT_MATCHED_METER_DATA
-      - DUPLICATE_METER_DATA
-      - METERING
-      - CUSTOMER
-      - PRODUCT
-      - PRICING_PLAN_SUBSCRIPTION
-      - PAYMENT
-      - PRICING
-      - REVENUE_RECOGNITION
-      - CLAUSES
-      title: ReportConfigurationUpdateRequestReportCode
-    AvailableCustomFieldColumnCreateRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        custom_field:
-          $ref: '#/components/schemas/CustomField'
-      title: AvailableCustomFieldColumnCreateRequest
-    ReportConfigurationCreateRequestReportCode:
-      type: string
-      enum:
-      - INVOICE
-      - INVOICE_USAGE
-      - INVOICE_HEADER
-      - INVOICE_LINE
-      - INVOICE_TAX
-      - INVOICE_COMMITMENT
-      - CHILD_PARENT_BREAKDOWN
-      - CHILD_PARENT_BREAKDOWN_PLATFORM
-      - NOT_MATCHED_METER_DATA
-      - DUPLICATE_METER_DATA
-      - METERING
-      - CUSTOMER
-      - PRODUCT
-      - PRICING_PLAN_SUBSCRIPTION
-      - PAYMENT
-      - PRICING
-      - REVENUE_RECOGNITION
-      - CLAUSES
-      title: ReportConfigurationCreateRequestReportCode
-    ReportDefinitionCreateRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        report_code:
-          $ref: '#/components/schemas/ReportDefinitionCreateRequestReportCode'
-        category:
-          oneOf:
-          - $ref: '#/components/schemas/ReportDefinitionCreateRequestCategory'
-          - type: 'null'
-        name:
-          type:
-          - string
-          - 'null'
-        description:
-          type:
-          - string
-          - 'null'
-        file_name_format:
-          type:
-          - string
-          - 'null'
-        run_types:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-        target_resource_types:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-        columns:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ReportColumn'
-        one_off_parameters:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ReportParameter'
-        scheduled_parameters:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ReportParameter'
-        trigger_parameters:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ReportParameter'
-      title: ReportDefinitionCreateRequest
+      - data
+      - links
+      title: ReportConfigurationResponseWrapper
     ReportDefinitionUpdateRequest:
       type: object
       properties:
@@ -1080,26 +913,193 @@ components:
           items:
             $ref: '#/components/schemas/ReportParameter'
       title: ReportDefinitionUpdateRequest
-    PaginationLinks:
+    ReportParameterType:
+      type: string
+      enum:
+      - CUSTOMER_ID
+      - INVOICE_ID
+      - METER_ID
+      - LOCALE_DATE
+      - TIMESTAMP
+      - INVOICE_STATUSES
+      title: ReportParameterType
+    ReportParameter:
       type: object
       properties:
-        first:
+        name:
+          $ref: '#/components/schemas/ReportParameterName'
+        type:
+          $ref: '#/components/schemas/ReportParameterType'
+        required:
+          type: boolean
+      title: ReportParameter
+    ReportDefinitionCategory:
+      type: string
+      enum:
+      - INVOICE
+      - PLATFORM
+      title: ReportDefinitionCategory
+    ReportDefinitionCreateRequest:
+      type: object
+      properties:
+        object_type:
           type:
           - string
           - 'null'
-        previous:
+        report_code:
+          $ref: '#/components/schemas/ReportDefinitionCreateRequestReportCode'
+        category:
+          oneOf:
+          - $ref: '#/components/schemas/ReportDefinitionCreateRequestCategory'
+          - type: 'null'
+        name:
           type:
           - string
           - 'null'
-        current:
+        description:
           type:
           - string
           - 'null'
-        next:
+        file_name_format:
           type:
           - string
           - 'null'
-      title: PaginationLinks
+        run_types:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        target_resource_types:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        columns:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ReportColumn'
+        one_off_parameters:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ReportParameter'
+        scheduled_parameters:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ReportParameter'
+        trigger_parameters:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ReportParameter'
+      title: ReportDefinitionCreateRequest
+    ReportDefinitionUpdateRequestCategory:
+      type: string
+      enum:
+      - INVOICE
+      - PLATFORM
+      title: ReportDefinitionUpdateRequestCategory
+    ReportConfigurationCreateRequestReportCode:
+      type: string
+      enum:
+      - INVOICE
+      - INVOICE_USAGE
+      - INVOICE_HEADER
+      - INVOICE_LINE
+      - INVOICE_TAX
+      - INVOICE_COMMITMENT
+      - CHILD_PARENT_BREAKDOWN
+      - CHILD_PARENT_BREAKDOWN_PLATFORM
+      - NOT_MATCHED_METER_DATA
+      - DUPLICATE_METER_DATA
+      - METERING
+      - CUSTOMER
+      - PRODUCT
+      - PRICING_PLAN_SUBSCRIPTION
+      - PAYMENT
+      - PRICING
+      - REVENUE_RECOGNITION
+      - CLAUSES
+      title: ReportConfigurationCreateRequestReportCode
+    CustomFieldResourceType:
+      type: string
+      enum:
+      - PLATFORM
+      - CUSTOMER
+      - BILLING_ENTITY
+      - METER
+      - METER_VALUE
+      - METER_PROPERTY
+      - METER_VALUE_CALCULATION
+      - PRODUCT
+      - PRODUCT_ITEM
+      - PRODUCT_CATEGORY
+      - PRICING
+      - PRICING_ITEM
+      - PRICING_ITEM_CONFIG
+      - PRICING_ITEM_SUMMARY
+      - METER_VALUE_CALCULATION_SUMMARY
+      - PRICING_PLAN
+      - PRICING_PLAN_VERSION
+      - PRICING_PLAN_SUBSCRIPTION
+      - PRICING_PLAN_SCHEDULE
+      - QUOTE
+      - QUOTE_VERSION
+      - CONTACT
+      - CUSTOM_FIELD
+      - REQUEST_REFERENCE
+      - METER_DATA
+      - CHARGE_DATA
+      - ADJUSTMENT_DATA
+      - PERSIST_DATA
+      - INVOICE
+      - INVOICE_PAYMENT_ATTEMPT
+      - PAYMENT_ACCEPTOR
+      - PAYMENT_SCHEDULE
+      - PAYMENT_REQUEST
+      - FEATURE
+      - ALERT_RULE
+      - ALERT
+      - USER
+      - MEMBERSHIP
+      - TEAM
+      - ENTITY
+      - ACCOUNT_GROUP
+      - AUDIT
+      - WEBHOOK
+      - REPORT_SUBSCRIPTION
+      - REPORT_CONFIGURATION
+      title: CustomFieldResourceType
+    ReportConfigurationReportCode:
+      type: string
+      enum:
+      - INVOICE
+      - INVOICE_USAGE
+      - INVOICE_HEADER
+      - INVOICE_LINE
+      - INVOICE_TAX
+      - INVOICE_COMMITMENT
+      - CHILD_PARENT_BREAKDOWN
+      - CHILD_PARENT_BREAKDOWN_PLATFORM
+      - NOT_MATCHED_METER_DATA
+      - DUPLICATE_METER_DATA
+      - METERING
+      - CUSTOMER
+      - PRODUCT
+      - PRICING_PLAN_SUBSCRIPTION
+      - PAYMENT
+      - PRICING
+      - REVENUE_RECOGNITION
+      - CLAUSES
+      title: ReportConfigurationReportCode
   securitySchemes:
     API-Key:
       type: apiKey

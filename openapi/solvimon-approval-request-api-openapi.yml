@@ -364,6 +364,93 @@ paths:
                 $ref: '#/components/schemas/ApiError'
 components:
   schemas:
+    ApprovalRequestSourceType:
+      type: string
+      enum:
+      - QUOTE_VERSION
+      - INVOICE
+      description: The object type in which this Approval Request was triggered. I.e. QUOTE_VERSION.
+      title: ApprovalRequestSourceType
+    ApprovalRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        approval_policy_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: The IDs of all the Approval Policies that were breached.
+        source_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApprovalRequestSourceType'
+          - type: 'null'
+          description: The object type in which this Approval Request was triggered. I.e. QUOTE_VERSION.
+        source_id:
+          type:
+          - string
+          - 'null'
+          description: The ID of the object type that triggered this Approval Request.
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/ApprovalRequestStatus'
+          - type: 'null'
+          description: The current status of the Approval Request.
+        owner_id:
+          type:
+          - string
+          - 'null'
+          description: The ID of the user who owns the Approval Request.
+        created_at:
+          type:
+          - string
+          - 'null'
+          description: The date that the Approval Request was created.
+        reviewed_at:
+          type:
+          - string
+          - 'null'
+        updated_at:
+          type:
+          - string
+          - 'null'
+          description: The date that the Approval Request was updated.
+        reviewers:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Reviewer'
+          description: The list of users that have approved or declined the Approval Request.
+        approval_strategy:
+          oneOf:
+          - $ref: '#/components/schemas/ApprovalRequestApprovalStrategy'
+          - type: 'null'
+          description: Approval Strategy applied in the Approval Request.
+      title: ApprovalRequest
+    ApprovalRequestStatus:
+      type: string
+      enum:
+      - PENDING_REVIEW
+      - APPROVED
+      - DECLINED
+      - CANCELLED
+      description: The current status of the Approval Request.
+      title: ApprovalRequestStatus
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
     ApiErrorResourceType:
       type: string
       enum:
@@ -453,13 +540,79 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
-    ApprovalRequestSourceType:
+    ApprovalRequestApprovalStrategy:
       type: string
       enum:
-      - QUOTE_VERSION
-      - INVOICE
-      description: The object type in which this Approval Request was triggered. I.e. QUOTE_VERSION.
-      title: ApprovalRequestSourceType
+      - ALL_LEVELS_MUST_APPROVE
+      - HIGHER_LEVEL_CAN_OVERRIDE
+      - ANYONE_CAN_DECIDE
+      description: Approval Strategy applied in the Approval Request.
+      title: ApprovalRequestApprovalStrategy
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
     Reviewer:
       type: object
       properties:
@@ -506,159 +659,6 @@ components:
       - data
       - links
       title: ApprovalRequestResponseWrapper
-    ApprovalRequestStatus:
-      type: string
-      enum:
-      - PENDING_REVIEW
-      - APPROVED
-      - DECLINED
-      - CANCELLED
-      description: The current status of the Approval Request.
-      title: ApprovalRequestStatus
-    ApiErrorCode:
-      type: string
-      enum:
-      - RESOURCE_NOT_FOUND
-      - RESOURCES_NOT_FOUND
-      - UNABLE_TO_PROCESS_INSTRUCTIONS
-      - BAD_REQUEST
-      - UNSUPPORTED_MEDIA_TYPE
-      - RESOURCE_ALREADY_EXISTS
-      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
-      - COULD_NOT_CREATE_RESOURCE
-      - COULD_NOT_UPDATE_RESOURCE
-      - COULD_NOT_DELETE_RESOURCE
-      - MISSING_VERSION
-      - UNSUPPORTED_VERSION
-      - UNAUTHORISED
-      - CUSTOMER_NOT_FOUND
-      - PLATFORM_NOT_FOUND
-      - PRICING_PLAN_NOT_FOUND
-      - PRODUCT_NOT_FOUND
-      - PRODUCT_ITEM_NOT_FOUND
-      - PRICING_NOT_FOUND
-      - PRICING_ITEM_NOT_FOUND
-      - USER_NOT_FOUND
-      - METER_NOT_FOUND
-      - METER_VALUE_NOT_FOUND
-      - METER_PROPERTY_NOT_FOUND
-      - PRICING_ITEM_SUMMARIES_NOT_FOUND
-      - MISSING_ID
-      - INVALID_ID
-      - MISSING_REFERENCE
-      - MISSING_FIELD
-      - INVALID_FIELD
-      - INVALID_OPERATION
-      - INTERNAL_ERROR
-      - USER_NOT_ALLOWED
-      - IDEMPOTENCY_CHECK_FAILED
-      - INVALID_REQUEST
-      title: ApiErrorCode
-    ApprovalRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        approval_policy_ids:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: The IDs of all the Approval Policies that were breached.
-        source_type:
-          oneOf:
-          - $ref: '#/components/schemas/ApprovalRequestSourceType'
-          - type: 'null'
-          description: The object type in which this Approval Request was triggered. I.e. QUOTE_VERSION.
-        source_id:
-          type:
-          - string
-          - 'null'
-          description: The ID of the object type that triggered this Approval Request.
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/ApprovalRequestStatus'
-          - type: 'null'
-          description: The current status of the Approval Request.
-        owner_id:
-          type:
-          - string
-          - 'null'
-          description: The ID of the user who owns the Approval Request.
-        created_at:
-          type:
-          - string
-          - 'null'
-          description: The date that the Approval Request was created.
-        reviewed_at:
-          type:
-          - string
-          - 'null'
-        updated_at:
-          type:
-          - string
-          - 'null'
-          description: The date that the Approval Request was updated.
-        reviewers:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Reviewer'
-          description: The list of users that have approved or declined the Approval Request.
-        approval_strategy:
-          oneOf:
-          - $ref: '#/components/schemas/ApprovalRequestApprovalStrategy'
-          - type: 'null'
-          description: Approval Strategy applied in the Approval Request.
-      title: ApprovalRequest
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
-    ApiError:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/ApiErrorType'
-        code:
-          $ref: '#/components/schemas/ApiErrorCode'
-        field:
-          type:
-          - string
-          - 'null'
-        message:
-          type: string
-        resource_id:
-          type:
-          - string
-          - 'null'
-        resource_type:
-          oneOf:
-          - $ref: '#/components/schemas/ApiErrorResourceType'
-          - type: 'null'
-      required:
-      - type
-      - code
-      - message
-      title: ApiError
-    ApprovalRequestApprovalStrategy:
-      type: string
-      enum:
-      - ALL_LEVELS_MUST_APPROVE
-      - HIGHER_LEVEL_CAN_OVERRIDE
-      - ANYONE_CAN_DECIDE
-      description: Approval Strategy applied in the Approval Request.
-      title: ApprovalRequestApprovalStrategy
     PaginationLinks:
       type: object
       properties:

@@ -74,29 +74,12 @@ paths:
                 $ref: '#/components/schemas/ApiError'
 components:
   schemas:
-    TaxIdTypeResponse:
-      type: object
-      properties:
-        allowed_types:
-          type: array
-          items:
-            $ref: '#/components/schemas/TaxIdTypeResponseAllowedTypesItems'
-          description: Allowed tax id types for the given country, or all tax id types when no country is provided.
-      required:
-      - allowed_types
-      title: TaxIdTypeResponse
-    TaxIdTypeResponseAllowedTypesItems:
+    ApiErrorType:
       type: string
       enum:
-      - GENERIC_TAX_ID
-      - AU_GST
-      - CA_GST_HST
-      - CA_PST
-      - CA_PST_BC
-      - CA_PST_MB
-      - CA_PST_SK
-      - CA_QST
-      title: TaxIdTypeResponseAllowedTypesItems
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
     ApiErrorResourceType:
       type: string
       enum:
@@ -186,6 +169,17 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
+    TaxIdTypeResponse:
+      type: object
+      properties:
+        allowed_types:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaxIdTypeResponseAllowedTypesItems'
+          description: Allowed tax id types for the given country, or all tax id types when no country is provided.
+      required:
+      - allowed_types
+      title: TaxIdTypeResponse
     ApiErrorCode:
       type: string
       enum:
@@ -225,12 +219,6 @@ components:
       - IDEMPOTENCY_CHECK_FAILED
       - INVALID_REQUEST
       title: ApiErrorCode
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
     ApiError:
       type: object
       properties:
@@ -257,6 +245,18 @@ components:
       - code
       - message
       title: ApiError
+    TaxIdTypeResponseAllowedTypesItems:
+      type: string
+      enum:
+      - GENERIC_TAX_ID
+      - AU_GST
+      - CA_GST_HST
+      - CA_PST
+      - CA_PST_BC
+      - CA_PST_MB
+      - CA_PST_SK
+      - CA_QST
+      title: TaxIdTypeResponseAllowedTypesItems
   securitySchemes:
     API-Key:
       type: apiKey

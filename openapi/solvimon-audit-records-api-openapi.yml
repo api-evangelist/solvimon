@@ -187,6 +187,68 @@ paths:
                 $ref: '#/components/schemas/ApiError'
 components:
   schemas:
+    AuditRecord:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        user_id:
+          type:
+          - string
+          - 'null'
+        target_entity_id:
+          type:
+          - string
+          - 'null'
+        target_platform_id:
+          type:
+          - string
+          - 'null'
+        target_resource_type:
+          type:
+          - string
+          - 'null'
+        target_id:
+          type:
+          - string
+          - 'null'
+        target_environment:
+          type:
+          - string
+          - 'null'
+        action:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        message:
+          type:
+          - string
+          - 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+        idempotency_key:
+          type:
+          - string
+          - 'null'
+      title: AuditRecord
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
     AuditRecordResponseWrapper:
       type: object
       properties:
@@ -300,62 +362,6 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
-    AuditRecord:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        user_id:
-          type:
-          - string
-          - 'null'
-        target_entity_id:
-          type:
-          - string
-          - 'null'
-        target_platform_id:
-          type:
-          - string
-          - 'null'
-        target_resource_type:
-          type:
-          - string
-          - 'null'
-        target_id:
-          type:
-          - string
-          - 'null'
-        target_environment:
-          type:
-          - string
-          - 'null'
-        action:
-          type:
-          - string
-          - 'null'
-        created_at:
-          type:
-          - string
-          - 'null'
-        message:
-          type:
-          - string
-          - 'null'
-        reference:
-          type:
-          - string
-          - 'null'
-        idempotency_key:
-          type:
-          - string
-          - 'null'
-      title: AuditRecord
     ApiErrorCode:
       type: string
       enum:
@@ -395,12 +401,6 @@ components:
       - IDEMPOTENCY_CHECK_FAILED
       - INVALID_REQUEST
       title: ApiErrorCode
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
     ApiError:
       type: object
       properties:

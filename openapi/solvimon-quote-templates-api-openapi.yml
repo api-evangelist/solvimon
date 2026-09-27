@@ -428,6 +428,46 @@ paths:
                 $ref: '#/components/schemas/ApiError'
 components:
   schemas:
+    QuoteTemplateCreateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      description: The status of the template
+      title: QuoteTemplateCreateRequestStatus
+    PeriodType:
+      type: string
+      enum:
+      - DAY
+      - WEEK
+      - MONTH
+      - YEAR
+      title: PeriodType
+    QuoteTemplateResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuoteTemplate'
+        page:
+          type:
+          - integer
+          - 'null'
+        limit:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      title: QuoteTemplateResponseWrapper
     PricingPlanSubscriptionTemplateUpdateRequestBillingCurrency:
       type: string
       enum:
@@ -609,22 +649,16 @@ components:
       - ZWL
       description: Alphabetic currency code representing the type of currency used for the pricing.
       title: PricingPlanSubscriptionTemplateUpdateRequestBillingCurrency
-    QuoteTemplateCreateRequestStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - ARCHIVED
-      description: The status of the template
-      title: QuoteTemplateCreateRequestStatus
-    PeriodType:
-      type: string
-      enum:
-      - DAY
-      - WEEK
-      - MONTH
-      - YEAR
-      title: PeriodType
+    Period:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/PeriodType'
+        value:
+          type:
+          - integer
+          - 'null'
+      title: Period
     ApiErrorCode:
       type: string
       enum:
@@ -664,188 +698,6 @@ components:
       - IDEMPOTENCY_CHECK_FAILED
       - INVALID_REQUEST
       title: ApiErrorCode
-    Period:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/PeriodType'
-        value:
-          type:
-          - integer
-          - 'null'
-      title: Period
-    QuoteVersionTemplate:
-      type: object
-      properties:
-        content:
-          $ref: '#/components/schemas/QuoteVersionContent'
-          description: Content of the quote version.
-        document_ids:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Documents attached to the quote version.
-      title: QuoteVersionTemplate
-    PricingPlanSubscriptionTemplateCreateRequest:
-      type: object
-      properties:
-        billing_currency:
-          oneOf:
-          - $ref: '#/components/schemas/PricingPlanSubscriptionTemplateCreateRequestBillingCurrency'
-          - type: 'null'
-          description: Alphabetic currency code representing the type of currency used for the pricing.
-        initial_term:
-          $ref: '#/components/schemas/Period'
-          description: The initial term for the agreement.
-        renewal_term:
-          $ref: '#/components/schemas/Period'
-          description: The renewal term after the initial term.
-        auto_renewal:
-          type:
-          - boolean
-          - 'null'
-          description: Indicates whether the subscription renews automatically.
-      title: PricingPlanSubscriptionTemplateCreateRequest
-    PricingPlanSubscriptionTemplate:
-      type: object
-      properties:
-        billing_currency:
-          oneOf:
-          - $ref: '#/components/schemas/PricingPlanSubscriptionTemplateBillingCurrency'
-          - type: 'null'
-          description: Alphabetic currency code representing the type of currency used for the pricing.
-        initial_term:
-          $ref: '#/components/schemas/Period'
-          description: The initial term for the agreement.
-        renewal_term:
-          $ref: '#/components/schemas/Period'
-          description: The renewal term after the initial term.
-        auto_renewal:
-          type:
-          - boolean
-          - 'null'
-          description: Indicates whether the subscription renews automatically.
-      title: PricingPlanSubscriptionTemplate
-    QuoteTemplateCreateRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        name:
-          type: string
-          description: Name of the template.
-        reference:
-          type: string
-          description: A custom reference assigned to the template.
-        description:
-          type:
-          - string
-          - 'null'
-          description: Description of the template.
-        status:
-          $ref: '#/components/schemas/QuoteTemplateCreateRequestStatus'
-          description: The status of the template
-        pricing_plan_subscription:
-          $ref: '#/components/schemas/PricingPlanSubscriptionTemplateCreateRequest'
-          description: Template used to define the subscription made for quotes made from this template.
-        pricing_plan_schedule:
-          $ref: '#/components/schemas/PricingPlanScheduleTemplateCreateRequest'
-          description: Template used to select the schedule associated to quotes made from this template.
-        quote_version:
-          $ref: '#/components/schemas/QuoteVersionTemplateCreateRequest'
-          description: Template used to create the initial quote body for quotes made from this template.
-        created_at:
-          type:
-          - string
-          - 'null'
-        updated_at:
-          type:
-          - string
-          - 'null'
-      required:
-      - name
-      - reference
-      title: QuoteTemplateCreateRequest
-    QuoteVersionTemplateCreateRequest:
-      type: object
-      properties:
-        content:
-          $ref: '#/components/schemas/QuoteVersionContent'
-          description: Content of the quote version.
-        document_ids:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Documents attached to the quote version.
-      title: QuoteVersionTemplateCreateRequest
-    PricingPlanSubscriptionTemplateUpdateRequest:
-      type: object
-      properties:
-        billing_currency:
-          oneOf:
-          - $ref: '#/components/schemas/PricingPlanSubscriptionTemplateUpdateRequestBillingCurrency'
-          - type: 'null'
-          description: Alphabetic currency code representing the type of currency used for the pricing.
-        initial_term:
-          $ref: '#/components/schemas/Period'
-          description: The initial term for the agreement.
-        renewal_term:
-          $ref: '#/components/schemas/Period'
-          description: The renewal term after the initial term.
-        auto_renewal:
-          type:
-          - boolean
-          - 'null'
-          description: Indicates whether the subscription renews automatically.
-      title: PricingPlanSubscriptionTemplateUpdateRequest
-    QuoteTemplateResponseWrapper:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/QuoteTemplate'
-        page:
-          type:
-          - integer
-          - 'null'
-        limit:
-          type:
-          - integer
-          - 'null'
-        total_number_of_pages:
-          type:
-          - integer
-          - 'null'
-        links:
-          $ref: '#/components/schemas/PaginationLinks'
-      required:
-      - data
-      title: QuoteTemplateResponseWrapper
-    QuoteVersionTemplateUpdateRequest:
-      type: object
-      properties:
-        content:
-          $ref: '#/components/schemas/QuoteVersionContent'
-          description: Content of the quote version.
-        document_ids:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Documents attached to the quote version.
-      title: QuoteVersionTemplateUpdateRequest
     ApiError:
       type: object
       properties:
@@ -872,22 +724,20 @@ components:
       - code
       - message
       title: ApiError
-    PricingPlanScheduleTemplateCreateRequest:
+    QuoteVersionDefaultContent:
       type: object
       properties:
-        pricing_plan_version_id:
+        header:
           type:
           - string
           - 'null'
-          description: The resource ID of the pricing plan version.
-      title: PricingPlanScheduleTemplateCreateRequest
-    QuoteVersionContentType:
-      type: string
-      enum:
-      - DEFAULT
-      - TIPTAP
-      description: The type of content used by the quote version.
-      title: QuoteVersionContentType
+          description: Text shown above the pricing plan.
+        footer:
+          type:
+          - string
+          - 'null'
+          description: Text shown below the pricing plan.
+      title: QuoteVersionDefaultContent
     PricingPlanScheduleTemplateUpdateRequest:
       type: object
       properties:
@@ -897,194 +747,22 @@ components:
           - 'null'
           description: The resource ID of the pricing plan version.
       title: PricingPlanScheduleTemplateUpdateRequest
-    PricingPlanSubscriptionTemplateBillingCurrency:
-      type: string
-      enum:
-      - AED
-      - AFN
-      - ALL
-      - AMD
-      - ANG
-      - AOA
-      - ARS
-      - AUD
-      - AWG
-      - AZN
-      - BAM
-      - BBD
-      - BDT
-      - BGN
-      - BHD
-      - BIF
-      - BMD
-      - BND
-      - BOB
-      - BRL
-      - BSD
-      - BTN
-      - BWP
-      - BYN
-      - BZD
-      - CAD
-      - CDF
-      - CHF
-      - CLF
-      - CLP
-      - CNY
-      - COP
-      - CRC
-      - CUC
-      - CUP
-      - CVE
-      - CZK
-      - DJF
-      - DKK
-      - DOP
-      - DZD
-      - EGP
-      - ERN
-      - ETB
-      - EUR
-      - FJD
-      - FKP
-      - GBP
-      - GEL
-      - GHS
-      - GIP
-      - GMD
-      - GNF
-      - GTQ
-      - GYD
-      - HKD
-      - HNL
-      - HRK
-      - HTG
-      - HUF
-      - IDR
-      - ILS
-      - INR
-      - IQD
-      - IRR
-      - ISK
-      - JMD
-      - JOD
-      - JPY
-      - KES
-      - KGS
-      - KHR
-      - KMF
-      - KPW
-      - KRW
-      - KWD
-      - KYD
-      - KZT
-      - LAK
-      - LBP
-      - LKR
-      - LRD
-      - LSL
-      - LYD
-      - MAD
-      - MDL
-      - MGA
-      - MKD
-      - MMK
-      - MNT
-      - MOP
-      - MRO
-      - MRU
-      - MUR
-      - MVR
-      - MWK
-      - MXN
-      - MXV
-      - MYR
-      - MZN
-      - NAD
-      - NGN
-      - NIO
-      - NOK
-      - NPR
-      - NZD
-      - OMR
-      - PAB
-      - PEN
-      - PGK
-      - PHP
-      - PKR
-      - PLN
-      - PYG
-      - QAR
-      - RON
-      - RSD
-      - RUB
-      - RWF
-      - SAR
-      - SBD
-      - SCR
-      - SDG
-      - SEK
-      - SGD
-      - SHP
-      - SLE
-      - SOS
-      - SRD
-      - SSP
-      - STN
-      - SVC
-      - SYP
-      - SZL
-      - THB
-      - TJS
-      - TMT
-      - TND
-      - TOP
-      - TRY
-      - TTD
-      - TWD
-      - TZS
-      - UAH
-      - UGX
-      - USD
-      - USN
-      - UYI
-      - UYU
-      - UZS
-      - VEF
-      - VES
-      - VND
-      - VUV
-      - WST
-      - XAF
-      - XAG
-      - XAU
-      - XBA
-      - XBB
-      - XBC
-      - XBD
-      - XCD
-      - XDR
-      - XOF
-      - XPD
-      - XPF
-      - XPT
-      - XSU
-      - XTS
-      - XUA
-      - XXX
-      - YER
-      - ZAR
-      - ZMW
-      - ZWL
-      description: Alphabetic currency code representing the type of currency used for the pricing.
-      title: PricingPlanSubscriptionTemplateBillingCurrency
+    PricingPlanScheduleTemplate:
+      type: object
+      properties:
+        pricing_plan_version_id:
+          type:
+          - string
+          - 'null'
+          description: The resource ID of the pricing plan version.
+      title: PricingPlanScheduleTemplate
     ApiErrorType:
       type: string
       enum:
       - API_ERROR
       - INVALID_REQUEST
       title: ApiErrorType
-    QuoteTemplate:
+    QuoteTemplateUpdateRequest:
       type: object
       properties:
         object_type:
@@ -1107,16 +785,16 @@ components:
           - 'null'
           description: Description of the template.
         status:
-          $ref: '#/components/schemas/QuoteTemplateStatus'
+          $ref: '#/components/schemas/QuoteTemplateUpdateRequestStatus'
           description: The status of the template
         pricing_plan_subscription:
-          $ref: '#/components/schemas/PricingPlanSubscriptionTemplate'
+          $ref: '#/components/schemas/PricingPlanSubscriptionTemplateUpdateRequest'
           description: Template used to define the subscription made for quotes made from this template.
         pricing_plan_schedule:
-          $ref: '#/components/schemas/PricingPlanScheduleTemplate'
+          $ref: '#/components/schemas/PricingPlanScheduleTemplateUpdateRequest'
           description: Template used to select the schedule associated to quotes made from this template.
         quote_version:
-          $ref: '#/components/schemas/QuoteVersionTemplate'
+          $ref: '#/components/schemas/QuoteVersionTemplateUpdateRequest'
           description: Template used to create the initial quote body for quotes made from this template.
         created_at:
           type:
@@ -1126,7 +804,90 @@ components:
           type:
           - string
           - 'null'
-      title: QuoteTemplate
+      title: QuoteTemplateUpdateRequest
+    PricingPlanSubscriptionTemplateCreateRequest:
+      type: object
+      properties:
+        billing_currency:
+          oneOf:
+          - $ref: '#/components/schemas/PricingPlanSubscriptionTemplateCreateRequestBillingCurrency'
+          - type: 'null'
+          description: Alphabetic currency code representing the type of currency used for the pricing.
+        initial_term:
+          $ref: '#/components/schemas/Period'
+          description: The initial term for the agreement.
+        renewal_term:
+          $ref: '#/components/schemas/Period'
+          description: The renewal term after the initial term.
+        auto_renewal:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates whether the subscription renews automatically.
+      title: PricingPlanSubscriptionTemplateCreateRequest
+    PaginationLinks:
+      type: object
+      properties:
+        first:
+          type:
+          - string
+          - 'null'
+        previous:
+          type:
+          - string
+          - 'null'
+        current:
+          type:
+          - string
+          - 'null'
+        next:
+          type:
+          - string
+          - 'null'
+      title: PaginationLinks
+    QuoteTemplateStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      description: The status of the template
+      title: QuoteTemplateStatus
+    QuoteVersionContent:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/QuoteVersionContentType'
+          description: The type of content used by the quote version.
+        default:
+          $ref: '#/components/schemas/QuoteVersionDefaultContent'
+          description: If type is DEFAULT, the content of the quote version.
+        tiptap:
+          type:
+          - string
+          - 'null'
+          description: If type is TIPTAP, the content of the quote version, stringified JSON following the ProseMirror schema.
+      title: QuoteVersionContent
+    PricingPlanSubscriptionTemplate:
+      type: object
+      properties:
+        billing_currency:
+          oneOf:
+          - $ref: '#/components/schemas/PricingPlanSubscriptionTemplateBillingCurrency'
+          - type: 'null'
+          description: Alphabetic currency code representing the type of currency used for the pricing.
+        initial_term:
+          $ref: '#/components/schemas/Period'
+          description: The initial term for the agreement.
+        renewal_term:
+          $ref: '#/components/schemas/Period'
+          description: The renewal term after the initial term.
+        auto_renewal:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates whether the subscription renews automatically.
+      title: PricingPlanSubscriptionTemplate
     PricingPlanSubscriptionTemplateCreateRequestBillingCurrency:
       type: string
       enum:
@@ -1308,7 +1069,188 @@ components:
       - ZWL
       description: Alphabetic currency code representing the type of currency used for the pricing.
       title: PricingPlanSubscriptionTemplateCreateRequestBillingCurrency
-    PricingPlanScheduleTemplate:
+    PricingPlanSubscriptionTemplateBillingCurrency:
+      type: string
+      enum:
+      - AED
+      - AFN
+      - ALL
+      - AMD
+      - ANG
+      - AOA
+      - ARS
+      - AUD
+      - AWG
+      - AZN
+      - BAM
+      - BBD
+      - BDT
+      - BGN
+      - BHD
+      - BIF
+      - BMD
+      - BND
+      - BOB
+      - BRL
+      - BSD
+      - BTN
+      - BWP
+      - BYN
+      - BZD
+      - CAD
+      - CDF
+      - CHF
+      - CLF
+      - CLP
+      - CNY
+      - COP
+      - CRC
+      - CUC
+      - CUP
+      - CVE
+      - CZK
+      - DJF
+      - DKK
+      - DOP
+      - DZD
+      - EGP
+      - ERN
+      - ETB
+      - EUR
+      - FJD
+      - FKP
+      - GBP
+      - GEL
+      - GHS
+      - GIP
+      - GMD
+      - GNF
+      - GTQ
+      - GYD
+      - HKD
+      - HNL
+      - HRK
+      - HTG
+      - HUF
+      - IDR
+      - ILS
+      - INR
+      - IQD
+      - IRR
+      - ISK
+      - JMD
+      - JOD
+      - JPY
+      - KES
+      - KGS
+      - KHR
+      - KMF
+      - KPW
+      - KRW
+      - KWD
+      - KYD
+      - KZT
+      - LAK
+      - LBP
+      - LKR
+      - LRD
+      - LSL
+      - LYD
+      - MAD
+      - MDL
+      - MGA
+      - MKD
+      - MMK
+      - MNT
+      - MOP
+      - MRO
+      - MRU
+      - MUR
+      - MVR
+      - MWK
+      - MXN
+      - MXV
+      - MYR
+      - MZN
+      - NAD
+      - NGN
+      - NIO
+      - NOK
+      - NPR
+      - NZD
+      - OMR
+      - PAB
+      - PEN
+      - PGK
+      - PHP
+      - PKR
+      - PLN
+      - PYG
+      - QAR
+      - RON
+      - RSD
+      - RUB
+      - RWF
+      - SAR
+      - SBD
+      - SCR
+      - SDG
+      - SEK
+      - SGD
+      - SHP
+      - SLE
+      - SOS
+      - SRD
+      - SSP
+      - STN
+      - SVC
+      - SYP
+      - SZL
+      - THB
+      - TJS
+      - TMT
+      - TND
+      - TOP
+      - TRY
+      - TTD
+      - TWD
+      - TZS
+      - UAH
+      - UGX
+      - USD
+      - USN
+      - UYI
+      - UYU
+      - UZS
+      - VEF
+      - VES
+      - VND
+      - VUV
+      - WST
+      - XAF
+      - XAG
+      - XAU
+      - XBA
+      - XBB
+      - XBC
+      - XBD
+      - XCD
+      - XDR
+      - XOF
+      - XPD
+      - XPF
+      - XPT
+      - XSU
+      - XTS
+      - XUA
+      - XXX
+      - YER
+      - ZAR
+      - ZMW
+      - ZWL
+      description: Alphabetic currency code representing the type of currency used for the pricing.
+      title: PricingPlanSubscriptionTemplateBillingCurrency
+    PricingPlanScheduleTemplateCreateRequest:
       type: object
       properties:
         pricing_plan_version_id:
@@ -1316,15 +1258,7 @@ components:
           - string
           - 'null'
           description: The resource ID of the pricing plan version.
-      title: PricingPlanScheduleTemplate
-    QuoteTemplateStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - ARCHIVED
-      description: The status of the template
-      title: QuoteTemplateStatus
+      title: PricingPlanScheduleTemplateCreateRequest
     ApiErrorResourceType:
       type: string
       enum:
@@ -1414,21 +1348,7 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
-    QuoteVersionDefaultContent:
-      type: object
-      properties:
-        header:
-          type:
-          - string
-          - 'null'
-          description: Text shown above the pricing plan.
-        footer:
-          type:
-          - string
-          - 'null'
-          description: Text shown below the pricing plan.
-      title: QuoteVersionDefaultContent
-    QuoteTemplateUpdateRequest:
+    QuoteTemplate:
       type: object
       properties:
         object_type:
@@ -1451,16 +1371,16 @@ components:
           - 'null'
           description: Description of the template.
         status:
-          $ref: '#/components/schemas/QuoteTemplateUpdateRequestStatus'
+          $ref: '#/components/schemas/QuoteTemplateStatus'
           description: The status of the template
         pricing_plan_subscription:
-          $ref: '#/components/schemas/PricingPlanSubscriptionTemplateUpdateRequest'
+          $ref: '#/components/schemas/PricingPlanSubscriptionTemplate'
           description: Template used to define the subscription made for quotes made from this template.
         pricing_plan_schedule:
-          $ref: '#/components/schemas/PricingPlanScheduleTemplateUpdateRequest'
+          $ref: '#/components/schemas/PricingPlanScheduleTemplate'
           description: Template used to select the schedule associated to quotes made from this template.
         quote_version:
-          $ref: '#/components/schemas/QuoteVersionTemplateUpdateRequest'
+          $ref: '#/components/schemas/QuoteVersionTemplate'
           description: Template used to create the initial quote body for quotes made from this template.
         created_at:
           type:
@@ -1470,7 +1390,67 @@ components:
           type:
           - string
           - 'null'
-      title: QuoteTemplateUpdateRequest
+      title: QuoteTemplate
+    QuoteVersionTemplate:
+      type: object
+      properties:
+        content:
+          $ref: '#/components/schemas/QuoteVersionContent'
+          description: Content of the quote version.
+        document_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Documents attached to the quote version.
+      title: QuoteVersionTemplate
+    QuoteTemplateCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        name:
+          type: string
+          description: Name of the template.
+        reference:
+          type: string
+          description: A custom reference assigned to the template.
+        description:
+          type:
+          - string
+          - 'null'
+          description: Description of the template.
+        status:
+          $ref: '#/components/schemas/QuoteTemplateCreateRequestStatus'
+          description: The status of the template
+        pricing_plan_subscription:
+          $ref: '#/components/schemas/PricingPlanSubscriptionTemplateCreateRequest'
+          description: Template used to define the subscription made for quotes made from this template.
+        pricing_plan_schedule:
+          $ref: '#/components/schemas/PricingPlanScheduleTemplateCreateRequest'
+          description: Template used to select the schedule associated to quotes made from this template.
+        quote_version:
+          $ref: '#/components/schemas/QuoteVersionTemplateCreateRequest'
+          description: Template used to create the initial quote body for quotes made from this template.
+        created_at:
+          type:
+          - string
+          - 'null'
+        updated_at:
+          type:
+          - string
+          - 'null'
+      required:
+      - name
+      - reference
+      title: QuoteTemplateCreateRequest
     QuoteTemplateUpdateRequestStatus:
       type: string
       enum:
@@ -1479,41 +1459,61 @@ components:
       - ARCHIVED
       description: The status of the template
       title: QuoteTemplateUpdateRequestStatus
-    QuoteVersionContent:
+    QuoteVersionContentType:
+      type: string
+      enum:
+      - DEFAULT
+      - TIPTAP
+      description: The type of content used by the quote version.
+      title: QuoteVersionContentType
+    PricingPlanSubscriptionTemplateUpdateRequest:
       type: object
       properties:
-        type:
-          $ref: '#/components/schemas/QuoteVersionContentType'
-          description: The type of content used by the quote version.
-        default:
-          $ref: '#/components/schemas/QuoteVersionDefaultContent'
-          description: If type is DEFAULT, the content of the quote version.
-        tiptap:
+        billing_currency:
+          oneOf:
+          - $ref: '#/components/schemas/PricingPlanSubscriptionTemplateUpdateRequestBillingCurrency'
+          - type: 'null'
+          description: Alphabetic currency code representing the type of currency used for the pricing.
+        initial_term:
+          $ref: '#/components/schemas/Period'
+          description: The initial term for the agreement.
+        renewal_term:
+          $ref: '#/components/schemas/Period'
+          description: The renewal term after the initial term.
+        auto_renewal:
           type:
-          - string
+          - boolean
           - 'null'
-          description: If type is TIPTAP, the content of the quote version, stringified JSON following the ProseMirror schema.
-      title: QuoteVersionContent
-    PaginationLinks:
+          description: Indicates whether the subscription renews automatically.
+      title: PricingPlanSubscriptionTemplateUpdateRequest
+    QuoteVersionTemplateCreateRequest:
       type: object
       properties:
-        first:
+        content:
+          $ref: '#/components/schemas/QuoteVersionContent'
+          description: Content of the quote version.
+        document_ids:
           type:
-          - string
+          - array
           - 'null'
-        previous:
+          items:
+            type: string
+          description: Documents attached to the quote version.
+      title: QuoteVersionTemplateCreateRequest
+    QuoteVersionTemplateUpdateRequest:
+      type: object
+      properties:
+        content:
+          $ref: '#/components/schemas/QuoteVersionContent'
+          description: Content of the quote version.
+        document_ids:
           type:
-          - string
+          - array
           - 'null'
-        current:
-          type:
-          - string
-          - 'null'
-        next:
-          type:
-          - string
-          - 'null'
-      title: PaginationLinks
+          items:
+            type: string
+          description: Documents attached to the quote version.
+      title: QuoteVersionTemplateUpdateRequest
   securitySchemes:
     API-Key:
       type: apiKey

@@ -308,11 +308,17 @@ paths:
               $ref: '#/components/schemas/AuthenticationProviderUpdateRequest'
 components:
   schemas:
-    SSOVariantCreateRequest:
+    AuthenticationProviderUpdateRequestType:
+      type: string
+      enum:
+      - DEFAULT
+      - SSO
+      title: AuthenticationProviderUpdateRequestType
+    SSOVariantUpdateRequest:
       type: object
       properties:
         variant:
-          $ref: '#/components/schemas/SsoVariantCreateRequestVariant'
+          $ref: '#/components/schemas/SsoVariantUpdateRequestVariant'
         allowed_domains:
           type: array
           items:
@@ -321,35 +327,7 @@ components:
           $ref: '#/components/schemas/SSOAuthenticationProviderVariantSettings'
         microsoft:
           $ref: '#/components/schemas/SSOAuthenticationProviderVariantSettings'
-      title: SSOVariantCreateRequest
-    AuthenticationProviderCreateRequest:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-        entity_id:
-          type:
-          - string
-          - 'null'
-        type:
-          $ref: '#/components/schemas/AuthenticationProviderCreateRequestType'
-        name:
-          type: string
-        status:
-          $ref: '#/components/schemas/AuthenticationProviderCreateRequestStatus'
-        sso:
-          $ref: '#/components/schemas/SSOVariantCreateRequest'
-      required:
-      - type
-      title: AuthenticationProviderCreateRequest
-    AuthenticationProviderCreateRequestStatus:
-      type: string
-      enum:
-      - ENABLED
-      - DISABLED
-      title: AuthenticationProviderCreateRequestStatus
+      title: SSOVariantUpdateRequest
     ApiErrorCode:
       type: string
       enum:
@@ -389,6 +367,12 @@ components:
       - IDEMPOTENCY_CHECK_FAILED
       - INVALID_REQUEST
       title: ApiErrorCode
+    AuthenticationProviderCreateRequestStatus:
+      type: string
+      enum:
+      - ENABLED
+      - DISABLED
+      title: AuthenticationProviderCreateRequestStatus
     SsoVariantCreateRequestVariant:
       type: string
       enum:
@@ -396,57 +380,13 @@ components:
       - OKTA
       - MICROSOFT
       title: SsoVariantCreateRequestVariant
-    AuthenticationProviderUpdateRequestStatus:
+    SsoVariantVariant:
       type: string
       enum:
-      - ENABLED
-      - DISABLED
-      title: AuthenticationProviderUpdateRequestStatus
-    AuthenticationProviderResponseWrapper:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/AuthenticationProvider'
-        limit:
-          type:
-          - integer
-          - 'null'
-        page:
-          type:
-          - integer
-          - 'null'
-        total_number_of_pages:
-          type:
-          - integer
-          - 'null'
-        links:
-          $ref: '#/components/schemas/PaginationLinks'
-      required:
-      - data
-      - links
-      title: AuthenticationProviderResponseWrapper
-    AuthenticationProviderUpdateRequestType:
-      type: string
-      enum:
-      - DEFAULT
-      - SSO
-      title: AuthenticationProviderUpdateRequestType
-    SSOVariantUpdateRequest:
-      type: object
-      properties:
-        variant:
-          $ref: '#/components/schemas/SsoVariantUpdateRequestVariant'
-        allowed_domains:
-          type: array
-          items:
-            type: string
-        okta:
-          $ref: '#/components/schemas/SSOAuthenticationProviderVariantSettings'
-        microsoft:
-          $ref: '#/components/schemas/SSOAuthenticationProviderVariantSettings'
-      title: SSOVariantUpdateRequest
+      - GOOGLE
+      - OKTA
+      - MICROSOFT
+      title: SsoVariantVariant
     ApiError:
       type: object
       properties:
@@ -473,6 +413,40 @@ components:
       - code
       - message
       title: ApiError
+    AuthenticationProviderRequestCreateRequest:
+      type: object
+      properties:
+        token:
+          type: string
+        email:
+          type: string
+      title: AuthenticationProviderRequestCreateRequest
+    SSOVariantCreateRequest:
+      type: object
+      properties:
+        variant:
+          $ref: '#/components/schemas/SsoVariantCreateRequestVariant'
+        allowed_domains:
+          type: array
+          items:
+            type: string
+        okta:
+          $ref: '#/components/schemas/SSOAuthenticationProviderVariantSettings'
+        microsoft:
+          $ref: '#/components/schemas/SSOAuthenticationProviderVariantSettings'
+      title: SSOVariantCreateRequest
+    AuthenticationProviderStatus:
+      type: string
+      enum:
+      - ENABLED
+      - DISABLED
+      title: AuthenticationProviderStatus
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
     SSOVariant:
       type: object
       properties:
@@ -487,33 +461,12 @@ components:
         microsoft:
           $ref: '#/components/schemas/SSOAuthenticationProviderVariantSettings'
       title: SSOVariant
-    AuthenticationProviderRequestCreateRequest:
-      type: object
-      properties:
-        token:
-          type: string
-        email:
-          type: string
-      title: AuthenticationProviderRequestCreateRequest
-    AuthenticationProviderStatus:
+    AuthenticationProviderUpdateRequestStatus:
       type: string
       enum:
       - ENABLED
       - DISABLED
-      title: AuthenticationProviderStatus
-    SSOAuthenticationProviderVariantSettings:
-      type: object
-      properties:
-        connection:
-          type: string
-      title: SSOAuthenticationProviderVariantSettings
-    SsoVariantUpdateRequestVariant:
-      type: string
-      enum:
-      - GOOGLE
-      - OKTA
-      - MICROSOFT
-      title: SsoVariantUpdateRequestVariant
+      title: AuthenticationProviderUpdateRequestStatus
     AuthenticationProvider:
       type: object
       properties:
@@ -534,31 +487,32 @@ components:
         sso:
           $ref: '#/components/schemas/SSOVariant'
       title: AuthenticationProvider
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
-    AuthenticationProviderType:
-      type: string
-      enum:
-      - DEFAULT
-      - SSO
-      title: AuthenticationProviderType
-    AuthenticationProviderCreateRequestType:
-      type: string
-      enum:
-      - DEFAULT
-      - SSO
-      title: AuthenticationProviderCreateRequestType
-    SsoVariantVariant:
-      type: string
-      enum:
-      - GOOGLE
-      - OKTA
-      - MICROSOFT
-      title: SsoVariantVariant
+    SSOAuthenticationProviderVariantSettings:
+      type: object
+      properties:
+        connection:
+          type: string
+      title: SSOAuthenticationProviderVariantSettings
+    PaginationLinks:
+      type: object
+      properties:
+        first:
+          type:
+          - string
+          - 'null'
+        previous:
+          type:
+          - string
+          - 'null'
+        current:
+          type:
+          - string
+          - 'null'
+        next:
+          type:
+          - string
+          - 'null'
+      title: PaginationLinks
     ApiErrorResourceType:
       type: string
       enum:
@@ -648,6 +602,65 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
+    AuthenticationProviderType:
+      type: string
+      enum:
+      - DEFAULT
+      - SSO
+      title: AuthenticationProviderType
+    AuthenticationProviderCreateRequest:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        entity_id:
+          type:
+          - string
+          - 'null'
+        type:
+          $ref: '#/components/schemas/AuthenticationProviderCreateRequestType'
+        name:
+          type: string
+        status:
+          $ref: '#/components/schemas/AuthenticationProviderCreateRequestStatus'
+        sso:
+          $ref: '#/components/schemas/SSOVariantCreateRequest'
+      required:
+      - type
+      title: AuthenticationProviderCreateRequest
+    AuthenticationProviderCreateRequestType:
+      type: string
+      enum:
+      - DEFAULT
+      - SSO
+      title: AuthenticationProviderCreateRequestType
+    AuthenticationProviderResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuthenticationProvider'
+        limit:
+          type:
+          - integer
+          - 'null'
+        page:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      - links
+      title: AuthenticationProviderResponseWrapper
     AuthenticationProviderUpdateRequest:
       type: object
       properties:
@@ -668,26 +681,13 @@ components:
         sso:
           $ref: '#/components/schemas/SSOVariantUpdateRequest'
       title: AuthenticationProviderUpdateRequest
-    PaginationLinks:
-      type: object
-      properties:
-        first:
-          type:
-          - string
-          - 'null'
-        previous:
-          type:
-          - string
-          - 'null'
-        current:
-          type:
-          - string
-          - 'null'
-        next:
-          type:
-          - string
-          - 'null'
-      title: PaginationLinks
+    SsoVariantUpdateRequestVariant:
+      type: string
+      enum:
+      - GOOGLE
+      - OKTA
+      - MICROSOFT
+      title: SsoVariantUpdateRequestVariant
   securitySchemes:
     API-Key:
       type: apiKey

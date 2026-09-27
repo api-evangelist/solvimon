@@ -246,70 +246,83 @@ paths:
                 $ref: '#/components/schemas/ApiError'
 components:
   schemas:
-    Individual:
-      type: object
-      properties:
-        name:
-          $ref: '#/components/schemas/Name'
-        residential_address:
-          $ref: '#/components/schemas/Address'
-      title: Individual
-    TaxIdValidation:
+    LinkedIntegration:
       type: object
       properties:
         id:
           type: string
-        validation_date:
-          type: string
-        source:
-          type: string
-        valid:
-          $ref: '#/components/schemas/TaxIdValidationValid'
-        message:
-          type:
-          - string
-          - 'null'
-      title: TaxIdValidation
-    Address:
+        link_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/LinkDetail'
+      title: LinkedIntegration
+    ReprocessNotMatchedCreateRequest:
       type: object
       properties:
-        line1:
+        customer_id:
+          type: string
+          description: Resource ID of type CUSTOMER
+        start_at:
           type:
           - string
           - 'null'
-        line2:
+          format: date-time
+        end_at:
           type:
           - string
           - 'null'
-        city:
+          format: date-time
+      title: ReprocessNotMatchedCreateRequest
+    Name:
+      type: object
+      properties:
+        first_name:
           type:
           - string
           - 'null'
-        postal_code:
+        last_name:
           type:
           - string
           - 'null'
-        state:
+        infix:
           type:
           - string
           - 'null'
-        country:
+      title: Name
+    PricingPlanSubscriptionSelector:
+      type: object
+      properties:
+        data:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorData'
+        rules:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorRule'
+        filters:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFilter'
+        fallback:
           oneOf:
-          - $ref: '#/components/schemas/AddressCountry'
+          - $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFallback'
           - type: 'null'
-      title: Address
-    LinkDetail:
-      type: object
-      properties:
-        url:
-          type:
-          - string
-          - 'null'
-        custom_field_name:
-          type:
-          - string
-          - 'null'
-      title: LinkDetail
+          description: The fallback logic what to do when no subscription is found. By default it is LATEST
+      title: PricingPlanSubscriptionSelector
+    TaxIdValidationValid:
+      type: string
+      enum:
+      - VALID
+      - NOT_VALID
+      - UNKNOWN
+      title: TaxIdValidationValid
     ApiErrorCode:
       type: string
       enum:
@@ -349,19 +362,38 @@ components:
       - IDEMPOTENCY_CHECK_FAILED
       - INVALID_REQUEST
       title: ApiErrorCode
-    TaxIdType:
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    PricingPlanSubscriptionSelectorDataField:
       type: string
       enum:
-      - GENERIC_TAX_ID
-      - AU_GST
-      - CA_GST_HST
-      - CA_PST
-      - CA_PST_BC
-      - CA_PST_MB
-      - CA_PST_SK
-      - CA_QST
-      description: Optional tax id type, indicates which type of tax the number is for
-      title: TaxIdType
+      - BILLING_ENTITY_REGISTERED_ADDRESS_COUNTRY
+      - PRICING_PLAN_REFERENCE
+      title: PricingPlanSubscriptionSelectorDataField
     ReprocessNotMatched:
       type: object
       properties:
@@ -379,32 +411,257 @@ components:
           - 'null'
           format: date-time
       title: ReprocessNotMatched
-    PricingPlanSubscriptionSelectorFilterField:
+    IntegrationDetails:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+        payment_gateway_variant:
+          $ref: '#/components/schemas/IntegrationDetailsPaymentGatewayVariant'
+        adyen:
+          $ref: '#/components/schemas/AdyenIntegrationDetails'
+        stripe:
+          $ref: '#/components/schemas/StripeIntegrationDetails'
+      title: IntegrationDetails
+    TaxIdType:
+      type: string
+      enum:
+      - GENERIC_TAX_ID
+      - AU_GST
+      - CA_GST_HST
+      - CA_PST
+      - CA_PST_BC
+      - CA_PST_MB
+      - CA_PST_SK
+      - CA_QST
+      description: Optional tax id type, indicates which type of tax the number is for
+      title: TaxIdType
+    CustomFieldValue:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOM_FIELD
+        reference:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+        values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        integration_details:
+          oneOf:
+          - $ref: '#/components/schemas/IntegrationDetails'
+          - type: 'null'
+        integration_id:
+          type: string
+          description: The resource ID of the integration linked to the custom field
+      title: CustomFieldValue
+    LinkDetail:
+      type: object
+      properties:
+        url:
+          type:
+          - string
+          - 'null'
+        custom_field_name:
+          type:
+          - string
+          - 'null'
+      title: LinkDetail
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    ReprocessCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        type:
+          $ref: '#/components/schemas/ReprocessCreateRequestType'
+        created_at:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - string
+          - 'null'
+        percentage:
+          type:
+          - integer
+          - 'null'
+        invoice:
+          $ref: '#/components/schemas/ReprocessInvoiceCreateRequest'
+        not_matched:
+          $ref: '#/components/schemas/ReprocessNotMatchedCreateRequest'
+        customer:
+          $ref: '#/components/schemas/ReprocessCustomerCreateRequest'
+      required:
+      - type
+      title: ReprocessCreateRequest
+    CustomerType:
+      type: string
+      enum:
+      - ORGANIZATION
+      - INDIVIDUAL
+      description: The type of customer entity.
+      title: CustomerType
+    ReprocessCustomer:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Resource ID of type CUSTOMER
+        customer_id:
+          type: string
+          description: Resource ID of type CUSTOMER
+        customer:
+          oneOf:
+          - $ref: '#/components/schemas/Customer'
+          - type: 'null'
+        start_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        end_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      title: ReprocessCustomer
+    ReprocessInvoiceCreateRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Resource ID of type INVOICE
+        invoice_id:
+          type: string
+          description: Resource ID of type INVOICE
+      title: ReprocessInvoiceCreateRequest
+    PricingPlanSubscriptionSelectorRuleType:
+      type: string
+      enum:
+      - EQUALS
+      - NOT_EQUALS
+      - IN
+      - NOT_IN
+      - GREATER_THAN
+      - GREATER_THAN_OR_EQUALS
+      - LESS_THAN
+      - LESS_THAN_OR_EQUALS
+      - EMPTY
+      - NOT_EMPTY
+      - CONTAINS
+      - NOT_CONTAINS
+      title: PricingPlanSubscriptionSelectorRuleType
+    PricingPlanSubscriptionSelectorRuleField:
       type: string
       enum:
       - BILLING_ENTITY_REGISTERED_ADDRESS_COUNTRY
       - PRICING_PLAN_REFERENCE
-      title: PricingPlanSubscriptionSelectorFilterField
-    NotificationPreferenceType:
-      type: string
-      enum:
-      - INVOICE
-      description: The notification type to configure.
-      title: NotificationPreferenceType
-    PricingPlanSubscriptionSelectorRule:
+      title: PricingPlanSubscriptionSelectorRuleField
+    PaginationLinks:
+      type: object
+      properties:
+        first:
+          type:
+          - string
+          - 'null'
+        previous:
+          type:
+          - string
+          - 'null'
+        current:
+          type:
+          - string
+          - 'null'
+        next:
+          type:
+          - string
+          - 'null'
+      title: PaginationLinks
+    ReprocessInvoice:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Resource ID of type INVOICE
+        invoice_id:
+          type: string
+          description: Resource ID of type INVOICE
+      title: ReprocessInvoice
+    PricingPlanSubscriptionSelectorData:
       type: object
       properties:
         field:
-          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorRuleField'
-        type:
-          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorRuleType'
-      title: PricingPlanSubscriptionSelectorRule
-    StripeIntegrationDetails:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorDataField'
+        value:
+          type: string
+      title: PricingPlanSubscriptionSelectorData
+    NotificationChannel:
       type: object
       properties:
-        payment_method_id:
-          type: string
-      title: StripeIntegrationDetails
+        type:
+          $ref: '#/components/schemas/NotificationChannelType'
+          description: The channel type to use.
+        enabled:
+          type:
+          - boolean
+          - 'null'
+          description: Whether the channel is enabled for the notification type.
+      title: NotificationChannel
+    CustomerRolesItems:
+      type: string
+      enum:
+      - DEFAULT
+      - NON_PROCESSING
+      - SELF_BILLING
+      - SELLER
+      - PROCESSING_ONLY
+      title: CustomerRolesItems
+    PricingPlanSubscriptionSelectorFilterType:
+      type: string
+      enum:
+      - EQUALS
+      - NOT_EQUALS
+      - IN
+      - NOT_IN
+      - GREATER_THAN
+      - GREATER_THAN_OR_EQUALS
+      - LESS_THAN
+      - LESS_THAN_OR_EQUALS
+      - EMPTY
+      - NOT_EMPTY
+      - CONTAINS
+      - NOT_CONTAINS
+      title: PricingPlanSubscriptionSelectorFilterType
     TaxRegistration:
       type: object
       properties:
@@ -439,288 +696,155 @@ components:
           $ref: '#/components/schemas/Address'
           description: The address of this tax registration, if different from the billing entity. Currently, only the address will be used for tax calculations
       title: TaxRegistration
-    TaxId:
-      type: object
-      properties:
-        id:
-          type: string
-        type:
-          oneOf:
-          - $ref: '#/components/schemas/TaxIdType'
-          - type: 'null'
-          description: Optional tax id type, indicates which type of tax the number is for
-        display_name:
-          type:
-          - string
-          - 'null'
-          description: User-friendly display name
-        tax_id_validation_result:
-          $ref: '#/components/schemas/TaxIdValidation'
-      title: TaxId
-    Organization:
-      type: object
-      properties:
-        legal_name:
-          type: string
-        tax_id:
-          type:
-          - string
-          - 'null'
-          description: Tax Id used for tax purposes of the organization
-        tax_ids:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/TaxId'
-          description: Tax Ids used for tax purposes of the organization
-        registration_number:
-          type:
-          - string
-          - 'null'
-        tax_exempt:
-          type:
-          - boolean
-          - 'null'
-        tax_exempt_note:
-          type:
-          - string
-          - 'null'
-        registered_address:
-          $ref: '#/components/schemas/Address'
-        tax_registrations:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/TaxRegistration'
-          description: Extra tax registrations for the customer
-      title: Organization
-    ReprocessInvoice:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Resource ID of type INVOICE
-        invoice_id:
-          type: string
-          description: Resource ID of type INVOICE
-      title: ReprocessInvoice
-    Name:
-      type: object
-      properties:
-        first_name:
-          type:
-          - string
-          - 'null'
-        last_name:
-          type:
-          - string
-          - 'null'
-        infix:
-          type:
-          - string
-          - 'null'
-      title: Name
-    ReprocessCustomerCreateRequest:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Resource ID of type CUSTOMER
-        customer_id:
-          type: string
-          description: Resource ID of type CUSTOMER
-        customer:
-          oneOf:
-          - $ref: '#/components/schemas/Customer'
-          - type: 'null'
-        start_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        end_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-      title: ReprocessCustomerCreateRequest
-    AdyenIntegrationDetails:
-      type: object
-      properties:
-        recurring_detail_reference:
-          type: string
-      title: AdyenIntegrationDetails
-    TaxIdValidationValid:
+    ApiErrorResourceType:
       type: string
       enum:
-      - VALID
-      - NOT_VALID
-      - UNKNOWN
-      title: TaxIdValidationValid
-    ReprocessCustomer:
+      - CUSTOMER
+      - CUSTOM_FIELD
+      - PLATFORM
+      - PLATFORM_UPTODATE
+      - METER
+      - METER_VALUE
+      - METER_PROPERTY
+      - METER_VALUE_CALCULATION
+      - INGEST_DATA
+      - METER_DATA
+      - CHARGE_DATA
+      - PERSIST_DATA
+      - ADJUSTMENT_DATA
+      - PRODUCT_CATEGORY
+      - PRODUCT
+      - PRODUCT_ITEM
+      - PRICING
+      - PRICING_GROUP
+      - PRICING_ITEM
+      - PRICING_ITEM_CONFIG
+      - PRICING_PLAN_SUBSCRIPTION
+      - PRICING_PLAN_SUBSCRIPTION_GROUP
+      - PRICING_PLAN_SCHEDULE
+      - PRICING_PLAN
+      - PRICING_PLAN_VERSION
+      - QUOTE
+      - QUOTE_VERSION
+      - QUOTE_TEMPLATE
+      - API_KEY
+      - USER
+      - ROLE
+      - PROXY_USER
+      - EXTERNAL_CREDENTIALS
+      - TOKEN
+      - INVOICE
+      - E_INVOICE
+      - PDF
+      - BILLING_ENTITY
+      - FEATURE
+      - MEMBERSHIP
+      - PAYMENT
+      - PAYMENT_ACCEPTOR
+      - PAYMENT_METHOD
+      - PAYMENT_METHOD_OPTIONS
+      - PAYMENT_SCHEDULE
+      - PAYMENT_REQUEST
+      - INTEGRATION
+      - WEBHOOK
+      - FILE
+      - FILE_PROCESSING_SETTINGS
+      - TEAM
+      - DOWNLOAD_URL
+      - CSV_REPORT
+      - REPORT
+      - REPORT_GENERATE_REQUEST
+      - REPORT_CONFIGURATION
+      - REPORT_SUBSCRIPTION
+      - REPORT_DEFINITION
+      - ACCOUNT_GROUP
+      - ENTITY
+      - EVENT_TRACE
+      - EVENT_TRACE_LINK
+      - PRICING_CATEGORY
+      - CONTACT
+      - ALERT_RULE
+      - ALERT
+      - AUDIT_RECORD
+      - PORTAL_URL
+      - AUTHENTICATION_PROVIDER
+      - REPROCESS
+      - APPROVAL_POLICY
+      - APPROVAL_REQUEST
+      - BULK_ACTION
+      - COUPON
+      - PROMOTION_CODE
+      - WALLET
+      - WALLET_TYPE
+      - WALLET_GRANT
+      - WORKFLOW
+      - WORKFLOW_TRIGGER
+      - WORKFLOW_ACTION
+      - CREDIT_TYPE
+      - SIGNATURE_REQUEST
+      - ATTACHMENT
+      - DOCUMENT
+      title: ApiErrorResourceType
+    Address:
       type: object
       properties:
-        id:
-          type: string
-          description: Resource ID of type CUSTOMER
-        customer_id:
-          type: string
-          description: Resource ID of type CUSTOMER
-        customer:
+        line1:
+          type:
+          - string
+          - 'null'
+        line2:
+          type:
+          - string
+          - 'null'
+        city:
+          type:
+          - string
+          - 'null'
+        postal_code:
+          type:
+          - string
+          - 'null'
+        state:
+          type:
+          - string
+          - 'null'
+        country:
           oneOf:
-          - $ref: '#/components/schemas/Customer'
+          - $ref: '#/components/schemas/AddressCountry'
           - type: 'null'
-        start_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        end_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-      title: ReprocessCustomer
-    ReprocessNotMatchedCreateRequest:
+      title: Address
+    PricingPlanSubscriptionSelectorRule:
       type: object
       properties:
-        customer_id:
-          type: string
-          description: Resource ID of type CUSTOMER
-        start_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        end_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-      title: ReprocessNotMatchedCreateRequest
-    PricingPlanSubscriptionSelectorFallback:
-      type: string
-      enum:
-      - LATEST
-      - NONE
-      description: The fallback logic what to do when no subscription is found. By default it is LATEST
-      title: PricingPlanSubscriptionSelectorFallback
-    PricingPlanSubscriptionSelectorRuleField:
-      type: string
-      enum:
-      - BILLING_ENTITY_REGISTERED_ADDRESS_COUNTRY
-      - PRICING_PLAN_REFERENCE
-      title: PricingPlanSubscriptionSelectorRuleField
-    IntegrationDetails:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-        reference:
-          type:
-          - string
-          - 'null'
-        payment_gateway_variant:
-          $ref: '#/components/schemas/IntegrationDetailsPaymentGatewayVariant'
-        adyen:
-          $ref: '#/components/schemas/AdyenIntegrationDetails'
-        stripe:
-          $ref: '#/components/schemas/StripeIntegrationDetails'
-      title: IntegrationDetails
-    ApiError:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/ApiErrorType'
-        code:
-          $ref: '#/components/schemas/ApiErrorCode'
         field:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorRuleField'
+        type:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorRuleType'
+      title: PricingPlanSubscriptionSelectorRule
+    ReprocessResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Reprocess'
+        page:
           type:
-          - string
+          - integer
           - 'null'
-        message:
-          type: string
-        resource_id:
+        limit:
           type:
-          - string
+          - integer
           - 'null'
-        resource_type:
-          oneOf:
-          - $ref: '#/components/schemas/ApiErrorResourceType'
-          - type: 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
       required:
-      - type
-      - code
-      - message
-      title: ApiError
-    CustomerRolesItems:
-      type: string
-      enum:
-      - DEFAULT
-      - NON_PROCESSING
-      - SELF_BILLING
-      - SELLER
-      - PROCESSING_ONLY
-      title: CustomerRolesItems
-    PricingPlanSubscriptionSelectorFilter:
-      type: object
-      properties:
-        field:
-          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFilterField'
-        type:
-          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFilterType'
-        value:
-          type: string
-      title: PricingPlanSubscriptionSelectorFilter
-    CustomerStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - ARCHIVED
-      - DEPRECATED
-      - CLOSED
-      title: CustomerStatus
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
-    NotificationPreference:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/NotificationPreferenceType'
-          description: The notification type to configure.
-        channels:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/NotificationChannel'
-          description: The channels for this notification type.
-      title: NotificationPreference
-    PricingPlanSubscriptionSelectorRuleType:
-      type: string
-      enum:
-      - EQUALS
-      - NOT_EQUALS
-      - IN
-      - NOT_IN
-      - GREATER_THAN
-      - GREATER_THAN_OR_EQUALS
-      - LESS_THAN
-      - LESS_THAN_OR_EQUALS
-      - EMPTY
-      - NOT_EMPTY
-      - CONTAINS
-      - NOT_CONTAINS
-      title: PricingPlanSubscriptionSelectorRuleType
+      - data
+      title: ReprocessResponseWrapper
     Customer:
       type: object
       properties:
@@ -811,12 +935,105 @@ components:
         seller_details:
           $ref: '#/components/schemas/CustomerSellerDetails'
       title: Customer
-    PricingPlanSubscriptionSelectorDataField:
+    NotificationChannelType:
       type: string
       enum:
-      - BILLING_ENTITY_REGISTERED_ADDRESS_COUNTRY
-      - PRICING_PLAN_REFERENCE
-      title: PricingPlanSubscriptionSelectorDataField
+      - EMAIL
+      description: The channel type to use.
+      title: NotificationChannelType
+    ReprocessType:
+      type: string
+      enum:
+      - NOT_MATCHED
+      - INVOICE
+      - CUSTOMER
+      title: ReprocessType
+    PricingPlanSubscriptionSelectorFallback:
+      type: string
+      enum:
+      - LATEST
+      - NONE
+      description: The fallback logic what to do when no subscription is found. By default it is LATEST
+      title: PricingPlanSubscriptionSelectorFallback
+    CustomerStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      - CLOSED
+      title: CustomerStatus
+    ReprocessCustomerCreateRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Resource ID of type CUSTOMER
+        customer_id:
+          type: string
+          description: Resource ID of type CUSTOMER
+        customer:
+          oneOf:
+          - $ref: '#/components/schemas/Customer'
+          - type: 'null'
+        start_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        end_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      title: ReprocessCustomerCreateRequest
+    ReprocessCreateRequestType:
+      type: string
+      enum:
+      - NOT_MATCHED
+      - INVOICE
+      - CUSTOMER
+      title: ReprocessCreateRequestType
+    IntegrationDetailsPaymentGatewayVariant:
+      type: string
+      enum:
+      - ADYEN
+      - STRIPE
+      title: IntegrationDetailsPaymentGatewayVariant
+    TaxId:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/TaxIdType'
+          - type: 'null'
+          description: Optional tax id type, indicates which type of tax the number is for
+        display_name:
+          type:
+          - string
+          - 'null'
+          description: User-friendly display name
+        tax_id_validation_result:
+          $ref: '#/components/schemas/TaxIdValidation'
+      title: TaxId
+    CustomerSellerDetails:
+      type: object
+      properties:
+        default_billing_entity_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type BILLING_ENTITY
+      title: CustomerSellerDetails
+    AdyenIntegrationDetails:
+      type: object
+      properties:
+        recurring_detail_reference:
+          type: string
+      title: AdyenIntegrationDetails
     Reprocess:
       type: object
       properties:
@@ -849,13 +1066,111 @@ components:
         customer:
           $ref: '#/components/schemas/ReprocessCustomer'
       title: Reprocess
-    ReprocessType:
+    PricingPlanSubscriptionSelectorFilterField:
       type: string
       enum:
-      - NOT_MATCHED
+      - BILLING_ENTITY_REGISTERED_ADDRESS_COUNTRY
+      - PRICING_PLAN_REFERENCE
+      title: PricingPlanSubscriptionSelectorFilterField
+    PricingPlanSubscriptionSelectorFilter:
+      type: object
+      properties:
+        field:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFilterField'
+        type:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFilterType'
+        value:
+          type: string
+      title: PricingPlanSubscriptionSelectorFilter
+    StripeIntegrationDetails:
+      type: object
+      properties:
+        payment_method_id:
+          type: string
+      title: StripeIntegrationDetails
+    Individual:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/Name'
+        residential_address:
+          $ref: '#/components/schemas/Address'
+      title: Individual
+    Organization:
+      type: object
+      properties:
+        legal_name:
+          type: string
+        tax_id:
+          type:
+          - string
+          - 'null'
+          description: Tax Id used for tax purposes of the organization
+        tax_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaxId'
+          description: Tax Ids used for tax purposes of the organization
+        registration_number:
+          type:
+          - string
+          - 'null'
+        tax_exempt:
+          type:
+          - boolean
+          - 'null'
+        tax_exempt_note:
+          type:
+          - string
+          - 'null'
+        registered_address:
+          $ref: '#/components/schemas/Address'
+        tax_registrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaxRegistration'
+          description: Extra tax registrations for the customer
+      title: Organization
+    TaxIdValidation:
+      type: object
+      properties:
+        id:
+          type: string
+        validation_date:
+          type: string
+        source:
+          type: string
+        valid:
+          $ref: '#/components/schemas/TaxIdValidationValid'
+        message:
+          type:
+          - string
+          - 'null'
+      title: TaxIdValidation
+    NotificationPreferenceType:
+      type: string
+      enum:
       - INVOICE
-      - CUSTOMER
-      title: ReprocessType
+      description: The notification type to configure.
+      title: NotificationPreferenceType
+    NotificationPreference:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/NotificationPreferenceType'
+          description: The notification type to configure.
+        channels:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/NotificationChannel'
+          description: The channels for this notification type.
+      title: NotificationPreference
     AddressCountry:
       type: string
       enum:
@@ -1108,321 +1423,6 @@ components:
       - ZM
       - ZW
       title: AddressCountry
-    LinkedIntegration:
-      type: object
-      properties:
-        id:
-          type: string
-        link_details:
-          type: array
-          items:
-            $ref: '#/components/schemas/LinkDetail'
-      title: LinkedIntegration
-    NotificationChannelType:
-      type: string
-      enum:
-      - EMAIL
-      description: The channel type to use.
-      title: NotificationChannelType
-    ApiErrorResourceType:
-      type: string
-      enum:
-      - CUSTOMER
-      - CUSTOM_FIELD
-      - PLATFORM
-      - PLATFORM_UPTODATE
-      - METER
-      - METER_VALUE
-      - METER_PROPERTY
-      - METER_VALUE_CALCULATION
-      - INGEST_DATA
-      - METER_DATA
-      - CHARGE_DATA
-      - PERSIST_DATA
-      - ADJUSTMENT_DATA
-      - PRODUCT_CATEGORY
-      - PRODUCT
-      - PRODUCT_ITEM
-      - PRICING
-      - PRICING_GROUP
-      - PRICING_ITEM
-      - PRICING_ITEM_CONFIG
-      - PRICING_PLAN_SUBSCRIPTION
-      - PRICING_PLAN_SUBSCRIPTION_GROUP
-      - PRICING_PLAN_SCHEDULE
-      - PRICING_PLAN
-      - PRICING_PLAN_VERSION
-      - QUOTE
-      - QUOTE_VERSION
-      - QUOTE_TEMPLATE
-      - API_KEY
-      - USER
-      - ROLE
-      - PROXY_USER
-      - EXTERNAL_CREDENTIALS
-      - TOKEN
-      - INVOICE
-      - E_INVOICE
-      - PDF
-      - BILLING_ENTITY
-      - FEATURE
-      - MEMBERSHIP
-      - PAYMENT
-      - PAYMENT_ACCEPTOR
-      - PAYMENT_METHOD
-      - PAYMENT_METHOD_OPTIONS
-      - PAYMENT_SCHEDULE
-      - PAYMENT_REQUEST
-      - INTEGRATION
-      - WEBHOOK
-      - FILE
-      - FILE_PROCESSING_SETTINGS
-      - TEAM
-      - DOWNLOAD_URL
-      - CSV_REPORT
-      - REPORT
-      - REPORT_GENERATE_REQUEST
-      - REPORT_CONFIGURATION
-      - REPORT_SUBSCRIPTION
-      - REPORT_DEFINITION
-      - ACCOUNT_GROUP
-      - ENTITY
-      - EVENT_TRACE
-      - EVENT_TRACE_LINK
-      - PRICING_CATEGORY
-      - CONTACT
-      - ALERT_RULE
-      - ALERT
-      - AUDIT_RECORD
-      - PORTAL_URL
-      - AUTHENTICATION_PROVIDER
-      - REPROCESS
-      - APPROVAL_POLICY
-      - APPROVAL_REQUEST
-      - BULK_ACTION
-      - COUPON
-      - PROMOTION_CODE
-      - WALLET
-      - WALLET_TYPE
-      - WALLET_GRANT
-      - WORKFLOW
-      - WORKFLOW_TRIGGER
-      - WORKFLOW_ACTION
-      - CREDIT_TYPE
-      - SIGNATURE_REQUEST
-      - ATTACHMENT
-      - DOCUMENT
-      title: ApiErrorResourceType
-    IntegrationDetailsPaymentGatewayVariant:
-      type: string
-      enum:
-      - ADYEN
-      - STRIPE
-      title: IntegrationDetailsPaymentGatewayVariant
-    NotificationChannel:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/NotificationChannelType'
-          description: The channel type to use.
-        enabled:
-          type:
-          - boolean
-          - 'null'
-          description: Whether the channel is enabled for the notification type.
-      title: NotificationChannel
-    CustomerSellerDetails:
-      type: object
-      properties:
-        default_billing_entity_id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type BILLING_ENTITY
-      title: CustomerSellerDetails
-    ReprocessInvoiceCreateRequest:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Resource ID of type INVOICE
-        invoice_id:
-          type: string
-          description: Resource ID of type INVOICE
-      title: ReprocessInvoiceCreateRequest
-    ReprocessResponseWrapper:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Reprocess'
-        page:
-          type:
-          - integer
-          - 'null'
-        limit:
-          type:
-          - integer
-          - 'null'
-        total_number_of_pages:
-          type:
-          - integer
-          - 'null'
-        links:
-          $ref: '#/components/schemas/PaginationLinks'
-      required:
-      - data
-      title: ReprocessResponseWrapper
-    PricingPlanSubscriptionSelector:
-      type: object
-      properties:
-        data:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorData'
-        rules:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorRule'
-        filters:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFilter'
-        fallback:
-          oneOf:
-          - $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFallback'
-          - type: 'null'
-          description: The fallback logic what to do when no subscription is found. By default it is LATEST
-      title: PricingPlanSubscriptionSelector
-    ReprocessCreateRequestType:
-      type: string
-      enum:
-      - NOT_MATCHED
-      - INVOICE
-      - CUSTOMER
-      title: ReprocessCreateRequestType
-    ReprocessCreateRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        type:
-          $ref: '#/components/schemas/ReprocessCreateRequestType'
-        created_at:
-          type:
-          - string
-          - 'null'
-        status:
-          type:
-          - string
-          - 'null'
-        percentage:
-          type:
-          - integer
-          - 'null'
-        invoice:
-          $ref: '#/components/schemas/ReprocessInvoiceCreateRequest'
-        not_matched:
-          $ref: '#/components/schemas/ReprocessNotMatchedCreateRequest'
-        customer:
-          $ref: '#/components/schemas/ReprocessCustomerCreateRequest'
-      required:
-      - type
-      title: ReprocessCreateRequest
-    PricingPlanSubscriptionSelectorData:
-      type: object
-      properties:
-        field:
-          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorDataField'
-        value:
-          type: string
-      title: PricingPlanSubscriptionSelectorData
-    PricingPlanSubscriptionSelectorFilterType:
-      type: string
-      enum:
-      - EQUALS
-      - NOT_EQUALS
-      - IN
-      - NOT_IN
-      - GREATER_THAN
-      - GREATER_THAN_OR_EQUALS
-      - LESS_THAN
-      - LESS_THAN_OR_EQUALS
-      - EMPTY
-      - NOT_EMPTY
-      - CONTAINS
-      - NOT_CONTAINS
-      title: PricingPlanSubscriptionSelectorFilterType
-    CustomerType:
-      type: string
-      enum:
-      - ORGANIZATION
-      - INDIVIDUAL
-      description: The type of customer entity.
-      title: CustomerType
-    PaginationLinks:
-      type: object
-      properties:
-        first:
-          type:
-          - string
-          - 'null'
-        previous:
-          type:
-          - string
-          - 'null'
-        current:
-          type:
-          - string
-          - 'null'
-        next:
-          type:
-          - string
-          - 'null'
-      title: PaginationLinks
-    CustomFieldValue:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type CUSTOM_FIELD
-        reference:
-          type:
-          - string
-          - 'null'
-        value:
-          type:
-          - string
-          - 'null'
-        values:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-        integration_details:
-          oneOf:
-          - $ref: '#/components/schemas/IntegrationDetails'
-          - type: 'null'
-        integration_id:
-          type: string
-          description: The resource ID of the integration linked to the custom field
-      title: CustomFieldValue
   securitySchemes:
     API-Key:
       type: apiKey

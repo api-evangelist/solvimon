@@ -351,16 +351,67 @@ paths:
               $ref: '#/components/schemas/MeterValueUpdateRequest'
 components:
   schemas:
-    MeterValueResponseWrapper:
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    MeterValueCreateRequestType:
+      type: string
+      enum:
+      - NUMBER
+      - AMOUNT
+      description: The type of the meter value.
+      title: MeterValueCreateRequestType
+    MeterValueUpdateRequest:
       type: object
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/MeterValue'
-      required:
-      - data
-      title: MeterValueResponseWrapper
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueUpdateRequestStatus'
+          - type: 'null'
+          description: The status of the meter value indicating the activity and the ability to update properties.
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueUpdateRequestType'
+          - type: 'null'
+          description: The type of the meter value.
+      title: MeterValueUpdateRequest
+    MeterValueUpdateRequestType:
+      type: string
+      enum:
+      - NUMBER
+      - AMOUNT
+      description: The type of the meter value.
+      title: MeterValueUpdateRequestType
+    MeterValueStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the meter value indicating the activity and the ability to update properties.
+      title: MeterValueStatus
     ApiErrorResourceType:
       type: string
       enum:
@@ -450,7 +501,7 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
-    MeterValue:
+    MeterValueCreateRequest:
       type: object
       properties:
         object_type:
@@ -473,16 +524,20 @@ components:
           - 'null'
         status:
           oneOf:
-          - $ref: '#/components/schemas/MeterValueStatus'
+          - $ref: '#/components/schemas/MeterValueCreateRequestStatus'
           - type: 'null'
           description: The status of the meter value indicating the activity and the ability to update properties.
         type:
           oneOf:
-          - $ref: '#/components/schemas/MeterValueType'
+          - $ref: '#/components/schemas/MeterValueCreateRequestType'
           - type: 'null'
           description: The type of the meter value.
-      title: MeterValue
-    MeterValueStatus:
+      required:
+      - reference
+      - name
+      - type
+      title: MeterValueCreateRequest
+    MeterValueCreateRequestStatus:
       type: string
       enum:
       - DRAFT
@@ -490,48 +545,17 @@ components:
       - ARCHIVED
       - DEPRECATED
       description: The status of the meter value indicating the activity and the ability to update properties.
-      title: MeterValueStatus
-    MeterValueUpdateRequest:
+      title: MeterValueCreateRequestStatus
+    MeterValueResponseWrapper:
       type: object
       properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        reference:
-          type: string
-        name:
-          type:
-          - string
-          - 'null'
-        description:
-          type:
-          - string
-          - 'null'
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/MeterValueUpdateRequestStatus'
-          - type: 'null'
-          description: The status of the meter value indicating the activity and the ability to update properties.
-        type:
-          oneOf:
-          - $ref: '#/components/schemas/MeterValueUpdateRequestType'
-          - type: 'null'
-          description: The type of the meter value.
-      title: MeterValueUpdateRequest
-    MeterValueUpdateRequestStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - ARCHIVED
-      - DEPRECATED
-      description: The status of the meter value indicating the activity and the ability to update properties.
-      title: MeterValueUpdateRequestStatus
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/MeterValue'
+      required:
+      - data
+      title: MeterValueResponseWrapper
     ApiErrorCode:
       type: string
       enum:
@@ -571,15 +595,6 @@ components:
       - IDEMPOTENCY_CHECK_FAILED
       - INVALID_REQUEST
       title: ApiErrorCode
-    MeterValueCreateRequestStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - ARCHIVED
-      - DEPRECATED
-      description: The status of the meter value indicating the activity and the ability to update properties.
-      title: MeterValueCreateRequestStatus
     MeterValueType:
       type: string
       enum:
@@ -587,13 +602,7 @@ components:
       - AMOUNT
       description: The type of the meter value.
       title: MeterValueType
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
-    MeterValueCreateRequest:
+    MeterValue:
       type: object
       properties:
         object_type:
@@ -616,19 +625,15 @@ components:
           - 'null'
         status:
           oneOf:
-          - $ref: '#/components/schemas/MeterValueCreateRequestStatus'
+          - $ref: '#/components/schemas/MeterValueStatus'
           - type: 'null'
           description: The status of the meter value indicating the activity and the ability to update properties.
         type:
           oneOf:
-          - $ref: '#/components/schemas/MeterValueCreateRequestType'
+          - $ref: '#/components/schemas/MeterValueType'
           - type: 'null'
           description: The type of the meter value.
-      required:
-      - reference
-      - name
-      - type
-      title: MeterValueCreateRequest
+      title: MeterValue
     ApiError:
       type: object
       properties:
@@ -655,20 +660,15 @@ components:
       - code
       - message
       title: ApiError
-    MeterValueCreateRequestType:
+    MeterValueUpdateRequestStatus:
       type: string
       enum:
-      - NUMBER
-      - AMOUNT
-      description: The type of the meter value.
-      title: MeterValueCreateRequestType
-    MeterValueUpdateRequestType:
-      type: string
-      enum:
-      - NUMBER
-      - AMOUNT
-      description: The type of the meter value.
-      title: MeterValueUpdateRequestType
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the meter value indicating the activity and the ability to update properties.
+      title: MeterValueUpdateRequestStatus
   securitySchemes:
     API-Key:
       type: apiKey
