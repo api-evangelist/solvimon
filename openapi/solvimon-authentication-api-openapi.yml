@@ -302,26 +302,101 @@ paths:
               $ref: '#/components/schemas/OAuthCallbackCreateRequest'
 components:
   schemas:
-    CaptchaRequestCreateRequest:
+    AccountRepresentation:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The id of the account
+        reference:
+          type: string
+          description: The reference of the account
+        account_type_code:
+          type: string
+          description: The type code of the account
+        environment:
+          type: string
+          description: The environment of this account
+        account_group_id:
+          type: string
+          description: The id of the account group that this account is associated with
+        parent_id:
+          type:
+          - string
+          - 'null'
+          description: The id of the parent account of this account
+        platform_id:
+          type:
+          - string
+          - 'null'
+          description: The id of the platform that this account belongs to
+      title: AccountRepresentation
+    OAuthCredentialRequestCreateRequest:
+      type: object
+      properties:
+        username:
+          type:
+          - string
+          - 'null'
+        password:
+          type:
+          - string
+          - 'null'
+        token_alias:
+          type:
+          - string
+          - 'null'
+      title: OAuthCredentialRequestCreateRequest
+    AccountMembershipRepresentationType:
+      type: string
+      enum:
+      - ADMIN
+      - USER
+      - PARTNER
+      description: The type of this membership
+      title: AccountMembershipRepresentationType
+    PasswordResetRequestCreateRequest:
       type: object
       properties:
         email:
           type: string
-        captcha_token:
+      title: PasswordResetRequestCreateRequest
+    Role:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+          description: Unique identifier for the role
+        name:
           type: string
-      required:
-      - email
-      - captcha_token
-      title: CaptchaRequestCreateRequest
-    UserStatus:
-      type: string
-      enum:
-      - INVITED
-      - INVITE_REVOKED
-      - ACTIVE
-      - INACTIVE
-      description: Indicates whether the user is active
-      title: UserStatus
+          description: The name of the role
+        description:
+          type: string
+          description: The description of the role
+        entity_id:
+          type:
+          - string
+          - 'null'
+          description: When present the role is created for/by this entity
+        child_role_ids:
+          type: array
+          items:
+            type: string
+          description: Child roles for this role
+        child_roles:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/RoleChildRolesItems'
+          description: Child roles, with a max depth of 2
+      title: Role
     ApiErrorCode:
       type: string
       enum:
@@ -361,211 +436,6 @@ components:
       - IDEMPOTENCY_CHECK_FAILED
       - INVALID_REQUEST
       title: ApiErrorCode
-    ApiError:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/ApiErrorType'
-        code:
-          $ref: '#/components/schemas/ApiErrorCode'
-        field:
-          type:
-          - string
-          - 'null'
-        message:
-          type: string
-        resource_id:
-          type:
-          - string
-          - 'null'
-        resource_type:
-          oneOf:
-          - $ref: '#/components/schemas/ApiErrorResourceType'
-          - type: 'null'
-      required:
-      - type
-      - code
-      - message
-      title: ApiError
-    User:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-          description: The id of the user
-        entity_id:
-          type:
-          - string
-          - 'null'
-          description: The entity id of the entity that this user belongs to
-        created_at:
-          type:
-          - string
-          - 'null'
-          description: The date when this user was created
-        active:
-          type:
-          - boolean
-          - 'null'
-          description: Indicates whether the user is active
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/UserStatus'
-          - type: 'null'
-          description: Indicates whether the user is active
-        account_memberships:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/AccountMembershipRepresentation'
-          description: The account memberships that this user has
-        team_memberships:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/TeamMemberRepresentation'
-          description: The team memberships that this user has
-        username:
-          type: string
-          description: The email of the user
-        password:
-          type:
-          - string
-          - 'null'
-          description: The password of the user. Should have a minimum of 8 characters, of which one is a number and one is a capital letter
-        invite_expired:
-          type:
-          - boolean
-          - 'null'
-          description: Indicates whether the invite sent to the user is expired
-      title: User
-    AccountMembershipRepresentation:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-          description: The id of this account membership
-        account_id:
-          type: string
-          description: The id of the account that this membership is for
-        account_reference:
-          type:
-          - string
-          - 'null'
-          description: The reference of the account that this membership is for
-        environment:
-          type:
-          - string
-          - 'null'
-          description: The environment that this membership is for
-        account:
-          oneOf:
-          - $ref: '#/components/schemas/AccountRepresentation'
-          - type: 'null'
-          description: The account that this membership is for
-        type:
-          $ref: '#/components/schemas/AccountMembershipRepresentationType'
-          description: The type of this membership
-        role_ids:
-          type: array
-          items:
-            type: string
-          description: The roles assigned through this membership
-        roles:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Role'
-          description: The roles that belong to this membership
-      title: AccountMembershipRepresentation
-    OAuthCallbackCreateRequest:
-      type: object
-      properties:
-        code:
-          type: string
-        redirect_uri:
-          type: string
-        state:
-          type:
-          - string
-          - 'null'
-      required:
-      - code
-      - redirect_uri
-      - state
-      title: OAuthCallbackCreateRequest
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
-    Authentication_postOauthLogout_Response_200:
-      type: object
-      properties: {}
-      description: Empty response body
-      title: Authentication_postOauthLogout_Response_200
-    RoleChildRolesItems:
-      type: object
-      properties: {}
-      title: RoleChildRolesItems
-    AccountRepresentation:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The id of the account
-        reference:
-          type: string
-          description: The reference of the account
-        account_type_code:
-          type: string
-          description: The type code of the account
-        environment:
-          type: string
-          description: The environment of this account
-        account_group_id:
-          type: string
-          description: The id of the account group that this account is associated with
-        parent_id:
-          type:
-          - string
-          - 'null'
-          description: The id of the parent account of this account
-        platform_id:
-          type:
-          - string
-          - 'null'
-          description: The id of the platform that this account belongs to
-      title: AccountRepresentation
-    AccountMembershipRepresentationType:
-      type: string
-      enum:
-      - ADMIN
-      - USER
-      - PARTNER
-      description: The type of this membership
-      title: AccountMembershipRepresentationType
-    Authentication_postOauthRequestPasswordReset_Response_200:
-      type: object
-      properties: {}
-      description: Empty response body
-      title: Authentication_postOauthRequestPasswordReset_Response_200
     ApiErrorResourceType:
       type: string
       enum:
@@ -655,13 +525,7 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
-    PasswordResetRequestCreateRequest:
-      type: object
-      properties:
-        email:
-          type: string
-      title: PasswordResetRequestCreateRequest
-    Role:
+    AccountMembershipRepresentation:
       type: object
       properties:
         object_type:
@@ -672,47 +536,91 @@ components:
           type:
           - string
           - 'null'
-          description: Unique identifier for the role
-        name:
+          description: The id of this account membership
+        account_id:
           type: string
-          description: The name of the role
-        description:
-          type: string
-          description: The description of the role
-        entity_id:
+          description: The id of the account that this membership is for
+        account_reference:
           type:
           - string
           - 'null'
-          description: When present the role is created for/by this entity
-        child_role_ids:
+          description: The reference of the account that this membership is for
+        environment:
+          type:
+          - string
+          - 'null'
+          description: The environment that this membership is for
+        account:
+          oneOf:
+          - $ref: '#/components/schemas/AccountRepresentation'
+          - type: 'null'
+          description: The account that this membership is for
+        type:
+          $ref: '#/components/schemas/AccountMembershipRepresentationType'
+          description: The type of this membership
+        role_ids:
           type: array
           items:
             type: string
-          description: Child roles for this role
-        child_roles:
+          description: The roles assigned through this membership
+        roles:
           type:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/RoleChildRolesItems'
-          description: Child roles, with a max depth of 2
-      title: Role
-    OAuthCredentialRequestCreateRequest:
+            $ref: '#/components/schemas/Role'
+          description: The roles that belong to this membership
+      title: AccountMembershipRepresentation
+    ApiError:
       type: object
       properties:
-        username:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
           type:
           - string
           - 'null'
-        password:
+        message:
+          type: string
+        resource_id:
           type:
           - string
           - 'null'
-        token_alias:
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    OAuthCallbackCreateRequest:
+      type: object
+      properties:
+        code:
+          type: string
+        redirect_uri:
+          type: string
+        state:
           type:
           - string
           - 'null'
-      title: OAuthCredentialRequestCreateRequest
+      required:
+      - code
+      - redirect_uri
+      - state
+      title: OAuthCallbackCreateRequest
+    ResetPasswordCreateRequest:
+      type: object
+      properties:
+        token:
+          type: string
+        new_password:
+          type: string
+      title: ResetPasswordCreateRequest
     TeamMemberRepresentation:
       type: object
       properties:
@@ -740,6 +648,96 @@ components:
           items:
             $ref: '#/components/schemas/AccountMembershipRepresentation'
       title: TeamMemberRepresentation
+    UserStatus:
+      type: string
+      enum:
+      - INVITED
+      - INVITE_REVOKED
+      - ACTIVE
+      - INACTIVE
+      description: Indicates whether the user is active
+      title: UserStatus
+    CaptchaRequestCreateRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        captcha_token:
+          type: string
+      required:
+      - email
+      - captcha_token
+      title: CaptchaRequestCreateRequest
+    RoleChildRolesItems:
+      type: object
+      properties: {}
+      title: RoleChildRolesItems
+    User:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+          description: The id of the user
+        entity_id:
+          type:
+          - string
+          - 'null'
+          description: The entity id of the entity that this user belongs to
+        created_at:
+          type:
+          - string
+          - 'null'
+          description: The date when this user was created
+        active:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates whether the user is active
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/UserStatus'
+          - type: 'null'
+          description: Indicates whether the user is active
+        account_memberships:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/AccountMembershipRepresentation'
+          description: The account memberships that this user has
+        team_memberships:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TeamMemberRepresentation'
+          description: The team memberships that this user has
+        username:
+          type: string
+          description: The email of the user
+        password:
+          type:
+          - string
+          - 'null'
+          description: The password of the user. Should have a minimum of 8 characters, of which one is a number and one is a capital letter
+        invite_expired:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates whether the invite sent to the user is expired
+      title: User
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
     JwtToken:
       type: object
       properties:
@@ -767,14 +765,16 @@ components:
           - string
           - 'null'
       title: JwtToken
-    ResetPasswordCreateRequest:
+    Authentication_postOauthRequestPasswordReset_Response_200:
       type: object
-      properties:
-        token:
-          type: string
-        new_password:
-          type: string
-      title: ResetPasswordCreateRequest
+      properties: {}
+      description: Empty response body
+      title: Authentication_postOauthRequestPasswordReset_Response_200
+    Authentication_postOauthLogout_Response_200:
+      type: object
+      properties: {}
+      description: Empty response body
+      title: Authentication_postOauthLogout_Response_200
   securitySchemes:
     API-Key:
       type: apiKey

@@ -418,30 +418,81 @@ paths:
               $ref: '#/components/schemas/TriggerReportRequestCreateRequest'
 components:
   schemas:
-    ReportSubscriptionScheduleCreateRequest:
+    ExportReportLocation:
       type: object
       properties:
-        time_of_day:
+        integration_id:
+          type: string
+          description: Resource ID of type INTEGRATION
+        variant:
+          $ref: '#/components/schemas/ExportReportLocationVariant'
+        stream_name:
           type:
-          - integer
+          - string
           - 'null'
-        day_of_week:
+        bigquery:
+          $ref: '#/components/schemas/ExportReportLocationBigQueryDetails'
+        s3:
+          $ref: '#/components/schemas/ExportReportLocationS3Details'
+        gcs:
+          $ref: '#/components/schemas/ExportReportLocationGcsDetails'
+      title: ExportReportLocation
+    ReportSubscriptionTrigger:
+      type: string
+      enum:
+      - INVOICE_TO_FINAL
+      title: ReportSubscriptionTrigger
+    ReportSubscription:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        report_configuration_id:
+          type: string
+          description: Resource ID of type REPORT_CONFIGURATION
+        report_code:
+          type:
+          - string
+          - 'null'
+        format:
+          $ref: '#/components/schemas/ReportSubscriptionFormat'
+        trigger:
           oneOf:
-          - $ref: '#/components/schemas/ReportSubscriptionScheduleCreateRequestDayOfWeek'
+          - $ref: '#/components/schemas/ReportSubscriptionTrigger'
           - type: 'null'
-        day_of_month:
-          type:
-          - integer
-          - 'null'
-      title: ReportSubscriptionScheduleCreateRequest
-    ReportParameterValueCreateRequest:
+        schedule:
+          $ref: '#/components/schemas/ReportSubscriptionSchedule'
+        active:
+          type: boolean
+        export_location:
+          $ref: '#/components/schemas/ExportReportLocation'
+        parameter_values:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReportParameterValue'
+      title: ReportSubscription
+    ExportReportLocationVariant:
+      type: string
+      enum:
+      - BIGQUERY
+      - S3
+      - GCS
+      - SNOWFLAKE
+      title: ExportReportLocationVariant
+    ReportParameterValueUpdateRequest:
       type: object
       properties:
         name:
-          $ref: '#/components/schemas/ReportParameterValueCreateRequestName'
+          $ref: '#/components/schemas/ReportParameterValueUpdateRequestName'
         value:
           type: string
-      title: ReportParameterValueCreateRequest
+      title: ReportParameterValueUpdateRequest
     ApiErrorCode:
       type: string
       enum:
@@ -481,32 +532,26 @@ components:
       - IDEMPOTENCY_CHECK_FAILED
       - INVALID_REQUEST
       title: ApiErrorCode
-    ApiError:
+    PaginationLinks:
       type: object
       properties:
-        type:
-          $ref: '#/components/schemas/ApiErrorType'
-        code:
-          $ref: '#/components/schemas/ApiErrorCode'
-        field:
+        first:
           type:
           - string
           - 'null'
-        message:
-          type: string
-        resource_id:
+        previous:
           type:
           - string
           - 'null'
-        resource_type:
-          oneOf:
-          - $ref: '#/components/schemas/ApiErrorResourceType'
-          - type: 'null'
-      required:
-      - type
-      - code
-      - message
-      title: ApiError
+        current:
+          type:
+          - string
+          - 'null'
+        next:
+          type:
+          - string
+          - 'null'
+      title: PaginationLinks
     ReportGenerateRequest:
       type: object
       properties:
@@ -555,7 +600,7 @@ components:
         export_location:
           $ref: '#/components/schemas/ExportReportLocation'
       title: ReportGenerateRequest
-    ReportSubscriptionScheduleUpdateRequestDayOfWeek:
+    ReportSubscriptionScheduleDayOfWeek:
       type: string
       enum:
       - MONDAY
@@ -565,29 +610,7 @@ components:
       - FRIDAY
       - SATURDAY
       - SUNDAY
-      title: ReportSubscriptionScheduleUpdateRequestDayOfWeek
-    ExportReportLocationVariant:
-      type: string
-      enum:
-      - BIGQUERY
-      - S3
-      - GCS
-      - SNOWFLAKE
-      title: ExportReportLocationVariant
-    ReportParameterValueUpdateRequestName:
-      type: string
-      enum:
-      - report_date
-      - from_date
-      - to_date
-      - updated_to_final_from_date
-      - updated_to_final_to_date
-      - meter
-      - meter_id
-      - customer_id
-      - invoice_id
-      - statuses
-      title: ReportParameterValueUpdateRequestName
+      title: ReportSubscriptionScheduleDayOfWeek
     ReportSubscriptionResponseWrapper:
       type: object
       properties:
@@ -613,38 +636,6 @@ components:
       - data
       - links
       title: ReportSubscriptionResponseWrapper
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
-    ReportSubscriptionTrigger:
-      type: string
-      enum:
-      - INVOICE_TO_FINAL
-      title: ReportSubscriptionTrigger
-    ReportSubscriptionCreateRequestFormat:
-      type: string
-      enum:
-      - CSV
-      title: ReportSubscriptionCreateRequestFormat
-    ReportSubscriptionSchedule:
-      type: object
-      properties:
-        time_of_day:
-          type:
-          - integer
-          - 'null'
-        day_of_week:
-          oneOf:
-          - $ref: '#/components/schemas/ReportSubscriptionScheduleDayOfWeek'
-          - type: 'null'
-        day_of_month:
-          type:
-          - integer
-          - 'null'
-      title: ReportSubscriptionSchedule
     ReportSubscriptionScheduleUpdateRequest:
       type: object
       properties:
@@ -661,6 +652,17 @@ components:
           - integer
           - 'null'
       title: ReportSubscriptionScheduleUpdateRequest
+    ExportReportLocationGcsDetailsFormatType:
+      type: string
+      enum:
+      - CSV
+      - PARQUET
+      title: ExportReportLocationGcsDetailsFormatType
+    ReportSubscriptionUpdateRequestTrigger:
+      type: string
+      enum:
+      - INVOICE_TO_FINAL
+      title: ReportSubscriptionUpdateRequestTrigger
     ExportReportLocationCreateRequest:
       type: object
       properties:
@@ -680,184 +682,36 @@ components:
         gcs:
           $ref: '#/components/schemas/ExportReportLocationGcsDetails'
       title: ExportReportLocationCreateRequest
-    ReportSubscriptionUpdateRequestTrigger:
-      type: string
-      enum:
-      - INVOICE_TO_FINAL
-      title: ReportSubscriptionUpdateRequestTrigger
-    ReportParameterValueName:
-      type: string
-      enum:
-      - report_date
-      - from_date
-      - to_date
-      - updated_to_final_from_date
-      - updated_to_final_to_date
-      - meter
-      - meter_id
-      - customer_id
-      - invoice_id
-      - statuses
-      title: ReportParameterValueName
-    ExportReportLocationS3Details:
-      type: object
-      properties:
-        bucket_path:
-          type: string
-        path_format:
-          type: string
-        format_type:
-          $ref: '#/components/schemas/ExportReportLocationS3DetailsFormatType'
-      title: ExportReportLocationS3Details
-    ReportSubscriptionCreateRequestTrigger:
-      type: string
-      enum:
-      - INVOICE_TO_FINAL
-      title: ReportSubscriptionCreateRequestTrigger
-    PaginationLinks:
-      type: object
-      properties:
-        first:
-          type:
-          - string
-          - 'null'
-        previous:
-          type:
-          - string
-          - 'null'
-        current:
-          type:
-          - string
-          - 'null'
-        next:
-          type:
-          - string
-          - 'null'
-      title: PaginationLinks
     ExportReportLocationS3DetailsFormatType:
       type: string
       enum:
       - CSV
       - PARQUET
       title: ExportReportLocationS3DetailsFormatType
-    ReportParameterValueUpdateRequest:
+    ReportSubscriptionSchedule:
       type: object
       properties:
-        name:
-          $ref: '#/components/schemas/ReportParameterValueUpdateRequestName'
-        value:
-          type: string
-      title: ReportParameterValueUpdateRequest
-    ReportSubscription:
-      type: object
-      properties:
-        object_type:
+        time_of_day:
           type:
-          - string
+          - integer
           - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        report_configuration_id:
-          type: string
-          description: Resource ID of type REPORT_CONFIGURATION
-        report_code:
-          type:
-          - string
-          - 'null'
-        format:
-          $ref: '#/components/schemas/ReportSubscriptionFormat'
-        trigger:
+        day_of_week:
           oneOf:
-          - $ref: '#/components/schemas/ReportSubscriptionTrigger'
+          - $ref: '#/components/schemas/ReportSubscriptionScheduleDayOfWeek'
           - type: 'null'
-        schedule:
-          $ref: '#/components/schemas/ReportSubscriptionSchedule'
-        active:
-          type: boolean
-        export_location:
-          $ref: '#/components/schemas/ExportReportLocation'
-        parameter_values:
-          type: array
-          items:
-            $ref: '#/components/schemas/ReportParameterValue'
-      title: ReportSubscription
-    ReportParameterValueCreateRequestName:
-      type: string
-      enum:
-      - report_date
-      - from_date
-      - to_date
-      - updated_to_final_from_date
-      - updated_to_final_to_date
-      - meter
-      - meter_id
-      - customer_id
-      - invoice_id
-      - statuses
-      title: ReportParameterValueCreateRequestName
-    ReportParameterValue:
-      type: object
-      properties:
-        name:
-          $ref: '#/components/schemas/ReportParameterValueName'
-        value:
-          type: string
-      title: ReportParameterValue
-    ExportReportLocationGcsDetails:
-      type: object
-      properties:
-        bucket_path:
-          type: string
-        path_format:
-          type: string
-        format_type:
-          $ref: '#/components/schemas/ExportReportLocationGcsDetailsFormatType'
-      title: ExportReportLocationGcsDetails
-    ExportReportLocationUpdateRequestVariant:
+        day_of_month:
+          type:
+          - integer
+          - 'null'
+      title: ReportSubscriptionSchedule
+    ExportReportLocationCreateRequestVariant:
       type: string
       enum:
       - BIGQUERY
       - S3
       - GCS
       - SNOWFLAKE
-      title: ExportReportLocationUpdateRequestVariant
-    ReportSubscriptionUpdateRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        report_configuration_id:
-          type: string
-          description: Resource ID of type REPORT_CONFIGURATION
-        report_code:
-          type:
-          - string
-          - 'null'
-        format:
-          $ref: '#/components/schemas/ReportSubscriptionUpdateRequestFormat'
-        trigger:
-          oneOf:
-          - $ref: '#/components/schemas/ReportSubscriptionUpdateRequestTrigger'
-          - type: 'null'
-        schedule:
-          $ref: '#/components/schemas/ReportSubscriptionScheduleUpdateRequest'
-        active:
-          type: boolean
-        export_location:
-          $ref: '#/components/schemas/ExportReportLocationUpdateRequest'
-        parameter_values:
-          type: array
-          items:
-            $ref: '#/components/schemas/ReportParameterValueUpdateRequest'
-      title: ReportSubscriptionUpdateRequest
+      title: ExportReportLocationCreateRequestVariant
     ApiErrorResourceType:
       type: string
       enum:
@@ -947,6 +801,64 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
+    ReportSubscriptionCreateRequestTrigger:
+      type: string
+      enum:
+      - INVOICE_TO_FINAL
+      title: ReportSubscriptionCreateRequestTrigger
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    ReportSubscriptionFormat:
+      type: string
+      enum:
+      - CSV
+      title: ReportSubscriptionFormat
+    ReportParameterValueCreateRequestName:
+      type: string
+      enum:
+      - report_date
+      - from_date
+      - to_date
+      - updated_to_final_from_date
+      - updated_to_final_to_date
+      - meter
+      - meter_id
+      - customer_id
+      - invoice_id
+      - statuses
+      title: ReportParameterValueCreateRequestName
+    ReportParameterValueCreateRequest:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/ReportParameterValueCreateRequestName'
+        value:
+          type: string
+      title: ReportParameterValueCreateRequest
     ExportReportLocationUpdateRequest:
       type: object
       properties:
@@ -966,6 +878,19 @@ components:
         gcs:
           $ref: '#/components/schemas/ExportReportLocationGcsDetails'
       title: ExportReportLocationUpdateRequest
+    TriggerReportRequestCreateRequest:
+      type: object
+      properties:
+        parameter_values:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReportParameterValueCreateRequest'
+      title: TriggerReportRequestCreateRequest
+    ReportSubscriptionUpdateRequestFormat:
+      type: string
+      enum:
+      - CSV
+      title: ReportSubscriptionUpdateRequestFormat
     ReportSubscriptionCreateRequest:
       type: object
       properties:
@@ -1003,36 +928,50 @@ components:
       required:
       - report_configuration_id
       title: ReportSubscriptionCreateRequest
-    ReportSubscriptionFormat:
+    ExportReportLocationUpdateRequestVariant:
       type: string
       enum:
-      - CSV
-      title: ReportSubscriptionFormat
-    ReportSubscriptionScheduleCreateRequestDayOfWeek:
-      type: string
-      enum:
-      - MONDAY
-      - TUESDAY
-      - WEDNESDAY
-      - THURSDAY
-      - FRIDAY
-      - SATURDAY
-      - SUNDAY
-      title: ReportSubscriptionScheduleCreateRequestDayOfWeek
-    ReportSubscriptionUpdateRequestFormat:
-      type: string
-      enum:
-      - CSV
-      title: ReportSubscriptionUpdateRequestFormat
-    TriggerReportRequestCreateRequest:
+      - BIGQUERY
+      - S3
+      - GCS
+      - SNOWFLAKE
+      title: ExportReportLocationUpdateRequestVariant
+    ReportSubscriptionUpdateRequest:
       type: object
       properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        report_configuration_id:
+          type: string
+          description: Resource ID of type REPORT_CONFIGURATION
+        report_code:
+          type:
+          - string
+          - 'null'
+        format:
+          $ref: '#/components/schemas/ReportSubscriptionUpdateRequestFormat'
+        trigger:
+          oneOf:
+          - $ref: '#/components/schemas/ReportSubscriptionUpdateRequestTrigger'
+          - type: 'null'
+        schedule:
+          $ref: '#/components/schemas/ReportSubscriptionScheduleUpdateRequest'
+        active:
+          type: boolean
+        export_location:
+          $ref: '#/components/schemas/ExportReportLocationUpdateRequest'
         parameter_values:
           type: array
           items:
-            $ref: '#/components/schemas/ReportParameterValueCreateRequest'
-      title: TriggerReportRequestCreateRequest
-    ReportSubscriptionScheduleDayOfWeek:
+            $ref: '#/components/schemas/ReportParameterValueUpdateRequest'
+      title: ReportSubscriptionUpdateRequest
+    ReportSubscriptionScheduleUpdateRequestDayOfWeek:
       type: string
       enum:
       - MONDAY
@@ -1042,7 +981,37 @@ components:
       - FRIDAY
       - SATURDAY
       - SUNDAY
-      title: ReportSubscriptionScheduleDayOfWeek
+      title: ReportSubscriptionScheduleUpdateRequestDayOfWeek
+    ExportReportLocationBigQueryDetails:
+      type: object
+      properties:
+        dataset_id:
+          type: string
+      title: ExportReportLocationBigQueryDetails
+    ExportReportLocationS3Details:
+      type: object
+      properties:
+        bucket_path:
+          type: string
+        path_format:
+          type: string
+        format_type:
+          $ref: '#/components/schemas/ExportReportLocationS3DetailsFormatType'
+      title: ExportReportLocationS3Details
+    ReportParameterValueUpdateRequestName:
+      type: string
+      enum:
+      - report_date
+      - from_date
+      - to_date
+      - updated_to_final_from_date
+      - updated_to_final_to_date
+      - meter
+      - meter_id
+      - customer_id
+      - invoice_id
+      - statuses
+      title: ReportParameterValueUpdateRequestName
     ReportGenerateRequestReportCode:
       type: string
       enum:
@@ -1065,45 +1034,76 @@ components:
       - REVENUE_RECOGNITION
       - CLAUSES
       title: ReportGenerateRequestReportCode
-    ExportReportLocationGcsDetailsFormatType:
+    ExportReportLocationGcsDetails:
+      type: object
+      properties:
+        bucket_path:
+          type: string
+        path_format:
+          type: string
+        format_type:
+          $ref: '#/components/schemas/ExportReportLocationGcsDetailsFormatType'
+      title: ExportReportLocationGcsDetails
+    ReportSubscriptionScheduleCreateRequestDayOfWeek:
+      type: string
+      enum:
+      - MONDAY
+      - TUESDAY
+      - WEDNESDAY
+      - THURSDAY
+      - FRIDAY
+      - SATURDAY
+      - SUNDAY
+      title: ReportSubscriptionScheduleCreateRequestDayOfWeek
+    ReportSubscriptionCreateRequestFormat:
       type: string
       enum:
       - CSV
-      - PARQUET
-      title: ExportReportLocationGcsDetailsFormatType
-    ExportReportLocationCreateRequestVariant:
+      title: ReportSubscriptionCreateRequestFormat
+    ReportParameterValue:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/ReportParameterValueName'
+        value:
+          type: string
+      title: ReportParameterValue
+    ApiErrorType:
       type: string
       enum:
-      - BIGQUERY
-      - S3
-      - GCS
-      - SNOWFLAKE
-      title: ExportReportLocationCreateRequestVariant
-    ExportReportLocationBigQueryDetails:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    ReportParameterValueName:
+      type: string
+      enum:
+      - report_date
+      - from_date
+      - to_date
+      - updated_to_final_from_date
+      - updated_to_final_to_date
+      - meter
+      - meter_id
+      - customer_id
+      - invoice_id
+      - statuses
+      title: ReportParameterValueName
+    ReportSubscriptionScheduleCreateRequest:
       type: object
       properties:
-        dataset_id:
-          type: string
-      title: ExportReportLocationBigQueryDetails
-    ExportReportLocation:
-      type: object
-      properties:
-        integration_id:
-          type: string
-          description: Resource ID of type INTEGRATION
-        variant:
-          $ref: '#/components/schemas/ExportReportLocationVariant'
-        stream_name:
+        time_of_day:
           type:
-          - string
+          - integer
           - 'null'
-        bigquery:
-          $ref: '#/components/schemas/ExportReportLocationBigQueryDetails'
-        s3:
-          $ref: '#/components/schemas/ExportReportLocationS3Details'
-        gcs:
-          $ref: '#/components/schemas/ExportReportLocationGcsDetails'
-      title: ExportReportLocation
+        day_of_week:
+          oneOf:
+          - $ref: '#/components/schemas/ReportSubscriptionScheduleCreateRequestDayOfWeek'
+          - type: 'null'
+        day_of_month:
+          type:
+          - integer
+          - 'null'
+      title: ReportSubscriptionScheduleCreateRequest
   securitySchemes:
     API-Key:
       type: apiKey

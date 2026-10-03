@@ -484,200 +484,6 @@ paths:
               $ref: '#/components/schemas/SearchCreateRequest'
 components:
   schemas:
-    InvoiceWorkflowCreateRequest:
-      type: object
-      properties:
-        variant:
-          $ref: '#/components/schemas/InvoiceWorkflowCreateRequestVariant'
-          description: Invoice workflow variant that determines which invoice condition starts the workflow.
-        overdue:
-          $ref: '#/components/schemas/InvoiceOverdue'
-          description: Overdue workflow settings that define the overdue steps used for execution.
-        upcoming_payment:
-          $ref: '#/components/schemas/InvoiceUpcomingPayment'
-          description: Upcoming payment reminder settings that define when reminders are sent before the charge date.
-      description: Defines the invoice-specific workflow settings that determine when invoice workflows should run.
-      title: InvoiceWorkflowCreateRequest
-    PaymentWorkflowCreateRequestVariant:
-      type: string
-      enum:
-      - FAILED_PAYMENT
-      description: Payment workflow variant that determines which payment condition starts the workflow.
-      title: PaymentWorkflowCreateRequestVariant
-    FilterFieldCreateRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        reference:
-          type:
-          - string
-          - 'null'
-        value:
-          type:
-          - string
-          - 'null'
-        values:
-          type: array
-          items:
-            type: string
-      title: FilterFieldCreateRequest
-    PeriodType:
-      type: string
-      enum:
-      - DAY
-      - WEEK
-      - MONTH
-      - YEAR
-      title: PeriodType
-    InvoiceWorkflowUpdateRequest:
-      type: object
-      properties:
-        variant:
-          $ref: '#/components/schemas/InvoiceWorkflowUpdateRequestVariant'
-          description: Invoice workflow variant that determines which invoice condition starts the workflow.
-        overdue:
-          $ref: '#/components/schemas/InvoiceOverdue'
-          description: Overdue workflow settings that define the overdue steps used for execution.
-        upcoming_payment:
-          $ref: '#/components/schemas/InvoiceUpcomingPayment'
-          description: Upcoming payment reminder settings that define when reminders are sent before the charge date.
-      description: Defines the invoice-specific workflow settings that determine when invoice workflows should run.
-      title: InvoiceWorkflowUpdateRequest
-    Credits:
-      type: object
-      properties:
-        quantity:
-          type: string
-        credit_type_id:
-          type: string
-          description: Resource ID of type CREDIT_TYPE
-      title: Credits
-    InvoiceWorkflow:
-      type: object
-      properties:
-        variant:
-          $ref: '#/components/schemas/InvoiceWorkflowVariant'
-          description: Invoice workflow variant that determines which invoice condition starts the workflow.
-        overdue:
-          $ref: '#/components/schemas/InvoiceOverdue'
-          description: Overdue workflow settings that define the overdue steps used for execution.
-        upcoming_payment:
-          $ref: '#/components/schemas/InvoiceUpcomingPayment'
-          description: Upcoming payment reminder settings that define when reminders are sent before the charge date.
-      description: Defines the invoice-specific workflow settings that determine when invoice workflows should run.
-      title: InvoiceWorkflow
-    InvoiceUpcomingPayment:
-      type: object
-      properties:
-        periods:
-          type: array
-          items:
-            $ref: '#/components/schemas/Period'
-          description: Periods before the charge date at which reminders are sent.
-      description: Defines the upcoming payment reminder schedule used by an invoice workflow.
-      title: InvoiceUpcomingPayment
-    Period:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/PeriodType'
-        value:
-          type:
-          - integer
-          - 'null'
-      title: Period
-    ApiErrorCode:
-      type: string
-      enum:
-      - RESOURCE_NOT_FOUND
-      - RESOURCES_NOT_FOUND
-      - UNABLE_TO_PROCESS_INSTRUCTIONS
-      - BAD_REQUEST
-      - UNSUPPORTED_MEDIA_TYPE
-      - RESOURCE_ALREADY_EXISTS
-      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
-      - COULD_NOT_CREATE_RESOURCE
-      - COULD_NOT_UPDATE_RESOURCE
-      - COULD_NOT_DELETE_RESOURCE
-      - MISSING_VERSION
-      - UNSUPPORTED_VERSION
-      - UNAUTHORISED
-      - CUSTOMER_NOT_FOUND
-      - PLATFORM_NOT_FOUND
-      - PRICING_PLAN_NOT_FOUND
-      - PRODUCT_NOT_FOUND
-      - PRODUCT_ITEM_NOT_FOUND
-      - PRICING_NOT_FOUND
-      - PRICING_ITEM_NOT_FOUND
-      - USER_NOT_FOUND
-      - METER_NOT_FOUND
-      - METER_VALUE_NOT_FOUND
-      - METER_PROPERTY_NOT_FOUND
-      - PRICING_ITEM_SUMMARIES_NOT_FOUND
-      - MISSING_ID
-      - INVALID_ID
-      - MISSING_REFERENCE
-      - MISSING_FIELD
-      - INVALID_FIELD
-      - INVALID_OPERATION
-      - INTERNAL_ERROR
-      - USER_NOT_ALLOWED
-      - IDEMPOTENCY_CHECK_FAILED
-      - INVALID_REQUEST
-      title: ApiErrorCode
-    ApiError:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/ApiErrorType'
-        code:
-          $ref: '#/components/schemas/ApiErrorCode'
-        field:
-          type:
-          - string
-          - 'null'
-        message:
-          type: string
-        resource_id:
-          type:
-          - string
-          - 'null'
-        resource_type:
-          oneOf:
-          - $ref: '#/components/schemas/ApiErrorResourceType'
-          - type: 'null'
-      required:
-      - type
-      - code
-      - message
-      title: ApiError
-    PaymentWorkflow:
-      type: object
-      properties:
-        variant:
-          $ref: '#/components/schemas/PaymentWorkflowVariant'
-          description: Payment workflow variant that determines which payment condition starts the workflow.
-      description: Defines the payment-specific workflow settings that determine when payment workflows should run.
-      title: PaymentWorkflow
-    WorkflowType:
-      type: string
-      enum:
-      - INVOICE
-      - PAYMENT
-      - PRICING_PLAN_SUBSCRIPTION
-      - WALLET
-      description: Resource type the workflow runs for. This selects the matching workflow configuration and trigger data.
-      title: WorkflowType
-    WorkflowCreateRequestStatus:
-      type: string
-      enum:
-      - ACTIVE
-      - INACTIVE
-      - DRAFT
-      - ARCHIVED
-      description: Status of the workflow.
-      title: WorkflowCreateRequestStatus
     AmountCurrency:
       type: string
       enum:
@@ -858,136 +664,107 @@ components:
       - ZMW
       - ZWL
       title: AmountCurrency
-    WorkflowUpdateRequestStatus:
-      type: string
-      enum:
-      - ACTIVE
-      - INACTIVE
-      - DRAFT
-      - ARCHIVED
-      description: Status of the workflow.
-      title: WorkflowUpdateRequestStatus
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
-    WorkflowUpdateRequest:
+    PricingPlanSubscriptionWorkflowCreateRequest:
       type: object
       properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        name:
-          type: string
-          description: Name of the workflow.
-        description:
-          type:
-          - string
-          - 'null'
-          description: Description of what the workflow is used for.
-        type:
-          $ref: '#/components/schemas/WorkflowUpdateRequestType'
-          description: Resource type the workflow runs for. This selects the matching workflow configuration and trigger data.
-        reference:
-          type: string
-          description: Unique reference.
-        status:
-          $ref: '#/components/schemas/WorkflowUpdateRequestStatus'
-          description: Status of the workflow.
-        created_at:
-          type:
-          - string
-          - 'null'
-          description: Date time when the workflow was created.
-        updated_at:
-          type:
-          - string
-          - 'null'
-          description: Date time when the workflow was last updated.
-        customer_ids:
+        variant:
+          $ref: '#/components/schemas/PricingPlanSubscriptionWorkflowCreateRequestVariant'
+        reminder_periods:
           type:
           - array
           - 'null'
           items:
-            type: string
-          description: Customer scope for the workflow. This limits which customers can use the workflow when it is triggered.
-        invoice:
-          $ref: '#/components/schemas/InvoiceWorkflowUpdateRequest'
-          description: Invoice workflow configuration that defines how the workflow runs for invoice events and executions.
-        payment:
-          $ref: '#/components/schemas/PaymentWorkflowUpdateRequest'
-          description: Payment workflow configuration that defines how the workflow runs for payment events and executions.
-        pricing_plan_subscription:
-          $ref: '#/components/schemas/PricingPlanSubscriptionWorkflowUpdateRequest'
-          description: Pricing plan subscription workflow configuration that defines how the workflow runs for subscription events and executions.
-        wallet:
-          $ref: '#/components/schemas/WalletWorkflowUpdateRequest'
-          description: Wallet workflow configuration that defines how the workflow runs for wallet (balance) events and executions.
-      description: Defines a workflow for a resource, including its scope, status and the configuration that controls how it runs.
-      title: WorkflowUpdateRequest
-    PaymentWorkflowCreateRequest:
-      type: object
-      properties:
-        variant:
-          $ref: '#/components/schemas/PaymentWorkflowCreateRequestVariant'
-          description: Payment workflow variant that determines which payment condition starts the workflow.
-      description: Defines the payment-specific workflow settings that determine when payment workflows should run.
-      title: PaymentWorkflowCreateRequest
-    WalletWorkflowCreateRequest:
-      type: object
-      properties:
-        variant:
-          $ref: '#/components/schemas/WalletWorkflowCreateRequestVariant'
-          description: Wallet workflow variant that determines which wallet condition starts the workflow.
-        wallet_balance:
-          $ref: '#/components/schemas/WalletWalletBalance'
-          description: Wallet balance workflow settings that define the configuration used for execution.
-      description: Defines the wallet-specific workflow settings that determine when wallet workflows should run.
-      title: WalletWorkflowCreateRequest
+            $ref: '#/components/schemas/Period'
+      title: PricingPlanSubscriptionWorkflowCreateRequest
     WalletWorkflowVariant:
       type: string
       enum:
       - WALLET_BALANCE
       description: Wallet workflow variant that determines which wallet condition starts the workflow.
       title: WalletWorkflowVariant
-    InvoiceWorkflowCreateRequestVariant:
-      type: string
-      enum:
-      - TO_FINAL
-      - OVERDUE
-      - UPCOMING_PAYMENT_REMINDER
-      description: Invoice workflow variant that determines which invoice condition starts the workflow.
-      title: InvoiceWorkflowCreateRequestVariant
-    PricingPlanSubscriptionWorkflowVariant:
-      type: string
-      enum:
-      - FREE_TRIAL_REMINDER
-      title: PricingPlanSubscriptionWorkflowVariant
-    WalletThreshold:
+    WalletWorkflow:
       type: object
       properties:
-        percentage:
+        variant:
+          $ref: '#/components/schemas/WalletWorkflowVariant'
+          description: Wallet workflow variant that determines which wallet condition starts the workflow.
+        wallet_balance:
+          $ref: '#/components/schemas/WalletWalletBalance'
+          description: Wallet balance workflow settings that define the configuration used for execution.
+      description: Defines the wallet-specific workflow settings that determine when wallet workflows should run.
+      title: WalletWorkflow
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    WorkflowType:
+      type: string
+      enum:
+      - INVOICE
+      - PAYMENT
+      - PRICING_PLAN_SUBSCRIPTION
+      - WALLET
+      description: Resource type the workflow runs for. This selects the matching workflow configuration and trigger data.
+      title: WorkflowType
+    PaymentWorkflow:
+      type: object
+      properties:
+        variant:
+          $ref: '#/components/schemas/PaymentWorkflowVariant'
+          description: Payment workflow variant that determines which payment condition starts the workflow.
+      description: Defines the payment-specific workflow settings that determine when payment workflows should run.
+      title: PaymentWorkflow
+    SearchFieldCreateRequest:
+      type: object
+      properties:
+        name:
           type:
           - string
           - 'null'
-        amount:
-          $ref: '#/components/schemas/Amount'
-        credits:
-          $ref: '#/components/schemas/Credits'
-      title: WalletThreshold
-    PaymentWorkflowUpdateRequestVariant:
-      type: string
-      enum:
-      - FAILED_PAYMENT
-      description: Payment workflow variant that determines which payment condition starts the workflow.
-      title: PaymentWorkflowUpdateRequestVariant
+        value:
+          type: string
+        wildcard_start:
+          type: boolean
+        wildcard_end:
+          type: boolean
+        ignore_case:
+          type: boolean
+      title: SearchFieldCreateRequest
     PaginationLinks:
       type: object
       properties:
@@ -1008,113 +785,86 @@ components:
           - string
           - 'null'
       title: PaginationLinks
-    WalletWorkflowUpdateRequestVariant:
-      type: string
-      enum:
-      - WALLET_BALANCE
-      description: Wallet workflow variant that determines which wallet condition starts the workflow.
-      title: WalletWorkflowUpdateRequestVariant
-    InvoiceOverdue:
-      type: object
-      properties:
-        periods:
-          type: array
-          items:
-            $ref: '#/components/schemas/Period'
-          description: Overdue periods that define the steps of the workflow.
-      description: Defines the overdue schedule used by an invoice workflow.
-      title: InvoiceOverdue
-    WalletWalletBalance:
-      type: object
-      properties:
-        wallet_type_id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type WALLET_TYPE
-        comparator:
-          $ref: '#/components/schemas/WalletWalletBalanceComparator'
-          description: For wallet workflows only LESS_THAN is supported.
-        threshold:
-          $ref: '#/components/schemas/WalletThreshold'
-      description: Defines the overdue schedule used by an invoice workflow.
-      title: WalletWalletBalance
-    WorkflowCreateRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        name:
-          type: string
-          description: Name of the workflow.
-        description:
-          type:
-          - string
-          - 'null'
-          description: Description of what the workflow is used for.
-        type:
-          $ref: '#/components/schemas/WorkflowCreateRequestType'
-          description: Resource type the workflow runs for. This selects the matching workflow configuration and trigger data.
-        reference:
-          type: string
-          description: Unique reference.
-        status:
-          $ref: '#/components/schemas/WorkflowCreateRequestStatus'
-          description: Status of the workflow.
-        created_at:
-          type:
-          - string
-          - 'null'
-          description: Date time when the workflow was created.
-        updated_at:
-          type:
-          - string
-          - 'null'
-          description: Date time when the workflow was last updated.
-        customer_ids:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: Customer scope for the workflow. This limits which customers can use the workflow when it is triggered.
-        invoice:
-          $ref: '#/components/schemas/InvoiceWorkflowCreateRequest'
-          description: Invoice workflow configuration that defines how the workflow runs for invoice events and executions.
-        payment:
-          $ref: '#/components/schemas/PaymentWorkflowCreateRequest'
-          description: Payment workflow configuration that defines how the workflow runs for payment events and executions.
-        pricing_plan_subscription:
-          $ref: '#/components/schemas/PricingPlanSubscriptionWorkflowCreateRequest'
-          description: Pricing plan subscription workflow configuration that defines how the workflow runs for subscription events and executions.
-        wallet:
-          $ref: '#/components/schemas/WalletWorkflowCreateRequest'
-          description: Wallet workflow configuration that defines how the workflow runs for wallet (balance) events and executions.
-      required:
-      - name
-      - type
-      - reference
-      - status
-      description: Defines a workflow for a resource, including its scope, status and the configuration that controls how it runs.
-      title: WorkflowCreateRequest
-    PricingPlanSubscriptionWorkflowCreateRequest:
+    InvoiceWorkflow:
       type: object
       properties:
         variant:
-          $ref: '#/components/schemas/PricingPlanSubscriptionWorkflowCreateRequestVariant'
+          $ref: '#/components/schemas/InvoiceWorkflowVariant'
+          description: Invoice workflow variant that determines which invoice condition starts the workflow.
+        overdue:
+          $ref: '#/components/schemas/InvoiceOverdue'
+          description: Overdue workflow settings that define the overdue steps used for execution.
+        upcoming_payment:
+          $ref: '#/components/schemas/InvoiceUpcomingPayment'
+          description: Upcoming payment reminder settings that define when reminders are sent before the charge date.
+      description: Defines the invoice-specific workflow settings that determine when invoice workflows should run.
+      title: InvoiceWorkflow
+    WorkflowStatus:
+      type: string
+      enum:
+      - ACTIVE
+      - INACTIVE
+      - DRAFT
+      - ARCHIVED
+      description: Status of the workflow.
+      title: WorkflowStatus
+    PaymentWorkflowUpdateRequestVariant:
+      type: string
+      enum:
+      - FAILED_PAYMENT
+      description: Payment workflow variant that determines which payment condition starts the workflow.
+      title: PaymentWorkflowUpdateRequestVariant
+    WorkflowPaginatedResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Workflow'
+          description: Page data.
+        limit:
+          type:
+          - integer
+          - 'null'
+          description: Page size limit used for this response.
+        page:
+          type:
+          - integer
+          - 'null'
+          description: Current page number (1-indexed).
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+          description: Pagination navigation links.
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+          description: Deprecated. Not supported anymore.
+      required:
+      - data
+      - links
+      description: Paginated response wrapper for workflow definitions.
+      title: WorkflowPaginatedResponse
+    PaymentWorkflowCreateRequest:
+      type: object
+      properties:
+        variant:
+          $ref: '#/components/schemas/PaymentWorkflowCreateRequestVariant'
+          description: Payment workflow variant that determines which payment condition starts the workflow.
+      description: Defines the payment-specific workflow settings that determine when payment workflows should run.
+      title: PaymentWorkflowCreateRequest
+    PricingPlanSubscriptionWorkflow:
+      type: object
+      properties:
+        variant:
+          $ref: '#/components/schemas/PricingPlanSubscriptionWorkflowVariant'
         reminder_periods:
           type:
           - array
           - 'null'
           items:
             $ref: '#/components/schemas/Period'
-      title: PricingPlanSubscriptionWorkflowCreateRequest
+      title: PricingPlanSubscriptionWorkflow
     Amount:
       type: object
       properties:
@@ -1123,16 +873,47 @@ components:
         currency:
           $ref: '#/components/schemas/AmountCurrency'
       title: Amount
-    SelectionRuleFieldCreateRequest:
+    WorkflowCreateRequestType:
+      type: string
+      enum:
+      - INVOICE
+      - PAYMENT
+      - PRICING_PLAN_SUBSCRIPTION
+      - WALLET
+      description: Resource type the workflow runs for. This selects the matching workflow configuration and trigger data.
+      title: WorkflowCreateRequestType
+    InvoiceWorkflowCreateRequestVariant:
+      type: string
+      enum:
+      - TO_FINAL
+      - OVERDUE
+      - UPCOMING_PAYMENT_REMINDER
+      description: Invoice workflow variant that determines which invoice condition starts the workflow.
+      title: InvoiceWorkflowCreateRequestVariant
+    PeriodType:
+      type: string
+      enum:
+      - DAY
+      - WEEK
+      - MONTH
+      - YEAR
+      title: PeriodType
+    SearchCreateRequest:
       type: object
       properties:
-        name:
-          type: string
-        value:
-          type:
-          - string
-          - 'null'
-      title: SelectionRuleFieldCreateRequest
+        search_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchFieldCreateRequest'
+        filter_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/FilterFieldCreateRequest'
+        selection_rule_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/SelectionRuleFieldCreateRequest'
+      title: SearchCreateRequest
     ApiErrorResourceType:
       type: string
       enum:
@@ -1222,6 +1003,77 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    InvoiceWorkflowUpdateRequestVariant:
+      type: string
+      enum:
+      - TO_FINAL
+      - OVERDUE
+      - UPCOMING_PAYMENT_REMINDER
+      description: Invoice workflow variant that determines which invoice condition starts the workflow.
+      title: InvoiceWorkflowUpdateRequestVariant
+    WalletWalletBalance:
+      type: object
+      properties:
+        wallet_type_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type WALLET_TYPE
+        comparator:
+          $ref: '#/components/schemas/WalletWalletBalanceComparator'
+          description: For wallet workflows only LESS_THAN is supported.
+        threshold:
+          $ref: '#/components/schemas/WalletThreshold'
+      description: Defines the overdue schedule used by an invoice workflow.
+      title: WalletWalletBalance
+    PaymentWorkflowUpdateRequest:
+      type: object
+      properties:
+        variant:
+          $ref: '#/components/schemas/PaymentWorkflowUpdateRequestVariant'
+          description: Payment workflow variant that determines which payment condition starts the workflow.
+      description: Defines the payment-specific workflow settings that determine when payment workflows should run.
+      title: PaymentWorkflowUpdateRequest
+    InvoiceWorkflowUpdateRequest:
+      type: object
+      properties:
+        variant:
+          $ref: '#/components/schemas/InvoiceWorkflowUpdateRequestVariant'
+          description: Invoice workflow variant that determines which invoice condition starts the workflow.
+        overdue:
+          $ref: '#/components/schemas/InvoiceOverdue'
+          description: Overdue workflow settings that define the overdue steps used for execution.
+        upcoming_payment:
+          $ref: '#/components/schemas/InvoiceUpcomingPayment'
+          description: Upcoming payment reminder settings that define when reminders are sent before the charge date.
+      description: Defines the invoice-specific workflow settings that determine when invoice workflows should run.
+      title: InvoiceWorkflowUpdateRequest
     Workflow:
       type: object
       properties:
@@ -1281,49 +1133,34 @@ components:
           description: Wallet workflow configuration that defines how the workflow runs for wallet (balance) events and executions.
       description: Defines a workflow for a resource, including its scope, status and the configuration that controls how it runs.
       title: Workflow
-    PaymentWorkflowUpdateRequest:
-      type: object
-      properties:
-        variant:
-          $ref: '#/components/schemas/PaymentWorkflowUpdateRequestVariant'
-          description: Payment workflow variant that determines which payment condition starts the workflow.
-      description: Defines the payment-specific workflow settings that determine when payment workflows should run.
-      title: PaymentWorkflowUpdateRequest
-    InvoiceWorkflowVariant:
-      type: string
-      enum:
-      - TO_FINAL
-      - OVERDUE
-      - UPCOMING_PAYMENT_REMINDER
-      description: Invoice workflow variant that determines which invoice condition starts the workflow.
-      title: InvoiceWorkflowVariant
-    SearchFieldCreateRequest:
+    SelectionRuleFieldCreateRequest:
       type: object
       properties:
         name:
+          type: string
+        value:
+          type:
+          - string
+          - 'null'
+      title: SelectionRuleFieldCreateRequest
+    FilterFieldCreateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        reference:
           type:
           - string
           - 'null'
         value:
-          type: string
-        wildcard_start:
-          type: boolean
-        wildcard_end:
-          type: boolean
-        ignore_case:
-          type: boolean
-      title: SearchFieldCreateRequest
-    WalletWorkflow:
-      type: object
-      properties:
-        variant:
-          $ref: '#/components/schemas/WalletWorkflowVariant'
-          description: Wallet workflow variant that determines which wallet condition starts the workflow.
-        wallet_balance:
-          $ref: '#/components/schemas/WalletWalletBalance'
-          description: Wallet balance workflow settings that define the configuration used for execution.
-      description: Defines the wallet-specific workflow settings that determine when wallet workflows should run.
-      title: WalletWorkflow
+          type:
+          - string
+          - 'null'
+        values:
+          type: array
+          items:
+            type: string
+      title: FilterFieldCreateRequest
     WalletWorkflowUpdateRequest:
       type: object
       properties:
@@ -1335,6 +1172,113 @@ components:
           description: Wallet balance workflow settings that define the configuration used for execution.
       description: Defines the wallet-specific workflow settings that determine when wallet workflows should run.
       title: WalletWorkflowUpdateRequest
+    InvoiceWorkflowVariant:
+      type: string
+      enum:
+      - TO_FINAL
+      - OVERDUE
+      - UPCOMING_PAYMENT_REMINDER
+      description: Invoice workflow variant that determines which invoice condition starts the workflow.
+      title: InvoiceWorkflowVariant
+    PricingPlanSubscriptionWorkflowVariant:
+      type: string
+      enum:
+      - FREE_TRIAL_REMINDER
+      title: PricingPlanSubscriptionWorkflowVariant
+    InvoiceWorkflowCreateRequest:
+      type: object
+      properties:
+        variant:
+          $ref: '#/components/schemas/InvoiceWorkflowCreateRequestVariant'
+          description: Invoice workflow variant that determines which invoice condition starts the workflow.
+        overdue:
+          $ref: '#/components/schemas/InvoiceOverdue'
+          description: Overdue workflow settings that define the overdue steps used for execution.
+        upcoming_payment:
+          $ref: '#/components/schemas/InvoiceUpcomingPayment'
+          description: Upcoming payment reminder settings that define when reminders are sent before the charge date.
+      description: Defines the invoice-specific workflow settings that determine when invoice workflows should run.
+      title: InvoiceWorkflowCreateRequest
+    WorkflowUpdateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        name:
+          type: string
+          description: Name of the workflow.
+        description:
+          type:
+          - string
+          - 'null'
+          description: Description of what the workflow is used for.
+        type:
+          $ref: '#/components/schemas/WorkflowUpdateRequestType'
+          description: Resource type the workflow runs for. This selects the matching workflow configuration and trigger data.
+        reference:
+          type: string
+          description: Unique reference.
+        status:
+          $ref: '#/components/schemas/WorkflowUpdateRequestStatus'
+          description: Status of the workflow.
+        created_at:
+          type:
+          - string
+          - 'null'
+          description: Date time when the workflow was created.
+        updated_at:
+          type:
+          - string
+          - 'null'
+          description: Date time when the workflow was last updated.
+        customer_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Customer scope for the workflow. This limits which customers can use the workflow when it is triggered.
+        invoice:
+          $ref: '#/components/schemas/InvoiceWorkflowUpdateRequest'
+          description: Invoice workflow configuration that defines how the workflow runs for invoice events and executions.
+        payment:
+          $ref: '#/components/schemas/PaymentWorkflowUpdateRequest'
+          description: Payment workflow configuration that defines how the workflow runs for payment events and executions.
+        pricing_plan_subscription:
+          $ref: '#/components/schemas/PricingPlanSubscriptionWorkflowUpdateRequest'
+          description: Pricing plan subscription workflow configuration that defines how the workflow runs for subscription events and executions.
+        wallet:
+          $ref: '#/components/schemas/WalletWorkflowUpdateRequest'
+          description: Wallet workflow configuration that defines how the workflow runs for wallet (balance) events and executions.
+      description: Defines a workflow for a resource, including its scope, status and the configuration that controls how it runs.
+      title: WorkflowUpdateRequest
+    InvoiceUpcomingPayment:
+      type: object
+      properties:
+        periods:
+          type: array
+          items:
+            $ref: '#/components/schemas/Period'
+          description: Periods before the charge date at which reminders are sent.
+      description: Defines the upcoming payment reminder schedule used by an invoice workflow.
+      title: InvoiceUpcomingPayment
+    WalletWorkflowCreateRequest:
+      type: object
+      properties:
+        variant:
+          $ref: '#/components/schemas/WalletWorkflowCreateRequestVariant'
+          description: Wallet workflow variant that determines which wallet condition starts the workflow.
+        wallet_balance:
+          $ref: '#/components/schemas/WalletWalletBalance'
+          description: Wallet balance workflow settings that define the configuration used for execution.
+      description: Defines the wallet-specific workflow settings that determine when wallet workflows should run.
+      title: WalletWorkflowCreateRequest
     PricingPlanSubscriptionWorkflowUpdateRequest:
       type: object
       properties:
@@ -1347,17 +1291,116 @@ components:
           items:
             $ref: '#/components/schemas/Period'
       title: PricingPlanSubscriptionWorkflowUpdateRequest
-    PricingPlanSubscriptionWorkflowUpdateRequestVariant:
+    WorkflowCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        name:
+          type: string
+          description: Name of the workflow.
+        description:
+          type:
+          - string
+          - 'null'
+          description: Description of what the workflow is used for.
+        type:
+          $ref: '#/components/schemas/WorkflowCreateRequestType'
+          description: Resource type the workflow runs for. This selects the matching workflow configuration and trigger data.
+        reference:
+          type: string
+          description: Unique reference.
+        status:
+          $ref: '#/components/schemas/WorkflowCreateRequestStatus'
+          description: Status of the workflow.
+        created_at:
+          type:
+          - string
+          - 'null'
+          description: Date time when the workflow was created.
+        updated_at:
+          type:
+          - string
+          - 'null'
+          description: Date time when the workflow was last updated.
+        customer_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: Customer scope for the workflow. This limits which customers can use the workflow when it is triggered.
+        invoice:
+          $ref: '#/components/schemas/InvoiceWorkflowCreateRequest'
+          description: Invoice workflow configuration that defines how the workflow runs for invoice events and executions.
+        payment:
+          $ref: '#/components/schemas/PaymentWorkflowCreateRequest'
+          description: Payment workflow configuration that defines how the workflow runs for payment events and executions.
+        pricing_plan_subscription:
+          $ref: '#/components/schemas/PricingPlanSubscriptionWorkflowCreateRequest'
+          description: Pricing plan subscription workflow configuration that defines how the workflow runs for subscription events and executions.
+        wallet:
+          $ref: '#/components/schemas/WalletWorkflowCreateRequest'
+          description: Wallet workflow configuration that defines how the workflow runs for wallet (balance) events and executions.
+      required:
+      - name
+      - type
+      - reference
+      - status
+      description: Defines a workflow for a resource, including its scope, status and the configuration that controls how it runs.
+      title: WorkflowCreateRequest
+    PaymentWorkflowVariant:
       type: string
       enum:
-      - FREE_TRIAL_REMINDER
-      title: PricingPlanSubscriptionWorkflowUpdateRequestVariant
-    WalletWorkflowCreateRequestVariant:
+      - FAILED_PAYMENT
+      description: Payment workflow variant that determines which payment condition starts the workflow.
+      title: PaymentWorkflowVariant
+    Credits:
+      type: object
+      properties:
+        quantity:
+          type: string
+        credit_type_id:
+          type: string
+          description: Resource ID of type CREDIT_TYPE
+      title: Credits
+    InvoiceOverdue:
+      type: object
+      properties:
+        periods:
+          type: array
+          items:
+            $ref: '#/components/schemas/Period'
+          description: Overdue periods that define the steps of the workflow.
+      description: Defines the overdue schedule used by an invoice workflow.
+      title: InvoiceOverdue
+    WorkflowCreateRequestStatus:
       type: string
       enum:
-      - WALLET_BALANCE
-      description: Wallet workflow variant that determines which wallet condition starts the workflow.
-      title: WalletWorkflowCreateRequestVariant
+      - ACTIVE
+      - INACTIVE
+      - DRAFT
+      - ARCHIVED
+      description: Status of the workflow.
+      title: WorkflowCreateRequestStatus
+    WalletThreshold:
+      type: object
+      properties:
+        percentage:
+          type:
+          - string
+          - 'null'
+        amount:
+          $ref: '#/components/schemas/Amount'
+        credits:
+          $ref: '#/components/schemas/Credits'
+      title: WalletThreshold
     WorkflowUpdateRequestType:
       type: string
       enum:
@@ -1367,44 +1410,12 @@ components:
       - WALLET
       description: Resource type the workflow runs for. This selects the matching workflow configuration and trigger data.
       title: WorkflowUpdateRequestType
-    PricingPlanSubscriptionWorkflow:
-      type: object
-      properties:
-        variant:
-          $ref: '#/components/schemas/PricingPlanSubscriptionWorkflowVariant'
-        reminder_periods:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Period'
-      title: PricingPlanSubscriptionWorkflow
-    SearchCreateRequest:
-      type: object
-      properties:
-        search_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/SearchFieldCreateRequest'
-        filter_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/FilterFieldCreateRequest'
-        selection_rule_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/SelectionRuleFieldCreateRequest'
-      title: SearchCreateRequest
-    WorkflowCreateRequestType:
+    PricingPlanSubscriptionWorkflowCreateRequestVariant:
       type: string
       enum:
-      - INVOICE
-      - PAYMENT
-      - PRICING_PLAN_SUBSCRIPTION
-      - WALLET
-      description: Resource type the workflow runs for. This selects the matching workflow configuration and trigger data.
-      title: WorkflowCreateRequestType
-    WorkflowStatus:
+      - FREE_TRIAL_REMINDER
+      title: PricingPlanSubscriptionWorkflowCreateRequestVariant
+    WorkflowUpdateRequestStatus:
       type: string
       enum:
       - ACTIVE
@@ -1412,7 +1423,24 @@ components:
       - DRAFT
       - ARCHIVED
       description: Status of the workflow.
-      title: WorkflowStatus
+      title: WorkflowUpdateRequestStatus
+    WalletWorkflowUpdateRequestVariant:
+      type: string
+      enum:
+      - WALLET_BALANCE
+      description: Wallet workflow variant that determines which wallet condition starts the workflow.
+      title: WalletWorkflowUpdateRequestVariant
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    PricingPlanSubscriptionWorkflowUpdateRequestVariant:
+      type: string
+      enum:
+      - FREE_TRIAL_REMINDER
+      title: PricingPlanSubscriptionWorkflowUpdateRequestVariant
     WalletWalletBalanceComparator:
       type: string
       enum:
@@ -1430,56 +1458,28 @@ components:
       - NOT_CONTAINS
       description: For wallet workflows only LESS_THAN is supported.
       title: WalletWalletBalanceComparator
-    PaymentWorkflowVariant:
+    PaymentWorkflowCreateRequestVariant:
       type: string
       enum:
       - FAILED_PAYMENT
       description: Payment workflow variant that determines which payment condition starts the workflow.
-      title: PaymentWorkflowVariant
-    InvoiceWorkflowUpdateRequestVariant:
+      title: PaymentWorkflowCreateRequestVariant
+    WalletWorkflowCreateRequestVariant:
       type: string
       enum:
-      - TO_FINAL
-      - OVERDUE
-      - UPCOMING_PAYMENT_REMINDER
-      description: Invoice workflow variant that determines which invoice condition starts the workflow.
-      title: InvoiceWorkflowUpdateRequestVariant
-    PricingPlanSubscriptionWorkflowCreateRequestVariant:
-      type: string
-      enum:
-      - FREE_TRIAL_REMINDER
-      title: PricingPlanSubscriptionWorkflowCreateRequestVariant
-    WorkflowPaginatedResponse:
+      - WALLET_BALANCE
+      description: Wallet workflow variant that determines which wallet condition starts the workflow.
+      title: WalletWorkflowCreateRequestVariant
+    Period:
       type: object
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Workflow'
-          description: Page data.
-        limit:
+        type:
+          $ref: '#/components/schemas/PeriodType'
+        value:
           type:
           - integer
           - 'null'
-          description: Page size limit used for this response.
-        page:
-          type:
-          - integer
-          - 'null'
-          description: Current page number (1-indexed).
-        links:
-          $ref: '#/components/schemas/PaginationLinks'
-          description: Pagination navigation links.
-        total_number_of_pages:
-          type:
-          - integer
-          - 'null'
-          description: Deprecated. Not supported anymore.
-      required:
-      - data
-      - links
-      description: Paginated response wrapper for workflow definitions.
-      title: WorkflowPaginatedResponse
+      title: Period
   securitySchemes:
     API-Key:
       type: apiKey

@@ -556,46 +556,40 @@ paths:
                 $ref: '#/components/schemas/ApiError'
 components:
   schemas:
-    CreditTypeResponseWrapper:
+    CreditTypeUpdateRequest:
       type: object
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreditType'
-        limit:
+        object_type:
           type:
-          - integer
+          - string
           - 'null'
-        page:
+        id:
           type:
-          - integer
+          - string
           - 'null'
-        total_number_of_pages:
+        reference:
+          type: string
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/CreditTypeUpdateRequestStatus'
+          - type: 'null'
+        name:
+          type: string
+        description:
           type:
-          - integer
+          - string
           - 'null'
-        links:
-          $ref: '#/components/schemas/PaginationLinks'
-      required:
-      - data
-      - links
-      title: CreditTypeResponseWrapper
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
-    CreditTypeUpdateRequestStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - INACTIVE
-      - DEPRECATED
-      - ARCHIVED
-      title: CreditTypeUpdateRequestStatus
+        unit_name:
+          $ref: '#/components/schemas/UnitName'
+        created_at:
+          type:
+          - string
+          - 'null'
+        updated_at:
+          type:
+          - string
+          - 'null'
+      title: CreditTypeUpdateRequest
     ApiErrorResourceType:
       type: string
       enum:
@@ -685,40 +679,41 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
-    CreditTypeCreateRequest:
+    ApiError:
       type: object
       properties:
-        object_type:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
           type:
           - string
           - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        reference:
+        message:
           type: string
-        status:
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
           oneOf:
-          - $ref: '#/components/schemas/CreditTypeCreateRequestStatus'
+          - $ref: '#/components/schemas/ApiErrorResourceType'
           - type: 'null'
-        name:
-          type: string
-        description:
-          type:
-          - string
-          - 'null'
-        unit_name:
-          $ref: '#/components/schemas/UnitName'
-        created_at:
-          type:
-          - string
-          - 'null'
-        updated_at:
-          type:
-          - string
-          - 'null'
-      title: CreditTypeCreateRequest
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    CreditTypeUpdateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - INACTIVE
+      - DEPRECATED
+      - ARCHIVED
+      title: CreditTypeUpdateRequestStatus
     CreditTypeCreateRequestStatus:
       type: string
       enum:
@@ -767,76 +762,46 @@ components:
       - IDEMPOTENCY_CHECK_FAILED
       - INVALID_REQUEST
       title: ApiErrorCode
-    CreditTypeUpdateRequest:
+    CreditTypeStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - INACTIVE
+      - DEPRECATED
+      - ARCHIVED
+      title: CreditTypeStatus
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    CreditTypeResponseWrapper:
       type: object
       properties:
-        object_type:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreditType'
+        limit:
           type:
-          - string
+          - integer
           - 'null'
-        id:
+        page:
           type:
-          - string
+          - integer
           - 'null'
-        reference:
-          type: string
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/CreditTypeUpdateRequestStatus'
-          - type: 'null'
-        name:
-          type: string
-        description:
+        total_number_of_pages:
           type:
-          - string
+          - integer
           - 'null'
-        unit_name:
-          $ref: '#/components/schemas/UnitName'
-        created_at:
-          type:
-          - string
-          - 'null'
-        updated_at:
-          type:
-          - string
-          - 'null'
-      title: CreditTypeUpdateRequest
-    UnitName:
-      type: object
-      properties:
-        singular:
-          type: string
-        plural:
-          type:
-          - string
-          - 'null'
-      title: UnitName
-    ApiError:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/ApiErrorType'
-        code:
-          $ref: '#/components/schemas/ApiErrorCode'
-        field:
-          type:
-          - string
-          - 'null'
-        message:
-          type: string
-        resource_id:
-          type:
-          - string
-          - 'null'
-        resource_type:
-          oneOf:
-          - $ref: '#/components/schemas/ApiErrorResourceType'
-          - type: 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
       required:
-      - type
-      - code
-      - message
-      title: ApiError
+      - data
+      - links
+      title: CreditTypeResponseWrapper
     PaginationLinks:
       type: object
       properties:
@@ -857,15 +822,6 @@ components:
           - string
           - 'null'
       title: PaginationLinks
-    CreditTypeStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - INACTIVE
-      - DEPRECATED
-      - ARCHIVED
-      title: CreditTypeStatus
     CreditType:
       type: object
       properties:
@@ -900,6 +856,50 @@ components:
           - string
           - 'null'
       title: CreditType
+    CreditTypeCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/CreditTypeCreateRequestStatus'
+          - type: 'null'
+        name:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        unit_name:
+          $ref: '#/components/schemas/UnitName'
+        created_at:
+          type:
+          - string
+          - 'null'
+        updated_at:
+          type:
+          - string
+          - 'null'
+      title: CreditTypeCreateRequest
+    UnitName:
+      type: object
+      properties:
+        singular:
+          type: string
+        plural:
+          type:
+          - string
+          - 'null'
+      title: UnitName
   securitySchemes:
     API-Key:
       type: apiKey

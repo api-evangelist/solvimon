@@ -375,35 +375,15 @@ paths:
                 $ref: '#/components/schemas/ApiError'
 components:
   schemas:
-    InitPricingPlanSubscriptionPortalUrlUpdateRequest:
-      type: object
-      properties:
-        pricing_plan_subscription_id:
-          type: string
-          description: Resource ID of type PRICING_PLAN_SUBSCRIPTION
-        success_url:
-          type:
-          - string
-          - 'null'
-      title: InitPricingPlanSubscriptionPortalUrlUpdateRequest
-    PeriodType:
+    PortalUrlType:
       type: string
       enum:
-      - DAY
-      - WEEK
-      - MONTH
-      - YEAR
-      title: PeriodType
-    PeriodUpdateRequest:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/PeriodUpdateRequestType'
-        value:
-          type:
-          - integer
-          - 'null'
-      title: PeriodUpdateRequest
+      - INVOICE
+      - PAY_INVOICE
+      - CUSTOMER
+      - QUOTE_VERSION
+      - INIT_PRICING_PLAN_SUBSCRIPTION
+      title: PortalUrlType
     PortalUrlCreateRequest:
       type: object
       properties:
@@ -473,16 +453,25 @@ components:
       required:
       - type
       title: PortalUrlCreateRequest
-    Period:
+    PeriodUpdateRequestType:
+      type: string
+      enum:
+      - DAY
+      - WEEK
+      - MONTH
+      - YEAR
+      title: PeriodUpdateRequestType
+    InitPricingPlanSubscriptionPortalUrl:
       type: object
       properties:
-        type:
-          $ref: '#/components/schemas/PeriodType'
-        value:
+        pricing_plan_subscription_id:
+          type: string
+          description: Resource ID of type PRICING_PLAN_SUBSCRIPTION
+        success_url:
           type:
-          - integer
+          - string
           - 'null'
-      title: Period
+      title: InitPricingPlanSubscriptionPortalUrl
     ApiErrorCode:
       type: string
       enum:
@@ -522,53 +511,19 @@ components:
       - IDEMPOTENCY_CHECK_FAILED
       - INVALID_REQUEST
       title: ApiErrorCode
-    PortalUrlCreateRequestStatus:
-      type: string
-      enum:
-      - PUBLISHED
-      - REVOKED
-      - EXPIRED
-      title: PortalUrlCreateRequestStatus
-    ApiError:
+    PeriodCreateRequest:
       type: object
       properties:
         type:
-          $ref: '#/components/schemas/ApiErrorType'
-        code:
-          $ref: '#/components/schemas/ApiErrorCode'
-        field:
+          $ref: '#/components/schemas/PeriodCreateRequestType'
+        value:
           type:
-          - string
+          - integer
           - 'null'
-        message:
-          type: string
-        resource_id:
-          type:
-          - string
-          - 'null'
-        resource_type:
-          oneOf:
-          - $ref: '#/components/schemas/ApiErrorResourceType'
-          - type: 'null'
-      required:
-      - type
-      - code
-      - message
-      title: ApiError
-    PortalUrlUpdateRequestStatus:
-      type: string
-      enum:
-      - PUBLISHED
-      - REVOKED
-      - EXPIRED
-      title: PortalUrlUpdateRequestStatus
-    CustomerActionOptions:
+      title: PeriodCreateRequest
+    InvoiceActionOptions:
       type: object
       properties:
-        edit_customer_details:
-          type:
-          - boolean
-          - 'null'
         download_invoice:
           type:
           - boolean
@@ -577,91 +532,7 @@ components:
           type:
           - boolean
           - 'null'
-        combine_open_invoices:
-          type:
-          - boolean
-          - 'null'
-      title: CustomerActionOptions
-    PeriodUpdateRequestType:
-      type: string
-      enum:
-      - DAY
-      - WEEK
-      - MONTH
-      - YEAR
-      title: PeriodUpdateRequestType
-    PortalUrlResponseWrapper:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/PortalUrl'
-        page:
-          type:
-          - integer
-          - 'null'
-        limit:
-          type:
-          - integer
-          - 'null'
-        total_number_of_pages:
-          type:
-          - integer
-          - 'null'
-        links:
-          $ref: '#/components/schemas/PaginationLinks'
-      required:
-      - data
-      title: PortalUrlResponseWrapper
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
-    CustomerPortalUrlCreateRequest:
-      type: object
-      properties:
-        display:
-          $ref: '#/components/schemas/DisplayConfig'
-        options:
-          $ref: '#/components/schemas/CustomerActionOptions'
-      title: CustomerPortalUrlCreateRequest
-    QuoteVersionPortalUrlUpdateRequest:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type QUOTE_VERSION
-      title: QuoteVersionPortalUrlUpdateRequest
-    QuoteVersionPortalUrlCreateRequest:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type QUOTE_VERSION
-      title: QuoteVersionPortalUrlCreateRequest
-    PortalUrlStatus:
-      type: string
-      enum:
-      - PUBLISHED
-      - REVOKED
-      - EXPIRED
-      title: PortalUrlStatus
-    QuoteVersionPortalUrl:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type QUOTE_VERSION
-      title: QuoteVersionPortalUrl
+      title: InvoiceActionOptions
     PaginationLinks:
       type: object
       properties:
@@ -682,40 +553,6 @@ components:
           - string
           - 'null'
       title: PaginationLinks
-    PortalUrlType:
-      type: string
-      enum:
-      - INVOICE
-      - PAY_INVOICE
-      - CUSTOMER
-      - QUOTE_VERSION
-      - INIT_PRICING_PLAN_SUBSCRIPTION
-      title: PortalUrlType
-    InvoicePortalUrlUpdateRequest:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Resource ID of type INVOICE
-        options:
-          $ref: '#/components/schemas/InvoiceActionOptions'
-      title: InvoicePortalUrlUpdateRequest
-    PortalUrlWidgetsCreateRequest:
-      type: object
-      properties:
-        usage:
-          type:
-          - string
-          - 'null'
-        invoices:
-          type:
-          - string
-          - 'null'
-        pricing_plan_subscriptions:
-          type:
-          - string
-          - 'null'
-      title: PortalUrlWidgetsCreateRequest
     PortalUrl:
       type: object
       properties:
@@ -783,6 +620,13 @@ components:
         init_pricing_plan_subscription:
           $ref: '#/components/schemas/InitPricingPlanSubscriptionPortalUrl'
       title: PortalUrl
+    PortalUrlUpdateRequestStatus:
+      type: string
+      enum:
+      - PUBLISHED
+      - REVOKED
+      - EXPIRED
+      title: PortalUrlUpdateRequestStatus
     PortalUrlWidgets:
       type: object
       properties:
@@ -799,6 +643,32 @@ components:
           - string
           - 'null'
       title: PortalUrlWidgets
+    QuoteVersionPortalUrlCreateRequest:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type QUOTE_VERSION
+      title: QuoteVersionPortalUrlCreateRequest
+    PeriodType:
+      type: string
+      enum:
+      - DAY
+      - WEEK
+      - MONTH
+      - YEAR
+      title: PeriodType
+    InvoicePortalUrlUpdateRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Resource ID of type INVOICE
+        options:
+          $ref: '#/components/schemas/InvoiceActionOptions'
+      title: InvoicePortalUrlUpdateRequest
     ApiErrorResourceType:
       type: string
       enum:
@@ -888,6 +758,32 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
     PortalUrlWidgetsUpdateRequest:
       type: object
       properties:
@@ -904,6 +800,15 @@ components:
           - string
           - 'null'
       title: PortalUrlWidgetsUpdateRequest
+    QuoteVersionPortalUrl:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type QUOTE_VERSION
+      title: QuoteVersionPortalUrl
     DisplayConfig:
       type: object
       properties:
@@ -924,51 +829,6 @@ components:
           - boolean
           - 'null'
       title: DisplayConfig
-    InitPricingPlanSubscriptionPortalUrl:
-      type: object
-      properties:
-        pricing_plan_subscription_id:
-          type: string
-          description: Resource ID of type PRICING_PLAN_SUBSCRIPTION
-        success_url:
-          type:
-          - string
-          - 'null'
-      title: InitPricingPlanSubscriptionPortalUrl
-    PortalUrlCreateRequestType:
-      type: string
-      enum:
-      - INVOICE
-      - PAY_INVOICE
-      - CUSTOMER
-      - QUOTE_VERSION
-      - INIT_PRICING_PLAN_SUBSCRIPTION
-      title: PortalUrlCreateRequestType
-    PeriodCreateRequestType:
-      type: string
-      enum:
-      - DAY
-      - WEEK
-      - MONTH
-      - YEAR
-      title: PeriodCreateRequestType
-    CustomerPortalUrl:
-      type: object
-      properties:
-        display:
-          $ref: '#/components/schemas/DisplayConfig'
-        options:
-          $ref: '#/components/schemas/CustomerActionOptions'
-      title: CustomerPortalUrl
-    InvoicePortalUrl:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Resource ID of type INVOICE
-        options:
-          $ref: '#/components/schemas/InvoiceActionOptions'
-      title: InvoicePortalUrl
     InvoicePortalUrlCreateRequest:
       type: object
       properties:
@@ -978,47 +838,29 @@ components:
         options:
           $ref: '#/components/schemas/InvoiceActionOptions'
       title: InvoicePortalUrlCreateRequest
-    CustomerPortalUrlUpdateRequest:
+    PortalUrlCreateRequestStatus:
+      type: string
+      enum:
+      - PUBLISHED
+      - REVOKED
+      - EXPIRED
+      title: PortalUrlCreateRequestStatus
+    PortalUrlWidgetsCreateRequest:
       type: object
       properties:
-        display:
-          $ref: '#/components/schemas/DisplayConfig'
-        options:
-          $ref: '#/components/schemas/CustomerActionOptions'
-      title: CustomerPortalUrlUpdateRequest
-    PeriodCreateRequest:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/PeriodCreateRequestType'
-        value:
-          type:
-          - integer
-          - 'null'
-      title: PeriodCreateRequest
-    InvoiceActionOptions:
-      type: object
-      properties:
-        download_invoice:
-          type:
-          - boolean
-          - 'null'
-        pay_open_invoice:
-          type:
-          - boolean
-          - 'null'
-      title: InvoiceActionOptions
-    InitPricingPlanSubscriptionPortalUrlCreateRequest:
-      type: object
-      properties:
-        pricing_plan_subscription_id:
-          type: string
-          description: Resource ID of type PRICING_PLAN_SUBSCRIPTION
-        success_url:
+        usage:
           type:
           - string
           - 'null'
-      title: InitPricingPlanSubscriptionPortalUrlCreateRequest
+        invoices:
+          type:
+          - string
+          - 'null'
+        pricing_plan_subscriptions:
+          type:
+          - string
+          - 'null'
+      title: PortalUrlWidgetsCreateRequest
     PortalUrlUpdateRequest:
       type: object
       properties:
@@ -1086,6 +928,135 @@ components:
         init_pricing_plan_subscription:
           $ref: '#/components/schemas/InitPricingPlanSubscriptionPortalUrlUpdateRequest'
       title: PortalUrlUpdateRequest
+    InvoicePortalUrl:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Resource ID of type INVOICE
+        options:
+          $ref: '#/components/schemas/InvoiceActionOptions'
+      title: InvoicePortalUrl
+    PeriodUpdateRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/PeriodUpdateRequestType'
+        value:
+          type:
+          - integer
+          - 'null'
+      title: PeriodUpdateRequest
+    InitPricingPlanSubscriptionPortalUrlUpdateRequest:
+      type: object
+      properties:
+        pricing_plan_subscription_id:
+          type: string
+          description: Resource ID of type PRICING_PLAN_SUBSCRIPTION
+        success_url:
+          type:
+          - string
+          - 'null'
+      title: InitPricingPlanSubscriptionPortalUrlUpdateRequest
+    PeriodCreateRequestType:
+      type: string
+      enum:
+      - DAY
+      - WEEK
+      - MONTH
+      - YEAR
+      title: PeriodCreateRequestType
+    QuoteVersionPortalUrlUpdateRequest:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type QUOTE_VERSION
+      title: QuoteVersionPortalUrlUpdateRequest
+    CustomerActionOptions:
+      type: object
+      properties:
+        edit_customer_details:
+          type:
+          - boolean
+          - 'null'
+        download_invoice:
+          type:
+          - boolean
+          - 'null'
+        pay_open_invoice:
+          type:
+          - boolean
+          - 'null'
+        combine_open_invoices:
+          type:
+          - boolean
+          - 'null'
+      title: CustomerActionOptions
+    PortalUrlCreateRequestType:
+      type: string
+      enum:
+      - INVOICE
+      - PAY_INVOICE
+      - CUSTOMER
+      - QUOTE_VERSION
+      - INIT_PRICING_PLAN_SUBSCRIPTION
+      title: PortalUrlCreateRequestType
+    PortalUrlResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PortalUrl'
+        page:
+          type:
+          - integer
+          - 'null'
+        limit:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      title: PortalUrlResponseWrapper
+    CustomerPortalUrl:
+      type: object
+      properties:
+        display:
+          $ref: '#/components/schemas/DisplayConfig'
+        options:
+          $ref: '#/components/schemas/CustomerActionOptions'
+      title: CustomerPortalUrl
+    PortalUrlStatus:
+      type: string
+      enum:
+      - PUBLISHED
+      - REVOKED
+      - EXPIRED
+      title: PortalUrlStatus
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    CustomerPortalUrlUpdateRequest:
+      type: object
+      properties:
+        display:
+          $ref: '#/components/schemas/DisplayConfig'
+        options:
+          $ref: '#/components/schemas/CustomerActionOptions'
+      title: CustomerPortalUrlUpdateRequest
     PortalUrlUpdateRequestType:
       type: string
       enum:
@@ -1095,6 +1066,35 @@ components:
       - QUOTE_VERSION
       - INIT_PRICING_PLAN_SUBSCRIPTION
       title: PortalUrlUpdateRequestType
+    CustomerPortalUrlCreateRequest:
+      type: object
+      properties:
+        display:
+          $ref: '#/components/schemas/DisplayConfig'
+        options:
+          $ref: '#/components/schemas/CustomerActionOptions'
+      title: CustomerPortalUrlCreateRequest
+    InitPricingPlanSubscriptionPortalUrlCreateRequest:
+      type: object
+      properties:
+        pricing_plan_subscription_id:
+          type: string
+          description: Resource ID of type PRICING_PLAN_SUBSCRIPTION
+        success_url:
+          type:
+          - string
+          - 'null'
+      title: InitPricingPlanSubscriptionPortalUrlCreateRequest
+    Period:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/PeriodType'
+        value:
+          type:
+          - integer
+          - 'null'
+      title: Period
   securitySchemes:
     API-Key:
       type: apiKey

@@ -227,19 +227,62 @@ paths:
               $ref: '#/components/schemas/SignatureRequestRecipientActionCreateRequest'
 components:
   schemas:
-    ApiErrorType:
+    SignatureRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        updated_at:
+          type:
+          - string
+          - 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/SignatureRequestStatus'
+          - type: 'null'
+          description: The status of the signature request.
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/SignatureRequestType'
+          - type: 'null'
+          description: The type of the signature request.
+        quote_version:
+          $ref: '#/components/schemas/SignatureRequestQuoteVersion'
+        recipients:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/SignatureRequestRecipientData'
+          description: The recipients of the signature request.
+      title: SignatureRequest
+    SignatureRequestQuoteVersion:
+      type: object
+      properties:
+        quote_version_id:
+          type:
+          - string
+          - 'null'
+          description: The ID of the quote version this signature request belongs to.
+      title: SignatureRequestQuoteVersion
+    SignatureRequestStatus:
       type: string
       enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
-    SignatureRequestRecipientDataStatus:
-      type: string
-      enum:
-      - PENDING
+      - IN_PROGRESS
       - COMPLETED
-      description: The status of the recipient.
-      title: SignatureRequestRecipientDataStatus
+      - VOID
+      description: The status of the signature request.
+      title: SignatureRequestStatus
     Name:
       type: object
       properties:
@@ -256,6 +299,72 @@ components:
           - string
           - 'null'
       title: Name
+    SignatureRequestRecipientActionCreateRequestAction:
+      type: string
+      enum:
+      - VIEW
+      - SIGN
+      description: The action the recipient is performing.
+      title: SignatureRequestRecipientActionCreateRequestAction
+    SignatureRequestRecipientDataStatus:
+      type: string
+      enum:
+      - PENDING
+      - COMPLETED
+      description: The status of the recipient.
+      title: SignatureRequestRecipientDataStatus
+    SignatureRequestType:
+      type: string
+      enum:
+      - QUOTE_VERSION
+      description: The type of the signature request.
+      title: SignatureRequestType
+    SignatureRequestRecipientActionCreateRequest:
+      type: object
+      properties:
+        recipient_id:
+          type: string
+          description: The recipient ID of the recipient performing the action.
+        action:
+          $ref: '#/components/schemas/SignatureRequestRecipientActionCreateRequestAction'
+          description: The action the recipient is performing.
+      required:
+      - recipient_id
+      - action
+      title: SignatureRequestRecipientActionCreateRequest
+    SignatureRequestRecipientDataRole:
+      type: string
+      enum:
+      - SIGNER
+      - VIEWER
+      description: The role of the recipient.
+      title: SignatureRequestRecipientDataRole
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
     ApiErrorResourceType:
       type: string
       enum:
@@ -345,37 +454,6 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
-    SignatureRequestQuoteVersion:
-      type: object
-      properties:
-        quote_version_id:
-          type:
-          - string
-          - 'null'
-          description: The ID of the quote version this signature request belongs to.
-      title: SignatureRequestQuoteVersion
-    SignatureRequestStatus:
-      type: string
-      enum:
-      - IN_PROGRESS
-      - COMPLETED
-      - VOID
-      description: The status of the signature request.
-      title: SignatureRequestStatus
-    SignatureRequestRecipientActionCreateRequestAction:
-      type: string
-      enum:
-      - VIEW
-      - SIGN
-      description: The action the recipient is performing.
-      title: SignatureRequestRecipientActionCreateRequestAction
-    SignatureRequestRecipientDataRole:
-      type: string
-      enum:
-      - SIGNER
-      - VIEWER
-      description: The role of the recipient.
-      title: SignatureRequestRecipientDataRole
     ApiErrorCode:
       type: string
       enum:
@@ -415,71 +493,12 @@ components:
       - IDEMPOTENCY_CHECK_FAILED
       - INVALID_REQUEST
       title: ApiErrorCode
-    ApiError:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/ApiErrorType'
-        code:
-          $ref: '#/components/schemas/ApiErrorCode'
-        field:
-          type:
-          - string
-          - 'null'
-        message:
-          type: string
-        resource_id:
-          type:
-          - string
-          - 'null'
-        resource_type:
-          oneOf:
-          - $ref: '#/components/schemas/ApiErrorResourceType'
-          - type: 'null'
-      required:
-      - type
-      - code
-      - message
-      title: ApiError
-    SignatureRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        created_at:
-          type:
-          - string
-          - 'null'
-        updated_at:
-          type:
-          - string
-          - 'null'
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/SignatureRequestStatus'
-          - type: 'null'
-          description: The status of the signature request.
-        type:
-          oneOf:
-          - $ref: '#/components/schemas/SignatureRequestType'
-          - type: 'null'
-          description: The type of the signature request.
-        quote_version:
-          $ref: '#/components/schemas/SignatureRequestQuoteVersion'
-        recipients:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/SignatureRequestRecipientData'
-          description: The recipients of the signature request.
-      title: SignatureRequest
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
     SignatureRequestRecipientData:
       type: object
       properties:
@@ -514,25 +533,6 @@ components:
           - type: 'null'
           description: The status of the recipient.
       title: SignatureRequestRecipientData
-    SignatureRequestType:
-      type: string
-      enum:
-      - QUOTE_VERSION
-      description: The type of the signature request.
-      title: SignatureRequestType
-    SignatureRequestRecipientActionCreateRequest:
-      type: object
-      properties:
-        recipient_id:
-          type: string
-          description: The recipient ID of the recipient performing the action.
-        action:
-          $ref: '#/components/schemas/SignatureRequestRecipientActionCreateRequestAction'
-          description: The action the recipient is performing.
-      required:
-      - recipient_id
-      - action
-      title: SignatureRequestRecipientActionCreateRequest
   securitySchemes:
     API-Key:
       type: apiKey

@@ -209,6 +209,29 @@ paths:
               $ref: '#/components/schemas/FileProcessingSettingsCreateRequest'
 components:
   schemas:
+    ClientCredentials:
+      type: object
+      properties:
+        client_id:
+          type: string
+        client_secret:
+          type: string
+      title: ClientCredentials
+    AuthenticationSettings:
+      type: object
+      properties:
+        api_key:
+          $ref: '#/components/schemas/AuthenticationSettingsApiKey'
+        client_credentials:
+          $ref: '#/components/schemas/ClientCredentials'
+        username_password:
+          $ref: '#/components/schemas/UsernamePassword'
+      title: AuthenticationSettings
+    FileProcessingSettingsCreateRequestType:
+      type: string
+      enum:
+      - METER_DATA
+      title: FileProcessingSettingsCreateRequestType
     FileProcessingSettingsUpdateRequest:
       type: object
       properties:
@@ -245,14 +268,30 @@ components:
           items:
             $ref: '#/components/schemas/CustomerReferencesUpdateRequest'
       title: FileProcessingSettingsUpdateRequest
-    MeterValueMappingAmountDefaultValue:
+    IngestReferenceMapping:
       type: object
       properties:
-        quantity:
+        column:
+          type:
+          - string
+          - 'null'
+        prefix:
+          $ref: '#/components/schemas/ColumnMapping'
+      title: IngestReferenceMapping
+    MeterValueMappingDefaultValue:
+      type: object
+      properties:
+        number:
           $ref: '#/components/schemas/DefaultValue'
-        currency:
-          $ref: '#/components/schemas/DefaultValue'
-      title: MeterValueMappingAmountDefaultValue
+        amount:
+          $ref: '#/components/schemas/MeterValueMappingAmountDefaultValue'
+      title: MeterValueMappingDefaultValue
+    DownloadSettingsUpdateRequest:
+      type: object
+      properties:
+        authentication:
+          $ref: '#/components/schemas/AuthenticationSettings'
+      title: DownloadSettingsUpdateRequest
     ApiErrorCode:
       type: string
       enum:
@@ -292,32 +331,48 @@ components:
       - IDEMPOTENCY_CHECK_FAILED
       - INVALID_REQUEST
       title: ApiErrorCode
-    ApiError:
+    DownloadSettingsCreateRequest:
       type: object
       properties:
-        type:
-          $ref: '#/components/schemas/ApiErrorType'
-        code:
-          $ref: '#/components/schemas/ApiErrorCode'
-        field:
+        authentication:
+          $ref: '#/components/schemas/AuthenticationSettings'
+      title: DownloadSettingsCreateRequest
+    CustomerReferencesUpdateRequest:
+      type: object
+      properties:
+        id:
           type:
           - string
           - 'null'
-        message:
-          type: string
-        resource_id:
+        reference:
           type:
           - string
           - 'null'
-        resource_type:
-          oneOf:
-          - $ref: '#/components/schemas/ApiErrorResourceType'
-          - type: 'null'
-      required:
-      - type
-      - code
-      - message
-      title: ApiError
+        custom_field_value:
+          type:
+          - string
+          - 'null'
+      title: CustomerReferencesUpdateRequest
+    ReferenceMappingInterface:
+      type: object
+      properties:
+        column:
+          type:
+          - string
+          - 'null'
+        custom_field:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+      title: ReferenceMappingInterface
     FileProcessingSettingsCreateRequest:
       type: object
       properties:
@@ -357,241 +412,6 @@ components:
       - reference
       - type
       title: FileProcessingSettingsCreateRequest
-    MeterValueMappingColumn:
-      type: object
-      properties:
-        number:
-          type:
-          - string
-          - 'null'
-        amount:
-          $ref: '#/components/schemas/MeterValueMappingColumnAmount'
-      title: MeterValueMappingColumn
-    MeterDataFileProcessingSettingsUpdateRequest:
-      type: object
-      properties:
-        mapping_column:
-          type:
-          - string
-          - 'null'
-        mappings:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/MeterDataMappingSettings'
-        customer_reference_mapping:
-          $ref: '#/components/schemas/ColumnMapping'
-      title: MeterDataFileProcessingSettingsUpdateRequest
-    FileProcessingSettingsCreateRequestType:
-      type: string
-      enum:
-      - METER_DATA
-      title: FileProcessingSettingsCreateRequestType
-    FileProcessingSettings:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        reference:
-          type: string
-        type:
-          $ref: '#/components/schemas/FileProcessingSettingsType'
-        meter_data:
-          $ref: '#/components/schemas/MeterDataFileProcessingSettings'
-        bucket_location:
-          type:
-          - string
-          - 'null'
-        download_settings:
-          $ref: '#/components/schemas/DownloadSettings'
-        included_customers:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CustomerReferences'
-        excluded_customers:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CustomerReferences'
-      title: FileProcessingSettings
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
-    AuthenticationSettingsApiKey:
-      type: object
-      properties:
-        header:
-          type:
-          - string
-          - 'null'
-        value:
-          type:
-          - string
-          - 'null'
-      title: AuthenticationSettingsApiKey
-    MeterValueMapping:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-        reference:
-          type:
-          - string
-          - 'null'
-        column:
-          $ref: '#/components/schemas/MeterValueMappingColumn'
-        default_value:
-          $ref: '#/components/schemas/MeterValueMappingDefaultValue'
-      title: MeterValueMapping
-    MeterDataMappingSettings:
-      type: object
-      properties:
-        column_values:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-        meter_reference_mapping:
-          $ref: '#/components/schemas/ReferenceMappingInterface'
-        ingest_reference_mapping:
-          $ref: '#/components/schemas/IngestReferenceMapping'
-        meter_property_mappings:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/MeterPropertyMapping'
-        meter_value_mappings:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/MeterValueMapping'
-      title: MeterDataMappingSettings
-    MeterPropertyMapping:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-        reference:
-          type:
-          - string
-          - 'null'
-        column:
-          type: string
-        default_value:
-          $ref: '#/components/schemas/DefaultValue'
-      title: MeterPropertyMapping
-    DownloadSettingsUpdateRequest:
-      type: object
-      properties:
-        authentication:
-          $ref: '#/components/schemas/AuthenticationSettings'
-      title: DownloadSettingsUpdateRequest
-    MeterValueMappingDefaultValue:
-      type: object
-      properties:
-        number:
-          $ref: '#/components/schemas/DefaultValue'
-        amount:
-          $ref: '#/components/schemas/MeterValueMappingAmountDefaultValue'
-      title: MeterValueMappingDefaultValue
-    ClientCredentials:
-      type: object
-      properties:
-        client_id:
-          type: string
-        client_secret:
-          type: string
-      title: ClientCredentials
-    AuthenticationSettings:
-      type: object
-      properties:
-        api_key:
-          $ref: '#/components/schemas/AuthenticationSettingsApiKey'
-        client_credentials:
-          $ref: '#/components/schemas/ClientCredentials'
-        username_password:
-          $ref: '#/components/schemas/UsernamePassword'
-      title: AuthenticationSettings
-    DefaultValue:
-      type: object
-      properties:
-        absent_column:
-          type:
-          - string
-          - 'null'
-        empty_field:
-          type:
-          - string
-          - 'null'
-      title: DefaultValue
-    DownloadSettings:
-      type: object
-      properties:
-        authentication:
-          $ref: '#/components/schemas/AuthenticationSettings'
-      title: DownloadSettings
-    CustomerReferences:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-        reference:
-          type:
-          - string
-          - 'null'
-        custom_field_value:
-          type:
-          - string
-          - 'null'
-      title: CustomerReferences
-    MeterDataFileProcessingSettingsCreateRequest:
-      type: object
-      properties:
-        mapping_column:
-          type:
-          - string
-          - 'null'
-        mappings:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/MeterDataMappingSettings'
-        customer_reference_mapping:
-          $ref: '#/components/schemas/ColumnMapping'
-      title: MeterDataFileProcessingSettingsCreateRequest
-    IngestReferenceMapping:
-      type: object
-      properties:
-        column:
-          type:
-          - string
-          - 'null'
-        prefix:
-          $ref: '#/components/schemas/ColumnMapping'
-      title: IngestReferenceMapping
     ApiErrorResourceType:
       type: string
       enum:
@@ -681,86 +501,136 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
-    ReferenceMappingInterface:
+    ApiError:
       type: object
       properties:
-        column:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
           type:
           - string
           - 'null'
-        custom_field:
+        message:
+          type: string
+        resource_id:
           type:
           - string
           - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        reference:
-          type:
-          - string
-          - 'null'
-      title: ReferenceMappingInterface
-    CustomerReferencesCreateRequest:
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    AuthenticationSettingsApiKey:
       type: object
       properties:
-        id:
+        header:
           type:
           - string
           - 'null'
-        reference:
+        value:
           type:
           - string
           - 'null'
-        custom_field_value:
-          type:
-          - string
-          - 'null'
-      title: CustomerReferencesCreateRequest
-    MeterValueMappingColumnAmount:
+      title: AuthenticationSettingsApiKey
+    DownloadSettings:
+      type: object
+      properties:
+        authentication:
+          $ref: '#/components/schemas/AuthenticationSettings'
+      title: DownloadSettings
+    MeterValueMappingAmountDefaultValue:
       type: object
       properties:
         quantity:
-          type: string
+          $ref: '#/components/schemas/DefaultValue'
         currency:
-          type: string
-      title: MeterValueMappingColumnAmount
-    CustomerReferencesUpdateRequest:
+          $ref: '#/components/schemas/DefaultValue'
+      title: MeterValueMappingAmountDefaultValue
+    MeterDataMappingSettings:
       type: object
       properties:
+        column_values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        meter_reference_mapping:
+          $ref: '#/components/schemas/ReferenceMappingInterface'
+        ingest_reference_mapping:
+          $ref: '#/components/schemas/IngestReferenceMapping'
+        meter_property_mappings:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/MeterPropertyMapping'
+        meter_value_mappings:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/MeterValueMapping'
+      title: MeterDataMappingSettings
+    MeterDataFileProcessingSettingsUpdateRequest:
+      type: object
+      properties:
+        mapping_column:
+          type:
+          - string
+          - 'null'
+        mappings:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/MeterDataMappingSettings'
+        customer_reference_mapping:
+          $ref: '#/components/schemas/ColumnMapping'
+      title: MeterDataFileProcessingSettingsUpdateRequest
+    FileProcessingSettings:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
         id:
           type:
           - string
           - 'null'
         reference:
-          type:
-          - string
-          - 'null'
-        custom_field_value:
-          type:
-          - string
-          - 'null'
-      title: CustomerReferencesUpdateRequest
-    ColumnMapping:
-      type: object
-      properties:
-        column:
-          type:
-          - string
-          - 'null'
-        custom_field:
-          type:
-          - string
-          - 'null'
-      title: ColumnMapping
-    UsernamePassword:
-      type: object
-      properties:
-        username:
           type: string
-        password:
-          type: string
-      title: UsernamePassword
+        type:
+          $ref: '#/components/schemas/FileProcessingSettingsType'
+        meter_data:
+          $ref: '#/components/schemas/MeterDataFileProcessingSettings'
+        bucket_location:
+          type:
+          - string
+          - 'null'
+        download_settings:
+          $ref: '#/components/schemas/DownloadSettings'
+        included_customers:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomerReferences'
+        excluded_customers:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomerReferences'
+      title: FileProcessingSettings
     MeterDataFileProcessingSettings:
       type: object
       properties:
@@ -777,22 +647,152 @@ components:
         customer_reference_mapping:
           $ref: '#/components/schemas/ColumnMapping'
       title: MeterDataFileProcessingSettings
-    FileProcessingSettingsUpdateRequestType:
-      type: string
-      enum:
-      - METER_DATA
-      title: FileProcessingSettingsUpdateRequestType
+    MeterPropertyMapping:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+        column:
+          type: string
+        default_value:
+          $ref: '#/components/schemas/DefaultValue'
+      title: MeterPropertyMapping
+    MeterValueMapping:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+        column:
+          $ref: '#/components/schemas/MeterValueMappingColumn'
+        default_value:
+          $ref: '#/components/schemas/MeterValueMappingDefaultValue'
+      title: MeterValueMapping
     FileProcessingSettingsType:
       type: string
       enum:
       - METER_DATA
       title: FileProcessingSettingsType
-    DownloadSettingsCreateRequest:
+    CustomerReferencesCreateRequest:
       type: object
       properties:
-        authentication:
-          $ref: '#/components/schemas/AuthenticationSettings'
-      title: DownloadSettingsCreateRequest
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+        custom_field_value:
+          type:
+          - string
+          - 'null'
+      title: CustomerReferencesCreateRequest
+    ColumnMapping:
+      type: object
+      properties:
+        column:
+          type:
+          - string
+          - 'null'
+        custom_field:
+          type:
+          - string
+          - 'null'
+      title: ColumnMapping
+    MeterDataFileProcessingSettingsCreateRequest:
+      type: object
+      properties:
+        mapping_column:
+          type:
+          - string
+          - 'null'
+        mappings:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/MeterDataMappingSettings'
+        customer_reference_mapping:
+          $ref: '#/components/schemas/ColumnMapping'
+      title: MeterDataFileProcessingSettingsCreateRequest
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    DefaultValue:
+      type: object
+      properties:
+        absent_column:
+          type:
+          - string
+          - 'null'
+        empty_field:
+          type:
+          - string
+          - 'null'
+      title: DefaultValue
+    MeterValueMappingColumnAmount:
+      type: object
+      properties:
+        quantity:
+          type: string
+        currency:
+          type: string
+      title: MeterValueMappingColumnAmount
+    UsernamePassword:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      title: UsernamePassword
+    FileProcessingSettingsUpdateRequestType:
+      type: string
+      enum:
+      - METER_DATA
+      title: FileProcessingSettingsUpdateRequestType
+    MeterValueMappingColumn:
+      type: object
+      properties:
+        number:
+          type:
+          - string
+          - 'null'
+        amount:
+          $ref: '#/components/schemas/MeterValueMappingColumnAmount'
+      title: MeterValueMappingColumn
+    CustomerReferences:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+        custom_field_value:
+          type:
+          - string
+          - 'null'
+      title: CustomerReferences
   securitySchemes:
     API-Key:
       type: apiKey

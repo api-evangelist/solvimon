@@ -285,21 +285,7 @@ paths:
                 $ref: '#/components/schemas/ApiError'
 components:
   schemas:
-    ResourceIdentifier:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/ResourceIdentifierType'
-        id:
-          type: string
-      title: ResourceIdentifier
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
-    ResourceIdentifierType:
+    ResourceIdentifierCreateRequestType:
       type: string
       enum:
       - PLATFORM
@@ -347,7 +333,7 @@ components:
       - WEBHOOK
       - REPORT_SUBSCRIPTION
       - REPORT_CONFIGURATION
-      title: ResourceIdentifierType
+      title: ResourceIdentifierCreateRequestType
     Attachment:
       type: object
       properties:
@@ -375,6 +361,14 @@ components:
           $ref: '#/components/schemas/ResourceIdentifier'
           description: The resource to attach the document to.
       title: Attachment
+    ResourceIdentifierCreateRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ResourceIdentifierCreateRequestType'
+        id:
+          type: string
+      title: ResourceIdentifierCreateRequest
     ApiErrorResourceType:
       type: string
       enum:
@@ -464,7 +458,33 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
-    ResourceIdentifierCreateRequestType:
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    ResourceIdentifierType:
       type: string
       enum:
       - PLATFORM
@@ -512,43 +532,7 @@ components:
       - WEBHOOK
       - REPORT_SUBSCRIPTION
       - REPORT_CONFIGURATION
-      title: ResourceIdentifierCreateRequestType
-    AttachmentResponseWrapper:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Attachment'
-      required:
-      - data
-      title: AttachmentResponseWrapper
-    ApiError:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/ApiErrorType'
-        code:
-          $ref: '#/components/schemas/ApiErrorCode'
-        field:
-          type:
-          - string
-          - 'null'
-        message:
-          type: string
-        resource_id:
-          type:
-          - string
-          - 'null'
-        resource_type:
-          oneOf:
-          - $ref: '#/components/schemas/ApiErrorResourceType'
-          - type: 'null'
-      required:
-      - type
-      - code
-      - message
-      title: ApiError
+      title: ResourceIdentifierType
     ApiErrorCode:
       type: string
       enum:
@@ -588,85 +572,16 @@ components:
       - IDEMPOTENCY_CHECK_FAILED
       - INVALID_REQUEST
       title: ApiErrorCode
-    DocumentCreateRequest:
+    AttachmentResponseWrapper:
       type: object
       properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        created_at:
-          type:
-          - string
-          - 'null'
-        name:
-          type: string
-          description: The name of the document.
-        description:
-          type:
-          - string
-          - 'null'
-          description: An optional description of the document.
-        content_type:
-          type: string
-          description: Content type of the file (e.g. application/pdf).
-        content:
-          type: string
-          description: The file content, BASE64 encoded. Max 10MB.
-        file_size:
-          type:
-          - integer
-          - 'null'
-          format: int64
-          description: The file size in bytes.
-        downloaded_at:
-          type:
-          - string
-          - 'null'
-          description: Timestamp of the most recent download.
-      title: DocumentCreateRequest
-    AttachmentCreateRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        created_at:
-          type:
-          - string
-          - 'null'
-        document_id:
-          type: string
-          description: The document ID to attach.
-        document:
-          oneOf:
-          - $ref: '#/components/schemas/DocumentCreateRequest'
-          - type: 'null'
-          description: The expanded document object.
-        resource:
-          $ref: '#/components/schemas/ResourceIdentifierCreateRequest'
-          description: The resource to attach the document to.
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Attachment'
       required:
-      - document_id
-      - resource
-      title: AttachmentCreateRequest
-    ResourceIdentifierCreateRequest:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/ResourceIdentifierCreateRequestType'
-        id:
-          type: string
-      title: ResourceIdentifierCreateRequest
+      - data
+      title: AttachmentResponseWrapper
     Document:
       type: object
       properties:
@@ -708,6 +623,91 @@ components:
           - 'null'
           description: Timestamp of the most recent download.
       title: Document
+    AttachmentCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        document_id:
+          type: string
+          description: The document ID to attach.
+        document:
+          oneOf:
+          - $ref: '#/components/schemas/DocumentCreateRequest'
+          - type: 'null'
+          description: The expanded document object.
+        resource:
+          $ref: '#/components/schemas/ResourceIdentifierCreateRequest'
+          description: The resource to attach the document to.
+      required:
+      - document_id
+      - resource
+      title: AttachmentCreateRequest
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    ResourceIdentifier:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ResourceIdentifierType'
+        id:
+          type: string
+      title: ResourceIdentifier
+    DocumentCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        name:
+          type: string
+          description: The name of the document.
+        description:
+          type:
+          - string
+          - 'null'
+          description: An optional description of the document.
+        content_type:
+          type: string
+          description: Content type of the file (e.g. application/pdf).
+        content:
+          type: string
+          description: The file content, BASE64 encoded. Max 10MB.
+        file_size:
+          type:
+          - integer
+          - 'null'
+          format: int64
+          description: The file size in bytes.
+        downloaded_at:
+          type:
+          - string
+          - 'null'
+          description: Timestamp of the most recent download.
+      title: DocumentCreateRequest
   securitySchemes:
     API-Key:
       type: apiKey

@@ -382,6 +382,184 @@ paths:
                 $ref: '#/components/schemas/ApiError'
 components:
   schemas:
+    AccountRepresentation:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The id of the account
+        reference:
+          type: string
+          description: The reference of the account
+        account_type_code:
+          type: string
+          description: The type code of the account
+        environment:
+          type: string
+          description: The environment of this account
+        account_group_id:
+          type: string
+          description: The id of the account group that this account is associated with
+        parent_id:
+          type:
+          - string
+          - 'null'
+          description: The id of the parent account of this account
+        platform_id:
+          type:
+          - string
+          - 'null'
+          description: The id of the platform that this account belongs to
+      title: AccountRepresentation
+    AccountMembershipRepresentationType:
+      type: string
+      enum:
+      - ADMIN
+      - USER
+      - PARTNER
+      description: The type of this membership
+      title: AccountMembershipRepresentationType
+    TeamMemberRepresentationCreateRequest:
+      type: object
+      properties:
+        team_id:
+          type:
+          - string
+          - 'null'
+          description: The id of this team membership
+        start_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: The start date from when this membership is valid
+        end_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: The end date till which this membership is valid
+        account_memberships:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/AccountMembershipRepresentation'
+      title: TeamMemberRepresentationCreateRequest
+    ApiKeyUpdateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+          description: The id of this API key
+        api_key:
+          type:
+          - string
+          - 'null'
+          description: The API Key itself
+        entity_id:
+          type:
+          - string
+          - 'null'
+          description: The id of the entity that this API key belongs to
+        created_at:
+          type:
+          - string
+          - 'null'
+          description: The creation date of the API key
+        active:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates whether this API key is active or not
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/ApiKeyUpdateRequestStatus'
+          - type: 'null'
+          description: Indicates the status of this API key
+        description:
+          type:
+          - string
+          - 'null'
+          description: Description of this API key, e.g. for describing type/location of usage
+        account_memberships:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/AccountMembershipRepresentationUpdateRequest'
+          description: Account memberships that this API key has
+        team_memberships:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TeamMemberRepresentationUpdateRequest'
+          description: The team memberships that this API key has
+        role_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiKeyUpdateRequestRoleType'
+          - type: 'null'
+          description: The role assigned to this API key, determining its access level. The default role is ADMINISTRATOR
+      title: ApiKeyUpdateRequest
+    ApiKeyUpdateRequestStatus:
+      type: string
+      enum:
+      - INVITED
+      - INVITE_REVOKED
+      - ACTIVE
+      - INACTIVE
+      description: Indicates the status of this API key
+      title: ApiKeyUpdateRequestStatus
+    Role:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+          description: Unique identifier for the role
+        name:
+          type: string
+          description: The name of the role
+        description:
+          type: string
+          description: The description of the role
+        entity_id:
+          type:
+          - string
+          - 'null'
+          description: When present the role is created for/by this entity
+        child_role_ids:
+          type: array
+          items:
+            type: string
+          description: Child roles for this role
+        child_roles:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/RoleChildRolesItems'
+          description: Child roles, with a max depth of 2
+      title: Role
+    ApiKeyCreateRequestRoleType:
+      type: string
+      enum:
+      - ADMINISTRATOR
+      - READ_ONLY
+      description: The role assigned to this API key, determining its access level. The default role is ADMINISTRATOR
+      title: ApiKeyCreateRequestRoleType
     ApiErrorCode:
       type: string
       enum:
@@ -421,57 +599,13 @@ components:
       - IDEMPOTENCY_CHECK_FAILED
       - INVALID_REQUEST
       title: ApiErrorCode
-    ApiError:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/ApiErrorType'
-        code:
-          $ref: '#/components/schemas/ApiErrorCode'
-        field:
-          type:
-          - string
-          - 'null'
-        message:
-          type: string
-        resource_id:
-          type:
-          - string
-          - 'null'
-        resource_type:
-          oneOf:
-          - $ref: '#/components/schemas/ApiErrorResourceType'
-          - type: 'null'
-      required:
-      - type
-      - code
-      - message
-      title: ApiError
-    ApiKeyPaginatedResponseWrapper:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiKey'
-        limit:
-          type:
-          - integer
-          - 'null'
-        page:
-          type:
-          - integer
-          - 'null'
-        total_number_of_pages:
-          type:
-          - integer
-          - 'null'
-        links:
-          $ref: '#/components/schemas/PaginationLinks'
-      required:
-      - data
-      - links
-      title: ApiKeyPaginatedResponseWrapper
+    ApiKeyUpdateRequestRoleType:
+      type: string
+      enum:
+      - ADMINISTRATOR
+      - READ_ONLY
+      description: The role assigned to this API key, determining its access level. The default role is ADMINISTRATOR
+      title: ApiKeyUpdateRequestRoleType
     ApiKeyStatus:
       type: string
       enum:
@@ -481,62 +615,35 @@ components:
       - INACTIVE
       description: Indicates the status of this API key
       title: ApiKeyStatus
-    ApiKeyCreateRequestStatus:
+    AccountMembershipRepresentationCreateRequestType:
       type: string
       enum:
-      - INVITED
-      - INVITE_REVOKED
-      - ACTIVE
-      - INACTIVE
-      description: Indicates the status of this API key
-      title: ApiKeyCreateRequestStatus
-    AccountMembershipRepresentation:
+      - ADMIN
+      - USER
+      - PARTNER
+      description: The type of this membership
+      title: AccountMembershipRepresentationCreateRequestType
+    PaginationLinks:
       type: object
       properties:
-        object_type:
+        first:
           type:
           - string
           - 'null'
-        id:
+        previous:
           type:
           - string
           - 'null'
-          description: The id of this account membership
-        account_id:
-          type: string
-          description: The id of the account that this membership is for
-        account_reference:
+        current:
           type:
           - string
           - 'null'
-          description: The reference of the account that this membership is for
-        environment:
+        next:
           type:
           - string
           - 'null'
-          description: The environment that this membership is for
-        account:
-          oneOf:
-          - $ref: '#/components/schemas/AccountRepresentation'
-          - type: 'null'
-          description: The account that this membership is for
-        type:
-          $ref: '#/components/schemas/AccountMembershipRepresentationType'
-          description: The type of this membership
-        role_ids:
-          type: array
-          items:
-            type: string
-          description: The roles assigned through this membership
-        roles:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Role'
-          description: The roles that belong to this membership
-      title: AccountMembershipRepresentation
-    ApiKeyCreateRequest:
+      title: PaginationLinks
+    ApiKey:
       type: object
       properties:
         object_type:
@@ -570,7 +677,7 @@ components:
           description: Indicates whether this API key is active or not
         status:
           oneOf:
-          - $ref: '#/components/schemas/ApiKeyCreateRequestStatus'
+          - $ref: '#/components/schemas/ApiKeyStatus'
           - type: 'null'
           description: Indicates the status of this API key
         description:
@@ -583,139 +690,41 @@ components:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/AccountMembershipRepresentationCreateRequest'
+            $ref: '#/components/schemas/AccountMembershipRepresentation'
           description: Account memberships that this API key has
         team_memberships:
           type:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/TeamMemberRepresentationCreateRequest'
+            $ref: '#/components/schemas/TeamMemberRepresentation'
           description: The team memberships that this API key has
         role_type:
           oneOf:
-          - $ref: '#/components/schemas/ApiKeyCreateRequestRoleType'
+          - $ref: '#/components/schemas/ApiKeyRoleType'
           - type: 'null'
           description: The role assigned to this API key, determining its access level. The default role is ADMINISTRATOR
-      title: ApiKeyCreateRequest
-    ApiKeyUpdateRequestRoleType:
-      type: string
-      enum:
-      - ADMINISTRATOR
-      - READ_ONLY
-      description: The role assigned to this API key, determining its access level. The default role is ADMINISTRATOR
-      title: ApiKeyUpdateRequestRoleType
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
-    RoleChildRolesItems:
-      type: object
-      properties: {}
-      title: RoleChildRolesItems
-    ApiKeyUpdateRequestStatus:
-      type: string
-      enum:
-      - INVITED
-      - INVITE_REVOKED
-      - ACTIVE
-      - INACTIVE
-      description: Indicates the status of this API key
-      title: ApiKeyUpdateRequestStatus
-    PaginationLinks:
+      title: ApiKey
+    UserSearchFilterCreateRequest:
       type: object
       properties:
-        first:
+        resource_id:
           type:
           - string
           - 'null'
-        previous:
+        username:
           type:
           - string
           - 'null'
-        current:
+        user_type:
           type:
           - string
           - 'null'
-        next:
+        include_inactive:
           type:
-          - string
+          - boolean
           - 'null'
-      title: PaginationLinks
-    AccountRepresentation:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The id of the account
-        reference:
-          type: string
-          description: The reference of the account
-        account_type_code:
-          type: string
-          description: The type code of the account
-        environment:
-          type: string
-          description: The environment of this account
-        account_group_id:
-          type: string
-          description: The id of the account group that this account is associated with
-        parent_id:
-          type:
-          - string
-          - 'null'
-          description: The id of the parent account of this account
-        platform_id:
-          type:
-          - string
-          - 'null'
-          description: The id of the platform that this account belongs to
-      title: AccountRepresentation
-    AccountMembershipRepresentationType:
-      type: string
-      enum:
-      - ADMIN
-      - USER
-      - PARTNER
-      description: The type of this membership
-      title: AccountMembershipRepresentationType
-    AccountMembershipRepresentationUpdateRequestType:
-      type: string
-      enum:
-      - ADMIN
-      - USER
-      - PARTNER
-      description: The type of this membership
-      title: AccountMembershipRepresentationUpdateRequestType
-    TeamMemberRepresentationUpdateRequest:
-      type: object
-      properties:
-        team_id:
-          type:
-          - string
-          - 'null'
-          description: The id of this team membership
-        start_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          description: The start date from when this membership is valid
-        end_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          description: The end date till which this membership is valid
-        account_memberships:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/AccountMembershipRepresentation'
-      title: TeamMemberRepresentationUpdateRequest
+      title: UserSearchFilterCreateRequest
     ApiErrorResourceType:
       type: string
       enum:
@@ -805,7 +814,148 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
-    ApiKeyUpdateRequest:
+    AccountMembershipRepresentation:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+          description: The id of this account membership
+        account_id:
+          type: string
+          description: The id of the account that this membership is for
+        account_reference:
+          type:
+          - string
+          - 'null'
+          description: The reference of the account that this membership is for
+        environment:
+          type:
+          - string
+          - 'null'
+          description: The environment that this membership is for
+        account:
+          oneOf:
+          - $ref: '#/components/schemas/AccountRepresentation'
+          - type: 'null'
+          description: The account that this membership is for
+        type:
+          $ref: '#/components/schemas/AccountMembershipRepresentationType'
+          description: The type of this membership
+        role_ids:
+          type: array
+          items:
+            type: string
+          description: The roles assigned through this membership
+        roles:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Role'
+          description: The roles that belong to this membership
+      title: AccountMembershipRepresentation
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    AccountMembershipRepresentationUpdateRequestType:
+      type: string
+      enum:
+      - ADMIN
+      - USER
+      - PARTNER
+      description: The type of this membership
+      title: AccountMembershipRepresentationUpdateRequestType
+    ApiKeyPaginatedResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiKey'
+        limit:
+          type:
+          - integer
+          - 'null'
+        page:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      - links
+      title: ApiKeyPaginatedResponseWrapper
+    TeamMemberRepresentation:
+      type: object
+      properties:
+        team_id:
+          type:
+          - string
+          - 'null'
+          description: The id of this team membership
+        start_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: The start date from when this membership is valid
+        end_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: The end date till which this membership is valid
+        account_memberships:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/AccountMembershipRepresentation'
+      title: TeamMemberRepresentation
+    ApiKeyCreateRequestStatus:
+      type: string
+      enum:
+      - INVITED
+      - INVITE_REVOKED
+      - ACTIVE
+      - INACTIVE
+      description: Indicates the status of this API key
+      title: ApiKeyCreateRequestStatus
+    ApiKeyCreateRequest:
       type: object
       properties:
         object_type:
@@ -839,7 +989,7 @@ components:
           description: Indicates whether this API key is active or not
         status:
           oneOf:
-          - $ref: '#/components/schemas/ApiKeyUpdateRequestStatus'
+          - $ref: '#/components/schemas/ApiKeyCreateRequestStatus'
           - type: 'null'
           description: Indicates the status of this API key
         description:
@@ -852,67 +1002,28 @@ components:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/AccountMembershipRepresentationUpdateRequest'
+            $ref: '#/components/schemas/AccountMembershipRepresentationCreateRequest'
           description: Account memberships that this API key has
         team_memberships:
           type:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/TeamMemberRepresentationUpdateRequest'
+            $ref: '#/components/schemas/TeamMemberRepresentationCreateRequest'
           description: The team memberships that this API key has
         role_type:
           oneOf:
-          - $ref: '#/components/schemas/ApiKeyUpdateRequestRoleType'
+          - $ref: '#/components/schemas/ApiKeyCreateRequestRoleType'
           - type: 'null'
           description: The role assigned to this API key, determining its access level. The default role is ADMINISTRATOR
-      title: ApiKeyUpdateRequest
-    AccountMembershipRepresentationUpdateRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-          description: The id of this account membership
-        account_id:
-          type: string
-          description: The id of the account that this membership is for
-        account_reference:
-          type:
-          - string
-          - 'null'
-          description: The reference of the account that this membership is for
-        environment:
-          type:
-          - string
-          - 'null'
-          description: The environment that this membership is for
-        account:
-          oneOf:
-          - $ref: '#/components/schemas/AccountRepresentation'
-          - type: 'null'
-          description: The account that this membership is for
-        type:
-          $ref: '#/components/schemas/AccountMembershipRepresentationUpdateRequestType'
-          description: The type of this membership
-        role_ids:
-          type: array
-          items:
-            type: string
-          description: The roles assigned through this membership
-        roles:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Role'
-          description: The roles that belong to this membership
-      title: AccountMembershipRepresentationUpdateRequest
+      title: ApiKeyCreateRequest
+    ApiKeyRoleType:
+      type: string
+      enum:
+      - ADMINISTRATOR
+      - READ_ONLY
+      description: The role assigned to this API key, determining its access level. The default role is ADMINISTRATOR
+      title: ApiKeyRoleType
     AccountMembershipRepresentationCreateRequest:
       type: object
       properties:
@@ -959,35 +1070,7 @@ components:
             $ref: '#/components/schemas/Role'
           description: The roles that belong to this membership
       title: AccountMembershipRepresentationCreateRequest
-    AccountMembershipRepresentationCreateRequestType:
-      type: string
-      enum:
-      - ADMIN
-      - USER
-      - PARTNER
-      description: The type of this membership
-      title: AccountMembershipRepresentationCreateRequestType
-    UserSearchFilterCreateRequest:
-      type: object
-      properties:
-        resource_id:
-          type:
-          - string
-          - 'null'
-        username:
-          type:
-          - string
-          - 'null'
-        user_type:
-          type:
-          - string
-          - 'null'
-        include_inactive:
-          type:
-          - boolean
-          - 'null'
-      title: UserSearchFilterCreateRequest
-    Role:
+    AccountMembershipRepresentationUpdateRequest:
       type: object
       properties:
         object_type:
@@ -998,101 +1081,46 @@ components:
           type:
           - string
           - 'null'
-          description: Unique identifier for the role
-        name:
+          description: The id of this account membership
+        account_id:
           type: string
-          description: The name of the role
-        description:
-          type: string
-          description: The description of the role
-        entity_id:
+          description: The id of the account that this membership is for
+        account_reference:
           type:
           - string
           - 'null'
-          description: When present the role is created for/by this entity
-        child_role_ids:
+          description: The reference of the account that this membership is for
+        environment:
+          type:
+          - string
+          - 'null'
+          description: The environment that this membership is for
+        account:
+          oneOf:
+          - $ref: '#/components/schemas/AccountRepresentation'
+          - type: 'null'
+          description: The account that this membership is for
+        type:
+          $ref: '#/components/schemas/AccountMembershipRepresentationUpdateRequestType'
+          description: The type of this membership
+        role_ids:
           type: array
           items:
             type: string
-          description: Child roles for this role
-        child_roles:
+          description: The roles assigned through this membership
+        roles:
           type:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/RoleChildRolesItems'
-          description: Child roles, with a max depth of 2
-      title: Role
-    ApiKeyCreateRequestRoleType:
-      type: string
-      enum:
-      - ADMINISTRATOR
-      - READ_ONLY
-      description: The role assigned to this API key, determining its access level. The default role is ADMINISTRATOR
-      title: ApiKeyCreateRequestRoleType
-    ApiKey:
+            $ref: '#/components/schemas/Role'
+          description: The roles that belong to this membership
+      title: AccountMembershipRepresentationUpdateRequest
+    RoleChildRolesItems:
       type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-          description: The id of this API key
-        api_key:
-          type:
-          - string
-          - 'null'
-          description: The API Key itself
-        entity_id:
-          type:
-          - string
-          - 'null'
-          description: The id of the entity that this API key belongs to
-        created_at:
-          type:
-          - string
-          - 'null'
-          description: The creation date of the API key
-        active:
-          type:
-          - boolean
-          - 'null'
-          description: Indicates whether this API key is active or not
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/ApiKeyStatus'
-          - type: 'null'
-          description: Indicates the status of this API key
-        description:
-          type:
-          - string
-          - 'null'
-          description: Description of this API key, e.g. for describing type/location of usage
-        account_memberships:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/AccountMembershipRepresentation'
-          description: Account memberships that this API key has
-        team_memberships:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/TeamMemberRepresentation'
-          description: The team memberships that this API key has
-        role_type:
-          oneOf:
-          - $ref: '#/components/schemas/ApiKeyRoleType'
-          - type: 'null'
-          description: The role assigned to this API key, determining its access level. The default role is ADMINISTRATOR
-      title: ApiKey
-    TeamMemberRepresentation:
+      properties: {}
+      title: RoleChildRolesItems
+    TeamMemberRepresentationUpdateRequest:
       type: object
       properties:
         team_id:
@@ -1118,41 +1146,13 @@ components:
           - 'null'
           items:
             $ref: '#/components/schemas/AccountMembershipRepresentation'
-      title: TeamMemberRepresentation
-    ApiKeyRoleType:
+      title: TeamMemberRepresentationUpdateRequest
+    ApiErrorType:
       type: string
       enum:
-      - ADMINISTRATOR
-      - READ_ONLY
-      description: The role assigned to this API key, determining its access level. The default role is ADMINISTRATOR
-      title: ApiKeyRoleType
-    TeamMemberRepresentationCreateRequest:
-      type: object
-      properties:
-        team_id:
-          type:
-          - string
-          - 'null'
-          description: The id of this team membership
-        start_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          description: The start date from when this membership is valid
-        end_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          description: The end date till which this membership is valid
-        account_memberships:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/AccountMembershipRepresentation'
-      title: TeamMemberRepresentationCreateRequest
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
   securitySchemes:
     API-Key:
       type: apiKey

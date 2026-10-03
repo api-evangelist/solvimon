@@ -355,12 +355,14 @@ paths:
               $ref: '#/components/schemas/RoleUpdateRequest'
 components:
   schemas:
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
+    RoleChildRolesItems:
+      type: object
+      properties: {}
+      title: RoleChildRolesItems
+    RoleCreateRequestChildRolesItems:
+      type: object
+      properties: {}
+      title: RoleCreateRequestChildRolesItems
     ApiErrorResourceType:
       type: string
       enum:
@@ -450,6 +452,32 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
     Role:
       type: object
       properties:
@@ -524,46 +552,6 @@ components:
       required:
       - name
       title: RoleCreateRequest
-    RoleChildRolesItems:
-      type: object
-      properties: {}
-      title: RoleChildRolesItems
-    RoleUpdateRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-          description: Unique identifier for the role
-        name:
-          type: string
-          description: The name of the role
-        description:
-          type: string
-          description: The description of the role
-        entity_id:
-          type:
-          - string
-          - 'null'
-          description: When present the role is created for/by this entity
-        child_role_ids:
-          type: array
-          items:
-            type: string
-          description: Child roles for this role
-        child_roles:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/RoleUpdateRequestChildRolesItems'
-          description: Child roles, with a max depth of 2
-      title: RoleUpdateRequest
     ApiErrorCode:
       type: string
       enum:
@@ -603,36 +591,12 @@ components:
       - IDEMPOTENCY_CHECK_FAILED
       - INVALID_REQUEST
       title: ApiErrorCode
-    ApiError:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/ApiErrorType'
-        code:
-          $ref: '#/components/schemas/ApiErrorCode'
-        field:
-          type:
-          - string
-          - 'null'
-        message:
-          type: string
-        resource_id:
-          type:
-          - string
-          - 'null'
-        resource_type:
-          oneOf:
-          - $ref: '#/components/schemas/ApiErrorResourceType'
-          - type: 'null'
-      required:
-      - type
-      - code
-      - message
-      title: ApiError
-    RoleUpdateRequestChildRolesItems:
-      type: object
-      properties: {}
-      title: RoleUpdateRequestChildRolesItems
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
     PaginationLinks:
       type: object
       properties:
@@ -653,10 +617,6 @@ components:
           - string
           - 'null'
       title: PaginationLinks
-    RoleCreateRequestChildRolesItems:
-      type: object
-      properties: {}
-      title: RoleCreateRequestChildRolesItems
     RolePaginatedResponseWrapper:
       type: object
       properties:
@@ -682,6 +642,46 @@ components:
       - data
       - links
       title: RolePaginatedResponseWrapper
+    RoleUpdateRequestChildRolesItems:
+      type: object
+      properties: {}
+      title: RoleUpdateRequestChildRolesItems
+    RoleUpdateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+          description: Unique identifier for the role
+        name:
+          type: string
+          description: The name of the role
+        description:
+          type: string
+          description: The description of the role
+        entity_id:
+          type:
+          - string
+          - 'null'
+          description: When present the role is created for/by this entity
+        child_role_ids:
+          type: array
+          items:
+            type: string
+          description: Child roles for this role
+        child_roles:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/RoleUpdateRequestChildRolesItems'
+          description: Child roles, with a max depth of 2
+      title: RoleUpdateRequest
   securitySchemes:
     API-Key:
       type: apiKey

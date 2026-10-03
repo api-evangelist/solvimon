@@ -364,13 +364,27 @@ paths:
                 $ref: '#/components/schemas/ApiError'
 components:
   schemas:
-    ApprovalRequestSourceType:
-      type: string
-      enum:
-      - QUOTE_VERSION
-      - INVOICE
-      description: The object type in which this Approval Request was triggered. I.e. QUOTE_VERSION.
-      title: ApprovalRequestSourceType
+    Reviewer:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - string
+          - 'null'
+          description: The status that the reviewer gave for the Approval Request.
+        reviewed_at:
+          type:
+          - string
+          - 'null'
+          description: The date when the reviewer approve/declined the Approval Request.
+        level:
+          type: integer
+          description: The hierarchy of the reviewer
+      title: Reviewer
     ApprovalRequest:
       type: object
       properties:
@@ -436,21 +450,6 @@ components:
           - type: 'null'
           description: Approval Strategy applied in the Approval Request.
       title: ApprovalRequest
-    ApprovalRequestStatus:
-      type: string
-      enum:
-      - PENDING_REVIEW
-      - APPROVED
-      - DECLINED
-      - CANCELLED
-      description: The current status of the Approval Request.
-      title: ApprovalRequestStatus
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
     ApiErrorResourceType:
       type: string
       enum:
@@ -540,14 +539,41 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
-    ApprovalRequestApprovalStrategy:
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    ApprovalRequestStatus:
       type: string
       enum:
-      - ALL_LEVELS_MUST_APPROVE
-      - HIGHER_LEVEL_CAN_OVERRIDE
-      - ANYONE_CAN_DECIDE
-      description: Approval Strategy applied in the Approval Request.
-      title: ApprovalRequestApprovalStrategy
+      - PENDING_REVIEW
+      - APPROVED
+      - DECLINED
+      - CANCELLED
+      description: The current status of the Approval Request.
+      title: ApprovalRequestStatus
     ApiErrorCode:
       type: string
       enum:
@@ -587,53 +613,47 @@ components:
       - IDEMPOTENCY_CHECK_FAILED
       - INVALID_REQUEST
       title: ApiErrorCode
-    ApiError:
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    PaginationLinks:
       type: object
       properties:
-        type:
-          $ref: '#/components/schemas/ApiErrorType'
-        code:
-          $ref: '#/components/schemas/ApiErrorCode'
-        field:
+        first:
           type:
           - string
           - 'null'
-        message:
-          type: string
-        resource_id:
+        previous:
           type:
           - string
           - 'null'
-        resource_type:
-          oneOf:
-          - $ref: '#/components/schemas/ApiErrorResourceType'
-          - type: 'null'
-      required:
-      - type
-      - code
-      - message
-      title: ApiError
-    Reviewer:
-      type: object
-      properties:
-        id:
+        current:
           type:
           - string
           - 'null'
-        status:
+        next:
           type:
           - string
           - 'null'
-          description: The status that the reviewer gave for the Approval Request.
-        reviewed_at:
-          type:
-          - string
-          - 'null'
-          description: The date when the reviewer approve/declined the Approval Request.
-        level:
-          type: integer
-          description: The hierarchy of the reviewer
-      title: Reviewer
+      title: PaginationLinks
+    ApprovalRequestSourceType:
+      type: string
+      enum:
+      - QUOTE_VERSION
+      - INVOICE
+      description: The object type in which this Approval Request was triggered. I.e. QUOTE_VERSION.
+      title: ApprovalRequestSourceType
+    ApprovalRequestApprovalStrategy:
+      type: string
+      enum:
+      - ALL_LEVELS_MUST_APPROVE
+      - HIGHER_LEVEL_CAN_OVERRIDE
+      - ANYONE_CAN_DECIDE
+      description: Approval Strategy applied in the Approval Request.
+      title: ApprovalRequestApprovalStrategy
     ApprovalRequestResponseWrapper:
       type: object
       properties:
@@ -659,26 +679,6 @@ components:
       - data
       - links
       title: ApprovalRequestResponseWrapper
-    PaginationLinks:
-      type: object
-      properties:
-        first:
-          type:
-          - string
-          - 'null'
-        previous:
-          type:
-          - string
-          - 'null'
-        current:
-          type:
-          - string
-          - 'null'
-        next:
-          type:
-          - string
-          - 'null'
-      title: PaginationLinks
   securitySchemes:
     API-Key:
       type: apiKey

@@ -799,25 +799,36 @@ paths:
               $ref: '#/components/schemas/UserInviteCreateRequest'
 components:
   schemas:
-    UserInvite:
+    AccountRepresentation:
       type: object
       properties:
-        username:
+        id:
           type: string
-        entity_id:
+          description: The id of the account
+        reference:
           type: string
-        account_memberships:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccountMembershipRepresentation'
-        team_memberships:
+          description: The reference of the account
+        account_type_code:
+          type: string
+          description: The type code of the account
+        environment:
+          type: string
+          description: The environment of this account
+        account_group_id:
+          type: string
+          description: The id of the account group that this account is associated with
+        parent_id:
           type:
-          - array
+          - string
           - 'null'
-          items:
-            $ref: '#/components/schemas/TeamMemberRepresentation'
-      title: UserInvite
-    UserStatus:
+          description: The id of the parent account of this account
+        platform_id:
+          type:
+          - string
+          - 'null'
+          description: The id of the platform that this account belongs to
+      title: AccountRepresentation
+    UserUpdateRequestStatus:
       type: string
       enum:
       - INVITED
@@ -825,7 +836,78 @@ components:
       - ACTIVE
       - INACTIVE
       description: Indicates whether the user is active
-      title: UserStatus
+      title: UserUpdateRequestStatus
+    AccountMembershipRepresentationType:
+      type: string
+      enum:
+      - ADMIN
+      - USER
+      - PARTNER
+      description: The type of this membership
+      title: AccountMembershipRepresentationType
+    TeamMemberRepresentationCreateRequest:
+      type: object
+      properties:
+        team_id:
+          type:
+          - string
+          - 'null'
+          description: The id of this team membership
+        start_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: The start date from when this membership is valid
+        end_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: The end date till which this membership is valid
+        account_memberships:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/AccountMembershipRepresentation'
+      title: TeamMemberRepresentationCreateRequest
+    Role:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+          description: Unique identifier for the role
+        name:
+          type: string
+          description: The name of the role
+        description:
+          type: string
+          description: The description of the role
+        entity_id:
+          type:
+          - string
+          - 'null'
+          description: When present the role is created for/by this entity
+        child_role_ids:
+          type: array
+          items:
+            type: string
+          description: Child roles for this role
+        child_roles:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/RoleChildRolesItems'
+          description: Child roles, with a max depth of 2
+      title: Role
     ApiErrorCode:
       type: string
       enum:
@@ -865,32 +947,34 @@ components:
       - IDEMPOTENCY_CHECK_FAILED
       - INVALID_REQUEST
       title: ApiErrorCode
-    ApiError:
+    PaginationLinks:
       type: object
       properties:
-        type:
-          $ref: '#/components/schemas/ApiErrorType'
-        code:
-          $ref: '#/components/schemas/ApiErrorCode'
-        field:
+        first:
           type:
           - string
           - 'null'
-        message:
-          type: string
-        resource_id:
+        previous:
           type:
           - string
           - 'null'
-        resource_type:
-          oneOf:
-          - $ref: '#/components/schemas/ApiErrorResourceType'
-          - type: 'null'
-      required:
-      - type
-      - code
-      - message
-      title: ApiError
+        current:
+          type:
+          - string
+          - 'null'
+        next:
+          type:
+          - string
+          - 'null'
+      title: PaginationLinks
+    AccountMembershipRepresentationCreateRequestType:
+      type: string
+      enum:
+      - ADMIN
+      - USER
+      - PARTNER
+      description: The type of this membership
+      title: AccountMembershipRepresentationCreateRequestType
     UserUpdateRequest:
       type: object
       properties:
@@ -951,143 +1035,6 @@ components:
           - 'null'
           description: Indicates whether the invite sent to the user is expired
       title: UserUpdateRequest
-    UserPaginatedResponseWrapper:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/User'
-        limit:
-          type:
-          - integer
-          - 'null'
-        page:
-          type:
-          - integer
-          - 'null'
-        total_number_of_pages:
-          type:
-          - integer
-          - 'null'
-        links:
-          $ref: '#/components/schemas/PaginationLinks'
-      required:
-      - data
-      - links
-      title: UserPaginatedResponseWrapper
-    User:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-          description: The id of the user
-        entity_id:
-          type:
-          - string
-          - 'null'
-          description: The entity id of the entity that this user belongs to
-        created_at:
-          type:
-          - string
-          - 'null'
-          description: The date when this user was created
-        active:
-          type:
-          - boolean
-          - 'null'
-          description: Indicates whether the user is active
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/UserStatus'
-          - type: 'null'
-          description: Indicates whether the user is active
-        account_memberships:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/AccountMembershipRepresentation'
-          description: The account memberships that this user has
-        team_memberships:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/TeamMemberRepresentation'
-          description: The team memberships that this user has
-        username:
-          type: string
-          description: The email of the user
-        password:
-          type:
-          - string
-          - 'null'
-          description: The password of the user. Should have a minimum of 8 characters, of which one is a number and one is a capital letter
-        invite_expired:
-          type:
-          - boolean
-          - 'null'
-          description: Indicates whether the invite sent to the user is expired
-      title: User
-    AccountMembershipRepresentation:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-          description: The id of this account membership
-        account_id:
-          type: string
-          description: The id of the account that this membership is for
-        account_reference:
-          type:
-          - string
-          - 'null'
-          description: The reference of the account that this membership is for
-        environment:
-          type:
-          - string
-          - 'null'
-          description: The environment that this membership is for
-        account:
-          oneOf:
-          - $ref: '#/components/schemas/AccountRepresentation'
-          - type: 'null'
-          description: The account that this membership is for
-        type:
-          $ref: '#/components/schemas/AccountMembershipRepresentationType'
-          description: The type of this membership
-        role_ids:
-          type: array
-          items:
-            type: string
-          description: The roles assigned through this membership
-        roles:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/Role'
-          description: The roles that belong to this membership
-      title: AccountMembershipRepresentation
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
     UserCreateRequest:
       type: object
       properties:
@@ -1148,130 +1095,6 @@ components:
           - 'null'
           description: Indicates whether the invite sent to the user is expired
       title: UserCreateRequest
-    UserInviteCreateRequest:
-      type: object
-      properties:
-        username:
-          type: string
-        entity_id:
-          type: string
-        account_memberships:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccountMembershipRepresentationCreateRequest'
-        team_memberships:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/TeamMemberRepresentationCreateRequest'
-      title: UserInviteCreateRequest
-    RoleChildRolesItems:
-      type: object
-      properties: {}
-      title: RoleChildRolesItems
-    TeamMemberPaginatedResponseWrapper:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/TeamMemberRepresentation'
-      required:
-      - data
-      title: TeamMemberPaginatedResponseWrapper
-    PaginationLinks:
-      type: object
-      properties:
-        first:
-          type:
-          - string
-          - 'null'
-        previous:
-          type:
-          - string
-          - 'null'
-        current:
-          type:
-          - string
-          - 'null'
-        next:
-          type:
-          - string
-          - 'null'
-      title: PaginationLinks
-    AccountRepresentation:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The id of the account
-        reference:
-          type: string
-          description: The reference of the account
-        account_type_code:
-          type: string
-          description: The type code of the account
-        environment:
-          type: string
-          description: The environment of this account
-        account_group_id:
-          type: string
-          description: The id of the account group that this account is associated with
-        parent_id:
-          type:
-          - string
-          - 'null'
-          description: The id of the parent account of this account
-        platform_id:
-          type:
-          - string
-          - 'null'
-          description: The id of the platform that this account belongs to
-      title: AccountRepresentation
-    AccountMembershipRepresentationType:
-      type: string
-      enum:
-      - ADMIN
-      - USER
-      - PARTNER
-      description: The type of this membership
-      title: AccountMembershipRepresentationType
-    AccountMembershipRepresentationUpdateRequestType:
-      type: string
-      enum:
-      - ADMIN
-      - USER
-      - PARTNER
-      description: The type of this membership
-      title: AccountMembershipRepresentationUpdateRequestType
-    TeamMemberRepresentationUpdateRequest:
-      type: object
-      properties:
-        team_id:
-          type:
-          - string
-          - 'null'
-          description: The id of this team membership
-        start_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          description: The start date from when this membership is valid
-        end_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          description: The end date till which this membership is valid
-        account_memberships:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/AccountMembershipRepresentation'
-      title: TeamMemberRepresentationUpdateRequest
     ApiErrorResourceType:
       type: string
       enum:
@@ -1361,16 +1184,7 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
-    UserCreateRequestStatus:
-      type: string
-      enum:
-      - INVITED
-      - INVITE_REVOKED
-      - ACTIVE
-      - INACTIVE
-      description: Indicates whether the user is active
-      title: UserCreateRequestStatus
-    AccountMembershipRepresentationUpdateRequest:
+    AccountMembershipRepresentation:
       type: object
       properties:
         object_type:
@@ -1401,7 +1215,7 @@ components:
           - type: 'null'
           description: The account that this membership is for
         type:
-          $ref: '#/components/schemas/AccountMembershipRepresentationUpdateRequestType'
+          $ref: '#/components/schemas/AccountMembershipRepresentationType'
           description: The type of this membership
         role_ids:
           type: array
@@ -1415,7 +1229,130 @@ components:
           items:
             $ref: '#/components/schemas/Role'
           description: The roles that belong to this membership
-      title: AccountMembershipRepresentationUpdateRequest
+      title: AccountMembershipRepresentation
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    AccountMembershipRepresentationUpdateRequestType:
+      type: string
+      enum:
+      - ADMIN
+      - USER
+      - PARTNER
+      description: The type of this membership
+      title: AccountMembershipRepresentationUpdateRequestType
+    UserPaginatedResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        limit:
+          type:
+          - integer
+          - 'null'
+        page:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      - links
+      title: UserPaginatedResponseWrapper
+    TeamMemberRepresentation:
+      type: object
+      properties:
+        team_id:
+          type:
+          - string
+          - 'null'
+          description: The id of this team membership
+        start_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: The start date from when this membership is valid
+        end_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: The end date till which this membership is valid
+        account_memberships:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/AccountMembershipRepresentation'
+      title: TeamMemberRepresentation
+    UserStatus:
+      type: string
+      enum:
+      - INVITED
+      - INVITE_REVOKED
+      - ACTIVE
+      - INACTIVE
+      description: Indicates whether the user is active
+      title: UserStatus
+    TeamMemberPaginatedResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TeamMemberRepresentation'
+      required:
+      - data
+      title: TeamMemberPaginatedResponseWrapper
+    UserInvite:
+      type: object
+      properties:
+        username:
+          type: string
+        entity_id:
+          type: string
+        account_memberships:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountMembershipRepresentation'
+        team_memberships:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TeamMemberRepresentation'
+      title: UserInvite
     AccountMembershipRepresentationCreateRequest:
       type: object
       properties:
@@ -1462,15 +1399,25 @@ components:
             $ref: '#/components/schemas/Role'
           description: The roles that belong to this membership
       title: AccountMembershipRepresentationCreateRequest
-    AccountMembershipRepresentationCreateRequestType:
-      type: string
-      enum:
-      - ADMIN
-      - USER
-      - PARTNER
-      description: The type of this membership
-      title: AccountMembershipRepresentationCreateRequestType
-    Role:
+    UserInviteCreateRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        entity_id:
+          type: string
+        account_memberships:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountMembershipRepresentationCreateRequest'
+        team_memberships:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TeamMemberRepresentationCreateRequest'
+      title: UserInviteCreateRequest
+    AccountMembershipRepresentationUpdateRequest:
       type: object
       properties:
         object_type:
@@ -1481,32 +1428,106 @@ components:
           type:
           - string
           - 'null'
-          description: Unique identifier for the role
-        name:
+          description: The id of this account membership
+        account_id:
           type: string
-          description: The name of the role
-        description:
-          type: string
-          description: The description of the role
+          description: The id of the account that this membership is for
+        account_reference:
+          type:
+          - string
+          - 'null'
+          description: The reference of the account that this membership is for
+        environment:
+          type:
+          - string
+          - 'null'
+          description: The environment that this membership is for
+        account:
+          oneOf:
+          - $ref: '#/components/schemas/AccountRepresentation'
+          - type: 'null'
+          description: The account that this membership is for
+        type:
+          $ref: '#/components/schemas/AccountMembershipRepresentationUpdateRequestType'
+          description: The type of this membership
+        role_ids:
+          type: array
+          items:
+            type: string
+          description: The roles assigned through this membership
+        roles:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Role'
+          description: The roles that belong to this membership
+      title: AccountMembershipRepresentationUpdateRequest
+    RoleChildRolesItems:
+      type: object
+      properties: {}
+      title: RoleChildRolesItems
+    User:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+          description: The id of the user
         entity_id:
           type:
           - string
           - 'null'
-          description: When present the role is created for/by this entity
-        child_role_ids:
-          type: array
-          items:
-            type: string
-          description: Child roles for this role
-        child_roles:
+          description: The entity id of the entity that this user belongs to
+        created_at:
+          type:
+          - string
+          - 'null'
+          description: The date when this user was created
+        active:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates whether the user is active
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/UserStatus'
+          - type: 'null'
+          description: Indicates whether the user is active
+        account_memberships:
           type:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/RoleChildRolesItems'
-          description: Child roles, with a max depth of 2
-      title: Role
-    TeamMemberRepresentation:
+            $ref: '#/components/schemas/AccountMembershipRepresentation'
+          description: The account memberships that this user has
+        team_memberships:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TeamMemberRepresentation'
+          description: The team memberships that this user has
+        username:
+          type: string
+          description: The email of the user
+        password:
+          type:
+          - string
+          - 'null'
+          description: The password of the user. Should have a minimum of 8 characters, of which one is a number and one is a capital letter
+        invite_expired:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates whether the invite sent to the user is expired
+      title: User
+    TeamMemberRepresentationUpdateRequest:
       type: object
       properties:
         team_id:
@@ -1532,35 +1553,14 @@ components:
           - 'null'
           items:
             $ref: '#/components/schemas/AccountMembershipRepresentation'
-      title: TeamMemberRepresentation
-    TeamMemberRepresentationCreateRequest:
-      type: object
-      properties:
-        team_id:
-          type:
-          - string
-          - 'null'
-          description: The id of this team membership
-        start_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          description: The start date from when this membership is valid
-        end_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          description: The end date till which this membership is valid
-        account_memberships:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/AccountMembershipRepresentation'
-      title: TeamMemberRepresentationCreateRequest
-    UserUpdateRequestStatus:
+      title: TeamMemberRepresentationUpdateRequest
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    UserCreateRequestStatus:
       type: string
       enum:
       - INVITED
@@ -1568,7 +1568,7 @@ components:
       - ACTIVE
       - INACTIVE
       description: Indicates whether the user is active
-      title: UserUpdateRequestStatus
+      title: UserCreateRequestStatus
   securitySchemes:
     API-Key:
       type: apiKey
