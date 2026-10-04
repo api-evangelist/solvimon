@@ -498,82 +498,6 @@ paths:
               $ref: '#/components/schemas/SearchCreateRequest'
 components:
   schemas:
-    ProductCategoryCreateRequestTaxCategory:
-      type: string
-      enum:
-      - STANDARD
-      - NO_TAX
-      - EXEMPT
-      description: The default tax category applied to the products in the product category.
-      title: ProductCategoryCreateRequestTaxCategory
-    ProductCategoryUpdateRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        name:
-          type: string
-        reference:
-          type: string
-        description:
-          type:
-          - string
-          - 'null'
-        tax_category:
-          oneOf:
-          - $ref: '#/components/schemas/ProductCategoryUpdateRequestTaxCategory'
-          - type: 'null'
-          description: The default tax category applied to the products in the product category.
-        display_order:
-          type:
-          - integer
-          - 'null'
-        customer_id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type CUSTOMER
-      title: ProductCategoryUpdateRequest
-    ProductCategory:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        name:
-          type: string
-        reference:
-          type: string
-        description:
-          type:
-          - string
-          - 'null'
-        tax_category:
-          oneOf:
-          - $ref: '#/components/schemas/ProductCategoryTaxCategory'
-          - type: 'null'
-          description: The default tax category applied to the products in the product category.
-        display_order:
-          type:
-          - integer
-          - 'null'
-        customer_id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type CUSTOMER
-      title: ProductCategory
     ProductCategoryUpdateRequestTaxCategory:
       type: string
       enum:
@@ -582,22 +506,98 @@ components:
       - EXEMPT
       description: The default tax category applied to the products in the product category.
       title: ProductCategoryUpdateRequestTaxCategory
-    SearchCreateRequest:
+    ProductCategoryCreateRequest:
       type: object
       properties:
-        search_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/SearchFieldCreateRequest'
-        filter_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/FilterFieldCreateRequest'
-        selection_rule_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/SelectionRuleFieldCreateRequest'
-      title: SearchCreateRequest
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        name:
+          type: string
+        reference:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        tax_category:
+          oneOf:
+          - $ref: '#/components/schemas/ProductCategoryCreateRequestTaxCategory'
+          - type: 'null'
+          description: The default tax category applied to the products in the product category.
+        display_order:
+          type:
+          - integer
+          - 'null'
+        customer_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOMER
+      required:
+      - name
+      - reference
+      title: ProductCategoryCreateRequest
+    ProductCategoryCreateRequestTaxCategory:
+      type: string
+      enum:
+      - STANDARD
+      - NO_TAX
+      - EXEMPT
+      description: The default tax category applied to the products in the product category.
+      title: ProductCategoryCreateRequestTaxCategory
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    ProductCategoryTaxCategory:
+      type: string
+      enum:
+      - STANDARD
+      - NO_TAX
+      - EXEMPT
+      description: The default tax category applied to the products in the product category.
+      title: ProductCategoryTaxCategory
     ApiErrorResourceType:
       type: string
       enum:
@@ -687,6 +687,24 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
+    FilterFieldCreateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        reference:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+        values:
+          type: array
+          items:
+            type: string
+      title: FilterFieldCreateRequest
     ApiError:
       type: object
       properties:
@@ -713,7 +731,13 @@ components:
       - code
       - message
       title: ApiError
-    ProductCategoryCreateRequest:
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    ProductCategoryUpdateRequest:
       type: object
       properties:
         object_type:
@@ -734,7 +758,7 @@ components:
           - 'null'
         tax_category:
           oneOf:
-          - $ref: '#/components/schemas/ProductCategoryCreateRequestTaxCategory'
+          - $ref: '#/components/schemas/ProductCategoryUpdateRequestTaxCategory'
           - type: 'null'
           description: The default tax category applied to the products in the product category.
         display_order:
@@ -746,16 +770,87 @@ components:
           - string
           - 'null'
           description: Resource ID of type CUSTOMER
-      required:
-      - name
-      - reference
-      title: ProductCategoryCreateRequest
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
+      title: ProductCategoryUpdateRequest
+    PaginationLinks:
+      type: object
+      properties:
+        first:
+          type:
+          - string
+          - 'null'
+        previous:
+          type:
+          - string
+          - 'null'
+        current:
+          type:
+          - string
+          - 'null'
+        next:
+          type:
+          - string
+          - 'null'
+      title: PaginationLinks
+    SearchCreateRequest:
+      type: object
+      properties:
+        search_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchFieldCreateRequest'
+        filter_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/FilterFieldCreateRequest'
+        selection_rule_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/SelectionRuleFieldCreateRequest'
+      title: SearchCreateRequest
+    ProductCategory:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        name:
+          type: string
+        reference:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        tax_category:
+          oneOf:
+          - $ref: '#/components/schemas/ProductCategoryTaxCategory'
+          - type: 'null'
+          description: The default tax category applied to the products in the product category.
+        display_order:
+          type:
+          - integer
+          - 'null'
+        customer_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOMER
+      title: ProductCategory
+    SelectionRuleFieldCreateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type:
+          - string
+          - 'null'
+      title: SelectionRuleFieldCreateRequest
     ProductCategoryResponseWrapper:
       type: object
       properties:
@@ -781,73 +876,6 @@ components:
       - data
       - links
       title: ProductCategoryResponseWrapper
-    ApiErrorCode:
-      type: string
-      enum:
-      - RESOURCE_NOT_FOUND
-      - RESOURCES_NOT_FOUND
-      - UNABLE_TO_PROCESS_INSTRUCTIONS
-      - BAD_REQUEST
-      - UNSUPPORTED_MEDIA_TYPE
-      - RESOURCE_ALREADY_EXISTS
-      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
-      - COULD_NOT_CREATE_RESOURCE
-      - COULD_NOT_UPDATE_RESOURCE
-      - COULD_NOT_DELETE_RESOURCE
-      - MISSING_VERSION
-      - UNSUPPORTED_VERSION
-      - UNAUTHORISED
-      - CUSTOMER_NOT_FOUND
-      - PLATFORM_NOT_FOUND
-      - PRICING_PLAN_NOT_FOUND
-      - PRODUCT_NOT_FOUND
-      - PRODUCT_ITEM_NOT_FOUND
-      - PRICING_NOT_FOUND
-      - PRICING_ITEM_NOT_FOUND
-      - USER_NOT_FOUND
-      - METER_NOT_FOUND
-      - METER_VALUE_NOT_FOUND
-      - METER_PROPERTY_NOT_FOUND
-      - PRICING_ITEM_SUMMARIES_NOT_FOUND
-      - MISSING_ID
-      - INVALID_ID
-      - MISSING_REFERENCE
-      - MISSING_FIELD
-      - INVALID_FIELD
-      - INVALID_OPERATION
-      - INTERNAL_ERROR
-      - USER_NOT_ALLOWED
-      - IDEMPOTENCY_CHECK_FAILED
-      - INVALID_REQUEST
-      title: ApiErrorCode
-    ProductCategoryTaxCategory:
-      type: string
-      enum:
-      - STANDARD
-      - NO_TAX
-      - EXEMPT
-      description: The default tax category applied to the products in the product category.
-      title: ProductCategoryTaxCategory
-    PaginationLinks:
-      type: object
-      properties:
-        first:
-          type:
-          - string
-          - 'null'
-        previous:
-          type:
-          - string
-          - 'null'
-        current:
-          type:
-          - string
-          - 'null'
-        next:
-          type:
-          - string
-          - 'null'
-      title: PaginationLinks
     SearchFieldCreateRequest:
       type: object
       properties:
@@ -864,34 +892,6 @@ components:
         ignore_case:
           type: boolean
       title: SearchFieldCreateRequest
-    SelectionRuleFieldCreateRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        value:
-          type:
-          - string
-          - 'null'
-      title: SelectionRuleFieldCreateRequest
-    FilterFieldCreateRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        reference:
-          type:
-          - string
-          - 'null'
-        value:
-          type:
-          - string
-          - 'null'
-        values:
-          type: array
-          items:
-            type: string
-      title: FilterFieldCreateRequest
   securitySchemes:
     API-Key:
       type: apiKey

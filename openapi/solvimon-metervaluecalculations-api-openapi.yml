@@ -367,24 +367,70 @@ paths:
               $ref: '#/components/schemas/MeterValueCalculationUpdateRequest'
 components:
   schemas:
-    MeterPropertyType:
-      type: string
-      enum:
-      - NUMBER
-      - ENUM
-      - STRING
-      description: The type of the meter property.
-      title: MeterPropertyType
-    MeterCreateRequestStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - ARCHIVED
-      - DEPRECATED
-      description: The status of the meter indicating the activity of the meter and the ability to update properties.
-      title: MeterCreateRequestStatus
-    MeterProperty:
+    MeterValueCalculationCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        calculation_type:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueCalculationCreateRequestCalculationType'
+          - type: 'null'
+          description: The type of calculation used for this billable metric.
+        persist:
+          type:
+          - boolean
+          - 'null'
+          description: Indicate if the data of the billable metric must be persisted to the next billing period of the schedule (default is false).
+        meter_id:
+          type:
+          - string
+          - 'null'
+          description: The ID of the meter.
+        meter:
+          oneOf:
+          - $ref: '#/components/schemas/MeterCreateRequest'
+          - type: 'null'
+        meter_value_id:
+          type:
+          - string
+          - 'null'
+          description: The ID of the meter value.
+        meter_value:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueCreateRequest'
+          - type: 'null'
+        meter_property_id:
+          type:
+          - string
+          - 'null'
+          description: The ID of the meter property.
+        meter_property:
+          oneOf:
+          - $ref: '#/components/schemas/MeterPropertyCreateRequest'
+          - type: 'null'
+      required:
+      - reference
+      - calculation_type
+      - meter_id
+      title: MeterValueCalculationCreateRequest
+    MeterPropertyCreateRequest:
       type: object
       properties:
         object_type:
@@ -406,11 +452,11 @@ components:
           - string
           - 'null'
         status:
-          $ref: '#/components/schemas/MeterPropertyStatus'
+          $ref: '#/components/schemas/MeterPropertyCreateRequestStatus'
           description: The status of the meter property indicating the activity and the ability to update properties.
         type:
           oneOf:
-          - $ref: '#/components/schemas/MeterPropertyType'
+          - $ref: '#/components/schemas/MeterPropertyCreateRequestType'
           - type: 'null'
           description: The type of the meter property.
         enum_values:
@@ -420,59 +466,20 @@ components:
           items:
             type: string
           description: The list of available ENUM values.
-      title: MeterProperty
-    MeterValueCalculationResponseWrapper:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/MeterValueCalculation'
       required:
-      - data
-      title: MeterValueCalculationResponseWrapper
-    MeterValueUpdateRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        reference:
-          type: string
-        name:
-          type:
-          - string
-          - 'null'
-        description:
-          type:
-          - string
-          - 'null'
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/MeterValueUpdateRequestStatus'
-          - type: 'null'
-          description: The status of the meter value indicating the activity and the ability to update properties.
-        type:
-          oneOf:
-          - $ref: '#/components/schemas/MeterValueUpdateRequestType'
-          - type: 'null'
-          description: The type of the meter value.
-      title: MeterValueUpdateRequest
-    MeterValueCalculationUpdateRequestCalculationType:
+      - reference
+      - name
+      - type
+      title: MeterPropertyCreateRequest
+    MeterUpdateRequestStatus:
       type: string
       enum:
-      - SUM
-      - MAX
-      - MIN
-      - AVERAGE
-      - UNIQUE
-      description: The type of calculation used for this billable metric.
-      title: MeterValueCalculationUpdateRequestCalculationType
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the meter indicating the activity of the meter and the ability to update properties.
+      title: MeterUpdateRequestStatus
     ApiErrorCode:
       type: string
       enum:
@@ -512,7 +519,54 @@ components:
       - IDEMPOTENCY_CHECK_FAILED
       - INVALID_REQUEST
       title: ApiErrorCode
-    MeterUpdateRequest:
+    MeterMeterValueCreateRequest:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type METER_VALUE
+        object:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValue'
+          - type: 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+        required:
+          type:
+          - boolean
+          - 'null'
+      title: MeterMeterValueCreateRequest
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    MeterCreateRequest:
       type: object
       properties:
         object_type:
@@ -535,7 +589,7 @@ components:
           - 'null'
         status:
           oneOf:
-          - $ref: '#/components/schemas/MeterUpdateRequestStatus'
+          - $ref: '#/components/schemas/MeterCreateRequestStatus'
           - type: 'null'
           description: The status of the meter indicating the activity of the meter and the ability to update properties.
         meter_values:
@@ -543,17 +597,19 @@ components:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/MeterMeterValueUpdateRequest'
+            $ref: '#/components/schemas/MeterMeterValueCreateRequest'
           description: The values used as input to calculate billable units, used in the meter.
         meter_properties:
           type:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/MeterMeterPropertyUpdateRequest'
+            $ref: '#/components/schemas/MeterMeterPropertyCreateRequest'
           description: The properties that provide information to give context to an event, used in the meter.
-      title: MeterUpdateRequest
-    MeterMeterProperty:
+      required:
+      - reference
+      title: MeterCreateRequest
+    MeterMeterPropertyCreateRequest:
       type: object
       properties:
         id:
@@ -573,26 +629,8 @@ components:
           type:
           - boolean
           - 'null'
-      title: MeterMeterProperty
-    MeterValueCreateRequestStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - ARCHIVED
-      - DEPRECATED
-      description: The status of the meter value indicating the activity and the ability to update properties.
-      title: MeterValueCreateRequestStatus
-    MeterPropertyUpdateRequestStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - ARCHIVED
-      - DEPRECATED
-      description: The status of the meter property indicating the activity and the ability to update properties.
-      title: MeterPropertyUpdateRequestStatus
-    MeterValueCreateRequest:
+      title: MeterMeterPropertyCreateRequest
+    Meter:
       type: object
       properties:
         object_type:
@@ -615,19 +653,24 @@ components:
           - 'null'
         status:
           oneOf:
-          - $ref: '#/components/schemas/MeterValueCreateRequestStatus'
+          - $ref: '#/components/schemas/MeterStatus'
           - type: 'null'
-          description: The status of the meter value indicating the activity and the ability to update properties.
-        type:
-          oneOf:
-          - $ref: '#/components/schemas/MeterValueCreateRequestType'
-          - type: 'null'
-          description: The type of the meter value.
-      required:
-      - reference
-      - name
-      - type
-      title: MeterValueCreateRequest
+          description: The status of the meter indicating the activity of the meter and the ability to update properties.
+        meter_values:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/MeterMeterValue'
+          description: The values used as input to calculate billable units, used in the meter.
+        meter_properties:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/MeterMeterProperty'
+          description: The properties that provide information to give context to an event, used in the meter.
+      title: Meter
     MeterPropertyUpdateRequest:
       type: object
       properties:
@@ -665,6 +708,60 @@ components:
             type: string
           description: The list of available ENUM values.
       title: MeterPropertyUpdateRequest
+    MeterPropertyStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the meter property indicating the activity and the ability to update properties.
+      title: MeterPropertyStatus
+    MeterValueStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the meter value indicating the activity and the ability to update properties.
+      title: MeterValueStatus
+    MeterValueCreateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the meter value indicating the activity and the ability to update properties.
+      title: MeterValueCreateRequestStatus
+    MeterMeterPropertyUpdateRequest:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type METER_PROPERTY
+        object:
+          oneOf:
+          - $ref: '#/components/schemas/MeterProperty'
+          - type: 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+        required:
+          type:
+          - boolean
+          - 'null'
+      title: MeterMeterPropertyUpdateRequest
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
     ApiErrorResourceType:
       type: string
       enum:
@@ -754,236 +851,6 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
-    ApiError:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/ApiErrorType'
-        code:
-          $ref: '#/components/schemas/ApiErrorCode'
-        field:
-          type:
-          - string
-          - 'null'
-        message:
-          type: string
-        resource_id:
-          type:
-          - string
-          - 'null'
-        resource_type:
-          oneOf:
-          - $ref: '#/components/schemas/ApiErrorResourceType'
-          - type: 'null'
-      required:
-      - type
-      - code
-      - message
-      title: ApiError
-    MeterMeterValueUpdateRequest:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type METER_VALUE
-        object:
-          oneOf:
-          - $ref: '#/components/schemas/MeterValue'
-          - type: 'null'
-        reference:
-          type:
-          - string
-          - 'null'
-        required:
-          type:
-          - boolean
-          - 'null'
-      title: MeterMeterValueUpdateRequest
-    MeterValueUpdateRequestType:
-      type: string
-      enum:
-      - NUMBER
-      - AMOUNT
-      description: The type of the meter value.
-      title: MeterValueUpdateRequestType
-    MeterPropertyCreateRequestStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - ARCHIVED
-      - DEPRECATED
-      description: The status of the meter property indicating the activity and the ability to update properties.
-      title: MeterPropertyCreateRequestStatus
-    MeterPropertyUpdateRequestType:
-      type: string
-      enum:
-      - NUMBER
-      - ENUM
-      - STRING
-      description: The type of the meter property.
-      title: MeterPropertyUpdateRequestType
-    MeterPropertyCreateRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        reference:
-          type: string
-        name:
-          type:
-          - string
-          - 'null'
-        description:
-          type:
-          - string
-          - 'null'
-        status:
-          $ref: '#/components/schemas/MeterPropertyCreateRequestStatus'
-          description: The status of the meter property indicating the activity and the ability to update properties.
-        type:
-          oneOf:
-          - $ref: '#/components/schemas/MeterPropertyCreateRequestType'
-          - type: 'null'
-          description: The type of the meter property.
-        enum_values:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: The list of available ENUM values.
-      required:
-      - reference
-      - name
-      - type
-      title: MeterPropertyCreateRequest
-    MeterValueCalculationCalculationType:
-      type: string
-      enum:
-      - SUM
-      - MAX
-      - MIN
-      - AVERAGE
-      - UNIQUE
-      description: The type of calculation used for this billable metric.
-      title: MeterValueCalculationCalculationType
-    MeterCreateRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        reference:
-          type: string
-        name:
-          type:
-          - string
-          - 'null'
-        description:
-          type:
-          - string
-          - 'null'
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/MeterCreateRequestStatus'
-          - type: 'null'
-          description: The status of the meter indicating the activity of the meter and the ability to update properties.
-        meter_values:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/MeterMeterValueCreateRequest'
-          description: The values used as input to calculate billable units, used in the meter.
-        meter_properties:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/MeterMeterPropertyCreateRequest'
-          description: The properties that provide information to give context to an event, used in the meter.
-      required:
-      - reference
-      title: MeterCreateRequest
-    MeterUpdateRequestStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - ARCHIVED
-      - DEPRECATED
-      description: The status of the meter indicating the activity of the meter and the ability to update properties.
-      title: MeterUpdateRequestStatus
-    MeterPropertyStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - ARCHIVED
-      - DEPRECATED
-      description: The status of the meter property indicating the activity and the ability to update properties.
-      title: MeterPropertyStatus
-    MeterValueType:
-      type: string
-      enum:
-      - NUMBER
-      - AMOUNT
-      description: The type of the meter value.
-      title: MeterValueType
-    MeterValueCalculationCreateRequestCalculationType:
-      type: string
-      enum:
-      - SUM
-      - MAX
-      - MIN
-      - AVERAGE
-      - UNIQUE
-      description: The type of calculation used for this billable metric.
-      title: MeterValueCalculationCreateRequestCalculationType
-    MeterMeterValue:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type METER_VALUE
-        object:
-          oneOf:
-          - $ref: '#/components/schemas/MeterValue'
-          - type: 'null'
-        reference:
-          type:
-          - string
-          - 'null'
-        required:
-          type:
-          - boolean
-          - 'null'
-      title: MeterMeterValue
-    MeterValueStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - ARCHIVED
-      - DEPRECATED
-      description: The status of the meter value indicating the activity and the ability to update properties.
-      title: MeterValueStatus
     MeterValueCalculation:
       type: object
       properties:
@@ -1043,77 +910,25 @@ components:
           - $ref: '#/components/schemas/MeterProperty'
           - type: 'null'
       title: MeterValueCalculation
-    MeterPropertyCreateRequestType:
+    MeterValueCalculationUpdateRequestCalculationType:
       type: string
       enum:
-      - NUMBER
-      - ENUM
-      - STRING
-      description: The type of the meter property.
-      title: MeterPropertyCreateRequestType
-    MeterValueCalculationCreateRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        reference:
-          type: string
-        name:
-          type:
-          - string
-          - 'null'
-        description:
-          type:
-          - string
-          - 'null'
-        calculation_type:
-          oneOf:
-          - $ref: '#/components/schemas/MeterValueCalculationCreateRequestCalculationType'
-          - type: 'null'
-          description: The type of calculation used for this billable metric.
-        persist:
-          type:
-          - boolean
-          - 'null'
-          description: Indicate if the data of the billable metric must be persisted to the next billing period of the schedule (default is false).
-        meter_id:
-          type:
-          - string
-          - 'null'
-          description: The ID of the meter.
-        meter:
-          oneOf:
-          - $ref: '#/components/schemas/MeterCreateRequest'
-          - type: 'null'
-        meter_value_id:
-          type:
-          - string
-          - 'null'
-          description: The ID of the meter value.
-        meter_value:
-          oneOf:
-          - $ref: '#/components/schemas/MeterValueCreateRequest'
-          - type: 'null'
-        meter_property_id:
-          type:
-          - string
-          - 'null'
-          description: The ID of the meter property.
-        meter_property:
-          oneOf:
-          - $ref: '#/components/schemas/MeterPropertyCreateRequest'
-          - type: 'null'
-      required:
-      - reference
-      - calculation_type
-      - meter_id
-      title: MeterValueCalculationCreateRequest
+      - SUM
+      - MAX
+      - MIN
+      - AVERAGE
+      - UNIQUE
+      description: The type of calculation used for this billable metric.
+      title: MeterValueCalculationUpdateRequestCalculationType
+    MeterValueUpdateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the meter value indicating the activity and the ability to update properties.
+      title: MeterValueUpdateRequestStatus
     MeterValueCalculationUpdateRequest:
       type: object
       properties:
@@ -1173,37 +988,15 @@ components:
           - $ref: '#/components/schemas/MeterPropertyUpdateRequest'
           - type: 'null'
       title: MeterValueCalculationUpdateRequest
-    MeterStatus:
+    MeterPropertyType:
       type: string
       enum:
-      - DRAFT
-      - ACTIVE
-      - ARCHIVED
-      - DEPRECATED
-      description: The status of the meter indicating the activity of the meter and the ability to update properties.
-      title: MeterStatus
-    MeterMeterPropertyUpdateRequest:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type METER_PROPERTY
-        object:
-          oneOf:
-          - $ref: '#/components/schemas/MeterProperty'
-          - type: 'null'
-        reference:
-          type:
-          - string
-          - 'null'
-        required:
-          type:
-          - boolean
-          - 'null'
-      title: MeterMeterPropertyUpdateRequest
-    Meter:
+      - NUMBER
+      - ENUM
+      - STRING
+      description: The type of the meter property.
+      title: MeterPropertyType
+    MeterProperty:
       type: object
       properties:
         object_type:
@@ -1225,34 +1018,21 @@ components:
           - string
           - 'null'
         status:
+          $ref: '#/components/schemas/MeterPropertyStatus'
+          description: The status of the meter property indicating the activity and the ability to update properties.
+        type:
           oneOf:
-          - $ref: '#/components/schemas/MeterStatus'
+          - $ref: '#/components/schemas/MeterPropertyType'
           - type: 'null'
-          description: The status of the meter indicating the activity of the meter and the ability to update properties.
-        meter_values:
+          description: The type of the meter property.
+        enum_values:
           type:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/MeterMeterValue'
-          description: The values used as input to calculate billable units, used in the meter.
-        meter_properties:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/MeterMeterProperty'
-          description: The properties that provide information to give context to an event, used in the meter.
-      title: Meter
-    MeterValueUpdateRequestStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - ARCHIVED
-      - DEPRECATED
-      description: The status of the meter value indicating the activity and the ability to update properties.
-      title: MeterValueUpdateRequestStatus
+            type: string
+          description: The list of available ENUM values.
+      title: MeterProperty
     MeterValue:
       type: object
       properties:
@@ -1285,41 +1065,7 @@ components:
           - type: 'null'
           description: The type of the meter value.
       title: MeterValue
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
-    MeterMeterValueCreateRequest:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type METER_VALUE
-        object:
-          oneOf:
-          - $ref: '#/components/schemas/MeterValue'
-          - type: 'null'
-        reference:
-          type:
-          - string
-          - 'null'
-        required:
-          type:
-          - boolean
-          - 'null'
-      title: MeterMeterValueCreateRequest
-    MeterValueCreateRequestType:
-      type: string
-      enum:
-      - NUMBER
-      - AMOUNT
-      description: The type of the meter value.
-      title: MeterValueCreateRequestType
-    MeterMeterPropertyCreateRequest:
+    MeterMeterProperty:
       type: object
       properties:
         id:
@@ -1339,7 +1085,261 @@ components:
           type:
           - boolean
           - 'null'
-      title: MeterMeterPropertyCreateRequest
+      title: MeterMeterProperty
+    MeterValueCalculationCalculationType:
+      type: string
+      enum:
+      - SUM
+      - MAX
+      - MIN
+      - AVERAGE
+      - UNIQUE
+      description: The type of calculation used for this billable metric.
+      title: MeterValueCalculationCalculationType
+    MeterValueUpdateRequestType:
+      type: string
+      enum:
+      - NUMBER
+      - AMOUNT
+      description: The type of the meter value.
+      title: MeterValueUpdateRequestType
+    MeterValueUpdateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueUpdateRequestStatus'
+          - type: 'null'
+          description: The status of the meter value indicating the activity and the ability to update properties.
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueUpdateRequestType'
+          - type: 'null'
+          description: The type of the meter value.
+      title: MeterValueUpdateRequest
+    MeterStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the meter indicating the activity of the meter and the ability to update properties.
+      title: MeterStatus
+    MeterValueType:
+      type: string
+      enum:
+      - NUMBER
+      - AMOUNT
+      description: The type of the meter value.
+      title: MeterValueType
+    MeterPropertyCreateRequestType:
+      type: string
+      enum:
+      - NUMBER
+      - ENUM
+      - STRING
+      description: The type of the meter property.
+      title: MeterPropertyCreateRequestType
+    MeterValueCreateRequestType:
+      type: string
+      enum:
+      - NUMBER
+      - AMOUNT
+      description: The type of the meter value.
+      title: MeterValueCreateRequestType
+    MeterValueCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueCreateRequestStatus'
+          - type: 'null'
+          description: The status of the meter value indicating the activity and the ability to update properties.
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValueCreateRequestType'
+          - type: 'null'
+          description: The type of the meter value.
+      required:
+      - reference
+      - name
+      - type
+      title: MeterValueCreateRequest
+    MeterMeterValue:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type METER_VALUE
+        object:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValue'
+          - type: 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+        required:
+          type:
+          - boolean
+          - 'null'
+      title: MeterMeterValue
+    MeterValueCalculationCreateRequestCalculationType:
+      type: string
+      enum:
+      - SUM
+      - MAX
+      - MIN
+      - AVERAGE
+      - UNIQUE
+      description: The type of calculation used for this billable metric.
+      title: MeterValueCalculationCreateRequestCalculationType
+    MeterCreateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the meter indicating the activity of the meter and the ability to update properties.
+      title: MeterCreateRequestStatus
+    MeterValueCalculationResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/MeterValueCalculation'
+      required:
+      - data
+      title: MeterValueCalculationResponseWrapper
+    MeterPropertyUpdateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the meter property indicating the activity and the ability to update properties.
+      title: MeterPropertyUpdateRequestStatus
+    MeterUpdateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/MeterUpdateRequestStatus'
+          - type: 'null'
+          description: The status of the meter indicating the activity of the meter and the ability to update properties.
+        meter_values:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/MeterMeterValueUpdateRequest'
+          description: The values used as input to calculate billable units, used in the meter.
+        meter_properties:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/MeterMeterPropertyUpdateRequest'
+          description: The properties that provide information to give context to an event, used in the meter.
+      title: MeterUpdateRequest
+    MeterPropertyUpdateRequestType:
+      type: string
+      enum:
+      - NUMBER
+      - ENUM
+      - STRING
+      description: The type of the meter property.
+      title: MeterPropertyUpdateRequestType
+    MeterPropertyCreateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the meter property indicating the activity and the ability to update properties.
+      title: MeterPropertyCreateRequestStatus
+    MeterMeterValueUpdateRequest:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type METER_VALUE
+        object:
+          oneOf:
+          - $ref: '#/components/schemas/MeterValue'
+          - type: 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+        required:
+          type:
+          - boolean
+          - 'null'
+      title: MeterMeterValueUpdateRequest
   securitySchemes:
     API-Key:
       type: apiKey

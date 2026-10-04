@@ -494,58 +494,14 @@ paths:
               $ref: '#/components/schemas/SearchCreateRequest'
 components:
   schemas:
-    RequestUsageReportsParametersCreateRequest:
+    BulkActionItemResource:
       type: object
       properties:
-        invoice_date:
+        type:
+          $ref: '#/components/schemas/BulkActionItemResourceType'
+        id:
           type: string
-      title: RequestUsageReportsParametersCreateRequest
-    BulkActionItemGeneratedResourceType:
-      type: string
-      enum:
-      - REPORT_GENERATE_REQUEST
-      title: BulkActionItemGeneratedResourceType
-    BulkActionResponseWrapper:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/BulkActionResponse'
-        limit:
-          type:
-          - integer
-          - 'null'
-        page:
-          type:
-          - integer
-          - 'null'
-        total_number_of_pages:
-          type:
-          - integer
-          - 'null'
-        links:
-          $ref: '#/components/schemas/PaginationLinks'
-      required:
-      - data
-      - links
-      title: BulkActionResponseWrapper
-    SearchFieldCreateRequest:
-      type: object
-      properties:
-        name:
-          type:
-          - string
-          - 'null'
-        value:
-          type: string
-        wildcard_start:
-          type: boolean
-        wildcard_end:
-          type: boolean
-        ignore_case:
-          type: boolean
-      title: SearchFieldCreateRequest
+      title: BulkActionItemResource
     ApiErrorCode:
       type: string
       enum:
@@ -585,32 +541,32 @@ components:
       - IDEMPOTENCY_CHECK_FAILED
       - INVALID_REQUEST
       title: ApiErrorCode
-    BulkActionCheckType:
-      type: string
-      enum:
-      - FINALIZE_INVOICES
-      - REQUEST_USAGE_REPORTS
-      title: BulkActionCheckType
-    PaginationLinks:
+    ApiError:
       type: object
       properties:
-        first:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
           type:
           - string
           - 'null'
-        previous:
+        message:
+          type: string
+        resource_id:
           type:
           - string
           - 'null'
-        current:
-          type:
-          - string
-          - 'null'
-        next:
-          type:
-          - string
-          - 'null'
-      title: PaginationLinks
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
     BulkActionItem:
       type: object
       properties:
@@ -629,28 +585,30 @@ components:
         generated_resource:
           $ref: '#/components/schemas/BulkActionItemGeneratedResource'
       title: BulkActionItem
-    FinalizeInvoicesParametersCreateRequest:
+    RequestUsageReportsParametersCreateRequest:
       type: object
       properties:
         invoice_date:
           type: string
-      title: FinalizeInvoicesParametersCreateRequest
-    SearchCreateRequest:
+      title: RequestUsageReportsParametersCreateRequest
+    BulkActionCheck:
       type: object
       properties:
-        search_fields:
+        type:
+          $ref: '#/components/schemas/BulkActionCheckType'
+        number_of_resources:
+          type: integer
+        included_example_resources:
           type: array
           items:
-            $ref: '#/components/schemas/SearchFieldCreateRequest'
-        filter_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/FilterFieldCreateRequest'
-        selection_rule_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/SelectionRuleFieldCreateRequest'
-      title: SearchCreateRequest
+            $ref: '#/components/schemas/BulkActionItemResource'
+      title: BulkActionCheck
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
     ApiErrorResourceType:
       type: string
       enum:
@@ -740,40 +698,94 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
-    ApiError:
+    FilterFieldCreateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        reference:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+        values:
+          type: array
+          items:
+            type: string
+      title: FilterFieldCreateRequest
+    BulkActionItemResponseWrapper:
+      type: object
+      properties:
+        limit:
+          type:
+          - integer
+          - 'null'
+        page:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/BulkActionItem'
+      required:
+      - links
+      - data
+      title: BulkActionItemResponseWrapper
+    BulkActionRequestCreateRequest:
       type: object
       properties:
         type:
-          $ref: '#/components/schemas/ApiErrorType'
-        code:
-          $ref: '#/components/schemas/ApiErrorCode'
-        field:
-          type:
-          - string
-          - 'null'
-        message:
-          type: string
-        resource_id:
-          type:
-          - string
-          - 'null'
-        resource_type:
-          oneOf:
-          - $ref: '#/components/schemas/ApiErrorResourceType'
-          - type: 'null'
+          $ref: '#/components/schemas/BulkActionRequestCreateRequestType'
+        finalize_invoices:
+          $ref: '#/components/schemas/FinalizeInvoicesParametersCreateRequest'
+        request_usage_reports:
+          $ref: '#/components/schemas/RequestUsageReportsParametersCreateRequest'
       required:
       - type
-      - code
-      - message
-      title: ApiError
-    BulkActionItemGeneratedResource:
+      title: BulkActionRequestCreateRequest
+    RequestUsageReportsParameters:
       type: object
       properties:
-        type:
-          $ref: '#/components/schemas/BulkActionItemGeneratedResourceType'
-        id:
+        invoice_date:
           type: string
-      title: BulkActionItemGeneratedResource
+      title: RequestUsageReportsParameters
+    BulkActionItemGeneratedResourceType:
+      type: string
+      enum:
+      - REPORT_GENERATE_REQUEST
+      title: BulkActionItemGeneratedResourceType
+    SearchFieldCreateRequest:
+      type: object
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+        value:
+          type: string
+        wildcard_start:
+          type: boolean
+        wildcard_end:
+          type: boolean
+        ignore_case:
+          type: boolean
+      title: SearchFieldCreateRequest
+    BulkActionCheckType:
+      type: string
+      enum:
+      - FINALIZE_INVOICES
+      - REQUEST_USAGE_REPORTS
+      title: BulkActionCheckType
     BulkActionResponse:
       type: object
       properties:
@@ -804,98 +816,42 @@ components:
         request_usage_reports:
           $ref: '#/components/schemas/RequestUsageReportsParameters'
       title: BulkActionResponse
-    BulkActionRequestCreateRequest:
+    BulkActionItemGeneratedResource:
       type: object
       properties:
         type:
-          $ref: '#/components/schemas/BulkActionRequestCreateRequestType'
-        finalize_invoices:
-          $ref: '#/components/schemas/FinalizeInvoicesParametersCreateRequest'
-        request_usage_reports:
-          $ref: '#/components/schemas/RequestUsageReportsParametersCreateRequest'
-      required:
-      - type
-      title: BulkActionRequestCreateRequest
-    BulkActionRequestCreateRequestType:
-      type: string
-      enum:
-      - FINALIZE_INVOICES
-      - REQUEST_USAGE_REPORTS
-      title: BulkActionRequestCreateRequestType
-    SelectionRuleFieldCreateRequest:
-      type: object
-      properties:
-        name:
+          $ref: '#/components/schemas/BulkActionItemGeneratedResourceType'
+        id:
           type: string
-        value:
-          type:
-          - string
-          - 'null'
-      title: SelectionRuleFieldCreateRequest
-    FilterFieldCreateRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        reference:
-          type:
-          - string
-          - 'null'
-        value:
-          type:
-          - string
-          - 'null'
-        values:
-          type: array
-          items:
-            type: string
-      title: FilterFieldCreateRequest
-    FinalizeInvoicesParameters:
-      type: object
-      properties:
-        invoice_date:
-          type: string
-      title: FinalizeInvoicesParameters
+      title: BulkActionItemGeneratedResource
     BulkActionItemResourceType:
       type: string
       enum:
       - INVOICE
       title: BulkActionItemResourceType
-    RequestUsageReportsParameters:
+    SearchCreateRequest:
       type: object
       properties:
-        invoice_date:
-          type: string
-      title: RequestUsageReportsParameters
-    BulkActionCheck:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/BulkActionCheckType'
-        number_of_resources:
-          type: integer
-        included_example_resources:
+        search_fields:
           type: array
           items:
-            $ref: '#/components/schemas/BulkActionItemResource'
-      title: BulkActionCheck
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
-    BulkActionItemResource:
+            $ref: '#/components/schemas/SearchFieldCreateRequest'
+        filter_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/FilterFieldCreateRequest'
+        selection_rule_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/SelectionRuleFieldCreateRequest'
+      title: SearchCreateRequest
+    BulkActionResponseWrapper:
       type: object
       properties:
-        type:
-          $ref: '#/components/schemas/BulkActionItemResourceType'
-        id:
-          type: string
-      title: BulkActionItemResource
-    BulkActionItemResponseWrapper:
-      type: object
-      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/BulkActionResponse'
         limit:
           type:
           - integer
@@ -910,14 +866,58 @@ components:
           - 'null'
         links:
           $ref: '#/components/schemas/PaginationLinks'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/BulkActionItem'
       required:
-      - links
       - data
-      title: BulkActionItemResponseWrapper
+      - links
+      title: BulkActionResponseWrapper
+    SelectionRuleFieldCreateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type:
+          - string
+          - 'null'
+      title: SelectionRuleFieldCreateRequest
+    FinalizeInvoicesParameters:
+      type: object
+      properties:
+        invoice_date:
+          type: string
+      title: FinalizeInvoicesParameters
+    FinalizeInvoicesParametersCreateRequest:
+      type: object
+      properties:
+        invoice_date:
+          type: string
+      title: FinalizeInvoicesParametersCreateRequest
+    PaginationLinks:
+      type: object
+      properties:
+        first:
+          type:
+          - string
+          - 'null'
+        previous:
+          type:
+          - string
+          - 'null'
+        current:
+          type:
+          - string
+          - 'null'
+        next:
+          type:
+          - string
+          - 'null'
+      title: PaginationLinks
+    BulkActionRequestCreateRequestType:
+      type: string
+      enum:
+      - FINALIZE_INVOICES
+      - REQUEST_USAGE_REPORTS
+      title: BulkActionRequestCreateRequestType
   securitySchemes:
     API-Key:
       type: apiKey

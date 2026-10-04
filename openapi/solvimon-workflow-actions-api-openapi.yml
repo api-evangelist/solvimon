@@ -291,23 +291,20 @@ paths:
               $ref: '#/components/schemas/WorkflowActionUpdateRequest'
 components:
   schemas:
-    WorkflowActionStatus:
+    SendEmailInvoiceConfigurationType:
       type: string
       enum:
-      - ACTIVE
-      - INACTIVE
-      - DRAFT
-      - ARCHIVED
-      description: Status of the action.
-      title: WorkflowActionStatus
-    SendEmailPricingPlanSubscriptionConfiguration:
-      type: object
-      properties:
-        include_customer_contacts_as_cc:
-          type: boolean
-          description: Controls whether the customer's configured contacts are added as CC recipients.
-      description: Defines subscription-specific options for emails sent by the workflow action.
-      title: SendEmailPricingPlanSubscriptionConfiguration
+      - TO_FINAL
+      - OVERDUE
+      - UPCOMING_PAYMENT_REMINDER
+      description: Invoice email type.
+      title: SendEmailInvoiceConfigurationType
+    WorkflowActionType:
+      type: string
+      enum:
+      - SEND_EMAIL_TO_CUSTOMER
+      description: Action type that selects the matching action configuration.
+      title: WorkflowActionType
     ApiErrorCode:
       type: string
       enum:
@@ -347,7 +344,89 @@ components:
       - IDEMPOTENCY_CHECK_FAILED
       - INVALID_REQUEST
       title: ApiErrorCode
-    WorkflowActionCreateRequest:
+    SendEmailPricingPlanSubscriptionConfiguration:
+      type: object
+      properties:
+        include_customer_contacts_as_cc:
+          type: boolean
+          description: Controls whether the customer's configured contacts are added as CC recipients.
+      description: Defines subscription-specific options for emails sent by the workflow action.
+      title: SendEmailPricingPlanSubscriptionConfiguration
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    SendEmailToCustomer:
+      type: object
+      properties:
+        integration_id:
+          type: string
+          description: Integration that provides the email delivery channel configuration.
+        subject:
+          type:
+          - string
+          - 'null'
+          description: Subject line used for the email.
+        from:
+          $ref: '#/components/schemas/EmailIdentifier'
+          description: Sender address and display information for the email.
+        reply_to:
+          $ref: '#/components/schemas/EmailIdentifier'
+          description: Reply-to address and display information for the email.
+        cc_recipients:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: CC recipient email addresses.
+        bcc_recipients:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: BCC recipient email addresses.
+        template_name:
+          type: string
+          description: Template name used to render the email.
+        variant:
+          $ref: '#/components/schemas/SendEmailToCustomerVariant'
+          description: Template variant that selects the matching target-specific email configuration.
+        invoice:
+          $ref: '#/components/schemas/SendEmailInvoiceConfiguration'
+          description: Invoice email settings used when the action runs for an invoice workflow.
+        payment:
+          $ref: '#/components/schemas/SendEmailPaymentConfiguration'
+          description: Payment email settings used when the action runs for a payment workflow.
+        pricing_plan_subscription:
+          $ref: '#/components/schemas/SendEmailPricingPlanSubscriptionConfiguration'
+          description: Pricing plan subscription email settings used when the action runs for a pricing plan subscription workflow.
+      description: Defines the email content, sender details, recipients, and template configuration used by the action.
+      title: SendEmailToCustomer
+    WorkflowActionUpdateRequest:
       type: object
       properties:
         object_type:
@@ -362,7 +441,7 @@ components:
           type: string
           description: Workflow that owns this action.
         type:
-          $ref: '#/components/schemas/WorkflowActionCreateRequestType'
+          $ref: '#/components/schemas/WorkflowActionUpdateRequestType'
           description: Action type that selects the matching action configuration.
         description:
           type:
@@ -370,7 +449,7 @@ components:
           - 'null'
           description: Description of what this action does.
         status:
-          $ref: '#/components/schemas/WorkflowActionCreateRequestStatus'
+          $ref: '#/components/schemas/WorkflowActionUpdateRequestStatus'
           description: Status of the action.
         created_at:
           type:
@@ -383,15 +462,11 @@ components:
           - 'null'
           description: Date time when the action was last updated.
         send_email_to_customer:
-          $ref: '#/components/schemas/SendEmailToCustomerCreateRequest'
+          $ref: '#/components/schemas/SendEmailToCustomerUpdateRequest'
           description: Email action configuration used to send an email to the customer.
-      required:
-      - workflow_id
-      - type
-      - status
       description: Defines an action that belongs to a workflow and describes what the workflow performs when it runs.
-      title: WorkflowActionCreateRequest
-    WorkflowActionUpdateRequestStatus:
+      title: WorkflowActionUpdateRequest
+    WorkflowActionCreateRequestStatus:
       type: string
       enum:
       - ACTIVE
@@ -399,13 +474,38 @@ components:
       - DRAFT
       - ARCHIVED
       description: Status of the action.
-      title: WorkflowActionUpdateRequestStatus
-    WorkflowActionUpdateRequestType:
+      title: WorkflowActionCreateRequestStatus
+    SendEmailToCustomerCreateRequestVariant:
       type: string
       enum:
-      - SEND_EMAIL_TO_CUSTOMER
-      description: Action type that selects the matching action configuration.
-      title: WorkflowActionUpdateRequestType
+      - INVOICE
+      - PAYMENT
+      - PRICING_PLAN_SUBSCRIPTION
+      description: Template variant that selects the matching target-specific email configuration.
+      title: SendEmailToCustomerCreateRequestVariant
+    SendEmailInvoiceConfiguration:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/SendEmailInvoiceConfigurationType'
+          description: Invoice email type.
+        include_pdf:
+          type: boolean
+          description: Attach the invoice PDF to the email. Only applicable for TO_FINAL and OVERDUE
+        include_payment_link:
+          type: boolean
+          description: Include a payment link in the email. Only applicable for TO_FINAL and OVERDUE
+        include_customer_contacts_as_cc:
+          type: boolean
+          description: Add the customer's configured contacts as CC recipients. Defaults to false when absent.
+      description: Defines invoice-specific options for emails sent by the workflow action. Fields allowed/required depend on `type`.
+      title: SendEmailInvoiceConfiguration
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
     ApiErrorResourceType:
       type: string
       enum:
@@ -495,119 +595,6 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
-    ApiError:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/ApiErrorType'
-        code:
-          $ref: '#/components/schemas/ApiErrorCode'
-        field:
-          type:
-          - string
-          - 'null'
-        message:
-          type: string
-        resource_id:
-          type:
-          - string
-          - 'null'
-        resource_type:
-          oneOf:
-          - $ref: '#/components/schemas/ApiErrorResourceType'
-          - type: 'null'
-      required:
-      - type
-      - code
-      - message
-      title: ApiError
-    SendEmailInvoiceConfiguration:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/SendEmailInvoiceConfigurationType'
-          description: Invoice email type.
-        include_pdf:
-          type: boolean
-          description: Attach the invoice PDF to the email. Only applicable for TO_FINAL and OVERDUE
-        include_payment_link:
-          type: boolean
-          description: Include a payment link in the email. Only applicable for TO_FINAL and OVERDUE
-        include_customer_contacts_as_cc:
-          type: boolean
-          description: Add the customer's configured contacts as CC recipients. Defaults to false when absent.
-      description: Defines invoice-specific options for emails sent by the workflow action. Fields allowed/required depend on `type`.
-      title: SendEmailInvoiceConfiguration
-    SendEmailPaymentConfiguration:
-      type: object
-      properties:
-        include_customer_contacts_as_cc:
-          type: boolean
-          description: Controls whether the customer's configured contacts are added as CC recipients.
-      description: Defines payment-specific options for emails sent by the workflow action.
-      title: SendEmailPaymentConfiguration
-    WorkflowActionUpdateRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        workflow_id:
-          type: string
-          description: Workflow that owns this action.
-        type:
-          $ref: '#/components/schemas/WorkflowActionUpdateRequestType'
-          description: Action type that selects the matching action configuration.
-        description:
-          type:
-          - string
-          - 'null'
-          description: Description of what this action does.
-        status:
-          $ref: '#/components/schemas/WorkflowActionUpdateRequestStatus'
-          description: Status of the action.
-        created_at:
-          type:
-          - string
-          - 'null'
-          description: Date time when the action was created.
-        updated_at:
-          type:
-          - string
-          - 'null'
-          description: Date time when the action was last updated.
-        send_email_to_customer:
-          $ref: '#/components/schemas/SendEmailToCustomerUpdateRequest'
-          description: Email action configuration used to send an email to the customer.
-      description: Defines an action that belongs to a workflow and describes what the workflow performs when it runs.
-      title: WorkflowActionUpdateRequest
-    SendEmailToCustomerUpdateRequestVariant:
-      type: string
-      enum:
-      - INVOICE
-      - PAYMENT
-      - PRICING_PLAN_SUBSCRIPTION
-      description: Template variant that selects the matching target-specific email configuration.
-      title: SendEmailToCustomerUpdateRequestVariant
-    WorkflowActionType:
-      type: string
-      enum:
-      - SEND_EMAIL_TO_CUSTOMER
-      description: Action type that selects the matching action configuration.
-      title: WorkflowActionType
-    SendEmailToCustomerCreateRequestVariant:
-      type: string
-      enum:
-      - INVOICE
-      - PAYMENT
-      - PRICING_PLAN_SUBSCRIPTION
-      description: Template variant that selects the matching target-specific email configuration.
-      title: SendEmailToCustomerCreateRequestVariant
     WorkflowAction:
       type: object
       properties:
@@ -648,14 +635,6 @@ components:
           description: Email action configuration used to send an email to the customer.
       description: Defines an action that belongs to a workflow and describes what the workflow performs when it runs.
       title: WorkflowAction
-    SendEmailToCustomerVariant:
-      type: string
-      enum:
-      - INVOICE
-      - PAYMENT
-      - PRICING_PLAN_SUBSCRIPTION
-      description: Template variant that selects the matching target-specific email configuration.
-      title: SendEmailToCustomerVariant
     EmailIdentifier:
       type: object
       properties:
@@ -666,117 +645,6 @@ components:
         email:
           type: string
       title: EmailIdentifier
-    SendEmailToCustomerUpdateRequest:
-      type: object
-      properties:
-        integration_id:
-          type: string
-          description: Integration that provides the email delivery channel configuration.
-        subject:
-          type:
-          - string
-          - 'null'
-          description: Subject line used for the email.
-        from:
-          $ref: '#/components/schemas/EmailIdentifier'
-          description: Sender address and display information for the email.
-        reply_to:
-          $ref: '#/components/schemas/EmailIdentifier'
-          description: Reply-to address and display information for the email.
-        cc_recipients:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: CC recipient email addresses.
-        bcc_recipients:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: BCC recipient email addresses.
-        template_name:
-          type: string
-          description: Template name used to render the email.
-        variant:
-          $ref: '#/components/schemas/SendEmailToCustomerUpdateRequestVariant'
-          description: Template variant that selects the matching target-specific email configuration.
-        invoice:
-          $ref: '#/components/schemas/SendEmailInvoiceConfiguration'
-          description: Invoice email settings used when the action runs for an invoice workflow.
-        payment:
-          $ref: '#/components/schemas/SendEmailPaymentConfiguration'
-          description: Payment email settings used when the action runs for a payment workflow.
-        pricing_plan_subscription:
-          $ref: '#/components/schemas/SendEmailPricingPlanSubscriptionConfiguration'
-          description: Pricing plan subscription email settings used when the action runs for a pricing plan subscription workflow.
-      description: Defines the email content, sender details, recipients, and template configuration used by the action.
-      title: SendEmailToCustomerUpdateRequest
-    SendEmailToCustomer:
-      type: object
-      properties:
-        integration_id:
-          type: string
-          description: Integration that provides the email delivery channel configuration.
-        subject:
-          type:
-          - string
-          - 'null'
-          description: Subject line used for the email.
-        from:
-          $ref: '#/components/schemas/EmailIdentifier'
-          description: Sender address and display information for the email.
-        reply_to:
-          $ref: '#/components/schemas/EmailIdentifier'
-          description: Reply-to address and display information for the email.
-        cc_recipients:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: CC recipient email addresses.
-        bcc_recipients:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: BCC recipient email addresses.
-        template_name:
-          type: string
-          description: Template name used to render the email.
-        variant:
-          $ref: '#/components/schemas/SendEmailToCustomerVariant'
-          description: Template variant that selects the matching target-specific email configuration.
-        invoice:
-          $ref: '#/components/schemas/SendEmailInvoiceConfiguration'
-          description: Invoice email settings used when the action runs for an invoice workflow.
-        payment:
-          $ref: '#/components/schemas/SendEmailPaymentConfiguration'
-          description: Payment email settings used when the action runs for a payment workflow.
-        pricing_plan_subscription:
-          $ref: '#/components/schemas/SendEmailPricingPlanSubscriptionConfiguration'
-          description: Pricing plan subscription email settings used when the action runs for a pricing plan subscription workflow.
-      description: Defines the email content, sender details, recipients, and template configuration used by the action.
-      title: SendEmailToCustomer
-    WorkflowActionCreateRequestType:
-      type: string
-      enum:
-      - SEND_EMAIL_TO_CUSTOMER
-      description: Action type that selects the matching action configuration.
-      title: WorkflowActionCreateRequestType
-    WorkflowActionCreateRequestStatus:
-      type: string
-      enum:
-      - ACTIVE
-      - INACTIVE
-      - DRAFT
-      - ARCHIVED
-      description: Status of the action.
-      title: WorkflowActionCreateRequestStatus
     SendEmailToCustomerCreateRequest:
       type: object
       properties:
@@ -825,20 +693,152 @@ components:
           description: Pricing plan subscription email settings used when the action runs for a pricing plan subscription workflow.
       description: Defines the email content, sender details, recipients, and template configuration used by the action.
       title: SendEmailToCustomerCreateRequest
-    ApiErrorType:
+    SendEmailToCustomerUpdateRequest:
+      type: object
+      properties:
+        integration_id:
+          type: string
+          description: Integration that provides the email delivery channel configuration.
+        subject:
+          type:
+          - string
+          - 'null'
+          description: Subject line used for the email.
+        from:
+          $ref: '#/components/schemas/EmailIdentifier'
+          description: Sender address and display information for the email.
+        reply_to:
+          $ref: '#/components/schemas/EmailIdentifier'
+          description: Reply-to address and display information for the email.
+        cc_recipients:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: CC recipient email addresses.
+        bcc_recipients:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: BCC recipient email addresses.
+        template_name:
+          type: string
+          description: Template name used to render the email.
+        variant:
+          $ref: '#/components/schemas/SendEmailToCustomerUpdateRequestVariant'
+          description: Template variant that selects the matching target-specific email configuration.
+        invoice:
+          $ref: '#/components/schemas/SendEmailInvoiceConfiguration'
+          description: Invoice email settings used when the action runs for an invoice workflow.
+        payment:
+          $ref: '#/components/schemas/SendEmailPaymentConfiguration'
+          description: Payment email settings used when the action runs for a payment workflow.
+        pricing_plan_subscription:
+          $ref: '#/components/schemas/SendEmailPricingPlanSubscriptionConfiguration'
+          description: Pricing plan subscription email settings used when the action runs for a pricing plan subscription workflow.
+      description: Defines the email content, sender details, recipients, and template configuration used by the action.
+      title: SendEmailToCustomerUpdateRequest
+    SendEmailToCustomerVariant:
       type: string
       enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
-    SendEmailInvoiceConfigurationType:
+      - INVOICE
+      - PAYMENT
+      - PRICING_PLAN_SUBSCRIPTION
+      description: Template variant that selects the matching target-specific email configuration.
+      title: SendEmailToCustomerVariant
+    WorkflowActionStatus:
       type: string
       enum:
-      - TO_FINAL
-      - OVERDUE
-      - UPCOMING_PAYMENT_REMINDER
-      description: Invoice email type.
-      title: SendEmailInvoiceConfigurationType
+      - ACTIVE
+      - INACTIVE
+      - DRAFT
+      - ARCHIVED
+      description: Status of the action.
+      title: WorkflowActionStatus
+    WorkflowActionCreateRequestType:
+      type: string
+      enum:
+      - SEND_EMAIL_TO_CUSTOMER
+      description: Action type that selects the matching action configuration.
+      title: WorkflowActionCreateRequestType
+    SendEmailPaymentConfiguration:
+      type: object
+      properties:
+        include_customer_contacts_as_cc:
+          type: boolean
+          description: Controls whether the customer's configured contacts are added as CC recipients.
+      description: Defines payment-specific options for emails sent by the workflow action.
+      title: SendEmailPaymentConfiguration
+    WorkflowActionCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        workflow_id:
+          type: string
+          description: Workflow that owns this action.
+        type:
+          $ref: '#/components/schemas/WorkflowActionCreateRequestType'
+          description: Action type that selects the matching action configuration.
+        description:
+          type:
+          - string
+          - 'null'
+          description: Description of what this action does.
+        status:
+          $ref: '#/components/schemas/WorkflowActionCreateRequestStatus'
+          description: Status of the action.
+        created_at:
+          type:
+          - string
+          - 'null'
+          description: Date time when the action was created.
+        updated_at:
+          type:
+          - string
+          - 'null'
+          description: Date time when the action was last updated.
+        send_email_to_customer:
+          $ref: '#/components/schemas/SendEmailToCustomerCreateRequest'
+          description: Email action configuration used to send an email to the customer.
+      required:
+      - workflow_id
+      - type
+      - status
+      description: Defines an action that belongs to a workflow and describes what the workflow performs when it runs.
+      title: WorkflowActionCreateRequest
+    WorkflowActionUpdateRequestType:
+      type: string
+      enum:
+      - SEND_EMAIL_TO_CUSTOMER
+      description: Action type that selects the matching action configuration.
+      title: WorkflowActionUpdateRequestType
+    SendEmailToCustomerUpdateRequestVariant:
+      type: string
+      enum:
+      - INVOICE
+      - PAYMENT
+      - PRICING_PLAN_SUBSCRIPTION
+      description: Template variant that selects the matching target-specific email configuration.
+      title: SendEmailToCustomerUpdateRequestVariant
+    WorkflowActionUpdateRequestStatus:
+      type: string
+      enum:
+      - ACTIVE
+      - INACTIVE
+      - DRAFT
+      - ARCHIVED
+      description: Status of the action.
+      title: WorkflowActionUpdateRequestStatus
   securitySchemes:
     API-Key:
       type: apiKey

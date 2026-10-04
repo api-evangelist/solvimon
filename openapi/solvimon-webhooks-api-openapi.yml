@@ -707,6 +707,165 @@ paths:
               $ref: '#/components/schemas/WebhookCreateRequest'
 components:
   schemas:
+    WebhookResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Webhook'
+        limit:
+          type:
+          - integer
+          - 'null'
+        page:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      - links
+      title: WebhookResponseWrapper
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    ApiErrorResourceType:
+      type: string
+      enum:
+      - CUSTOMER
+      - CUSTOM_FIELD
+      - PLATFORM
+      - PLATFORM_UPTODATE
+      - METER
+      - METER_VALUE
+      - METER_PROPERTY
+      - METER_VALUE_CALCULATION
+      - INGEST_DATA
+      - METER_DATA
+      - CHARGE_DATA
+      - PERSIST_DATA
+      - ADJUSTMENT_DATA
+      - PRODUCT_CATEGORY
+      - PRODUCT
+      - PRODUCT_ITEM
+      - PRICING
+      - PRICING_GROUP
+      - PRICING_ITEM
+      - PRICING_ITEM_CONFIG
+      - PRICING_PLAN_SUBSCRIPTION
+      - PRICING_PLAN_SUBSCRIPTION_GROUP
+      - PRICING_PLAN_SCHEDULE
+      - PRICING_PLAN
+      - PRICING_PLAN_VERSION
+      - QUOTE
+      - QUOTE_VERSION
+      - QUOTE_TEMPLATE
+      - API_KEY
+      - USER
+      - ROLE
+      - PROXY_USER
+      - EXTERNAL_CREDENTIALS
+      - TOKEN
+      - INVOICE
+      - E_INVOICE
+      - PDF
+      - BILLING_ENTITY
+      - FEATURE
+      - MEMBERSHIP
+      - PAYMENT
+      - PAYMENT_ACCEPTOR
+      - PAYMENT_METHOD
+      - PAYMENT_METHOD_OPTIONS
+      - PAYMENT_SCHEDULE
+      - PAYMENT_REQUEST
+      - INTEGRATION
+      - WEBHOOK
+      - FILE
+      - FILE_PROCESSING_SETTINGS
+      - TEAM
+      - DOWNLOAD_URL
+      - CSV_REPORT
+      - REPORT
+      - REPORT_GENERATE_REQUEST
+      - REPORT_CONFIGURATION
+      - REPORT_SUBSCRIPTION
+      - REPORT_DEFINITION
+      - ACCOUNT_GROUP
+      - ENTITY
+      - EVENT_TRACE
+      - EVENT_TRACE_LINK
+      - PRICING_CATEGORY
+      - CONTACT
+      - ALERT_RULE
+      - ALERT
+      - AUDIT_RECORD
+      - PORTAL_URL
+      - AUTHENTICATION_PROVIDER
+      - REPROCESS
+      - APPROVAL_POLICY
+      - APPROVAL_REQUEST
+      - BULK_ACTION
+      - COUPON
+      - PROMOTION_CODE
+      - WALLET
+      - WALLET_TYPE
+      - WALLET_GRANT
+      - WORKFLOW
+      - WORKFLOW_TRIGGER
+      - WORKFLOW_ACTION
+      - CREDIT_TYPE
+      - SIGNATURE_REQUEST
+      - ATTACHMENT
+      - DOCUMENT
+      title: ApiErrorResourceType
     PenaltyBoxDataCreateRequest:
       type: object
       properties:
@@ -731,105 +890,32 @@ components:
           - 'null'
           description: Indicates the payload sent for the webhook
       title: PenaltyBoxDataCreateRequest
-    WebhookUpdateRequest:
+    ApiError:
       type: object
       properties:
-        object_type:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
           type:
           - string
           - 'null'
-        id:
+        message:
+          type: string
+        resource_id:
           type:
           - string
           - 'null'
-        username:
-          type:
-          - string
-          - 'null'
-          description: The username used for basic authentication.
-        password:
-          type:
-          - string
-          - 'null'
-          description: The password used for basic authentication.
-        api_header_field:
-          type:
-          - string
-          - 'null'
-          description: The name of the header field for authentication with an API key.
-        api_key:
-          type:
-          - string
-          - 'null'
-          description: The value of for authentication with an API key.
-        url:
-          type:
-          - string
-          - 'null'
-          description: The url of the webhook where webhooks will be sent.
-        included_actions:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: The actions of which a webhook will be sent.
-        excluded_actions:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: The actions of which a webhook will not be sent.
-        active:
-          type: boolean
-          description: The status of the webhook.
-        penalty_box:
-          type:
-          - string
-          - 'null'
-        secret_key:
-          type:
-          - string
-          - 'null'
-        signing_protocol:
-          type:
-          - string
-          - 'null'
-          description: The signing protocol for the webhook.
-        previous_secret_key:
-          type:
-          - string
-          - 'null'
-        previous_signing_protocol:
-          type:
-          - string
-          - 'null'
-        secret_rolled_at:
-          type:
-          - string
-          - 'null'
-          description: The instant when the secret was rolled.
-        include_previous_data:
-          type: boolean
-          description: Define whether the webhook payload include the previous status or only the current status
-        authentication_type:
-          $ref: '#/components/schemas/WebhookUpdateRequestAuthenticationType'
-          description: The type of authentication used for the webhook.
-        penalty_box_data:
+        resource_type:
           oneOf:
-          - $ref: '#/components/schemas/PenaltyBoxDataUpdateRequest'
+          - $ref: '#/components/schemas/ApiErrorResourceType'
           - type: 'null'
-          description: Indicates if this webhook is in the penalty box
-        name:
-          type:
-          - string
-          - 'null'
-        reference:
-          type:
-          - string
-          - 'null'
-      title: WebhookUpdateRequest
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
     WebhookConnectionResponse:
       type: object
       properties:
@@ -842,14 +928,42 @@ components:
           - string
           - 'null'
       title: WebhookConnectionResponse
-    WebhookCreateRequestAuthenticationType:
+    WebhookUpdateRequestAuthenticationType:
       type: string
       enum:
       - PASSWORD
       - API_KEY
       - NONE
       description: The type of authentication used for the webhook.
-      title: WebhookCreateRequestAuthenticationType
+      title: WebhookUpdateRequestAuthenticationType
+    PaginationLinks:
+      type: object
+      properties:
+        first:
+          type:
+          - string
+          - 'null'
+        previous:
+          type:
+          - string
+          - 'null'
+        current:
+          type:
+          - string
+          - 'null'
+        next:
+          type:
+          - string
+          - 'null'
+      title: PaginationLinks
+    WebhookAuthenticationType:
+      type: string
+      enum:
+      - PASSWORD
+      - API_KEY
+      - NONE
+      description: The type of authentication used for the webhook.
+      title: WebhookAuthenticationType
     Webhook:
       type: object
       properties:
@@ -949,228 +1063,105 @@ components:
           - string
           - 'null'
       title: Webhook
-    WebhookAction:
+    WebhookUpdateRequest:
       type: object
       properties:
         object_type:
-          type: string
-        actions:
-          type: array
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        username:
+          type:
+          - string
+          - 'null'
+          description: The username used for basic authentication.
+        password:
+          type:
+          - string
+          - 'null'
+          description: The password used for basic authentication.
+        api_header_field:
+          type:
+          - string
+          - 'null'
+          description: The name of the header field for authentication with an API key.
+        api_key:
+          type:
+          - string
+          - 'null'
+          description: The value of for authentication with an API key.
+        url:
+          type:
+          - string
+          - 'null'
+          description: The url of the webhook where webhooks will be sent.
+        included_actions:
+          type:
+          - array
+          - 'null'
           items:
             type: string
-      title: WebhookAction
-    ApiError:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/ApiErrorType'
-        code:
-          $ref: '#/components/schemas/ApiErrorCode'
-        field:
+          description: The actions of which a webhook will be sent.
+        excluded_actions:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: The actions of which a webhook will not be sent.
+        active:
+          type: boolean
+          description: The status of the webhook.
+        penalty_box:
           type:
           - string
           - 'null'
-        message:
-          type: string
-        resource_id:
+        secret_key:
           type:
           - string
           - 'null'
-        resource_type:
+        signing_protocol:
+          type:
+          - string
+          - 'null'
+          description: The signing protocol for the webhook.
+        previous_secret_key:
+          type:
+          - string
+          - 'null'
+        previous_signing_protocol:
+          type:
+          - string
+          - 'null'
+        secret_rolled_at:
+          type:
+          - string
+          - 'null'
+          description: The instant when the secret was rolled.
+        include_previous_data:
+          type: boolean
+          description: Define whether the webhook payload include the previous status or only the current status
+        authentication_type:
+          $ref: '#/components/schemas/WebhookUpdateRequestAuthenticationType'
+          description: The type of authentication used for the webhook.
+        penalty_box_data:
           oneOf:
-          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - $ref: '#/components/schemas/PenaltyBoxDataUpdateRequest'
           - type: 'null'
-      required:
-      - type
-      - code
-      - message
-      title: ApiError
-    ApiErrorResourceType:
-      type: string
-      enum:
-      - CUSTOMER
-      - CUSTOM_FIELD
-      - PLATFORM
-      - PLATFORM_UPTODATE
-      - METER
-      - METER_VALUE
-      - METER_PROPERTY
-      - METER_VALUE_CALCULATION
-      - INGEST_DATA
-      - METER_DATA
-      - CHARGE_DATA
-      - PERSIST_DATA
-      - ADJUSTMENT_DATA
-      - PRODUCT_CATEGORY
-      - PRODUCT
-      - PRODUCT_ITEM
-      - PRICING
-      - PRICING_GROUP
-      - PRICING_ITEM
-      - PRICING_ITEM_CONFIG
-      - PRICING_PLAN_SUBSCRIPTION
-      - PRICING_PLAN_SUBSCRIPTION_GROUP
-      - PRICING_PLAN_SCHEDULE
-      - PRICING_PLAN
-      - PRICING_PLAN_VERSION
-      - QUOTE
-      - QUOTE_VERSION
-      - QUOTE_TEMPLATE
-      - API_KEY
-      - USER
-      - ROLE
-      - PROXY_USER
-      - EXTERNAL_CREDENTIALS
-      - TOKEN
-      - INVOICE
-      - E_INVOICE
-      - PDF
-      - BILLING_ENTITY
-      - FEATURE
-      - MEMBERSHIP
-      - PAYMENT
-      - PAYMENT_ACCEPTOR
-      - PAYMENT_METHOD
-      - PAYMENT_METHOD_OPTIONS
-      - PAYMENT_SCHEDULE
-      - PAYMENT_REQUEST
-      - INTEGRATION
-      - WEBHOOK
-      - FILE
-      - FILE_PROCESSING_SETTINGS
-      - TEAM
-      - DOWNLOAD_URL
-      - CSV_REPORT
-      - REPORT
-      - REPORT_GENERATE_REQUEST
-      - REPORT_CONFIGURATION
-      - REPORT_SUBSCRIPTION
-      - REPORT_DEFINITION
-      - ACCOUNT_GROUP
-      - ENTITY
-      - EVENT_TRACE
-      - EVENT_TRACE_LINK
-      - PRICING_CATEGORY
-      - CONTACT
-      - ALERT_RULE
-      - ALERT
-      - AUDIT_RECORD
-      - PORTAL_URL
-      - AUTHENTICATION_PROVIDER
-      - REPROCESS
-      - APPROVAL_POLICY
-      - APPROVAL_REQUEST
-      - BULK_ACTION
-      - COUPON
-      - PROMOTION_CODE
-      - WALLET
-      - WALLET_TYPE
-      - WALLET_GRANT
-      - WORKFLOW
-      - WORKFLOW_TRIGGER
-      - WORKFLOW_ACTION
-      - CREDIT_TYPE
-      - SIGNATURE_REQUEST
-      - ATTACHMENT
-      - DOCUMENT
-      title: ApiErrorResourceType
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
-    ApiErrorCode:
-      type: string
-      enum:
-      - RESOURCE_NOT_FOUND
-      - RESOURCES_NOT_FOUND
-      - UNABLE_TO_PROCESS_INSTRUCTIONS
-      - BAD_REQUEST
-      - UNSUPPORTED_MEDIA_TYPE
-      - RESOURCE_ALREADY_EXISTS
-      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
-      - COULD_NOT_CREATE_RESOURCE
-      - COULD_NOT_UPDATE_RESOURCE
-      - COULD_NOT_DELETE_RESOURCE
-      - MISSING_VERSION
-      - UNSUPPORTED_VERSION
-      - UNAUTHORISED
-      - CUSTOMER_NOT_FOUND
-      - PLATFORM_NOT_FOUND
-      - PRICING_PLAN_NOT_FOUND
-      - PRODUCT_NOT_FOUND
-      - PRODUCT_ITEM_NOT_FOUND
-      - PRICING_NOT_FOUND
-      - PRICING_ITEM_NOT_FOUND
-      - USER_NOT_FOUND
-      - METER_NOT_FOUND
-      - METER_VALUE_NOT_FOUND
-      - METER_PROPERTY_NOT_FOUND
-      - PRICING_ITEM_SUMMARIES_NOT_FOUND
-      - MISSING_ID
-      - INVALID_ID
-      - MISSING_REFERENCE
-      - MISSING_FIELD
-      - INVALID_FIELD
-      - INVALID_OPERATION
-      - INTERNAL_ERROR
-      - USER_NOT_ALLOWED
-      - IDEMPOTENCY_CHECK_FAILED
-      - INVALID_REQUEST
-      title: ApiErrorCode
-    PenaltyBoxDataUpdateRequest:
-      type: object
-      properties:
-        retry_count:
-          type:
-          - integer
-          - 'null'
-          description: Indicates the number of retries
-        retry_at:
+          description: Indicates if this webhook is in the penalty box
+        name:
           type:
           - string
           - 'null'
-          description: Indicates when it will be retried
-        cause:
+        reference:
           type:
           - string
           - 'null'
-          description: Indicates the cause why this webhook is in the penalty box
-        payload:
-          type:
-          - string
-          - 'null'
-          description: Indicates the payload sent for the webhook
-      title: PenaltyBoxDataUpdateRequest
-    PaginationLinks:
-      type: object
-      properties:
-        first:
-          type:
-          - string
-          - 'null'
-        previous:
-          type:
-          - string
-          - 'null'
-        current:
-          type:
-          - string
-          - 'null'
-        next:
-          type:
-          - string
-          - 'null'
-      title: PaginationLinks
-    WebhookUpdateRequestAuthenticationType:
-      type: string
-      enum:
-      - PASSWORD
-      - API_KEY
-      - NONE
-      description: The type of authentication used for the webhook.
-      title: WebhookUpdateRequestAuthenticationType
+      title: WebhookUpdateRequest
     PenaltyBoxData:
       type: object
       properties:
@@ -1298,14 +1289,24 @@ components:
       - name
       - reference
       title: WebhookCreateRequest
-    WebhookAuthenticationType:
+    WebhookCreateRequestAuthenticationType:
       type: string
       enum:
       - PASSWORD
       - API_KEY
       - NONE
       description: The type of authentication used for the webhook.
-      title: WebhookAuthenticationType
+      title: WebhookCreateRequestAuthenticationType
+    WebhookAction:
+      type: object
+      properties:
+        object_type:
+          type: string
+        actions:
+          type: array
+          items:
+            type: string
+      title: WebhookAction
     WebhookActionResponseWrapper:
       type: object
       properties:
@@ -1316,31 +1317,30 @@ components:
           items:
             $ref: '#/components/schemas/WebhookAction'
       title: WebhookActionResponseWrapper
-    WebhookResponseWrapper:
+    PenaltyBoxDataUpdateRequest:
       type: object
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Webhook'
-        limit:
+        retry_count:
           type:
           - integer
           - 'null'
-        page:
+          description: Indicates the number of retries
+        retry_at:
           type:
-          - integer
+          - string
           - 'null'
-        total_number_of_pages:
+          description: Indicates when it will be retried
+        cause:
           type:
-          - integer
+          - string
           - 'null'
-        links:
-          $ref: '#/components/schemas/PaginationLinks'
-      required:
-      - data
-      - links
-      title: WebhookResponseWrapper
+          description: Indicates the cause why this webhook is in the penalty box
+        payload:
+          type:
+          - string
+          - 'null'
+          description: Indicates the payload sent for the webhook
+      title: PenaltyBoxDataUpdateRequest
   securitySchemes:
     API-Key:
       type: apiKey

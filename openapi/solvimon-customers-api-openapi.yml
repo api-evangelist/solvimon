@@ -987,6 +987,65 @@ paths:
               $ref: '#/components/schemas/CustomerCreateRequest'
 components:
   schemas:
+    PricingPlanSubscriptionSelector:
+      type: object
+      properties:
+        data:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorData'
+        rules:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorRule'
+        filters:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFilter'
+        fallback:
+          oneOf:
+          - $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFallback'
+          - type: 'null'
+          description: The fallback logic what to do when no subscription is found. By default it is LATEST
+      title: PricingPlanSubscriptionSelector
+    NotificationChannelType:
+      type: string
+      enum:
+      - EMAIL
+      description: The channel type to use.
+      title: NotificationChannelType
+    PricingPlanSubscriptionSelectorFilterField:
+      type: string
+      enum:
+      - BILLING_ENTITY_REGISTERED_ADDRESS_COUNTRY
+      - PRICING_PLAN_REFERENCE
+      title: PricingPlanSubscriptionSelectorFilterField
+    Individual:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/Name'
+        residential_address:
+          $ref: '#/components/schemas/Address'
+      title: Individual
+    LinkDetail:
+      type: object
+      properties:
+        url:
+          type:
+          - string
+          - 'null'
+        custom_field_name:
+          type:
+          - string
+          - 'null'
+      title: LinkDetail
     TaxId:
       type: object
       properties:
@@ -1005,72 +1064,12 @@ components:
         tax_id_validation_result:
           $ref: '#/components/schemas/TaxIdValidation'
       title: TaxId
-    NotificationPreferenceType:
+    ApiErrorType:
       type: string
       enum:
-      - INVOICE
-      description: The notification type to configure.
-      title: NotificationPreferenceType
-    SearchFieldCreateRequest:
-      type: object
-      properties:
-        name:
-          type:
-          - string
-          - 'null'
-        value:
-          type: string
-        wildcard_start:
-          type: boolean
-        wildcard_end:
-          type: boolean
-        ignore_case:
-          type: boolean
-      title: SearchFieldCreateRequest
-    PricingPlanSubscriptionSelectorRuleField:
-      type: string
-      enum:
-      - BILLING_ENTITY_REGISTERED_ADDRESS_COUNTRY
-      - PRICING_PLAN_REFERENCE
-      title: PricingPlanSubscriptionSelectorRuleField
-    PaginationLinks:
-      type: object
-      properties:
-        first:
-          type:
-          - string
-          - 'null'
-        previous:
-          type:
-          - string
-          - 'null'
-        current:
-          type:
-          - string
-          - 'null'
-        next:
-          type:
-          - string
-          - 'null'
-      title: PaginationLinks
-    Amount:
-      type: object
-      properties:
-        quantity:
-          type: string
-        currency:
-          $ref: '#/components/schemas/AmountCurrency'
-      title: Amount
-    SelectionRuleFieldCreateRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        value:
-          type:
-          - string
-          - 'null'
-      title: SelectionRuleFieldCreateRequest
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
     FilterFieldCreateRequest:
       type: object
       properties:
@@ -1089,6 +1088,325 @@ components:
           items:
             type: string
       title: FilterFieldCreateRequest
+    EntitlementSummary:
+      type: object
+      properties:
+        pricing_plan_subscription_id:
+          type: string
+        entitlements:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntitlementSummaryItem'
+      title: EntitlementSummary
+    CustomerCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        parent_customer_id:
+          type:
+          - string
+          - 'null'
+          description: The parent of the customer. Only returned when there is a single parent.
+        parent_customer_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: A list of parents of the customer. Will also be returned if there is a single parent.
+        reference:
+          type: string
+          description: A custom reference assigned to the customer.
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/CustomerCreateRequestStatus'
+          - type: 'null'
+        timezone:
+          type:
+          - string
+          - 'null'
+        type:
+          $ref: '#/components/schemas/CustomerCreateRequestType'
+          description: The type of customer entity.
+        email:
+          type: string
+          description: The email of the customer.
+        notification_preferences:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/NotificationPreferenceCreateRequest'
+          description: Notification preferences for customer-related communications.
+        locale:
+          type:
+          - string
+          - 'null'
+          description: The locale of the customer. Format is language-country (like en-US).
+        individual:
+          $ref: '#/components/schemas/IndividualCreateRequest'
+          description: Additional description of the individual customer type.
+        organization:
+          $ref: '#/components/schemas/OrganizationCreateRequest'
+          description: Additional description of the organization customer type.
+        custom_fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomFieldValueCreateRequest'
+        processing_only:
+          type:
+          - boolean
+          - 'null'
+        pricing_plan_subscription_selector:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorCreateRequest'
+          description: Settings to influence dynamically the subscription to use for the ingest data.
+        linked_integrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/LinkedIntegrationCreateRequest'
+        roles:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomerCreateRequestRolesItems'
+        seller_details:
+          $ref: '#/components/schemas/CustomerSellerDetailsCreateRequest'
+      required:
+      - type
+      title: CustomerCreateRequest
+    SearchFieldCreateRequest:
+      type: object
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+        value:
+          type: string
+        wildcard_start:
+          type: boolean
+        wildcard_end:
+          type: boolean
+        ignore_case:
+          type: boolean
+      title: SearchFieldCreateRequest
+    NotificationPreferenceCreateRequestType:
+      type: string
+      enum:
+      - INVOICE
+      description: The notification type to configure.
+      title: NotificationPreferenceCreateRequestType
+    CustomerSellerDetails:
+      type: object
+      properties:
+        default_billing_entity_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type BILLING_ENTITY
+      title: CustomerSellerDetails
+    CustomerRolesItems:
+      type: string
+      enum:
+      - DEFAULT
+      - NON_PROCESSING
+      - SELF_BILLING
+      - SELLER
+      - PROCESSING_ONLY
+      title: CustomerRolesItems
+    PricingPlanSubscriptionSelectorRuleType:
+      type: string
+      enum:
+      - EQUALS
+      - NOT_EQUALS
+      - IN
+      - NOT_IN
+      - GREATER_THAN
+      - GREATER_THAN_OR_EQUALS
+      - LESS_THAN
+      - LESS_THAN_OR_EQUALS
+      - EMPTY
+      - NOT_EMPTY
+      - CONTAINS
+      - NOT_CONTAINS
+      title: PricingPlanSubscriptionSelectorRuleType
+    CustomerSellerDetailsCreateRequest:
+      type: object
+      properties:
+        default_billing_entity_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type BILLING_ENTITY
+      title: CustomerSellerDetailsCreateRequest
+    CustomerStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      - CLOSED
+      title: CustomerStatus
+    CustomerWalletBalanceStatus:
+      type: object
+      properties:
+        wallet_id:
+          type:
+          - string
+          - 'null'
+        wallet_balance:
+          oneOf:
+          - $ref: '#/components/schemas/WalletBalanceStatus'
+          - type: 'null'
+      title: CustomerWalletBalanceStatus
+    OrganizationUpdateRequest:
+      type: object
+      properties:
+        legal_name:
+          type: string
+        tax_id:
+          type:
+          - string
+          - 'null'
+          description: Tax Id used for tax purposes of the organization
+        tax_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaxId'
+          description: Tax Ids used for tax purposes of the organization
+        registration_number:
+          type:
+          - string
+          - 'null'
+        tax_exempt:
+          type:
+          - boolean
+          - 'null'
+        tax_exempt_note:
+          type:
+          - string
+          - 'null'
+        registered_address:
+          $ref: '#/components/schemas/Address'
+        tax_registrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaxRegistration'
+          description: Extra tax registrations for the customer
+      title: OrganizationUpdateRequest
+    PricingPlanSubscriptionSelectorUpdateRequest:
+      type: object
+      properties:
+        data:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorData'
+        rules:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorRule'
+        filters:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFilter'
+        fallback:
+          oneOf:
+          - $ref: '#/components/schemas/PricingPlanSubscriptionSelectorUpdateRequestFallback'
+          - type: 'null'
+          description: The fallback logic what to do when no subscription is found. By default it is LATEST
+      title: PricingPlanSubscriptionSelectorUpdateRequest
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
     CustomFieldValue:
       type: object
       properties:
@@ -1119,6 +1437,22 @@ components:
           type: string
           description: The resource ID of the integration linked to the custom field
       title: CustomFieldValue
+    CustomerCreateRequestType:
+      type: string
+      enum:
+      - ORGANIZATION
+      - INDIVIDUAL
+      description: The type of customer entity.
+      title: CustomerCreateRequestType
+    CustomerSellerDetailsUpdateRequest:
+      type: object
+      properties:
+        default_billing_entity_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type BILLING_ENTITY
+      title: CustomerSellerDetailsUpdateRequest
     Customer:
       type: object
       properties:
@@ -1209,19 +1543,112 @@ components:
         seller_details:
           $ref: '#/components/schemas/CustomerSellerDetails'
       title: Customer
-    NotificationPreferenceUpdateRequestType:
+    EntitlementSummaryItem:
+      type: object
+      properties:
+        feature_reference:
+          type:
+          - string
+          - 'null'
+        feature_id:
+          type:
+          - string
+          - 'null'
+        overwrite:
+          type:
+          - boolean
+          - 'null'
+        override:
+          type:
+          - boolean
+          - 'null'
+        number:
+          type:
+          - string
+          - 'null'
+        switch:
+          type:
+          - boolean
+          - 'null'
+        amount:
+          $ref: '#/components/schemas/Amount'
+        enums:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        strings:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+      title: EntitlementSummaryItem
+    TaxIdValidationWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaxIdValidation'
+      required:
+      - data
+      title: TaxIdValidationWrapper
+    CustomerType:
       type: string
       enum:
-      - INVOICE
-      description: The notification type to configure.
-      title: NotificationPreferenceUpdateRequestType
-    PricingPlanSubscriptionSelectorUpdateRequestFallback:
-      type: string
-      enum:
-      - LATEST
-      - NONE
-      description: The fallback logic what to do when no subscription is found. By default it is LATEST
-      title: PricingPlanSubscriptionSelectorUpdateRequestFallback
+      - ORGANIZATION
+      - INDIVIDUAL
+      description: The type of customer entity.
+      title: CustomerType
+    Organization:
+      type: object
+      properties:
+        legal_name:
+          type: string
+        tax_id:
+          type:
+          - string
+          - 'null'
+          description: Tax Id used for tax purposes of the organization
+        tax_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaxId'
+          description: Tax Ids used for tax purposes of the organization
+        registration_number:
+          type:
+          - string
+          - 'null'
+        tax_exempt:
+          type:
+          - boolean
+          - 'null'
+        tax_exempt_note:
+          type:
+          - string
+          - 'null'
+        registered_address:
+          $ref: '#/components/schemas/Address'
+        tax_registrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaxRegistration'
+          description: Extra tax registrations for the customer
+      title: Organization
+    Amount:
+      type: object
+      properties:
+        quantity:
+          type: string
+        currency:
+          $ref: '#/components/schemas/AmountCurrency'
+      title: Amount
     Credits:
       type: object
       properties:
@@ -1231,6 +1658,165 @@ components:
           type: string
           description: Resource ID of type CREDIT_TYPE
       title: Credits
+    CustomerWalletBalancesStatus:
+      type: object
+      properties:
+        wallet_balances:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomerWalletBalanceStatus'
+        balance_at:
+          type:
+          - string
+          - 'null'
+      title: CustomerWalletBalancesStatus
+    NotificationPreferenceUpdateRequestType:
+      type: string
+      enum:
+      - INVOICE
+      description: The notification type to configure.
+      title: NotificationPreferenceUpdateRequestType
+    WalletBalanceStatus:
+      type: object
+      properties:
+        balance:
+          oneOf:
+          - $ref: '#/components/schemas/WalletBalanceValue'
+          - type: 'null'
+        reserved_balance:
+          oneOf:
+          - $ref: '#/components/schemas/WalletBalanceValue'
+          - type: 'null'
+        open_balance:
+          oneOf:
+          - $ref: '#/components/schemas/WalletBalanceValue'
+          - type: 'null'
+        balance_at:
+          type:
+          - string
+          - 'null'
+      title: WalletBalanceStatus
+    SelectionRuleFieldCreateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type:
+          - string
+          - 'null'
+      title: SelectionRuleFieldCreateRequest
+    IntegrationDetails:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+        payment_gateway_variant:
+          $ref: '#/components/schemas/IntegrationDetailsPaymentGatewayVariant'
+        adyen:
+          $ref: '#/components/schemas/AdyenIntegrationDetails'
+        stripe:
+          $ref: '#/components/schemas/StripeIntegrationDetails'
+      title: IntegrationDetails
+    CustomerCreateRequestRolesItems:
+      type: string
+      enum:
+      - DEFAULT
+      - NON_PROCESSING
+      - SELF_BILLING
+      - SELLER
+      - PROCESSING_ONLY
+      title: CustomerCreateRequestRolesItems
+    TaxIdType:
+      type: string
+      enum:
+      - GENERIC_TAX_ID
+      - AU_GST
+      - CA_GST_HST
+      - CA_PST
+      - CA_PST_BC
+      - CA_PST_MB
+      - CA_PST_SK
+      - CA_QST
+      description: Optional tax id type, indicates which type of tax the number is for
+      title: TaxIdType
+    PricingPlanSubscriptionSelectorDataField:
+      type: string
+      enum:
+      - BILLING_ENTITY_REGISTERED_ADDRESS_COUNTRY
+      - PRICING_PLAN_REFERENCE
+      title: PricingPlanSubscriptionSelectorDataField
+    Name:
+      type: object
+      properties:
+        first_name:
+          type:
+          - string
+          - 'null'
+        last_name:
+          type:
+          - string
+          - 'null'
+        infix:
+          type:
+          - string
+          - 'null'
+      title: Name
+    TaxRegistration:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The id of this tax registration
+        description:
+          type:
+          - string
+          - 'null'
+          description: The description of this tax registration
+        tax_id:
+          type:
+          - string
+          - 'null'
+          description: The tax id of this tax registration, e.g. a TIN, VAT id or other tax number
+        tax_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaxId'
+          description: Tax IDs used for tax purposes of the tax registration, e.g. TINs, VAT ids, or other tax number
+        registration_number:
+          type:
+          - string
+          - 'null'
+          description: The registration number of this tax registration, e.g. a company registration number
+        registered_address:
+          $ref: '#/components/schemas/Address'
+          description: The address of this tax registration, if different from the billing entity. Currently, only the address will be used for tax calculations
+      title: TaxRegistration
+    StripeIntegrationDetails:
+      type: object
+      properties:
+        payment_method_id:
+          type: string
+      title: StripeIntegrationDetails
+    PricingPlanSubscriptionSelectorFallback:
+      type: string
+      enum:
+      - LATEST
+      - NONE
+      description: The fallback logic what to do when no subscription is found. By default it is LATEST
+      title: PricingPlanSubscriptionSelectorFallback
     CustomerUpdateRequestRolesItems:
       type: string
       enum:
@@ -1240,6 +1826,16 @@ components:
       - SELLER
       - PROCESSING_ONLY
       title: CustomerUpdateRequestRolesItems
+    PricingPlanSubscriptionSelectorFilter:
+      type: object
+      properties:
+        field:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFilterField'
+        type:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFilterType'
+        value:
+          type: string
+      title: PricingPlanSubscriptionSelectorFilter
     WalletBalanceValue:
       type: object
       properties:
@@ -1252,12 +1848,36 @@ components:
           - $ref: '#/components/schemas/Amount'
           - type: 'null'
       title: WalletBalanceValue
-    NotificationPreferenceCreateRequestType:
-      type: string
-      enum:
-      - INVOICE
-      description: The notification type to configure.
-      title: NotificationPreferenceCreateRequestType
+    IndividualCreateRequest:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/Name'
+        residential_address:
+          $ref: '#/components/schemas/Address'
+      title: IndividualCreateRequest
+    PricingPlanSubscriptionSelectorData:
+      type: object
+      properties:
+        field:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorDataField'
+        value:
+          type: string
+      title: PricingPlanSubscriptionSelectorData
+    NotificationPreferenceUpdateRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/NotificationPreferenceUpdateRequestType'
+          description: The notification type to configure.
+        channels:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/NotificationChannel'
+          description: The channels for this notification type.
+      title: NotificationPreferenceUpdateRequest
     CustomerUpdateRequest:
       type: object
       properties:
@@ -1348,6 +1968,388 @@ components:
         seller_details:
           $ref: '#/components/schemas/CustomerSellerDetailsUpdateRequest'
       title: CustomerUpdateRequest
+    TaxIdValidation:
+      type: object
+      properties:
+        id:
+          type: string
+        validation_date:
+          type: string
+        source:
+          type: string
+        valid:
+          $ref: '#/components/schemas/TaxIdValidationValid'
+        message:
+          type:
+          - string
+          - 'null'
+      title: TaxIdValidation
+    PricingPlanSubscriptionSelectorUpdateRequestFallback:
+      type: string
+      enum:
+      - LATEST
+      - NONE
+      description: The fallback logic what to do when no subscription is found. By default it is LATEST
+      title: PricingPlanSubscriptionSelectorUpdateRequestFallback
+    LinkedIntegrationCreateRequest:
+      type: object
+      properties:
+        id:
+          type: string
+        link_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/LinkDetail'
+      title: LinkedIntegrationCreateRequest
+    CustomerUpdateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      - CLOSED
+      title: CustomerUpdateRequestStatus
+    IndividualUpdateRequest:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/Name'
+        residential_address:
+          $ref: '#/components/schemas/Address'
+      title: IndividualUpdateRequest
+    LinkedIntegrationUpdateRequest:
+      type: object
+      properties:
+        id:
+          type: string
+        link_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/LinkDetail'
+      title: LinkedIntegrationUpdateRequest
+    CustomFieldValueCreateRequest:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOM_FIELD
+        reference:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+        values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        integration_details:
+          oneOf:
+          - $ref: '#/components/schemas/IntegrationDetails'
+          - type: 'null'
+        integration_id:
+          type: string
+          description: The resource ID of the integration linked to the custom field
+      title: CustomFieldValueCreateRequest
+    PricingPlanSubscriptionSelectorCreateRequestFallback:
+      type: string
+      enum:
+      - LATEST
+      - NONE
+      description: The fallback logic what to do when no subscription is found. By default it is LATEST
+      title: PricingPlanSubscriptionSelectorCreateRequestFallback
+    WalletBalanceStatusRequestCreateRequest:
+      type: object
+      properties:
+        balance_at:
+          type: string
+          format: date-time
+          description: The date of the balance determination. Default is now().
+      title: WalletBalanceStatusRequestCreateRequest
+    CustomerCreateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      - CLOSED
+      title: CustomerCreateRequestStatus
+    CustomFieldValueUpdateRequest:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOM_FIELD
+        reference:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+        values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        integration_details:
+          oneOf:
+          - $ref: '#/components/schemas/IntegrationDetails'
+          - type: 'null'
+        integration_id:
+          type: string
+          description: The resource ID of the integration linked to the custom field
+      title: CustomFieldValueUpdateRequest
+    OrganizationCreateRequest:
+      type: object
+      properties:
+        legal_name:
+          type: string
+        tax_id:
+          type:
+          - string
+          - 'null'
+          description: Tax Id used for tax purposes of the organization
+        tax_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaxId'
+          description: Tax Ids used for tax purposes of the organization
+        registration_number:
+          type:
+          - string
+          - 'null'
+        tax_exempt:
+          type:
+          - boolean
+          - 'null'
+        tax_exempt_note:
+          type:
+          - string
+          - 'null'
+        registered_address:
+          $ref: '#/components/schemas/Address'
+        tax_registrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaxRegistration'
+          description: Extra tax registrations for the customer
+      title: OrganizationCreateRequest
+    NotificationChannel:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/NotificationChannelType'
+          description: The channel type to use.
+        enabled:
+          type:
+          - boolean
+          - 'null'
+          description: Whether the channel is enabled for the notification type.
+      title: NotificationChannel
+    NotificationPreference:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/NotificationPreferenceType'
+          description: The notification type to configure.
+        channels:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/NotificationChannel'
+          description: The channels for this notification type.
+      title: NotificationPreference
+    AdyenIntegrationDetails:
+      type: object
+      properties:
+        recurring_detail_reference:
+          type: string
+      title: AdyenIntegrationDetails
+    IntegrationDetailsPaymentGatewayVariant:
+      type: string
+      enum:
+      - ADYEN
+      - STRIPE
+      title: IntegrationDetailsPaymentGatewayVariant
+    CustomerUpdateRequestType:
+      type: string
+      enum:
+      - ORGANIZATION
+      - INDIVIDUAL
+      description: The type of customer entity.
+      title: CustomerUpdateRequestType
+    TaxIdValidationValid:
+      type: string
+      enum:
+      - VALID
+      - NOT_VALID
+      - UNKNOWN
+      title: TaxIdValidationValid
+    ApiErrorResourceType:
+      type: string
+      enum:
+      - CUSTOMER
+      - CUSTOM_FIELD
+      - PLATFORM
+      - PLATFORM_UPTODATE
+      - METER
+      - METER_VALUE
+      - METER_PROPERTY
+      - METER_VALUE_CALCULATION
+      - INGEST_DATA
+      - METER_DATA
+      - CHARGE_DATA
+      - PERSIST_DATA
+      - ADJUSTMENT_DATA
+      - PRODUCT_CATEGORY
+      - PRODUCT
+      - PRODUCT_ITEM
+      - PRICING
+      - PRICING_GROUP
+      - PRICING_ITEM
+      - PRICING_ITEM_CONFIG
+      - PRICING_PLAN_SUBSCRIPTION
+      - PRICING_PLAN_SUBSCRIPTION_GROUP
+      - PRICING_PLAN_SCHEDULE
+      - PRICING_PLAN
+      - PRICING_PLAN_VERSION
+      - QUOTE
+      - QUOTE_VERSION
+      - QUOTE_TEMPLATE
+      - API_KEY
+      - USER
+      - ROLE
+      - PROXY_USER
+      - EXTERNAL_CREDENTIALS
+      - TOKEN
+      - INVOICE
+      - E_INVOICE
+      - PDF
+      - BILLING_ENTITY
+      - FEATURE
+      - MEMBERSHIP
+      - PAYMENT
+      - PAYMENT_ACCEPTOR
+      - PAYMENT_METHOD
+      - PAYMENT_METHOD_OPTIONS
+      - PAYMENT_SCHEDULE
+      - PAYMENT_REQUEST
+      - INTEGRATION
+      - WEBHOOK
+      - FILE
+      - FILE_PROCESSING_SETTINGS
+      - TEAM
+      - DOWNLOAD_URL
+      - CSV_REPORT
+      - REPORT
+      - REPORT_GENERATE_REQUEST
+      - REPORT_CONFIGURATION
+      - REPORT_SUBSCRIPTION
+      - REPORT_DEFINITION
+      - ACCOUNT_GROUP
+      - ENTITY
+      - EVENT_TRACE
+      - EVENT_TRACE_LINK
+      - PRICING_CATEGORY
+      - CONTACT
+      - ALERT_RULE
+      - ALERT
+      - AUDIT_RECORD
+      - PORTAL_URL
+      - AUTHENTICATION_PROVIDER
+      - REPROCESS
+      - APPROVAL_POLICY
+      - APPROVAL_REQUEST
+      - BULK_ACTION
+      - COUPON
+      - PROMOTION_CODE
+      - WALLET
+      - WALLET_TYPE
+      - WALLET_GRANT
+      - WORKFLOW
+      - WORKFLOW_TRIGGER
+      - WORKFLOW_ACTION
+      - CREDIT_TYPE
+      - SIGNATURE_REQUEST
+      - ATTACHMENT
+      - DOCUMENT
+      title: ApiErrorResourceType
+    Address:
+      type: object
+      properties:
+        line1:
+          type:
+          - string
+          - 'null'
+        line2:
+          type:
+          - string
+          - 'null'
+        city:
+          type:
+          - string
+          - 'null'
+        postal_code:
+          type:
+          - string
+          - 'null'
+        state:
+          type:
+          - string
+          - 'null'
+        country:
+          oneOf:
+          - $ref: '#/components/schemas/AddressCountry'
+          - type: 'null'
+      title: Address
+    Entitlements:
+      type: object
+      properties:
+        entitlements:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/EntitlementSummaryItem'
+        pricing_plan_subscription_entitlements:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/EntitlementSummary'
+      title: Entitlements
+    NotificationPreferenceCreateRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/NotificationPreferenceCreateRequestType'
+          description: The notification type to configure.
+        channels:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/NotificationChannel'
+          description: The channels for this notification type.
+      title: NotificationPreferenceCreateRequest
     AmountCurrency:
       type: string
       enum:
@@ -1528,20 +2530,44 @@ components:
       - ZMW
       - ZWL
       title: AmountCurrency
-    NotificationPreferenceUpdateRequest:
+    LinkedIntegration:
       type: object
       properties:
-        type:
-          $ref: '#/components/schemas/NotificationPreferenceUpdateRequestType'
-          description: The notification type to configure.
-        channels:
-          type:
-          - array
-          - 'null'
+        id:
+          type: string
+        link_details:
+          type: array
           items:
-            $ref: '#/components/schemas/NotificationChannel'
-          description: The channels for this notification type.
-      title: NotificationPreferenceUpdateRequest
+            $ref: '#/components/schemas/LinkDetail'
+      title: LinkedIntegration
+    PricingPlanSubscriptionSelectorRuleField:
+      type: string
+      enum:
+      - BILLING_ENTITY_REGISTERED_ADDRESS_COUNTRY
+      - PRICING_PLAN_REFERENCE
+      title: PricingPlanSubscriptionSelectorRuleField
+    SearchCreateRequest:
+      type: object
+      properties:
+        search_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchFieldCreateRequest'
+        filter_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/FilterFieldCreateRequest'
+        selection_rule_fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/SelectionRuleFieldCreateRequest'
+      title: SearchCreateRequest
+    NotificationPreferenceType:
+      type: string
+      enum:
+      - INVOICE
+      description: The notification type to configure.
+      title: NotificationPreferenceType
     CustomerResponseWrapper:
       type: object
       properties:
@@ -1566,163 +2592,6 @@ components:
       required:
       - data
       title: CustomerResponseWrapper
-    OrganizationCreateRequest:
-      type: object
-      properties:
-        legal_name:
-          type: string
-        tax_id:
-          type:
-          - string
-          - 'null'
-          description: Tax Id used for tax purposes of the organization
-        tax_ids:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/TaxId'
-          description: Tax Ids used for tax purposes of the organization
-        registration_number:
-          type:
-          - string
-          - 'null'
-        tax_exempt:
-          type:
-          - boolean
-          - 'null'
-        tax_exempt_note:
-          type:
-          - string
-          - 'null'
-        registered_address:
-          $ref: '#/components/schemas/Address'
-        tax_registrations:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/TaxRegistration'
-          description: Extra tax registrations for the customer
-      title: OrganizationCreateRequest
-    NotificationChannel:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/NotificationChannelType'
-          description: The channel type to use.
-        enabled:
-          type:
-          - boolean
-          - 'null'
-          description: Whether the channel is enabled for the notification type.
-      title: NotificationChannel
-    CustomerType:
-      type: string
-      enum:
-      - ORGANIZATION
-      - INDIVIDUAL
-      description: The type of customer entity.
-      title: CustomerType
-    ApiError:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/ApiErrorType'
-        code:
-          $ref: '#/components/schemas/ApiErrorCode'
-        field:
-          type:
-          - string
-          - 'null'
-        message:
-          type: string
-        resource_id:
-          type:
-          - string
-          - 'null'
-        resource_type:
-          oneOf:
-          - $ref: '#/components/schemas/ApiErrorResourceType'
-          - type: 'null'
-      required:
-      - type
-      - code
-      - message
-      title: ApiError
-    NotificationPreference:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/NotificationPreferenceType'
-          description: The notification type to configure.
-        channels:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/NotificationChannel'
-          description: The channels for this notification type.
-      title: NotificationPreference
-    CustomerWalletBalanceStatus:
-      type: object
-      properties:
-        wallet_id:
-          type:
-          - string
-          - 'null'
-        wallet_balance:
-          oneOf:
-          - $ref: '#/components/schemas/WalletBalanceStatus'
-          - type: 'null'
-      title: CustomerWalletBalanceStatus
-    PricingPlanSubscriptionSelector:
-      type: object
-      properties:
-        data:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorData'
-        rules:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorRule'
-        filters:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFilter'
-        fallback:
-          oneOf:
-          - $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFallback'
-          - type: 'null'
-          description: The fallback logic what to do when no subscription is found. By default it is LATEST
-      title: PricingPlanSubscriptionSelector
-    LinkDetail:
-      type: object
-      properties:
-        url:
-          type:
-          - string
-          - 'null'
-        custom_field_name:
-          type:
-          - string
-          - 'null'
-      title: LinkDetail
-    WalletBalanceStatusRequestCreateRequest:
-      type: object
-      properties:
-        balance_at:
-          type: string
-          format: date-time
-          description: The date of the balance determination. Default is now().
-      title: WalletBalanceStatusRequestCreateRequest
     PricingPlanSubscriptionSelectorFilterType:
       type: string
       enum:
@@ -1739,532 +2608,14 @@ components:
       - CONTAINS
       - NOT_CONTAINS
       title: PricingPlanSubscriptionSelectorFilterType
-    CustomFieldValueCreateRequest:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type CUSTOM_FIELD
-        reference:
-          type:
-          - string
-          - 'null'
-        value:
-          type:
-          - string
-          - 'null'
-        values:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-        integration_details:
-          oneOf:
-          - $ref: '#/components/schemas/IntegrationDetails'
-          - type: 'null'
-        integration_id:
-          type: string
-          description: The resource ID of the integration linked to the custom field
-      title: CustomFieldValueCreateRequest
-    CustomerUpdateRequestType:
-      type: string
-      enum:
-      - ORGANIZATION
-      - INDIVIDUAL
-      description: The type of customer entity.
-      title: CustomerUpdateRequestType
-    CustomerCreateRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        created_at:
-          type:
-          - string
-          - 'null'
-        parent_customer_id:
-          type:
-          - string
-          - 'null'
-          description: The parent of the customer. Only returned when there is a single parent.
-        parent_customer_ids:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: A list of parents of the customer. Will also be returned if there is a single parent.
-        reference:
-          type: string
-          description: A custom reference assigned to the customer.
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/CustomerCreateRequestStatus'
-          - type: 'null'
-        timezone:
-          type:
-          - string
-          - 'null'
-        type:
-          $ref: '#/components/schemas/CustomerCreateRequestType'
-          description: The type of customer entity.
-        email:
-          type: string
-          description: The email of the customer.
-        notification_preferences:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/NotificationPreferenceCreateRequest'
-          description: Notification preferences for customer-related communications.
-        locale:
-          type:
-          - string
-          - 'null'
-          description: The locale of the customer. Format is language-country (like en-US).
-        individual:
-          $ref: '#/components/schemas/IndividualCreateRequest'
-          description: Additional description of the individual customer type.
-        organization:
-          $ref: '#/components/schemas/OrganizationCreateRequest'
-          description: Additional description of the organization customer type.
-        custom_fields:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CustomFieldValueCreateRequest'
-        processing_only:
-          type:
-          - boolean
-          - 'null'
-        pricing_plan_subscription_selector:
-          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorCreateRequest'
-          description: Settings to influence dynamically the subscription to use for the ingest data.
-        linked_integrations:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/LinkedIntegrationCreateRequest'
-        roles:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CustomerCreateRequestRolesItems'
-        seller_details:
-          $ref: '#/components/schemas/CustomerSellerDetailsCreateRequest'
-      required:
-      - type
-      title: CustomerCreateRequest
-    CustomerSellerDetails:
-      type: object
-      properties:
-        default_billing_entity_id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type BILLING_ENTITY
-      title: CustomerSellerDetails
-    IndividualUpdateRequest:
-      type: object
-      properties:
-        name:
-          $ref: '#/components/schemas/Name'
-        residential_address:
-          $ref: '#/components/schemas/Address'
-      title: IndividualUpdateRequest
-    EntitlementSummaryItem:
-      type: object
-      properties:
-        feature_reference:
-          type:
-          - string
-          - 'null'
-        feature_id:
-          type:
-          - string
-          - 'null'
-        overwrite:
-          type:
-          - boolean
-          - 'null'
-        override:
-          type:
-          - boolean
-          - 'null'
-        number:
-          type:
-          - string
-          - 'null'
-        switch:
-          type:
-          - boolean
-          - 'null'
-        amount:
-          $ref: '#/components/schemas/Amount'
-        enums:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-        strings:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-      title: EntitlementSummaryItem
-    NotificationChannelType:
-      type: string
-      enum:
-      - EMAIL
-      description: The channel type to use.
-      title: NotificationChannelType
-    Entitlements:
-      type: object
-      properties:
-        entitlements:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/EntitlementSummaryItem'
-        pricing_plan_subscription_entitlements:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/EntitlementSummary'
-      title: Entitlements
-    LinkedIntegrationCreateRequest:
-      type: object
-      properties:
-        id:
-          type: string
-        link_details:
-          type: array
-          items:
-            $ref: '#/components/schemas/LinkDetail'
-      title: LinkedIntegrationCreateRequest
-    PricingPlanSubscriptionSelectorUpdateRequest:
-      type: object
-      properties:
-        data:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorData'
-        rules:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorRule'
-        filters:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFilter'
-        fallback:
-          oneOf:
-          - $ref: '#/components/schemas/PricingPlanSubscriptionSelectorUpdateRequestFallback'
-          - type: 'null'
-          description: The fallback logic what to do when no subscription is found. By default it is LATEST
-      title: PricingPlanSubscriptionSelectorUpdateRequest
-    OrganizationUpdateRequest:
-      type: object
-      properties:
-        legal_name:
-          type: string
-        tax_id:
-          type:
-          - string
-          - 'null'
-          description: Tax Id used for tax purposes of the organization
-        tax_ids:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/TaxId'
-          description: Tax Ids used for tax purposes of the organization
-        registration_number:
-          type:
-          - string
-          - 'null'
-        tax_exempt:
-          type:
-          - boolean
-          - 'null'
-        tax_exempt_note:
-          type:
-          - string
-          - 'null'
-        registered_address:
-          $ref: '#/components/schemas/Address'
-        tax_registrations:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/TaxRegistration'
-          description: Extra tax registrations for the customer
-      title: OrganizationUpdateRequest
-    CustomerStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - ARCHIVED
-      - DEPRECATED
-      - CLOSED
-      title: CustomerStatus
-    PricingPlanSubscriptionSelectorData:
+    PricingPlanSubscriptionSelectorRule:
       type: object
       properties:
         field:
-          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorDataField'
-        value:
-          type: string
-      title: PricingPlanSubscriptionSelectorData
-    ApiErrorCode:
-      type: string
-      enum:
-      - RESOURCE_NOT_FOUND
-      - RESOURCES_NOT_FOUND
-      - UNABLE_TO_PROCESS_INSTRUCTIONS
-      - BAD_REQUEST
-      - UNSUPPORTED_MEDIA_TYPE
-      - RESOURCE_ALREADY_EXISTS
-      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
-      - COULD_NOT_CREATE_RESOURCE
-      - COULD_NOT_UPDATE_RESOURCE
-      - COULD_NOT_DELETE_RESOURCE
-      - MISSING_VERSION
-      - UNSUPPORTED_VERSION
-      - UNAUTHORISED
-      - CUSTOMER_NOT_FOUND
-      - PLATFORM_NOT_FOUND
-      - PRICING_PLAN_NOT_FOUND
-      - PRODUCT_NOT_FOUND
-      - PRODUCT_ITEM_NOT_FOUND
-      - PRICING_NOT_FOUND
-      - PRICING_ITEM_NOT_FOUND
-      - USER_NOT_FOUND
-      - METER_NOT_FOUND
-      - METER_VALUE_NOT_FOUND
-      - METER_PROPERTY_NOT_FOUND
-      - PRICING_ITEM_SUMMARIES_NOT_FOUND
-      - MISSING_ID
-      - INVALID_ID
-      - MISSING_REFERENCE
-      - MISSING_FIELD
-      - INVALID_FIELD
-      - INVALID_OPERATION
-      - INTERNAL_ERROR
-      - USER_NOT_ALLOWED
-      - IDEMPOTENCY_CHECK_FAILED
-      - INVALID_REQUEST
-      title: ApiErrorCode
-    EntitlementSummary:
-      type: object
-      properties:
-        pricing_plan_subscription_id:
-          type: string
-        entitlements:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntitlementSummaryItem'
-      title: EntitlementSummary
-    SearchCreateRequest:
-      type: object
-      properties:
-        search_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/SearchFieldCreateRequest'
-        filter_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/FilterFieldCreateRequest'
-        selection_rule_fields:
-          type: array
-          items:
-            $ref: '#/components/schemas/SelectionRuleFieldCreateRequest'
-      title: SearchCreateRequest
-    PricingPlanSubscriptionSelectorCreateRequest:
-      type: object
-      properties:
-        data:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorData'
-        rules:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorRule'
-        filters:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFilter'
-        fallback:
-          oneOf:
-          - $ref: '#/components/schemas/PricingPlanSubscriptionSelectorCreateRequestFallback'
-          - type: 'null'
-          description: The fallback logic what to do when no subscription is found. By default it is LATEST
-      title: PricingPlanSubscriptionSelectorCreateRequest
-    CustomerCreateRequestRolesItems:
-      type: string
-      enum:
-      - DEFAULT
-      - NON_PROCESSING
-      - SELF_BILLING
-      - SELLER
-      - PROCESSING_ONLY
-      title: CustomerCreateRequestRolesItems
-    TaxIdValidationWrapper:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/TaxIdValidation'
-      required:
-      - data
-      title: TaxIdValidationWrapper
-    IntegrationDetailsPaymentGatewayVariant:
-      type: string
-      enum:
-      - ADYEN
-      - STRIPE
-      title: IntegrationDetailsPaymentGatewayVariant
-    CustomerUpdateRequestStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - ARCHIVED
-      - DEPRECATED
-      - CLOSED
-      title: CustomerUpdateRequestStatus
-    PricingPlanSubscriptionSelectorFilterField:
-      type: string
-      enum:
-      - BILLING_ENTITY_REGISTERED_ADDRESS_COUNTRY
-      - PRICING_PLAN_REFERENCE
-      title: PricingPlanSubscriptionSelectorFilterField
-    WalletBalanceStatus:
-      type: object
-      properties:
-        balance:
-          oneOf:
-          - $ref: '#/components/schemas/WalletBalanceValue'
-          - type: 'null'
-        reserved_balance:
-          oneOf:
-          - $ref: '#/components/schemas/WalletBalanceValue'
-          - type: 'null'
-        open_balance:
-          oneOf:
-          - $ref: '#/components/schemas/WalletBalanceValue'
-          - type: 'null'
-        balance_at:
-          type:
-          - string
-          - 'null'
-      title: WalletBalanceStatus
-    PricingPlanSubscriptionSelectorCreateRequestFallback:
-      type: string
-      enum:
-      - LATEST
-      - NONE
-      description: The fallback logic what to do when no subscription is found. By default it is LATEST
-      title: PricingPlanSubscriptionSelectorCreateRequestFallback
-    NotificationPreferenceCreateRequest:
-      type: object
-      properties:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorRuleField'
         type:
-          $ref: '#/components/schemas/NotificationPreferenceCreateRequestType'
-          description: The notification type to configure.
-        channels:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/NotificationChannel'
-          description: The channels for this notification type.
-      title: NotificationPreferenceCreateRequest
-    CustomerSellerDetailsUpdateRequest:
-      type: object
-      properties:
-        default_billing_entity_id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type BILLING_ENTITY
-      title: CustomerSellerDetailsUpdateRequest
-    AdyenIntegrationDetails:
-      type: object
-      properties:
-        recurring_detail_reference:
-          type: string
-      title: AdyenIntegrationDetails
-    PricingPlanSubscriptionSelectorFallback:
-      type: string
-      enum:
-      - LATEST
-      - NONE
-      description: The fallback logic what to do when no subscription is found. By default it is LATEST
-      title: PricingPlanSubscriptionSelectorFallback
-    LinkedIntegration:
-      type: object
-      properties:
-        id:
-          type: string
-        link_details:
-          type: array
-          items:
-            $ref: '#/components/schemas/LinkDetail'
-      title: LinkedIntegration
-    CustomerCreateRequestStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - ARCHIVED
-      - DEPRECATED
-      - CLOSED
-      title: CustomerCreateRequestStatus
-    CustomerRolesItems:
-      type: string
-      enum:
-      - DEFAULT
-      - NON_PROCESSING
-      - SELF_BILLING
-      - SELLER
-      - PROCESSING_ONLY
-      title: CustomerRolesItems
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorRuleType'
+      title: PricingPlanSubscriptionSelectorRule
     AddressCountry:
       type: string
       enum:
@@ -2517,404 +2868,53 @@ components:
       - ZM
       - ZW
       title: AddressCountry
-    IndividualCreateRequest:
+    PaginationLinks:
       type: object
       properties:
-        name:
-          $ref: '#/components/schemas/Name'
-        residential_address:
-          $ref: '#/components/schemas/Address'
-      title: IndividualCreateRequest
-    TaxIdValidationValid:
-      type: string
-      enum:
-      - VALID
-      - NOT_VALID
-      - UNKNOWN
-      title: TaxIdValidationValid
-    IntegrationDetails:
-      type: object
-      properties:
-        id:
+        first:
           type:
           - string
           - 'null'
-        reference:
+        previous:
           type:
           - string
           - 'null'
-        payment_gateway_variant:
-          $ref: '#/components/schemas/IntegrationDetailsPaymentGatewayVariant'
-        adyen:
-          $ref: '#/components/schemas/AdyenIntegrationDetails'
-        stripe:
-          $ref: '#/components/schemas/StripeIntegrationDetails'
-      title: IntegrationDetails
-    Individual:
-      type: object
-      properties:
-        name:
-          $ref: '#/components/schemas/Name'
-        residential_address:
-          $ref: '#/components/schemas/Address'
-      title: Individual
-    StripeIntegrationDetails:
-      type: object
-      properties:
-        payment_method_id:
-          type: string
-      title: StripeIntegrationDetails
-    Organization:
-      type: object
-      properties:
-        legal_name:
-          type: string
-        tax_id:
+        current:
           type:
           - string
           - 'null'
-          description: Tax Id used for tax purposes of the organization
-        tax_ids:
+        next:
+          type:
+          - string
+          - 'null'
+      title: PaginationLinks
+    PricingPlanSubscriptionSelectorCreateRequest:
+      type: object
+      properties:
+        data:
           type:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/TaxId'
-          description: Tax Ids used for tax purposes of the organization
-        registration_number:
-          type:
-          - string
-          - 'null'
-        tax_exempt:
-          type:
-          - boolean
-          - 'null'
-        tax_exempt_note:
-          type:
-          - string
-          - 'null'
-        registered_address:
-          $ref: '#/components/schemas/Address'
-        tax_registrations:
+            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorData'
+        rules:
           type:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/TaxRegistration'
-          description: Extra tax registrations for the customer
-      title: Organization
-    ApiErrorResourceType:
-      type: string
-      enum:
-      - CUSTOMER
-      - CUSTOM_FIELD
-      - PLATFORM
-      - PLATFORM_UPTODATE
-      - METER
-      - METER_VALUE
-      - METER_PROPERTY
-      - METER_VALUE_CALCULATION
-      - INGEST_DATA
-      - METER_DATA
-      - CHARGE_DATA
-      - PERSIST_DATA
-      - ADJUSTMENT_DATA
-      - PRODUCT_CATEGORY
-      - PRODUCT
-      - PRODUCT_ITEM
-      - PRICING
-      - PRICING_GROUP
-      - PRICING_ITEM
-      - PRICING_ITEM_CONFIG
-      - PRICING_PLAN_SUBSCRIPTION
-      - PRICING_PLAN_SUBSCRIPTION_GROUP
-      - PRICING_PLAN_SCHEDULE
-      - PRICING_PLAN
-      - PRICING_PLAN_VERSION
-      - QUOTE
-      - QUOTE_VERSION
-      - QUOTE_TEMPLATE
-      - API_KEY
-      - USER
-      - ROLE
-      - PROXY_USER
-      - EXTERNAL_CREDENTIALS
-      - TOKEN
-      - INVOICE
-      - E_INVOICE
-      - PDF
-      - BILLING_ENTITY
-      - FEATURE
-      - MEMBERSHIP
-      - PAYMENT
-      - PAYMENT_ACCEPTOR
-      - PAYMENT_METHOD
-      - PAYMENT_METHOD_OPTIONS
-      - PAYMENT_SCHEDULE
-      - PAYMENT_REQUEST
-      - INTEGRATION
-      - WEBHOOK
-      - FILE
-      - FILE_PROCESSING_SETTINGS
-      - TEAM
-      - DOWNLOAD_URL
-      - CSV_REPORT
-      - REPORT
-      - REPORT_GENERATE_REQUEST
-      - REPORT_CONFIGURATION
-      - REPORT_SUBSCRIPTION
-      - REPORT_DEFINITION
-      - ACCOUNT_GROUP
-      - ENTITY
-      - EVENT_TRACE
-      - EVENT_TRACE_LINK
-      - PRICING_CATEGORY
-      - CONTACT
-      - ALERT_RULE
-      - ALERT
-      - AUDIT_RECORD
-      - PORTAL_URL
-      - AUTHENTICATION_PROVIDER
-      - REPROCESS
-      - APPROVAL_POLICY
-      - APPROVAL_REQUEST
-      - BULK_ACTION
-      - COUPON
-      - PROMOTION_CODE
-      - WALLET
-      - WALLET_TYPE
-      - WALLET_GRANT
-      - WORKFLOW
-      - WORKFLOW_TRIGGER
-      - WORKFLOW_ACTION
-      - CREDIT_TYPE
-      - SIGNATURE_REQUEST
-      - ATTACHMENT
-      - DOCUMENT
-      title: ApiErrorResourceType
-    CustomFieldValueUpdateRequest:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type CUSTOM_FIELD
-        reference:
-          type:
-          - string
-          - 'null'
-        value:
-          type:
-          - string
-          - 'null'
-        values:
+            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorRule'
+        filters:
           type:
           - array
           - 'null'
           items:
-            type: string
-        integration_details:
+            $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFilter'
+        fallback:
           oneOf:
-          - $ref: '#/components/schemas/IntegrationDetails'
+          - $ref: '#/components/schemas/PricingPlanSubscriptionSelectorCreateRequestFallback'
           - type: 'null'
-        integration_id:
-          type: string
-          description: The resource ID of the integration linked to the custom field
-      title: CustomFieldValueUpdateRequest
-    PricingPlanSubscriptionSelectorDataField:
-      type: string
-      enum:
-      - BILLING_ENTITY_REGISTERED_ADDRESS_COUNTRY
-      - PRICING_PLAN_REFERENCE
-      title: PricingPlanSubscriptionSelectorDataField
-    TaxIdValidation:
-      type: object
-      properties:
-        id:
-          type: string
-        validation_date:
-          type: string
-        source:
-          type: string
-        valid:
-          $ref: '#/components/schemas/TaxIdValidationValid'
-        message:
-          type:
-          - string
-          - 'null'
-      title: TaxIdValidation
-    TaxRegistration:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: The id of this tax registration
-        description:
-          type:
-          - string
-          - 'null'
-          description: The description of this tax registration
-        tax_id:
-          type:
-          - string
-          - 'null'
-          description: The tax id of this tax registration, e.g. a TIN, VAT id or other tax number
-        tax_ids:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/TaxId'
-          description: Tax IDs used for tax purposes of the tax registration, e.g. TINs, VAT ids, or other tax number
-        registration_number:
-          type:
-          - string
-          - 'null'
-          description: The registration number of this tax registration, e.g. a company registration number
-        registered_address:
-          $ref: '#/components/schemas/Address'
-          description: The address of this tax registration, if different from the billing entity. Currently, only the address will be used for tax calculations
-      title: TaxRegistration
-    CustomerWalletBalancesStatus:
-      type: object
-      properties:
-        wallet_balances:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CustomerWalletBalanceStatus'
-        balance_at:
-          type:
-          - string
-          - 'null'
-      title: CustomerWalletBalancesStatus
-    TaxIdType:
-      type: string
-      enum:
-      - GENERIC_TAX_ID
-      - AU_GST
-      - CA_GST_HST
-      - CA_PST
-      - CA_PST_BC
-      - CA_PST_MB
-      - CA_PST_SK
-      - CA_QST
-      description: Optional tax id type, indicates which type of tax the number is for
-      title: TaxIdType
-    PricingPlanSubscriptionSelectorRuleType:
-      type: string
-      enum:
-      - EQUALS
-      - NOT_EQUALS
-      - IN
-      - NOT_IN
-      - GREATER_THAN
-      - GREATER_THAN_OR_EQUALS
-      - LESS_THAN
-      - LESS_THAN_OR_EQUALS
-      - EMPTY
-      - NOT_EMPTY
-      - CONTAINS
-      - NOT_CONTAINS
-      title: PricingPlanSubscriptionSelectorRuleType
-    Address:
-      type: object
-      properties:
-        line1:
-          type:
-          - string
-          - 'null'
-        line2:
-          type:
-          - string
-          - 'null'
-        city:
-          type:
-          - string
-          - 'null'
-        postal_code:
-          type:
-          - string
-          - 'null'
-        state:
-          type:
-          - string
-          - 'null'
-        country:
-          oneOf:
-          - $ref: '#/components/schemas/AddressCountry'
-          - type: 'null'
-      title: Address
-    CustomerSellerDetailsCreateRequest:
-      type: object
-      properties:
-        default_billing_entity_id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type BILLING_ENTITY
-      title: CustomerSellerDetailsCreateRequest
-    PricingPlanSubscriptionSelectorFilter:
-      type: object
-      properties:
-        field:
-          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFilterField'
-        type:
-          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFilterType'
-        value:
-          type: string
-      title: PricingPlanSubscriptionSelectorFilter
-    Name:
-      type: object
-      properties:
-        first_name:
-          type:
-          - string
-          - 'null'
-        last_name:
-          type:
-          - string
-          - 'null'
-        infix:
-          type:
-          - string
-          - 'null'
-      title: Name
-    PricingPlanSubscriptionSelectorRule:
-      type: object
-      properties:
-        field:
-          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorRuleField'
-        type:
-          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorRuleType'
-      title: PricingPlanSubscriptionSelectorRule
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
-    CustomerCreateRequestType:
-      type: string
-      enum:
-      - ORGANIZATION
-      - INDIVIDUAL
-      description: The type of customer entity.
-      title: CustomerCreateRequestType
-    LinkedIntegrationUpdateRequest:
-      type: object
-      properties:
-        id:
-          type: string
-        link_details:
-          type: array
-          items:
-            $ref: '#/components/schemas/LinkDetail'
-      title: LinkedIntegrationUpdateRequest
+          description: The fallback logic what to do when no subscription is found. By default it is LATEST
+      title: PricingPlanSubscriptionSelectorCreateRequest
   securitySchemes:
     API-Key:
       type: apiKey

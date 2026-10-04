@@ -364,27 +364,15 @@ paths:
                 $ref: '#/components/schemas/ApiError'
 components:
   schemas:
-    Reviewer:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-        status:
-          type:
-          - string
-          - 'null'
-          description: The status that the reviewer gave for the Approval Request.
-        reviewed_at:
-          type:
-          - string
-          - 'null'
-          description: The date when the reviewer approve/declined the Approval Request.
-        level:
-          type: integer
-          description: The hierarchy of the reviewer
-      title: Reviewer
+    ApprovalRequestStatus:
+      type: string
+      enum:
+      - PENDING_REVIEW
+      - APPROVED
+      - DECLINED
+      - CANCELLED
+      description: The current status of the Approval Request.
+      title: ApprovalRequestStatus
     ApprovalRequest:
       type: object
       properties:
@@ -450,6 +438,51 @@ components:
           - type: 'null'
           description: Approval Strategy applied in the Approval Request.
       title: ApprovalRequest
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
     ApiErrorResourceType:
       type: string
       enum:
@@ -539,6 +572,31 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
+    ApprovalRequestResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalRequest'
+        limit:
+          type:
+          - integer
+          - 'null'
+        page:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      - links
+      title: ApprovalRequestResponseWrapper
     ApiError:
       type: object
       properties:
@@ -565,60 +623,6 @@ components:
       - code
       - message
       title: ApiError
-    ApprovalRequestStatus:
-      type: string
-      enum:
-      - PENDING_REVIEW
-      - APPROVED
-      - DECLINED
-      - CANCELLED
-      description: The current status of the Approval Request.
-      title: ApprovalRequestStatus
-    ApiErrorCode:
-      type: string
-      enum:
-      - RESOURCE_NOT_FOUND
-      - RESOURCES_NOT_FOUND
-      - UNABLE_TO_PROCESS_INSTRUCTIONS
-      - BAD_REQUEST
-      - UNSUPPORTED_MEDIA_TYPE
-      - RESOURCE_ALREADY_EXISTS
-      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
-      - COULD_NOT_CREATE_RESOURCE
-      - COULD_NOT_UPDATE_RESOURCE
-      - COULD_NOT_DELETE_RESOURCE
-      - MISSING_VERSION
-      - UNSUPPORTED_VERSION
-      - UNAUTHORISED
-      - CUSTOMER_NOT_FOUND
-      - PLATFORM_NOT_FOUND
-      - PRICING_PLAN_NOT_FOUND
-      - PRODUCT_NOT_FOUND
-      - PRODUCT_ITEM_NOT_FOUND
-      - PRICING_NOT_FOUND
-      - PRICING_ITEM_NOT_FOUND
-      - USER_NOT_FOUND
-      - METER_NOT_FOUND
-      - METER_VALUE_NOT_FOUND
-      - METER_PROPERTY_NOT_FOUND
-      - PRICING_ITEM_SUMMARIES_NOT_FOUND
-      - MISSING_ID
-      - INVALID_ID
-      - MISSING_REFERENCE
-      - MISSING_FIELD
-      - INVALID_FIELD
-      - INVALID_OPERATION
-      - INTERNAL_ERROR
-      - USER_NOT_ALLOWED
-      - IDEMPOTENCY_CHECK_FAILED
-      - INVALID_REQUEST
-      title: ApiErrorCode
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
     PaginationLinks:
       type: object
       properties:
@@ -646,6 +650,27 @@ components:
       - INVOICE
       description: The object type in which this Approval Request was triggered. I.e. QUOTE_VERSION.
       title: ApprovalRequestSourceType
+    Reviewer:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        status:
+          type:
+          - string
+          - 'null'
+          description: The status that the reviewer gave for the Approval Request.
+        reviewed_at:
+          type:
+          - string
+          - 'null'
+          description: The date when the reviewer approve/declined the Approval Request.
+        level:
+          type: integer
+          description: The hierarchy of the reviewer
+      title: Reviewer
     ApprovalRequestApprovalStrategy:
       type: string
       enum:
@@ -654,31 +679,6 @@ components:
       - ANYONE_CAN_DECIDE
       description: Approval Strategy applied in the Approval Request.
       title: ApprovalRequestApprovalStrategy
-    ApprovalRequestResponseWrapper:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApprovalRequest'
-        limit:
-          type:
-          - integer
-          - 'null'
-        page:
-          type:
-          - integer
-          - 'null'
-        total_number_of_pages:
-          type:
-          - integer
-          - 'null'
-        links:
-          $ref: '#/components/schemas/PaginationLinks'
-      required:
-      - data
-      - links
-      title: ApprovalRequestResponseWrapper
   securitySchemes:
     API-Key:
       type: apiKey

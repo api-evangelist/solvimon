@@ -535,32 +535,367 @@ paths:
                 $ref: '#/components/schemas/ApiError'
 components:
   schemas:
-    ApprovalGroup:
+    ApprovalPolicyCommitment:
       type: object
       properties:
-        level:
-          type: integer
-          description: The hierarchy of the users
-        approvers:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApprovalPolicyApprover'
-          description: The users who are allowed to review and approve/decline the approval review.
-      title: ApprovalGroup
-    ApprovalPolicyRuleType:
+        amount:
+          $ref: '#/components/schemas/Amount'
+          description: The commitment amount that will be tested for the rule.
+      title: ApprovalPolicyCommitment
+    ApprovalPolicyRuleComparator:
       type: string
       enum:
-      - ALWAYS_APPROVE
-      - DISCOUNT
-      - COMMITMENT
-      - PRICING
+      - LESS_THAN
+      - LESS_THAN_OR_EQUALS
+      - EQUALS
+      - GREATER_THAN_OR_EQUALS
+      - GREATER_THAN
+      description: Indicates how the value(s) will be compared.
+      title: ApprovalPolicyRuleComparator
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    ApproversCreateRequestType:
+      type: string
+      enum:
+      - ALL_LEVELS_MUST_APPROVE
+      - HIGHER_LEVEL_CAN_OVERRIDE
+      - ANYONE_CAN_DECIDE
+      description: The type of approval level needs to approve it.
+      title: ApproversCreateRequestType
+    ApprovalPolicyUpdateRequestApprovalType:
+      type: string
+      enum:
+      - GROUP
+      - LEVEL
+      description: The type of approval process which needs to be followed if this approval policy is invoked.
+      title: ApprovalPolicyUpdateRequestApprovalType
+    ApprovalPolicyDueDate:
+      type: object
+      properties:
+        is_custom:
+          type: boolean
+          description: Whether the due date is custom.
+      title: ApprovalPolicyDueDate
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    ApprovalPolicyUpdateRequestSourceType:
+      type: string
+      enum:
+      - QUOTE_VERSION
+      - INVOICE
+      description: The object type of this approval policy.
+      title: ApprovalPolicyUpdateRequestSourceType
+    ApprovalPolicy:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        source_type:
+          $ref: '#/components/schemas/ApprovalPolicySourceType'
+          description: The object type of this approval policy.
+        reference:
+          type: string
+          description: The human-readable reference to this approval policy.
+        name:
+          type: string
+          description: The name of this approval policy.
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/ApprovalPolicyStatus'
+          - type: 'null'
+          description: The current status of the approval policy.
+        approval_type:
+          $ref: '#/components/schemas/ApprovalPolicyApprovalType'
+          description: The type of approval process which needs to be followed if this approval policy is invoked.
+        created_at:
+          type:
+          - string
+          - 'null'
+          description: When the approval policy was created.
+        update_at:
+          type:
+          - string
+          - 'null'
+          description: When the approval policy was updated last.
+        approvers:
+          $ref: '#/components/schemas/Approvers'
+          description: The type of approve level and users who are allowed to approve/decline the approval review.
+        rule_groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalPolicyRuleGroup'
+          description: The groups of rules that are applicable for this approval policy. These will be chained using OR.
+      title: ApprovalPolicy
+    Amount:
+      type: object
+      properties:
+        quantity:
+          type: string
+        currency:
+          $ref: '#/components/schemas/AmountCurrency'
+      title: Amount
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    ApiErrorResourceType:
+      type: string
+      enum:
+      - CUSTOMER
       - CUSTOM_FIELD
+      - PLATFORM
+      - PLATFORM_UPTODATE
+      - METER
+      - METER_VALUE
+      - METER_PROPERTY
+      - METER_VALUE_CALCULATION
+      - INGEST_DATA
+      - METER_DATA
+      - CHARGE_DATA
+      - PERSIST_DATA
+      - ADJUSTMENT_DATA
+      - PRODUCT_CATEGORY
+      - PRODUCT
+      - PRODUCT_ITEM
+      - PRICING
+      - PRICING_GROUP
+      - PRICING_ITEM
+      - PRICING_ITEM_CONFIG
+      - PRICING_PLAN_SUBSCRIPTION
+      - PRICING_PLAN_SUBSCRIPTION_GROUP
+      - PRICING_PLAN_SCHEDULE
+      - PRICING_PLAN
+      - PRICING_PLAN_VERSION
+      - QUOTE
+      - QUOTE_VERSION
+      - QUOTE_TEMPLATE
+      - API_KEY
+      - USER
+      - ROLE
+      - PROXY_USER
+      - EXTERNAL_CREDENTIALS
+      - TOKEN
+      - INVOICE
+      - E_INVOICE
+      - PDF
       - BILLING_ENTITY
-      - BILLING_PERIOD
-      - DUE_DATE
+      - FEATURE
+      - MEMBERSHIP
+      - PAYMENT
       - PAYMENT_ACCEPTOR
-      description: The type of rule that will be applied.
-      title: ApprovalPolicyRuleType
+      - PAYMENT_METHOD
+      - PAYMENT_METHOD_OPTIONS
+      - PAYMENT_SCHEDULE
+      - PAYMENT_REQUEST
+      - INTEGRATION
+      - WEBHOOK
+      - FILE
+      - FILE_PROCESSING_SETTINGS
+      - TEAM
+      - DOWNLOAD_URL
+      - CSV_REPORT
+      - REPORT
+      - REPORT_GENERATE_REQUEST
+      - REPORT_CONFIGURATION
+      - REPORT_SUBSCRIPTION
+      - REPORT_DEFINITION
+      - ACCOUNT_GROUP
+      - ENTITY
+      - EVENT_TRACE
+      - EVENT_TRACE_LINK
+      - PRICING_CATEGORY
+      - CONTACT
+      - ALERT_RULE
+      - ALERT
+      - AUDIT_RECORD
+      - PORTAL_URL
+      - AUTHENTICATION_PROVIDER
+      - REPROCESS
+      - APPROVAL_POLICY
+      - APPROVAL_REQUEST
+      - BULK_ACTION
+      - COUPON
+      - PROMOTION_CODE
+      - WALLET
+      - WALLET_TYPE
+      - WALLET_GRANT
+      - WORKFLOW
+      - WORKFLOW_TRIGGER
+      - WORKFLOW_ACTION
+      - CREDIT_TYPE
+      - SIGNATURE_REQUEST
+      - ATTACHMENT
+      - DOCUMENT
+      title: ApiErrorResourceType
+    ApprovalPolicySourceType:
+      type: string
+      enum:
+      - QUOTE_VERSION
+      - INVOICE
+      description: The object type of this approval policy.
+      title: ApprovalPolicySourceType
+    ApprovalPolicyApproverType:
+      type: string
+      enum:
+      - USER
+      description: The type of approver. I.e. User, Team, etc.
+      title: ApprovalPolicyApproverType
+    ApprovalPolicyCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        source_type:
+          $ref: '#/components/schemas/ApprovalPolicyCreateRequestSourceType'
+          description: The object type of this approval policy.
+        reference:
+          type: string
+          description: The human-readable reference to this approval policy.
+        name:
+          type: string
+          description: The name of this approval policy.
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/ApprovalPolicyCreateRequestStatus'
+          - type: 'null'
+          description: The current status of the approval policy.
+        approval_type:
+          $ref: '#/components/schemas/ApprovalPolicyCreateRequestApprovalType'
+          description: The type of approval process which needs to be followed if this approval policy is invoked.
+        created_at:
+          type:
+          - string
+          - 'null'
+          description: When the approval policy was created.
+        update_at:
+          type:
+          - string
+          - 'null'
+          description: When the approval policy was updated last.
+        approvers:
+          $ref: '#/components/schemas/ApproversCreateRequest'
+          description: The type of approve level and users who are allowed to approve/decline the approval review.
+        rule_groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalPolicyRuleGroupCreateRequest'
+          description: The groups of rules that are applicable for this approval policy. These will be chained using OR.
+      required:
+      - source_type
+      - reference
+      - name
+      - approval_type
+      - approvers
+      - rule_groups
+      title: ApprovalPolicyCreateRequest
+    ApprovalPolicyRuleGroupCreateRequest:
+      type: object
+      properties:
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalPolicyRule'
+          description: The rules that are applicable for the approval policy. These will be chained using AND.
+      title: ApprovalPolicyRuleGroupCreateRequest
+    ApproversCreateRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApproversCreateRequestType'
+          description: The type of approval level needs to approve it.
+        approval_groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalGroup'
+          description: The users who are allowed to review and approve/decline the approval review and their hierarchy in the group.
+      title: ApproversCreateRequest
+    ApproversUpdateRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApproversUpdateRequestType'
+          description: The type of approval level needs to approve it.
+        approval_groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalGroup'
+          description: The users who are allowed to review and approve/decline the approval review and their hierarchy in the group.
+      title: ApproversUpdateRequest
     AmountCurrency:
       type: string
       enum:
@@ -741,104 +1076,24 @@ components:
       - ZMW
       - ZWL
       title: AmountCurrency
-    ApprovalPolicy:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        source_type:
-          $ref: '#/components/schemas/ApprovalPolicySourceType'
-          description: The object type of this approval policy.
-        reference:
-          type: string
-          description: The human-readable reference to this approval policy.
-        name:
-          type: string
-          description: The name of this approval policy.
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/ApprovalPolicyStatus'
-          - type: 'null'
-          description: The current status of the approval policy.
-        approval_type:
-          $ref: '#/components/schemas/ApprovalPolicyApprovalType'
-          description: The type of approval process which needs to be followed if this approval policy is invoked.
-        created_at:
-          type:
-          - string
-          - 'null'
-          description: When the approval policy was created.
-        update_at:
-          type:
-          - string
-          - 'null'
-          description: When the approval policy was updated last.
-        approvers:
-          $ref: '#/components/schemas/Approvers'
-          description: The type of approve level and users who are allowed to approve/decline the approval review.
-        rule_groups:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApprovalPolicyRuleGroup'
-          description: The groups of rules that are applicable for this approval policy. These will be chained using OR.
-      title: ApprovalPolicy
-    ApproversUpdateRequest:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/ApproversUpdateRequestType'
-          description: The type of approval level needs to approve it.
-        approval_groups:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApprovalGroup'
-          description: The users who are allowed to review and approve/decline the approval review and their hierarchy in the group.
-      title: ApproversUpdateRequest
-    ApiErrorCode:
+    ApprovalPolicyStatus:
       type: string
       enum:
-      - RESOURCE_NOT_FOUND
-      - RESOURCES_NOT_FOUND
-      - UNABLE_TO_PROCESS_INSTRUCTIONS
-      - BAD_REQUEST
-      - UNSUPPORTED_MEDIA_TYPE
-      - RESOURCE_ALREADY_EXISTS
-      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
-      - COULD_NOT_CREATE_RESOURCE
-      - COULD_NOT_UPDATE_RESOURCE
-      - COULD_NOT_DELETE_RESOURCE
-      - MISSING_VERSION
-      - UNSUPPORTED_VERSION
-      - UNAUTHORISED
-      - CUSTOMER_NOT_FOUND
-      - PLATFORM_NOT_FOUND
-      - PRICING_PLAN_NOT_FOUND
-      - PRODUCT_NOT_FOUND
-      - PRODUCT_ITEM_NOT_FOUND
-      - PRICING_NOT_FOUND
-      - PRICING_ITEM_NOT_FOUND
-      - USER_NOT_FOUND
-      - METER_NOT_FOUND
-      - METER_VALUE_NOT_FOUND
-      - METER_PROPERTY_NOT_FOUND
-      - PRICING_ITEM_SUMMARIES_NOT_FOUND
-      - MISSING_ID
-      - INVALID_ID
-      - MISSING_REFERENCE
-      - MISSING_FIELD
-      - INVALID_FIELD
-      - INVALID_OPERATION
-      - INTERNAL_ERROR
-      - USER_NOT_ALLOWED
-      - IDEMPOTENCY_CHECK_FAILED
-      - INVALID_REQUEST
-      title: ApiErrorCode
+      - DRAFT
+      - ACTIVE
+      - DEPRECATED
+      - ARCHIVED
+      description: The current status of the approval policy.
+      title: ApprovalPolicyStatus
+    ApprovalPolicyRuleGroup:
+      type: object
+      properties:
+        rules:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalPolicyRule'
+          description: The rules that are applicable for the approval policy. These will be chained using AND.
+      title: ApprovalPolicyRuleGroup
     ApprovalPolicyPaymentAcceptor:
       type: object
       properties:
@@ -846,169 +1101,35 @@ components:
           type: boolean
           description: Whether the payment acceptors are custom.
       title: ApprovalPolicyPaymentAcceptor
-    ApprovalPolicyCreateRequestSourceType:
-      type: string
-      enum:
-      - QUOTE_VERSION
-      - INVOICE
-      description: The object type of this approval policy.
-      title: ApprovalPolicyCreateRequestSourceType
-    Amount:
+    ApprovalPolicyDiscount:
       type: object
       properties:
-        quantity:
+        percentage:
           type: string
-        currency:
-          $ref: '#/components/schemas/AmountCurrency'
-      title: Amount
-    ApprovalPolicyBillingPeriod:
-      type: object
-      properties:
-        is_custom:
-          type: boolean
-          description: Whether the billing period is custom.
-      title: ApprovalPolicyBillingPeriod
-    ApprovalPolicyPricing:
-      type: object
-      properties:
-        has_override:
-          type: boolean
-          description: Whether there is a pricing override present.
-      title: ApprovalPolicyPricing
-    ApprovalPolicyDueDate:
-      type: object
-      properties:
-        is_custom:
-          type: boolean
-          description: Whether the due date is custom.
-      title: ApprovalPolicyDueDate
-    ApiErrorResourceType:
-      type: string
-      enum:
-      - CUSTOMER
-      - CUSTOM_FIELD
-      - PLATFORM
-      - PLATFORM_UPTODATE
-      - METER
-      - METER_VALUE
-      - METER_PROPERTY
-      - METER_VALUE_CALCULATION
-      - INGEST_DATA
-      - METER_DATA
-      - CHARGE_DATA
-      - PERSIST_DATA
-      - ADJUSTMENT_DATA
-      - PRODUCT_CATEGORY
-      - PRODUCT
-      - PRODUCT_ITEM
-      - PRICING
-      - PRICING_GROUP
-      - PRICING_ITEM
-      - PRICING_ITEM_CONFIG
-      - PRICING_PLAN_SUBSCRIPTION
-      - PRICING_PLAN_SUBSCRIPTION_GROUP
-      - PRICING_PLAN_SCHEDULE
-      - PRICING_PLAN
-      - PRICING_PLAN_VERSION
-      - QUOTE
-      - QUOTE_VERSION
-      - QUOTE_TEMPLATE
-      - API_KEY
-      - USER
-      - ROLE
-      - PROXY_USER
-      - EXTERNAL_CREDENTIALS
-      - TOKEN
-      - INVOICE
-      - E_INVOICE
-      - PDF
-      - BILLING_ENTITY
-      - FEATURE
-      - MEMBERSHIP
-      - PAYMENT
-      - PAYMENT_ACCEPTOR
-      - PAYMENT_METHOD
-      - PAYMENT_METHOD_OPTIONS
-      - PAYMENT_SCHEDULE
-      - PAYMENT_REQUEST
-      - INTEGRATION
-      - WEBHOOK
-      - FILE
-      - FILE_PROCESSING_SETTINGS
-      - TEAM
-      - DOWNLOAD_URL
-      - CSV_REPORT
-      - REPORT
-      - REPORT_GENERATE_REQUEST
-      - REPORT_CONFIGURATION
-      - REPORT_SUBSCRIPTION
-      - REPORT_DEFINITION
-      - ACCOUNT_GROUP
-      - ENTITY
-      - EVENT_TRACE
-      - EVENT_TRACE_LINK
-      - PRICING_CATEGORY
-      - CONTACT
-      - ALERT_RULE
-      - ALERT
-      - AUDIT_RECORD
-      - PORTAL_URL
-      - AUTHENTICATION_PROVIDER
-      - REPROCESS
-      - APPROVAL_POLICY
-      - APPROVAL_REQUEST
-      - BULK_ACTION
-      - COUPON
-      - PROMOTION_CODE
-      - WALLET
-      - WALLET_TYPE
-      - WALLET_GRANT
-      - WORKFLOW
-      - WORKFLOW_TRIGGER
-      - WORKFLOW_ACTION
-      - CREDIT_TYPE
-      - SIGNATURE_REQUEST
-      - ATTACHMENT
-      - DOCUMENT
-      title: ApiErrorResourceType
-    ApproversCreateRequest:
+          description: The discount percentage value that will be tested for the rule.
+        amount:
+          $ref: '#/components/schemas/Amount'
+          description: The discount amount that will be tested for the rule.
+      title: ApprovalPolicyDiscount
+    Approvers:
       type: object
       properties:
         type:
-          $ref: '#/components/schemas/ApproversCreateRequestType'
+          $ref: '#/components/schemas/ApproversType'
           description: The type of approval level needs to approve it.
         approval_groups:
           type: array
           items:
             $ref: '#/components/schemas/ApprovalGroup'
           description: The users who are allowed to review and approve/decline the approval review and their hierarchy in the group.
-      title: ApproversCreateRequest
-    ApiError:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/ApiErrorType'
-        code:
-          $ref: '#/components/schemas/ApiErrorCode'
-        field:
-          type:
-          - string
-          - 'null'
-        message:
-          type: string
-        resource_id:
-          type:
-          - string
-          - 'null'
-        resource_type:
-          oneOf:
-          - $ref: '#/components/schemas/ApiErrorResourceType'
-          - type: 'null'
-      required:
-      - type
-      - code
-      - message
-      title: ApiError
+      title: Approvers
+    ApprovalPolicyApprovalType:
+      type: string
+      enum:
+      - GROUP
+      - LEVEL
+      description: The type of approval process which needs to be followed if this approval policy is invoked.
+      title: ApprovalPolicyApprovalType
     ApprovalPolicyApprover:
       type: object
       properties:
@@ -1019,6 +1140,14 @@ components:
           $ref: '#/components/schemas/ApprovalPolicyUser'
           description: The details of the user who is allowed to approve.
       title: ApprovalPolicyApprover
+    ApproversUpdateRequestType:
+      type: string
+      enum:
+      - ALL_LEVELS_MUST_APPROVE
+      - HIGHER_LEVEL_CAN_OVERRIDE
+      - ANYONE_CAN_DECIDE
+      description: The type of approval level needs to approve it.
+      title: ApproversUpdateRequestType
     ApprovalPolicyUpdateRequest:
       type: object
       properties:
@@ -1066,31 +1195,6 @@ components:
             $ref: '#/components/schemas/ApprovalPolicyRuleGroupUpdateRequest'
           description: The groups of rules that are applicable for this approval policy. These will be chained using OR.
       title: ApprovalPolicyUpdateRequest
-    ApprovalPolicyRuleGroup:
-      type: object
-      properties:
-        rules:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApprovalPolicyRule'
-          description: The rules that are applicable for the approval policy. These will be chained using AND.
-      title: ApprovalPolicyRuleGroup
-    ApprovalPolicySourceType:
-      type: string
-      enum:
-      - QUOTE_VERSION
-      - INVOICE
-      description: The object type of this approval policy.
-      title: ApprovalPolicySourceType
-    ApprovalPolicyStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - DEPRECATED
-      - ARCHIVED
-      description: The current status of the approval policy.
-      title: ApprovalPolicyStatus
     ApprovalPolicyBillingEntity:
       type: object
       properties:
@@ -1107,96 +1211,13 @@ components:
             $ref: '#/components/schemas/ApprovalPolicyRule'
           description: The rules that are applicable for the approval policy. These will be chained using AND.
       title: ApprovalPolicyRuleGroupUpdateRequest
-    Approvers:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/ApproversType'
-          description: The type of approval level needs to approve it.
-        approval_groups:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApprovalGroup'
-          description: The users who are allowed to review and approve/decline the approval review and their hierarchy in the group.
-      title: Approvers
-    ApprovalPolicyDiscount:
-      type: object
-      properties:
-        percentage:
-          type: string
-          description: The discount percentage value that will be tested for the rule.
-        amount:
-          $ref: '#/components/schemas/Amount'
-          description: The discount amount that will be tested for the rule.
-      title: ApprovalPolicyDiscount
-    ApprovalPolicyCreateRequestApprovalType:
+    ApprovalPolicyCreateRequestSourceType:
       type: string
       enum:
-      - GROUP
-      - LEVEL
-      description: The type of approval process which needs to be followed if this approval policy is invoked.
-      title: ApprovalPolicyCreateRequestApprovalType
-    ApprovalPolicyCreateRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        source_type:
-          $ref: '#/components/schemas/ApprovalPolicyCreateRequestSourceType'
-          description: The object type of this approval policy.
-        reference:
-          type: string
-          description: The human-readable reference to this approval policy.
-        name:
-          type: string
-          description: The name of this approval policy.
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/ApprovalPolicyCreateRequestStatus'
-          - type: 'null'
-          description: The current status of the approval policy.
-        approval_type:
-          $ref: '#/components/schemas/ApprovalPolicyCreateRequestApprovalType'
-          description: The type of approval process which needs to be followed if this approval policy is invoked.
-        created_at:
-          type:
-          - string
-          - 'null'
-          description: When the approval policy was created.
-        update_at:
-          type:
-          - string
-          - 'null'
-          description: When the approval policy was updated last.
-        approvers:
-          $ref: '#/components/schemas/ApproversCreateRequest'
-          description: The type of approve level and users who are allowed to approve/decline the approval review.
-        rule_groups:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApprovalPolicyRuleGroupCreateRequest'
-          description: The groups of rules that are applicable for this approval policy. These will be chained using OR.
-      required:
-      - source_type
-      - reference
-      - name
-      - approval_type
-      - approvers
-      - rule_groups
-      title: ApprovalPolicyCreateRequest
-    ApprovalPolicyUpdateRequestApprovalType:
-      type: string
-      enum:
-      - GROUP
-      - LEVEL
-      description: The type of approval process which needs to be followed if this approval policy is invoked.
-      title: ApprovalPolicyUpdateRequestApprovalType
+      - QUOTE_VERSION
+      - INVOICE
+      description: The object type of this approval policy.
+      title: ApprovalPolicyCreateRequestSourceType
     ApproversType:
       type: string
       enum:
@@ -1205,49 +1226,6 @@ components:
       - ANYONE_CAN_DECIDE
       description: The type of approval level needs to approve it.
       title: ApproversType
-    ApprovalPolicyRuleGroupCreateRequest:
-      type: object
-      properties:
-        rules:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApprovalPolicyRule'
-          description: The rules that are applicable for the approval policy. These will be chained using AND.
-      title: ApprovalPolicyRuleGroupCreateRequest
-    ApprovalPolicyRuleComparator:
-      type: string
-      enum:
-      - LESS_THAN
-      - LESS_THAN_OR_EQUALS
-      - EQUALS
-      - GREATER_THAN_OR_EQUALS
-      - GREATER_THAN
-      description: Indicates how the value(s) will be compared.
-      title: ApprovalPolicyRuleComparator
-    ApprovalPolicyUser:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The ID of the user who can review the approval request.
-      title: ApprovalPolicyUser
-    ApprovalPolicyCreateRequestStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - DEPRECATED
-      - ARCHIVED
-      description: The current status of the approval policy.
-      title: ApprovalPolicyCreateRequestStatus
-    ApproversUpdateRequestType:
-      type: string
-      enum:
-      - ALL_LEVELS_MUST_APPROVE
-      - HIGHER_LEVEL_CAN_OVERRIDE
-      - ANYONE_CAN_DECIDE
-      description: The type of approval level needs to approve it.
-      title: ApproversUpdateRequestType
     ApprovalPolicyCustomField:
       type: object
       properties:
@@ -1258,6 +1236,48 @@ components:
           type: string
           description: The value of the custom field that will be used for the rule.
       title: ApprovalPolicyCustomField
+    ApprovalPolicyPricing:
+      type: object
+      properties:
+        has_override:
+          type: boolean
+          description: Whether there is a pricing override present.
+      title: ApprovalPolicyPricing
+    ApprovalPolicyUser:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The ID of the user who can review the approval request.
+      title: ApprovalPolicyUser
+    ApprovalPolicyCreateRequestApprovalType:
+      type: string
+      enum:
+      - GROUP
+      - LEVEL
+      description: The type of approval process which needs to be followed if this approval policy is invoked.
+      title: ApprovalPolicyCreateRequestApprovalType
+    ApprovalPolicyRuleType:
+      type: string
+      enum:
+      - ALWAYS_APPROVE
+      - DISCOUNT
+      - COMMITMENT
+      - PRICING
+      - CUSTOM_FIELD
+      - BILLING_ENTITY
+      - BILLING_PERIOD
+      - DUE_DATE
+      - PAYMENT_ACCEPTOR
+      description: The type of rule that will be applied.
+      title: ApprovalPolicyRuleType
+    ApprovalPolicyBillingPeriod:
+      type: object
+      properties:
+        is_custom:
+          type: boolean
+          description: Whether the billing period is custom.
+      title: ApprovalPolicyBillingPeriod
     ApprovalPolicyUpdateRequestStatus:
       type: string
       enum:
@@ -1267,16 +1287,18 @@ components:
       - ARCHIVED
       description: The current status of the approval policy.
       title: ApprovalPolicyUpdateRequestStatus
-    GetAllApprovalPoliciesResponse:
+    ApprovalGroup:
       type: object
       properties:
-        data:
+        level:
+          type: integer
+          description: The hierarchy of the users
+        approvers:
           type: array
           items:
-            $ref: '#/components/schemas/ApprovalPolicy'
-      required:
-      - data
-      title: GetAllApprovalPoliciesResponse
+            $ref: '#/components/schemas/ApprovalPolicyApprover'
+          description: The users who are allowed to review and approve/decline the approval review.
+      title: ApprovalGroup
     ApprovalPolicyRule:
       type: object
       properties:
@@ -1311,47 +1333,25 @@ components:
           $ref: '#/components/schemas/ApprovalPolicyPaymentAcceptor'
           description: The values for a payment term rule.
       title: ApprovalPolicyRule
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
-    ApprovalPolicyApprovalType:
-      type: string
-      enum:
-      - GROUP
-      - LEVEL
-      description: The type of approval process which needs to be followed if this approval policy is invoked.
-      title: ApprovalPolicyApprovalType
-    ApprovalPolicyApproverType:
-      type: string
-      enum:
-      - USER
-      description: The type of approver. I.e. User, Team, etc.
-      title: ApprovalPolicyApproverType
-    ApprovalPolicyCommitment:
+    GetAllApprovalPoliciesResponse:
       type: object
       properties:
-        amount:
-          $ref: '#/components/schemas/Amount'
-          description: The commitment amount that will be tested for the rule.
-      title: ApprovalPolicyCommitment
-    ApproversCreateRequestType:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalPolicy'
+      required:
+      - data
+      title: GetAllApprovalPoliciesResponse
+    ApprovalPolicyCreateRequestStatus:
       type: string
       enum:
-      - ALL_LEVELS_MUST_APPROVE
-      - HIGHER_LEVEL_CAN_OVERRIDE
-      - ANYONE_CAN_DECIDE
-      description: The type of approval level needs to approve it.
-      title: ApproversCreateRequestType
-    ApprovalPolicyUpdateRequestSourceType:
-      type: string
-      enum:
-      - QUOTE_VERSION
-      - INVOICE
-      description: The object type of this approval policy.
-      title: ApprovalPolicyUpdateRequestSourceType
+      - DRAFT
+      - ACTIVE
+      - DEPRECATED
+      - ARCHIVED
+      description: The current status of the approval policy.
+      title: ApprovalPolicyCreateRequestStatus
   securitySchemes:
     API-Key:
       type: apiKey

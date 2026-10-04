@@ -227,6 +227,31 @@ paths:
               $ref: '#/components/schemas/SignatureRequestRecipientActionCreateRequest'
 components:
   schemas:
+    SignatureRequestQuoteVersion:
+      type: object
+      properties:
+        quote_version_id:
+          type:
+          - string
+          - 'null'
+          description: The ID of the quote version this signature request belongs to.
+      title: SignatureRequestQuoteVersion
+    Name:
+      type: object
+      properties:
+        first_name:
+          type:
+          - string
+          - 'null'
+        last_name:
+          type:
+          - string
+          - 'null'
+        infix:
+          type:
+          - string
+          - 'null'
+      title: Name
     SignatureRequest:
       type: object
       properties:
@@ -266,59 +291,6 @@ components:
             $ref: '#/components/schemas/SignatureRequestRecipientData'
           description: The recipients of the signature request.
       title: SignatureRequest
-    SignatureRequestQuoteVersion:
-      type: object
-      properties:
-        quote_version_id:
-          type:
-          - string
-          - 'null'
-          description: The ID of the quote version this signature request belongs to.
-      title: SignatureRequestQuoteVersion
-    SignatureRequestStatus:
-      type: string
-      enum:
-      - IN_PROGRESS
-      - COMPLETED
-      - VOID
-      description: The status of the signature request.
-      title: SignatureRequestStatus
-    Name:
-      type: object
-      properties:
-        first_name:
-          type:
-          - string
-          - 'null'
-        last_name:
-          type:
-          - string
-          - 'null'
-        infix:
-          type:
-          - string
-          - 'null'
-      title: Name
-    SignatureRequestRecipientActionCreateRequestAction:
-      type: string
-      enum:
-      - VIEW
-      - SIGN
-      description: The action the recipient is performing.
-      title: SignatureRequestRecipientActionCreateRequestAction
-    SignatureRequestRecipientDataStatus:
-      type: string
-      enum:
-      - PENDING
-      - COMPLETED
-      description: The status of the recipient.
-      title: SignatureRequestRecipientDataStatus
-    SignatureRequestType:
-      type: string
-      enum:
-      - QUOTE_VERSION
-      description: The type of the signature request.
-      title: SignatureRequestType
     SignatureRequestRecipientActionCreateRequest:
       type: object
       properties:
@@ -332,6 +304,99 @@ components:
       - recipient_id
       - action
       title: SignatureRequestRecipientActionCreateRequest
+    SignatureRequestType:
+      type: string
+      enum:
+      - QUOTE_VERSION
+      description: The type of the signature request.
+      title: SignatureRequestType
+    SignatureRequestStatus:
+      type: string
+      enum:
+      - IN_PROGRESS
+      - COMPLETED
+      - VOID
+      description: The status of the signature request.
+      title: SignatureRequestStatus
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    SignatureRequestRecipientData:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The unique identifier of this recipient.
+        contact_id:
+          type:
+          - string
+          - 'null'
+          description: The contact ID, present when the recipient originates from a contact.
+        name:
+          oneOf:
+          - $ref: '#/components/schemas/Name'
+          - type: 'null'
+          description: The name of the recipient.
+        email:
+          type:
+          - string
+          - 'null'
+          description: The email of the recipient.
+        role:
+          oneOf:
+          - $ref: '#/components/schemas/SignatureRequestRecipientDataRole'
+          - type: 'null'
+          description: The role of the recipient.
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/SignatureRequestRecipientDataStatus'
+          - type: 'null'
+          description: The status of the recipient.
+      title: SignatureRequestRecipientData
     SignatureRequestRecipientDataRole:
       type: string
       enum:
@@ -454,85 +519,20 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
-    ApiErrorCode:
+    SignatureRequestRecipientActionCreateRequestAction:
       type: string
       enum:
-      - RESOURCE_NOT_FOUND
-      - RESOURCES_NOT_FOUND
-      - UNABLE_TO_PROCESS_INSTRUCTIONS
-      - BAD_REQUEST
-      - UNSUPPORTED_MEDIA_TYPE
-      - RESOURCE_ALREADY_EXISTS
-      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
-      - COULD_NOT_CREATE_RESOURCE
-      - COULD_NOT_UPDATE_RESOURCE
-      - COULD_NOT_DELETE_RESOURCE
-      - MISSING_VERSION
-      - UNSUPPORTED_VERSION
-      - UNAUTHORISED
-      - CUSTOMER_NOT_FOUND
-      - PLATFORM_NOT_FOUND
-      - PRICING_PLAN_NOT_FOUND
-      - PRODUCT_NOT_FOUND
-      - PRODUCT_ITEM_NOT_FOUND
-      - PRICING_NOT_FOUND
-      - PRICING_ITEM_NOT_FOUND
-      - USER_NOT_FOUND
-      - METER_NOT_FOUND
-      - METER_VALUE_NOT_FOUND
-      - METER_PROPERTY_NOT_FOUND
-      - PRICING_ITEM_SUMMARIES_NOT_FOUND
-      - MISSING_ID
-      - INVALID_ID
-      - MISSING_REFERENCE
-      - MISSING_FIELD
-      - INVALID_FIELD
-      - INVALID_OPERATION
-      - INTERNAL_ERROR
-      - USER_NOT_ALLOWED
-      - IDEMPOTENCY_CHECK_FAILED
-      - INVALID_REQUEST
-      title: ApiErrorCode
-    ApiErrorType:
+      - VIEW
+      - SIGN
+      description: The action the recipient is performing.
+      title: SignatureRequestRecipientActionCreateRequestAction
+    SignatureRequestRecipientDataStatus:
       type: string
       enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
-    SignatureRequestRecipientData:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: The unique identifier of this recipient.
-        contact_id:
-          type:
-          - string
-          - 'null'
-          description: The contact ID, present when the recipient originates from a contact.
-        name:
-          oneOf:
-          - $ref: '#/components/schemas/Name'
-          - type: 'null'
-          description: The name of the recipient.
-        email:
-          type:
-          - string
-          - 'null'
-          description: The email of the recipient.
-        role:
-          oneOf:
-          - $ref: '#/components/schemas/SignatureRequestRecipientDataRole'
-          - type: 'null'
-          description: The role of the recipient.
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/SignatureRequestRecipientDataStatus'
-          - type: 'null'
-          description: The status of the recipient.
-      title: SignatureRequestRecipientData
+      - PENDING
+      - COMPLETED
+      description: The status of the recipient.
+      title: SignatureRequestRecipientDataStatus
   securitySchemes:
     API-Key:
       type: apiKey

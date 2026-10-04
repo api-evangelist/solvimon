@@ -187,62 +187,75 @@ paths:
                 $ref: '#/components/schemas/ApiError'
 components:
   schemas:
-    AuditRecord:
+    AuditRecordResponseWrapper:
       type: object
       properties:
-        object_type:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditRecord'
+        page:
           type:
-          - string
+          - integer
           - 'null'
-        id:
+        limit:
           type:
-          - string
+          - integer
           - 'null'
-        user_id:
+        total_number_of_pages:
           type:
-          - string
+          - integer
           - 'null'
-        target_entity_id:
-          type:
-          - string
-          - 'null'
-        target_platform_id:
-          type:
-          - string
-          - 'null'
-        target_resource_type:
-          type:
-          - string
-          - 'null'
-        target_id:
-          type:
-          - string
-          - 'null'
-        target_environment:
-          type:
-          - string
-          - 'null'
-        action:
-          type:
-          - string
-          - 'null'
-        created_at:
-          type:
-          - string
-          - 'null'
-        message:
-          type:
-          - string
-          - 'null'
-        reference:
-          type:
-          - string
-          - 'null'
-        idempotency_key:
-          type:
-          - string
-          - 'null'
-      title: AuditRecord
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      title: AuditRecordResponseWrapper
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
     ApiErrorResourceType:
       type: string
       enum:
@@ -358,51 +371,6 @@ components:
       - code
       - message
       title: ApiError
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
-    ApiErrorCode:
-      type: string
-      enum:
-      - RESOURCE_NOT_FOUND
-      - RESOURCES_NOT_FOUND
-      - UNABLE_TO_PROCESS_INSTRUCTIONS
-      - BAD_REQUEST
-      - UNSUPPORTED_MEDIA_TYPE
-      - RESOURCE_ALREADY_EXISTS
-      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
-      - COULD_NOT_CREATE_RESOURCE
-      - COULD_NOT_UPDATE_RESOURCE
-      - COULD_NOT_DELETE_RESOURCE
-      - MISSING_VERSION
-      - UNSUPPORTED_VERSION
-      - UNAUTHORISED
-      - CUSTOMER_NOT_FOUND
-      - PLATFORM_NOT_FOUND
-      - PRICING_PLAN_NOT_FOUND
-      - PRODUCT_NOT_FOUND
-      - PRODUCT_ITEM_NOT_FOUND
-      - PRICING_NOT_FOUND
-      - PRICING_ITEM_NOT_FOUND
-      - USER_NOT_FOUND
-      - METER_NOT_FOUND
-      - METER_VALUE_NOT_FOUND
-      - METER_PROPERTY_NOT_FOUND
-      - PRICING_ITEM_SUMMARIES_NOT_FOUND
-      - MISSING_ID
-      - INVALID_ID
-      - MISSING_REFERENCE
-      - MISSING_FIELD
-      - INVALID_FIELD
-      - INVALID_OPERATION
-      - INTERNAL_ERROR
-      - USER_NOT_ALLOWED
-      - IDEMPOTENCY_CHECK_FAILED
-      - INVALID_REQUEST
-      title: ApiErrorCode
     PaginationLinks:
       type: object
       properties:
@@ -423,30 +391,62 @@ components:
           - string
           - 'null'
       title: PaginationLinks
-    AuditRecordResponseWrapper:
+    AuditRecord:
       type: object
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/AuditRecord'
-        page:
+        object_type:
           type:
-          - integer
+          - string
           - 'null'
-        limit:
+        id:
           type:
-          - integer
+          - string
           - 'null'
-        total_number_of_pages:
+        user_id:
           type:
-          - integer
+          - string
           - 'null'
-        links:
-          $ref: '#/components/schemas/PaginationLinks'
-      required:
-      - data
-      title: AuditRecordResponseWrapper
+        target_entity_id:
+          type:
+          - string
+          - 'null'
+        target_platform_id:
+          type:
+          - string
+          - 'null'
+        target_resource_type:
+          type:
+          - string
+          - 'null'
+        target_id:
+          type:
+          - string
+          - 'null'
+        target_environment:
+          type:
+          - string
+          - 'null'
+        action:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        message:
+          type:
+          - string
+          - 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+        idempotency_key:
+          type:
+          - string
+          - 'null'
+      title: AuditRecord
   securitySchemes:
     API-Key:
       type: apiKey

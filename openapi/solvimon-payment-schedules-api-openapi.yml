@@ -550,1091 +550,6 @@ paths:
                 $ref: '#/components/schemas/ApiError'
 components:
   schemas:
-    PaymentScheduleInstallmentsCreateRequest:
-      type: object
-      properties:
-        total_amount:
-          $ref: '#/components/schemas/Amount'
-        variant:
-          $ref: '#/components/schemas/PaymentScheduleInstallmentsCreateRequestVariant'
-        number_of_installments:
-          type: integer
-        interval:
-          $ref: '#/components/schemas/IntervalInstallment'
-        fixed:
-          $ref: '#/components/schemas/FixedInstallment'
-      title: PaymentScheduleInstallmentsCreateRequest
-    TaxId:
-      type: object
-      properties:
-        id:
-          type: string
-        type:
-          oneOf:
-          - $ref: '#/components/schemas/TaxIdType'
-          - type: 'null'
-          description: Optional tax id type, indicates which type of tax the number is for
-        display_name:
-          type:
-          - string
-          - 'null'
-          description: User-friendly display name
-        tax_id_validation_result:
-          $ref: '#/components/schemas/TaxIdValidation'
-      title: TaxId
-    NotificationPreferenceType:
-      type: string
-      enum:
-      - INVOICE
-      description: The notification type to configure.
-      title: NotificationPreferenceType
-    PaymentRequestCreateRequestStatus:
-      type: string
-      enum:
-      - SCHEDULED
-      - IN_PROGRESS
-      - ON_HOLD
-      - FAILED
-      - DONE
-      - SKIPPED
-      description: The status of the payment request
-      title: PaymentRequestCreateRequestStatus
-    PaymentScheduleResponseWrapper:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/PaymentSchedule'
-        page:
-          type:
-          - integer
-          - 'null'
-        limit:
-          type:
-          - integer
-          - 'null'
-        total_number_of_pages:
-          type:
-          - integer
-          - 'null'
-        links:
-          $ref: '#/components/schemas/PaginationLinks'
-      required:
-      - data
-      title: PaymentScheduleResponseWrapper
-    PricingPlanSubscriptionSelectorRuleField:
-      type: string
-      enum:
-      - BILLING_ENTITY_REGISTERED_ADDRESS_COUNTRY
-      - PRICING_PLAN_REFERENCE
-      title: PricingPlanSubscriptionSelectorRuleField
-    PaginationLinks:
-      type: object
-      properties:
-        first:
-          type:
-          - string
-          - 'null'
-        previous:
-          type:
-          - string
-          - 'null'
-        current:
-          type:
-          - string
-          - 'null'
-        next:
-          type:
-          - string
-          - 'null'
-      title: PaginationLinks
-    PaymentSchedule:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        created_at:
-          type:
-          - string
-          - 'null'
-        updated_at:
-          type:
-          - string
-          - 'null'
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/PaymentScheduleStatus'
-          - type: 'null'
-        customer_id:
-          type: string
-          description: Resource ID of type CUSTOMER
-        customer:
-          oneOf:
-          - $ref: '#/components/schemas/Customer'
-          - type: 'null'
-        reference:
-          type: string
-        description:
-          type:
-          - string
-          - 'null'
-        statement_descriptor:
-          type:
-          - string
-          - 'null'
-        payment_method_id:
-          type: string
-          description: Resource ID of type PAYMENT_METHOD
-        payment_method:
-          oneOf:
-          - $ref: '#/components/schemas/PaymentMethod'
-          - type: 'null'
-        billing_entity_id:
-          type: string
-          description: Resource ID of type BILLING_ENTITY
-        dunning:
-          $ref: '#/components/schemas/PaymentScheduleDunning'
-        payment_method_fallback:
-          $ref: '#/components/schemas/PaymentMethodFallback'
-        type:
-          $ref: '#/components/schemas/PaymentScheduleType'
-        installments:
-          $ref: '#/components/schemas/PaymentScheduleInstallments'
-        recurring:
-          $ref: '#/components/schemas/PaymentScheduleRecurring'
-        one_off:
-          $ref: '#/components/schemas/PaymentScheduleOneOff'
-        seller_details:
-          $ref: '#/components/schemas/SellerDetails'
-      title: PaymentSchedule
-    PaymentScheduleUpdateRequestStatus:
-      type: string
-      enum:
-      - ACTIVE
-      - PAUSED
-      - CANCELLED
-      - DONE
-      title: PaymentScheduleUpdateRequestStatus
-    Amount:
-      type: object
-      properties:
-        quantity:
-          type: string
-        currency:
-          $ref: '#/components/schemas/AmountCurrency'
-      title: Amount
-    PeriodType:
-      type: string
-      enum:
-      - DAY
-      - WEEK
-      - MONTH
-      - YEAR
-      title: PeriodType
-    PaymentScheduleCreateRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        created_at:
-          type:
-          - string
-          - 'null'
-        updated_at:
-          type:
-          - string
-          - 'null'
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/PaymentScheduleCreateRequestStatus'
-          - type: 'null'
-        customer_id:
-          type: string
-          description: Resource ID of type CUSTOMER
-        customer:
-          oneOf:
-          - $ref: '#/components/schemas/CustomerCreateRequest'
-          - type: 'null'
-        reference:
-          type: string
-        description:
-          type:
-          - string
-          - 'null'
-        statement_descriptor:
-          type:
-          - string
-          - 'null'
-        payment_method_id:
-          type: string
-          description: Resource ID of type PAYMENT_METHOD
-        payment_method:
-          oneOf:
-          - $ref: '#/components/schemas/PaymentMethodCreateRequest'
-          - type: 'null'
-        billing_entity_id:
-          type: string
-          description: Resource ID of type BILLING_ENTITY
-        dunning:
-          $ref: '#/components/schemas/PaymentScheduleDunningCreateRequest'
-        payment_method_fallback:
-          $ref: '#/components/schemas/PaymentMethodFallbackCreateRequest'
-        type:
-          $ref: '#/components/schemas/PaymentScheduleCreateRequestType'
-        installments:
-          $ref: '#/components/schemas/PaymentScheduleInstallmentsCreateRequest'
-        recurring:
-          $ref: '#/components/schemas/PaymentScheduleRecurringCreateRequest'
-        one_off:
-          $ref: '#/components/schemas/PaymentScheduleOneOffCreateRequest'
-        seller_details:
-          $ref: '#/components/schemas/SellerDetailsCreateRequest'
-      required:
-      - customer_id
-      - reference
-      - payment_method_id
-      - billing_entity_id
-      - type
-      title: PaymentScheduleCreateRequest
-    PaymentMethodOnlineBanking:
-      type: object
-      properties:
-        variant:
-          type:
-          - string
-          - 'null'
-        owner_name:
-          type:
-          - string
-          - 'null'
-        iban:
-          type:
-          - string
-          - 'null'
-        bic:
-          type:
-          - string
-          - 'null'
-        country:
-          oneOf:
-          - $ref: '#/components/schemas/PaymentMethodOnlineBankingCountry'
-          - type: 'null'
-      title: PaymentMethodOnlineBanking
-    PaymentMethodStatus:
-      type: string
-      enum:
-      - SETUP
-      - ACTIVE
-      - INACTIVE
-      - ARCHIVED
-      title: PaymentMethodStatus
-    PaymentScheduleInstallmentsUpdateRequest:
-      type: object
-      properties:
-        total_amount:
-          $ref: '#/components/schemas/Amount'
-        variant:
-          $ref: '#/components/schemas/PaymentScheduleInstallmentsUpdateRequestVariant'
-        number_of_installments:
-          type: integer
-        interval:
-          $ref: '#/components/schemas/IntervalInstallment'
-        fixed:
-          $ref: '#/components/schemas/FixedInstallment'
-      title: PaymentScheduleInstallmentsUpdateRequest
-    CustomFieldValue:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type CUSTOM_FIELD
-        reference:
-          type:
-          - string
-          - 'null'
-        value:
-          type:
-          - string
-          - 'null'
-        values:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-        integration_details:
-          oneOf:
-          - $ref: '#/components/schemas/IntegrationDetails'
-          - type: 'null'
-        integration_id:
-          type: string
-          description: The resource ID of the integration linked to the custom field
-      title: CustomFieldValue
-    Customer:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        created_at:
-          type:
-          - string
-          - 'null'
-        parent_customer_id:
-          type:
-          - string
-          - 'null'
-          description: The parent of the customer. Only returned when there is a single parent.
-        parent_customer_ids:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: A list of parents of the customer. Will also be returned if there is a single parent.
-        reference:
-          type: string
-          description: A custom reference assigned to the customer.
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/CustomerStatus'
-          - type: 'null'
-        timezone:
-          type:
-          - string
-          - 'null'
-        type:
-          $ref: '#/components/schemas/CustomerType'
-          description: The type of customer entity.
-        email:
-          type: string
-          description: The email of the customer.
-        notification_preferences:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/NotificationPreference'
-          description: Notification preferences for customer-related communications.
-        locale:
-          type:
-          - string
-          - 'null'
-          description: The locale of the customer. Format is language-country (like en-US).
-        individual:
-          $ref: '#/components/schemas/Individual'
-          description: Additional description of the individual customer type.
-        organization:
-          $ref: '#/components/schemas/Organization'
-          description: Additional description of the organization customer type.
-        custom_fields:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CustomFieldValue'
-        processing_only:
-          type:
-          - boolean
-          - 'null'
-        pricing_plan_subscription_selector:
-          $ref: '#/components/schemas/PricingPlanSubscriptionSelector'
-          description: Settings to influence dynamically the subscription to use for the ingest data.
-        linked_integrations:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/LinkedIntegration'
-        roles:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CustomerRolesItems'
-        seller_details:
-          $ref: '#/components/schemas/CustomerSellerDetails'
-      title: Customer
-    SellerDetailsUpdateRequest:
-      type: object
-      properties:
-        seller_customer_id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type CUSTOMER
-      title: SellerDetailsUpdateRequest
-    PaymentMethodDigitalWallet:
-      type: object
-      properties:
-        variant:
-          type:
-          - string
-          - 'null'
-      title: PaymentMethodDigitalWallet
-    PaymentMethodCreateRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        created_at:
-          type:
-          - string
-          - 'null'
-        updated_at:
-          type:
-          - string
-          - 'null'
-        reference:
-          type: string
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/PaymentMethodCreateRequestStatus'
-          - type: 'null'
-        type:
-          oneOf:
-          - $ref: '#/components/schemas/PaymentMethodCreateRequestType'
-          - type: 'null'
-        card:
-          $ref: '#/components/schemas/PaymentMethodCard'
-        online_banking:
-          $ref: '#/components/schemas/PaymentMethodOnlineBanking'
-        buy_now_pay_later:
-          $ref: '#/components/schemas/PaymentMethodBuyNowPayLater'
-        direct_debit:
-          $ref: '#/components/schemas/PaymentMethodDirectDebit'
-        digital_wallet:
-          $ref: '#/components/schemas/PaymentMethodDigitalWallet'
-        customer_id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type CUSTOMER
-        integration_id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type INTEGRATION
-        integration_reference:
-          type:
-          - string
-          - 'null'
-        integration_details:
-          $ref: '#/components/schemas/IntegrationDetails'
-        billing_address:
-          $ref: '#/components/schemas/Address'
-        is_default:
-          type:
-          - boolean
-          - 'null'
-      title: PaymentMethodCreateRequest
-    PaymentScheduleUpdateRequestType:
-      type: string
-      enum:
-      - INSTALLMENTS
-      - ONE_OFF
-      - RECURRING
-      title: PaymentScheduleUpdateRequestType
-    PaymentMethodUpdateRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        created_at:
-          type:
-          - string
-          - 'null'
-        updated_at:
-          type:
-          - string
-          - 'null'
-        reference:
-          type: string
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/PaymentMethodUpdateRequestStatus'
-          - type: 'null'
-        type:
-          oneOf:
-          - $ref: '#/components/schemas/PaymentMethodUpdateRequestType'
-          - type: 'null'
-        card:
-          $ref: '#/components/schemas/PaymentMethodCard'
-        online_banking:
-          $ref: '#/components/schemas/PaymentMethodOnlineBanking'
-        buy_now_pay_later:
-          $ref: '#/components/schemas/PaymentMethodBuyNowPayLater'
-        direct_debit:
-          $ref: '#/components/schemas/PaymentMethodDirectDebit'
-        digital_wallet:
-          $ref: '#/components/schemas/PaymentMethodDigitalWallet'
-        customer_id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type CUSTOMER
-        integration_id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type INTEGRATION
-        integration_reference:
-          type:
-          - string
-          - 'null'
-        integration_details:
-          $ref: '#/components/schemas/IntegrationDetails'
-        billing_address:
-          $ref: '#/components/schemas/Address'
-        is_default:
-          type:
-          - boolean
-          - 'null'
-      title: PaymentMethodUpdateRequest
-    PaymentMethodUpdateRequestStatus:
-      type: string
-      enum:
-      - SETUP
-      - ACTIVE
-      - INACTIVE
-      - ARCHIVED
-      title: PaymentMethodUpdateRequestStatus
-    PaymentMethodFallbackCreateRequest:
-      type: object
-      properties:
-        enabled:
-          type: boolean
-        payment_method_ids:
-          type: array
-          items:
-            type: string
-      title: PaymentMethodFallbackCreateRequest
-    PaymentMethodFallback:
-      type: object
-      properties:
-        enabled:
-          type: boolean
-        payment_method_ids:
-          type: array
-          items:
-            type: string
-      title: PaymentMethodFallback
-    PaymentScheduleDunningCreateRequest:
-      type: object
-      properties:
-        enabled:
-          type: boolean
-      title: PaymentScheduleDunningCreateRequest
-    CustomerUpdateRequestRolesItems:
-      type: string
-      enum:
-      - DEFAULT
-      - NON_PROCESSING
-      - SELF_BILLING
-      - SELLER
-      - PROCESSING_ONLY
-      title: CustomerUpdateRequestRolesItems
-    PaymentMethodFallbackUpdateRequest:
-      type: object
-      properties:
-        enabled:
-          type: boolean
-        payment_method_ids:
-          type: array
-          items:
-            type: string
-      title: PaymentMethodFallbackUpdateRequest
-    CustomerUpdateRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        created_at:
-          type:
-          - string
-          - 'null'
-        parent_customer_id:
-          type:
-          - string
-          - 'null'
-          description: The parent of the customer. Only returned when there is a single parent.
-        parent_customer_ids:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: A list of parents of the customer. Will also be returned if there is a single parent.
-        reference:
-          type: string
-          description: A custom reference assigned to the customer.
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/CustomerUpdateRequestStatus'
-          - type: 'null'
-        timezone:
-          type:
-          - string
-          - 'null'
-        type:
-          $ref: '#/components/schemas/CustomerUpdateRequestType'
-          description: The type of customer entity.
-        email:
-          type: string
-          description: The email of the customer.
-        notification_preferences:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/NotificationPreference'
-          description: Notification preferences for customer-related communications.
-        locale:
-          type:
-          - string
-          - 'null'
-          description: The locale of the customer. Format is language-country (like en-US).
-        individual:
-          $ref: '#/components/schemas/Individual'
-          description: Additional description of the individual customer type.
-        organization:
-          $ref: '#/components/schemas/Organization'
-          description: Additional description of the organization customer type.
-        custom_fields:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CustomFieldValue'
-        processing_only:
-          type:
-          - boolean
-          - 'null'
-        pricing_plan_subscription_selector:
-          $ref: '#/components/schemas/PricingPlanSubscriptionSelector'
-          description: Settings to influence dynamically the subscription to use for the ingest data.
-        linked_integrations:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/LinkedIntegration'
-        roles:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CustomerUpdateRequestRolesItems'
-        seller_details:
-          $ref: '#/components/schemas/CustomerSellerDetails'
-      title: CustomerUpdateRequest
-    AmountCurrency:
-      type: string
-      enum:
-      - AED
-      - AFN
-      - ALL
-      - AMD
-      - ANG
-      - AOA
-      - ARS
-      - AUD
-      - AWG
-      - AZN
-      - BAM
-      - BBD
-      - BDT
-      - BGN
-      - BHD
-      - BIF
-      - BMD
-      - BND
-      - BOB
-      - BRL
-      - BSD
-      - BTN
-      - BWP
-      - BYN
-      - BZD
-      - CAD
-      - CDF
-      - CHF
-      - CLF
-      - CLP
-      - CNY
-      - COP
-      - CRC
-      - CUC
-      - CUP
-      - CVE
-      - CZK
-      - DJF
-      - DKK
-      - DOP
-      - DZD
-      - EGP
-      - ERN
-      - ETB
-      - EUR
-      - FJD
-      - FKP
-      - GBP
-      - GEL
-      - GHS
-      - GIP
-      - GMD
-      - GNF
-      - GTQ
-      - GYD
-      - HKD
-      - HNL
-      - HRK
-      - HTG
-      - HUF
-      - IDR
-      - ILS
-      - INR
-      - IQD
-      - IRR
-      - ISK
-      - JMD
-      - JOD
-      - JPY
-      - KES
-      - KGS
-      - KHR
-      - KMF
-      - KPW
-      - KRW
-      - KWD
-      - KYD
-      - KZT
-      - LAK
-      - LBP
-      - LKR
-      - LRD
-      - LSL
-      - LYD
-      - MAD
-      - MDL
-      - MGA
-      - MKD
-      - MMK
-      - MNT
-      - MOP
-      - MRO
-      - MRU
-      - MUR
-      - MVR
-      - MWK
-      - MXN
-      - MXV
-      - MYR
-      - MZN
-      - NAD
-      - NGN
-      - NIO
-      - NOK
-      - NPR
-      - NZD
-      - OMR
-      - PAB
-      - PEN
-      - PGK
-      - PHP
-      - PKR
-      - PLN
-      - PYG
-      - QAR
-      - RON
-      - RSD
-      - RUB
-      - RWF
-      - SAR
-      - SBD
-      - SCR
-      - SDG
-      - SEK
-      - SGD
-      - SHP
-      - SLE
-      - SOS
-      - SRD
-      - SSP
-      - STN
-      - SVC
-      - SYP
-      - SZL
-      - THB
-      - TJS
-      - TMT
-      - TND
-      - TOP
-      - TRY
-      - TTD
-      - TWD
-      - TZS
-      - UAH
-      - UGX
-      - USD
-      - USN
-      - UYI
-      - UYU
-      - UZS
-      - VEF
-      - VES
-      - VND
-      - VUV
-      - WST
-      - XAF
-      - XAG
-      - XAU
-      - XBA
-      - XBB
-      - XBC
-      - XBD
-      - XCD
-      - XDR
-      - XOF
-      - XPD
-      - XPF
-      - XPT
-      - XSU
-      - XTS
-      - XUA
-      - XXX
-      - YER
-      - ZAR
-      - ZMW
-      - ZWL
-      title: AmountCurrency
-    SellerDetails:
-      type: object
-      properties:
-        seller_customer_id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type CUSTOMER
-      title: SellerDetails
-    PaymentScheduleInitCreateRequest:
-      type: object
-      properties:
-        customer:
-          $ref: '#/components/schemas/CustomerCreateRequest'
-          description: Details of the customer to create or update before creating the payment schedule.
-        payment_method:
-          $ref: '#/components/schemas/PaymentMethodCreateRequest'
-          description: Details of the payment method to create or update for the customer.
-        payment_schedule:
-          $ref: '#/components/schemas/PaymentScheduleCreateRequest'
-          description: Details of the payment schedule to create.
-        payment_requests:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/PaymentRequestCreateRequest'
-          description: Payment requests that were generated for the payment schedule.
-      title: PaymentScheduleInitCreateRequest
-    PaymentMethodUpdateRequestType:
-      type: string
-      enum:
-      - CARD
-      - ONLINE_BANKING
-      - BUY_NOW_PAY_LATER
-      - DIRECT_DEBIT
-      - DIGITAL_WALLET
-      - UNKNOWN
-      title: PaymentMethodUpdateRequestType
-    PaymentMethodCreateRequestStatus:
-      type: string
-      enum:
-      - SETUP
-      - ACTIVE
-      - INACTIVE
-      - ARCHIVED
-      title: PaymentMethodCreateRequestStatus
-    Charge:
-      type: object
-      properties:
-        charge_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        amount:
-          $ref: '#/components/schemas/Amount'
-      title: Charge
-    NotificationChannel:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/NotificationChannelType'
-          description: The channel type to use.
-        enabled:
-          type:
-          - boolean
-          - 'null'
-          description: Whether the channel is enabled for the notification type.
-      title: NotificationChannel
-    FixedInstallment:
-      type: object
-      properties:
-        charges:
-          type: array
-          items:
-            $ref: '#/components/schemas/Charge'
-      title: FixedInstallment
-    PaymentRequestStatus:
-      type: string
-      enum:
-      - SCHEDULED
-      - IN_PROGRESS
-      - ON_HOLD
-      - FAILED
-      - DONE
-      - SKIPPED
-      description: The status of the payment request
-      title: PaymentRequestStatus
-    CustomerType:
-      type: string
-      enum:
-      - ORGANIZATION
-      - INDIVIDUAL
-      description: The type of customer entity.
-      title: CustomerType
-    ApiError:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/ApiErrorType'
-        code:
-          $ref: '#/components/schemas/ApiErrorCode'
-        field:
-          type:
-          - string
-          - 'null'
-        message:
-          type: string
-        resource_id:
-          type:
-          - string
-          - 'null'
-        resource_type:
-          oneOf:
-          - $ref: '#/components/schemas/ApiErrorResourceType'
-          - type: 'null'
-      required:
-      - type
-      - code
-      - message
-      title: ApiError
-    NotificationPreference:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/NotificationPreferenceType'
-          description: The notification type to configure.
-        channels:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/NotificationChannel'
-          description: The channels for this notification type.
-      title: NotificationPreference
-    PaymentScheduleInit:
-      type: object
-      properties:
-        customer:
-          $ref: '#/components/schemas/Customer'
-          description: Details of the customer to create or update before creating the payment schedule.
-        payment_method:
-          $ref: '#/components/schemas/PaymentMethod'
-          description: Details of the payment method to create or update for the customer.
-        payment_schedule:
-          $ref: '#/components/schemas/PaymentSchedule'
-          description: Details of the payment schedule to create.
-        payment_requests:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/PaymentRequest'
-          description: Payment requests that were generated for the payment schedule.
-      title: PaymentScheduleInit
-    PaymentMethodDirectDebit:
-      type: object
-      properties:
-        variant:
-          type:
-          - string
-          - 'null'
-        owner_name:
-          type:
-          - string
-          - 'null'
-        iban:
-          type:
-          - string
-          - 'null'
-        bic:
-          type:
-          - string
-          - 'null'
-        country:
-          oneOf:
-          - $ref: '#/components/schemas/PaymentMethodDirectDebitCountry'
-          - type: 'null'
-      title: PaymentMethodDirectDebit
-    SellerDetailsCreateRequest:
-      type: object
-      properties:
-        seller_customer_id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type CUSTOMER
-      title: SellerDetailsCreateRequest
     PricingPlanSubscriptionSelector:
       type: object
       properties:
@@ -1662,16 +577,121 @@ components:
           - type: 'null'
           description: The fallback logic what to do when no subscription is found. By default it is LATEST
       title: PricingPlanSubscriptionSelector
-    PaymentMethodCreateRequestType:
+    NotificationChannelType:
       type: string
       enum:
-      - CARD
-      - ONLINE_BANKING
-      - BUY_NOW_PAY_LATER
-      - DIRECT_DEBIT
-      - DIGITAL_WALLET
-      - UNKNOWN
-      title: PaymentMethodCreateRequestType
+      - EMAIL
+      description: The channel type to use.
+      title: NotificationChannelType
+    PaymentScheduleUpdateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        updated_at:
+          type:
+          - string
+          - 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentScheduleUpdateRequestStatus'
+          - type: 'null'
+        customer_id:
+          type: string
+          description: Resource ID of type CUSTOMER
+        customer:
+          oneOf:
+          - $ref: '#/components/schemas/CustomerUpdateRequest'
+          - type: 'null'
+        reference:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        statement_descriptor:
+          type:
+          - string
+          - 'null'
+        payment_method_id:
+          type: string
+          description: Resource ID of type PAYMENT_METHOD
+        payment_method:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentMethodUpdateRequest'
+          - type: 'null'
+        billing_entity_id:
+          type: string
+          description: Resource ID of type BILLING_ENTITY
+        dunning:
+          $ref: '#/components/schemas/PaymentScheduleDunningUpdateRequest'
+        payment_method_fallback:
+          $ref: '#/components/schemas/PaymentMethodFallbackUpdateRequest'
+        type:
+          $ref: '#/components/schemas/PaymentScheduleUpdateRequestType'
+        installments:
+          $ref: '#/components/schemas/PaymentScheduleInstallmentsUpdateRequest'
+        recurring:
+          $ref: '#/components/schemas/PaymentScheduleRecurringUpdateRequest'
+        one_off:
+          $ref: '#/components/schemas/PaymentScheduleOneOffUpdateRequest'
+        seller_details:
+          $ref: '#/components/schemas/SellerDetailsUpdateRequest'
+      title: PaymentScheduleUpdateRequest
+    PricingPlanSubscriptionSelectorFilterField:
+      type: string
+      enum:
+      - BILLING_ENTITY_REGISTERED_ADDRESS_COUNTRY
+      - PRICING_PLAN_REFERENCE
+      title: PricingPlanSubscriptionSelectorFilterField
+    PaymentMethodFallbackUpdateRequest:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        payment_method_ids:
+          type: array
+          items:
+            type: string
+      title: PaymentMethodFallbackUpdateRequest
+    PaymentScheduleInitCreateRequest:
+      type: object
+      properties:
+        customer:
+          $ref: '#/components/schemas/CustomerCreateRequest'
+          description: Details of the customer to create or update before creating the payment schedule.
+        payment_method:
+          $ref: '#/components/schemas/PaymentMethodCreateRequest'
+          description: Details of the payment method to create or update for the customer.
+        payment_schedule:
+          $ref: '#/components/schemas/PaymentScheduleCreateRequest'
+          description: Details of the payment schedule to create.
+        payment_requests:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PaymentRequestCreateRequest'
+          description: Payment requests that were generated for the payment schedule.
+      title: PaymentScheduleInitCreateRequest
+    Individual:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/Name'
+        residential_address:
+          $ref: '#/components/schemas/Address'
+      title: Individual
     LinkDetail:
       type: object
       properties:
@@ -1684,29 +704,30 @@ components:
           - string
           - 'null'
       title: LinkDetail
-    PricingPlanSubscriptionSelectorFilterType:
+    TaxId:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/TaxIdType'
+          - type: 'null'
+          description: Optional tax id type, indicates which type of tax the number is for
+        display_name:
+          type:
+          - string
+          - 'null'
+          description: User-friendly display name
+        tax_id_validation_result:
+          $ref: '#/components/schemas/TaxIdValidation'
+      title: TaxId
+    ApiErrorType:
       type: string
       enum:
-      - EQUALS
-      - NOT_EQUALS
-      - IN
-      - NOT_IN
-      - GREATER_THAN
-      - GREATER_THAN_OR_EQUALS
-      - LESS_THAN
-      - LESS_THAN_OR_EQUALS
-      - EMPTY
-      - NOT_EMPTY
-      - CONTAINS
-      - NOT_CONTAINS
-      title: PricingPlanSubscriptionSelectorFilterType
-    CustomerUpdateRequestType:
-      type: string
-      enum:
-      - ORGANIZATION
-      - INDIVIDUAL
-      description: The type of customer entity.
-      title: CustomerUpdateRequestType
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
     CustomerCreateRequest:
       type: object
       properties:
@@ -1797,1197 +818,14 @@ components:
         seller_details:
           $ref: '#/components/schemas/CustomerSellerDetails'
       title: CustomerCreateRequest
-    CustomerSellerDetails:
-      type: object
-      properties:
-        default_billing_entity_id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type BILLING_ENTITY
-      title: CustomerSellerDetails
-    PaymentScheduleInstallmentsCreateRequestVariant:
-      type: string
-      enum:
-      - INTERVAL
-      - FIXED
-      title: PaymentScheduleInstallmentsCreateRequestVariant
-    PaymentScheduleOneOff:
-      type: object
-      properties:
-        charge:
-          $ref: '#/components/schemas/Charge'
-      title: PaymentScheduleOneOff
-    NotificationChannelType:
-      type: string
-      enum:
-      - EMAIL
-      description: The channel type to use.
-      title: NotificationChannelType
-    PaymentScheduleType:
-      type: string
-      enum:
-      - INSTALLMENTS
-      - ONE_OFF
-      - RECURRING
-      title: PaymentScheduleType
-    CustomerStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - ARCHIVED
-      - DEPRECATED
-      - CLOSED
-      title: CustomerStatus
-    PricingPlanSubscriptionSelectorData:
-      type: object
-      properties:
-        field:
-          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorDataField'
-        value:
-          type: string
-      title: PricingPlanSubscriptionSelectorData
-    PaymentScheduleCreateRequestStatus:
-      type: string
-      enum:
-      - ACTIVE
-      - PAUSED
-      - CANCELLED
-      - DONE
-      title: PaymentScheduleCreateRequestStatus
-    PaymentScheduleRecurringCreateRequest:
-      type: object
-      properties:
-        charge:
-          $ref: '#/components/schemas/Charge'
-        start_at:
-          type: string
-          format: date-time
-        end_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        period:
-          $ref: '#/components/schemas/Period'
-      title: PaymentScheduleRecurringCreateRequest
-    ApiErrorCode:
-      type: string
-      enum:
-      - RESOURCE_NOT_FOUND
-      - RESOURCES_NOT_FOUND
-      - UNABLE_TO_PROCESS_INSTRUCTIONS
-      - BAD_REQUEST
-      - UNSUPPORTED_MEDIA_TYPE
-      - RESOURCE_ALREADY_EXISTS
-      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
-      - COULD_NOT_CREATE_RESOURCE
-      - COULD_NOT_UPDATE_RESOURCE
-      - COULD_NOT_DELETE_RESOURCE
-      - MISSING_VERSION
-      - UNSUPPORTED_VERSION
-      - UNAUTHORISED
-      - CUSTOMER_NOT_FOUND
-      - PLATFORM_NOT_FOUND
-      - PRICING_PLAN_NOT_FOUND
-      - PRODUCT_NOT_FOUND
-      - PRODUCT_ITEM_NOT_FOUND
-      - PRICING_NOT_FOUND
-      - PRICING_ITEM_NOT_FOUND
-      - USER_NOT_FOUND
-      - METER_NOT_FOUND
-      - METER_VALUE_NOT_FOUND
-      - METER_PROPERTY_NOT_FOUND
-      - PRICING_ITEM_SUMMARIES_NOT_FOUND
-      - MISSING_ID
-      - INVALID_ID
-      - MISSING_REFERENCE
-      - MISSING_FIELD
-      - INVALID_FIELD
-      - INVALID_OPERATION
-      - INTERNAL_ERROR
-      - USER_NOT_ALLOWED
-      - IDEMPOTENCY_CHECK_FAILED
-      - INVALID_REQUEST
-      title: ApiErrorCode
-    PaymentMethodBuyNowPayLater:
+    PaymentMethodDigitalWallet:
       type: object
       properties:
         variant:
           type:
           - string
           - 'null'
-      title: PaymentMethodBuyNowPayLater
-    PaymentMethodDirectDebitCountry:
-      type: string
-      enum:
-      - AD
-      - AE
-      - AF
-      - AG
-      - AI
-      - AL
-      - AM
-      - AO
-      - AQ
-      - AR
-      - AS
-      - AT
-      - AU
-      - AW
-      - AX
-      - AZ
-      - BA
-      - BB
-      - BD
-      - BE
-      - BF
-      - BG
-      - BH
-      - BI
-      - BJ
-      - BL
-      - BM
-      - BN
-      - BO
-      - BQ
-      - BR
-      - BS
-      - BT
-      - BV
-      - BW
-      - BY
-      - BZ
-      - CA
-      - CC
-      - CD
-      - CF
-      - CG
-      - CH
-      - CI
-      - CK
-      - CL
-      - CM
-      - CN
-      - CO
-      - CR
-      - CU
-      - CV
-      - CW
-      - CX
-      - CY
-      - CZ
-      - DE
-      - DJ
-      - DK
-      - DM
-      - DO
-      - DZ
-      - EC
-      - EE
-      - EG
-      - EH
-      - ER
-      - ES
-      - ET
-      - FI
-      - FJ
-      - FK
-      - FM
-      - FO
-      - FR
-      - GA
-      - GB
-      - GD
-      - GE
-      - GF
-      - GG
-      - GH
-      - GI
-      - GL
-      - GM
-      - GN
-      - GP
-      - GQ
-      - GR
-      - GS
-      - GT
-      - GU
-      - GW
-      - GY
-      - HK
-      - HM
-      - HN
-      - HR
-      - HT
-      - HU
-      - ID
-      - IE
-      - IL
-      - IM
-      - IN
-      - IO
-      - IQ
-      - IR
-      - IS
-      - IT
-      - JE
-      - JM
-      - JO
-      - JP
-      - KE
-      - KG
-      - KH
-      - KI
-      - KM
-      - KN
-      - KP
-      - KR
-      - KW
-      - KY
-      - KZ
-      - LA
-      - LB
-      - LC
-      - LI
-      - LK
-      - LR
-      - LS
-      - LT
-      - LU
-      - LV
-      - LY
-      - MA
-      - MC
-      - MD
-      - ME
-      - MF
-      - MG
-      - MH
-      - MK
-      - ML
-      - MM
-      - MN
-      - MO
-      - MP
-      - MQ
-      - MR
-      - MS
-      - MT
-      - MU
-      - MV
-      - MW
-      - MX
-      - MY
-      - MZ
-      - NA
-      - NC
-      - NE
-      - NF
-      - NG
-      - NI
-      - NL
-      - 'NO'
-      - NP
-      - NR
-      - NU
-      - NZ
-      - OM
-      - PA
-      - PE
-      - PF
-      - PG
-      - PH
-      - PK
-      - PL
-      - PM
-      - PN
-      - PR
-      - PS
-      - PT
-      - PW
-      - PY
-      - QA
-      - RE
-      - RO
-      - RS
-      - RU
-      - RW
-      - SA
-      - SB
-      - SC
-      - SD
-      - SE
-      - SG
-      - SH
-      - SI
-      - SJ
-      - SK
-      - SL
-      - SM
-      - SN
-      - SO
-      - SR
-      - SS
-      - ST
-      - SV
-      - SX
-      - SY
-      - SZ
-      - TC
-      - TD
-      - TF
-      - TG
-      - TH
-      - TJ
-      - TK
-      - TL
-      - TM
-      - TN
-      - TO
-      - TR
-      - TT
-      - TV
-      - TW
-      - TZ
-      - UA
-      - UG
-      - US
-      - UY
-      - UZ
-      - VA
-      - VC
-      - VE
-      - VG
-      - VI
-      - VN
-      - VU
-      - WF
-      - WS
-      - YE
-      - YT
-      - ZA
-      - ZM
-      - ZW
-      title: PaymentMethodDirectDebitCountry
-    CustomerCreateRequestRolesItems:
-      type: string
-      enum:
-      - DEFAULT
-      - NON_PROCESSING
-      - SELF_BILLING
-      - SELLER
-      - PROCESSING_ONLY
-      title: CustomerCreateRequestRolesItems
-    IntegrationDetailsPaymentGatewayVariant:
-      type: string
-      enum:
-      - ADYEN
-      - STRIPE
-      title: IntegrationDetailsPaymentGatewayVariant
-    PaymentMethodCard:
-      type: object
-      properties:
-        brand:
-          oneOf:
-          - $ref: '#/components/schemas/PaymentMethodCardBrand'
-          - type: 'null'
-        name:
-          type:
-          - string
-          - 'null'
-        expiry_date:
-          $ref: '#/components/schemas/ExpiryDate'
-        last_four_digits:
-          type:
-          - string
-          - 'null'
-        country:
-          type:
-          - string
-          - 'null'
-      title: PaymentMethodCard
-    PaymentScheduleRecurring:
-      type: object
-      properties:
-        charge:
-          $ref: '#/components/schemas/Charge'
-        start_at:
-          type: string
-          format: date-time
-        end_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        period:
-          $ref: '#/components/schemas/Period'
-      title: PaymentScheduleRecurring
-    PaymentRequestCreateRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        payment_schedule_id:
-          type:
-          - string
-          - 'null'
-          description: The id of the payment schedule
-        customer_id:
-          type:
-          - string
-          - 'null'
-          description: The id of the customer
-        customer:
-          oneOf:
-          - $ref: '#/components/schemas/Customer'
-          - type: 'null'
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/PaymentRequestCreateRequestStatus'
-          - type: 'null'
-          description: The status of the payment request
-        created_at:
-          type:
-          - string
-          - 'null'
-          description: The moment the payment request was created
-        execute_at:
-          type:
-          - string
-          - 'null'
-          description: The moment the payment request must be executed
-        index:
-          type:
-          - integer
-          - 'null'
-          description: The index of the payment request of the payment schedule
-        amount:
-          oneOf:
-          - $ref: '#/components/schemas/Amount'
-          - type: 'null'
-          description: The amount of the payment request
-      title: PaymentRequestCreateRequest
-    CustomerUpdateRequestStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - ARCHIVED
-      - DEPRECATED
-      - CLOSED
-      title: CustomerUpdateRequestStatus
-    PricingPlanSubscriptionSelectorFilterField:
-      type: string
-      enum:
-      - BILLING_ENTITY_REGISTERED_ADDRESS_COUNTRY
-      - PRICING_PLAN_REFERENCE
-      title: PricingPlanSubscriptionSelectorFilterField
-    PaymentScheduleInstallmentsVariant:
-      type: string
-      enum:
-      - INTERVAL
-      - FIXED
-      title: PaymentScheduleInstallmentsVariant
-    ExpiryDate:
-      type: object
-      properties:
-        expiry_month:
-          type: integer
-        expiry_year:
-          type: integer
-      title: ExpiryDate
-    PaymentMethodCardBrand:
-      type: string
-      enum:
-      - ACCEL
-      - AMERICAN_EXPRESS
-      - BANCONTACT
-      - CARNET
-      - CARTES_BANCAIRES
-      - DANKORT
-      - DINERS
-      - DISCOVER
-      - EFTPOS
-      - ELO
-      - GIROCARD
-      - HIPERCARD
-      - JCB
-      - MAESTRO
-      - MASTERCARD
-      - NYCE
-      - PULSE
-      - STAR
-      - UNION_PAY
-      - VISA
-      - V_PAY
-      title: PaymentMethodCardBrand
-    AdyenIntegrationDetails:
-      type: object
-      properties:
-        recurring_detail_reference:
-          type: string
-      title: AdyenIntegrationDetails
-    PricingPlanSubscriptionSelectorFallback:
-      type: string
-      enum:
-      - LATEST
-      - NONE
-      description: The fallback logic what to do when no subscription is found. By default it is LATEST
-      title: PricingPlanSubscriptionSelectorFallback
-    PaymentScheduleDunningUpdateRequest:
-      type: object
-      properties:
-        enabled:
-          type: boolean
-      title: PaymentScheduleDunningUpdateRequest
-    PaymentScheduleCreateRequestType:
-      type: string
-      enum:
-      - INSTALLMENTS
-      - ONE_OFF
-      - RECURRING
-      title: PaymentScheduleCreateRequestType
-    PaymentScheduleInstallments:
-      type: object
-      properties:
-        total_amount:
-          $ref: '#/components/schemas/Amount'
-        variant:
-          $ref: '#/components/schemas/PaymentScheduleInstallmentsVariant'
-        number_of_installments:
-          type: integer
-        interval:
-          $ref: '#/components/schemas/IntervalInstallment'
-        fixed:
-          $ref: '#/components/schemas/FixedInstallment'
-      title: PaymentScheduleInstallments
-    IntervalInstallment:
-      type: object
-      properties:
-        start_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        period:
-          $ref: '#/components/schemas/Period'
-        charges:
-          type: array
-          items:
-            $ref: '#/components/schemas/Charge'
-      title: IntervalInstallment
-    LinkedIntegration:
-      type: object
-      properties:
-        id:
-          type: string
-        link_details:
-          type: array
-          items:
-            $ref: '#/components/schemas/LinkDetail'
-      title: LinkedIntegration
-    PaymentScheduleOneOffCreateRequest:
-      type: object
-      properties:
-        charge:
-          $ref: '#/components/schemas/Charge'
-      title: PaymentScheduleOneOffCreateRequest
-    CustomerCreateRequestStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - ARCHIVED
-      - DEPRECATED
-      - CLOSED
-      title: CustomerCreateRequestStatus
-    CustomerRolesItems:
-      type: string
-      enum:
-      - DEFAULT
-      - NON_PROCESSING
-      - SELF_BILLING
-      - SELLER
-      - PROCESSING_ONLY
-      title: CustomerRolesItems
-    PaymentMethod:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        created_at:
-          type:
-          - string
-          - 'null'
-        updated_at:
-          type:
-          - string
-          - 'null'
-        reference:
-          type: string
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/PaymentMethodStatus'
-          - type: 'null'
-        type:
-          oneOf:
-          - $ref: '#/components/schemas/PaymentMethodType'
-          - type: 'null'
-        card:
-          $ref: '#/components/schemas/PaymentMethodCard'
-        online_banking:
-          $ref: '#/components/schemas/PaymentMethodOnlineBanking'
-        buy_now_pay_later:
-          $ref: '#/components/schemas/PaymentMethodBuyNowPayLater'
-        direct_debit:
-          $ref: '#/components/schemas/PaymentMethodDirectDebit'
-        digital_wallet:
-          $ref: '#/components/schemas/PaymentMethodDigitalWallet'
-        customer_id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type CUSTOMER
-        integration_id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type INTEGRATION
-        integration_reference:
-          type:
-          - string
-          - 'null'
-        integration_details:
-          $ref: '#/components/schemas/IntegrationDetails'
-        billing_address:
-          $ref: '#/components/schemas/Address'
-        is_default:
-          type:
-          - boolean
-          - 'null'
-      title: PaymentMethod
-    PaymentMethodType:
-      type: string
-      enum:
-      - CARD
-      - ONLINE_BANKING
-      - BUY_NOW_PAY_LATER
-      - DIRECT_DEBIT
-      - DIGITAL_WALLET
-      - UNKNOWN
-      title: PaymentMethodType
-    PaymentScheduleInstallmentsUpdateRequestVariant:
-      type: string
-      enum:
-      - INTERVAL
-      - FIXED
-      title: PaymentScheduleInstallmentsUpdateRequestVariant
-    PaymentRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        payment_schedule_id:
-          type:
-          - string
-          - 'null'
-          description: The id of the payment schedule
-        customer_id:
-          type:
-          - string
-          - 'null'
-          description: The id of the customer
-        customer:
-          oneOf:
-          - $ref: '#/components/schemas/Customer'
-          - type: 'null'
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/PaymentRequestStatus'
-          - type: 'null'
-          description: The status of the payment request
-        created_at:
-          type:
-          - string
-          - 'null'
-          description: The moment the payment request was created
-        execute_at:
-          type:
-          - string
-          - 'null'
-          description: The moment the payment request must be executed
-        index:
-          type:
-          - integer
-          - 'null'
-          description: The index of the payment request of the payment schedule
-        amount:
-          oneOf:
-          - $ref: '#/components/schemas/Amount'
-          - type: 'null'
-          description: The amount of the payment request
-      title: PaymentRequest
-    AddressCountry:
-      type: string
-      enum:
-      - AD
-      - AE
-      - AF
-      - AG
-      - AI
-      - AL
-      - AM
-      - AO
-      - AQ
-      - AR
-      - AS
-      - AT
-      - AU
-      - AW
-      - AX
-      - AZ
-      - BA
-      - BB
-      - BD
-      - BE
-      - BF
-      - BG
-      - BH
-      - BI
-      - BJ
-      - BL
-      - BM
-      - BN
-      - BO
-      - BQ
-      - BR
-      - BS
-      - BT
-      - BV
-      - BW
-      - BY
-      - BZ
-      - CA
-      - CC
-      - CD
-      - CF
-      - CG
-      - CH
-      - CI
-      - CK
-      - CL
-      - CM
-      - CN
-      - CO
-      - CR
-      - CU
-      - CV
-      - CW
-      - CX
-      - CY
-      - CZ
-      - DE
-      - DJ
-      - DK
-      - DM
-      - DO
-      - DZ
-      - EC
-      - EE
-      - EG
-      - EH
-      - ER
-      - ES
-      - ET
-      - FI
-      - FJ
-      - FK
-      - FM
-      - FO
-      - FR
-      - GA
-      - GB
-      - GD
-      - GE
-      - GF
-      - GG
-      - GH
-      - GI
-      - GL
-      - GM
-      - GN
-      - GP
-      - GQ
-      - GR
-      - GS
-      - GT
-      - GU
-      - GW
-      - GY
-      - HK
-      - HM
-      - HN
-      - HR
-      - HT
-      - HU
-      - ID
-      - IE
-      - IL
-      - IM
-      - IN
-      - IO
-      - IQ
-      - IR
-      - IS
-      - IT
-      - JE
-      - JM
-      - JO
-      - JP
-      - KE
-      - KG
-      - KH
-      - KI
-      - KM
-      - KN
-      - KP
-      - KR
-      - KW
-      - KY
-      - KZ
-      - LA
-      - LB
-      - LC
-      - LI
-      - LK
-      - LR
-      - LS
-      - LT
-      - LU
-      - LV
-      - LY
-      - MA
-      - MC
-      - MD
-      - ME
-      - MF
-      - MG
-      - MH
-      - MK
-      - ML
-      - MM
-      - MN
-      - MO
-      - MP
-      - MQ
-      - MR
-      - MS
-      - MT
-      - MU
-      - MV
-      - MW
-      - MX
-      - MY
-      - MZ
-      - NA
-      - NC
-      - NE
-      - NF
-      - NG
-      - NI
-      - NL
-      - 'NO'
-      - NP
-      - NR
-      - NU
-      - NZ
-      - OM
-      - PA
-      - PE
-      - PF
-      - PG
-      - PH
-      - PK
-      - PL
-      - PM
-      - PN
-      - PR
-      - PS
-      - PT
-      - PW
-      - PY
-      - QA
-      - RE
-      - RO
-      - RS
-      - RU
-      - RW
-      - SA
-      - SB
-      - SC
-      - SD
-      - SE
-      - SG
-      - SH
-      - SI
-      - SJ
-      - SK
-      - SL
-      - SM
-      - SN
-      - SO
-      - SR
-      - SS
-      - ST
-      - SV
-      - SX
-      - SY
-      - SZ
-      - TC
-      - TD
-      - TF
-      - TG
-      - TH
-      - TJ
-      - TK
-      - TL
-      - TM
-      - TN
-      - TO
-      - TR
-      - TT
-      - TV
-      - TW
-      - TZ
-      - UA
-      - UG
-      - US
-      - UY
-      - UZ
-      - VA
-      - VC
-      - VE
-      - VG
-      - VI
-      - VN
-      - VU
-      - WF
-      - WS
-      - YE
-      - YT
-      - ZA
-      - ZM
-      - ZW
-      title: AddressCountry
-    PaymentScheduleOneOffUpdateRequest:
-      type: object
-      properties:
-        charge:
-          $ref: '#/components/schemas/Charge'
-      title: PaymentScheduleOneOffUpdateRequest
-    TaxIdValidationValid:
-      type: string
-      enum:
-      - VALID
-      - NOT_VALID
-      - UNKNOWN
-      title: TaxIdValidationValid
-    PaymentScheduleRecurringUpdateRequest:
-      type: object
-      properties:
-        charge:
-          $ref: '#/components/schemas/Charge'
-        start_at:
-          type: string
-          format: date-time
-        end_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        period:
-          $ref: '#/components/schemas/Period'
-      title: PaymentScheduleRecurringUpdateRequest
-    IntegrationDetails:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-        reference:
-          type:
-          - string
-          - 'null'
-        payment_gateway_variant:
-          $ref: '#/components/schemas/IntegrationDetailsPaymentGatewayVariant'
-        adyen:
-          $ref: '#/components/schemas/AdyenIntegrationDetails'
-        stripe:
-          $ref: '#/components/schemas/StripeIntegrationDetails'
-      title: IntegrationDetails
-    Individual:
-      type: object
-      properties:
-        name:
-          $ref: '#/components/schemas/Name'
-        residential_address:
-          $ref: '#/components/schemas/Address'
-      title: Individual
-    StripeIntegrationDetails:
-      type: object
-      properties:
-        payment_method_id:
-          type: string
-      title: StripeIntegrationDetails
-    Organization:
-      type: object
-      properties:
-        legal_name:
-          type: string
-        tax_id:
-          type:
-          - string
-          - 'null'
-          description: Tax Id used for tax purposes of the organization
-        tax_ids:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/TaxId'
-          description: Tax Ids used for tax purposes of the organization
-        registration_number:
-          type:
-          - string
-          - 'null'
-        tax_exempt:
-          type:
-          - boolean
-          - 'null'
-        tax_exempt_note:
-          type:
-          - string
-          - 'null'
-        registered_address:
-          $ref: '#/components/schemas/Address'
-        tax_registrations:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/TaxRegistration'
-          description: Extra tax registrations for the customer
-      title: Organization
-    ApiErrorResourceType:
-      type: string
-      enum:
-      - CUSTOMER
-      - CUSTOM_FIELD
-      - PLATFORM
-      - PLATFORM_UPTODATE
-      - METER
-      - METER_VALUE
-      - METER_PROPERTY
-      - METER_VALUE_CALCULATION
-      - INGEST_DATA
-      - METER_DATA
-      - CHARGE_DATA
-      - PERSIST_DATA
-      - ADJUSTMENT_DATA
-      - PRODUCT_CATEGORY
-      - PRODUCT
-      - PRODUCT_ITEM
-      - PRICING
-      - PRICING_GROUP
-      - PRICING_ITEM
-      - PRICING_ITEM_CONFIG
-      - PRICING_PLAN_SUBSCRIPTION
-      - PRICING_PLAN_SUBSCRIPTION_GROUP
-      - PRICING_PLAN_SCHEDULE
-      - PRICING_PLAN
-      - PRICING_PLAN_VERSION
-      - QUOTE
-      - QUOTE_VERSION
-      - QUOTE_TEMPLATE
-      - API_KEY
-      - USER
-      - ROLE
-      - PROXY_USER
-      - EXTERNAL_CREDENTIALS
-      - TOKEN
-      - INVOICE
-      - E_INVOICE
-      - PDF
-      - BILLING_ENTITY
-      - FEATURE
-      - MEMBERSHIP
-      - PAYMENT
-      - PAYMENT_ACCEPTOR
-      - PAYMENT_METHOD
-      - PAYMENT_METHOD_OPTIONS
-      - PAYMENT_SCHEDULE
-      - PAYMENT_REQUEST
-      - INTEGRATION
-      - WEBHOOK
-      - FILE
-      - FILE_PROCESSING_SETTINGS
-      - TEAM
-      - DOWNLOAD_URL
-      - CSV_REPORT
-      - REPORT
-      - REPORT_GENERATE_REQUEST
-      - REPORT_CONFIGURATION
-      - REPORT_SUBSCRIPTION
-      - REPORT_DEFINITION
-      - ACCOUNT_GROUP
-      - ENTITY
-      - EVENT_TRACE
-      - EVENT_TRACE_LINK
-      - PRICING_CATEGORY
-      - CONTACT
-      - ALERT_RULE
-      - ALERT
-      - AUDIT_RECORD
-      - PORTAL_URL
-      - AUTHENTICATION_PROVIDER
-      - REPROCESS
-      - APPROVAL_POLICY
-      - APPROVAL_REQUEST
-      - BULK_ACTION
-      - COUPON
-      - PROMOTION_CODE
-      - WALLET
-      - WALLET_TYPE
-      - WALLET_GRANT
-      - WORKFLOW
-      - WORKFLOW_TRIGGER
-      - WORKFLOW_ACTION
-      - CREDIT_TYPE
-      - SIGNATURE_REQUEST
-      - ATTACHMENT
-      - DOCUMENT
-      title: ApiErrorResourceType
+      title: PaymentMethodDigitalWallet
     PaymentMethodOnlineBankingCountry:
       type: string
       enum:
@@ -3240,13 +1078,82 @@ components:
       - ZM
       - ZW
       title: PaymentMethodOnlineBankingCountry
-    PricingPlanSubscriptionSelectorDataField:
+    CustomerSellerDetails:
+      type: object
+      properties:
+        default_billing_entity_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type BILLING_ENTITY
+      title: CustomerSellerDetails
+    PaymentScheduleInstallments:
+      type: object
+      properties:
+        total_amount:
+          $ref: '#/components/schemas/Amount'
+        variant:
+          $ref: '#/components/schemas/PaymentScheduleInstallmentsVariant'
+        number_of_installments:
+          type: integer
+        interval:
+          $ref: '#/components/schemas/IntervalInstallment'
+        fixed:
+          $ref: '#/components/schemas/FixedInstallment'
+      title: PaymentScheduleInstallments
+    CustomerRolesItems:
       type: string
       enum:
-      - BILLING_ENTITY_REGISTERED_ADDRESS_COUNTRY
-      - PRICING_PLAN_REFERENCE
-      title: PricingPlanSubscriptionSelectorDataField
-    PaymentScheduleUpdateRequest:
+      - DEFAULT
+      - NON_PROCESSING
+      - SELF_BILLING
+      - SELLER
+      - PROCESSING_ONLY
+      title: CustomerRolesItems
+    PeriodType:
+      type: string
+      enum:
+      - DAY
+      - WEEK
+      - MONTH
+      - YEAR
+      title: PeriodType
+    PaymentMethodStatus:
+      type: string
+      enum:
+      - SETUP
+      - ACTIVE
+      - INACTIVE
+      - ARCHIVED
+      title: PaymentMethodStatus
+    PaymentRequestStatus:
+      type: string
+      enum:
+      - SCHEDULED
+      - IN_PROGRESS
+      - ON_HOLD
+      - FAILED
+      - DONE
+      - SKIPPED
+      description: The status of the payment request
+      title: PaymentRequestStatus
+    PricingPlanSubscriptionSelectorRuleType:
+      type: string
+      enum:
+      - EQUALS
+      - NOT_EQUALS
+      - IN
+      - NOT_IN
+      - GREATER_THAN
+      - GREATER_THAN_OR_EQUALS
+      - LESS_THAN
+      - LESS_THAN_OR_EQUALS
+      - EMPTY
+      - NOT_EMPTY
+      - CONTAINS
+      - NOT_CONTAINS
+      title: PricingPlanSubscriptionSelectorRuleType
+    PaymentMethodCreateRequest:
       type: object
       properties:
         object_type:
@@ -3265,68 +1172,896 @@ components:
           type:
           - string
           - 'null'
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/PaymentScheduleUpdateRequestStatus'
-          - type: 'null'
-        customer_id:
-          type: string
-          description: Resource ID of type CUSTOMER
-        customer:
-          oneOf:
-          - $ref: '#/components/schemas/CustomerUpdateRequest'
-          - type: 'null'
         reference:
           type: string
-        description:
-          type:
-          - string
-          - 'null'
-        statement_descriptor:
-          type:
-          - string
-          - 'null'
-        payment_method_id:
-          type: string
-          description: Resource ID of type PAYMENT_METHOD
-        payment_method:
+        status:
           oneOf:
-          - $ref: '#/components/schemas/PaymentMethodUpdateRequest'
+          - $ref: '#/components/schemas/PaymentMethodCreateRequestStatus'
           - type: 'null'
-        billing_entity_id:
-          type: string
-          description: Resource ID of type BILLING_ENTITY
-        dunning:
-          $ref: '#/components/schemas/PaymentScheduleDunningUpdateRequest'
-        payment_method_fallback:
-          $ref: '#/components/schemas/PaymentMethodFallbackUpdateRequest'
         type:
-          $ref: '#/components/schemas/PaymentScheduleUpdateRequestType'
-        installments:
-          $ref: '#/components/schemas/PaymentScheduleInstallmentsUpdateRequest'
-        recurring:
-          $ref: '#/components/schemas/PaymentScheduleRecurringUpdateRequest'
-        one_off:
-          $ref: '#/components/schemas/PaymentScheduleOneOffUpdateRequest'
-        seller_details:
-          $ref: '#/components/schemas/SellerDetailsUpdateRequest'
-      title: PaymentScheduleUpdateRequest
-    TaxIdValidation:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentMethodCreateRequestType'
+          - type: 'null'
+        card:
+          $ref: '#/components/schemas/PaymentMethodCard'
+        online_banking:
+          $ref: '#/components/schemas/PaymentMethodOnlineBanking'
+        buy_now_pay_later:
+          $ref: '#/components/schemas/PaymentMethodBuyNowPayLater'
+        direct_debit:
+          $ref: '#/components/schemas/PaymentMethodDirectDebit'
+        digital_wallet:
+          $ref: '#/components/schemas/PaymentMethodDigitalWallet'
+        customer_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOMER
+        integration_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type INTEGRATION
+        integration_reference:
+          type:
+          - string
+          - 'null'
+        integration_details:
+          $ref: '#/components/schemas/IntegrationDetails'
+        billing_address:
+          $ref: '#/components/schemas/Address'
+        is_default:
+          type:
+          - boolean
+          - 'null'
+      title: PaymentMethodCreateRequest
+    PaymentRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        payment_schedule_id:
+          type:
+          - string
+          - 'null'
+          description: The id of the payment schedule
+        customer_id:
+          type:
+          - string
+          - 'null'
+          description: The id of the customer
+        customer:
+          oneOf:
+          - $ref: '#/components/schemas/Customer'
+          - type: 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentRequestStatus'
+          - type: 'null'
+          description: The status of the payment request
+        created_at:
+          type:
+          - string
+          - 'null'
+          description: The moment the payment request was created
+        execute_at:
+          type:
+          - string
+          - 'null'
+          description: The moment the payment request must be executed
+        index:
+          type:
+          - integer
+          - 'null'
+          description: The index of the payment request of the payment schedule
+        amount:
+          oneOf:
+          - $ref: '#/components/schemas/Amount'
+          - type: 'null'
+          description: The amount of the payment request
+      title: PaymentRequest
+    CustomerStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      - CLOSED
+      title: CustomerStatus
+    PaymentScheduleDunningUpdateRequest:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+      title: PaymentScheduleDunningUpdateRequest
+    PaymentScheduleInit:
+      type: object
+      properties:
+        customer:
+          $ref: '#/components/schemas/Customer'
+          description: Details of the customer to create or update before creating the payment schedule.
+        payment_method:
+          $ref: '#/components/schemas/PaymentMethod'
+          description: Details of the payment method to create or update for the customer.
+        payment_schedule:
+          $ref: '#/components/schemas/PaymentSchedule'
+          description: Details of the payment schedule to create.
+        payment_requests:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/PaymentRequest'
+          description: Payment requests that were generated for the payment schedule.
+      title: PaymentScheduleInit
+    PaymentMethod:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        updated_at:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentMethodStatus'
+          - type: 'null'
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentMethodType'
+          - type: 'null'
+        card:
+          $ref: '#/components/schemas/PaymentMethodCard'
+        online_banking:
+          $ref: '#/components/schemas/PaymentMethodOnlineBanking'
+        buy_now_pay_later:
+          $ref: '#/components/schemas/PaymentMethodBuyNowPayLater'
+        direct_debit:
+          $ref: '#/components/schemas/PaymentMethodDirectDebit'
+        digital_wallet:
+          $ref: '#/components/schemas/PaymentMethodDigitalWallet'
+        customer_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOMER
+        integration_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type INTEGRATION
+        integration_reference:
+          type:
+          - string
+          - 'null'
+        integration_details:
+          $ref: '#/components/schemas/IntegrationDetails'
+        billing_address:
+          $ref: '#/components/schemas/Address'
+        is_default:
+          type:
+          - boolean
+          - 'null'
+      title: PaymentMethod
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    Charge:
+      type: object
+      properties:
+        charge_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        amount:
+          $ref: '#/components/schemas/Amount'
+      title: Charge
+    PaymentScheduleUpdateRequestType:
+      type: string
+      enum:
+      - INSTALLMENTS
+      - ONE_OFF
+      - RECURRING
+      title: PaymentScheduleUpdateRequestType
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    CustomFieldValue:
       type: object
       properties:
         id:
-          type: string
-        validation_date:
-          type: string
-        source:
-          type: string
-        valid:
-          $ref: '#/components/schemas/TaxIdValidationValid'
-        message:
           type:
           - string
           - 'null'
-      title: TaxIdValidation
+          description: Resource ID of type CUSTOM_FIELD
+        reference:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+        values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        integration_details:
+          oneOf:
+          - $ref: '#/components/schemas/IntegrationDetails'
+          - type: 'null'
+        integration_id:
+          type: string
+          description: The resource ID of the integration linked to the custom field
+      title: CustomFieldValue
+    CustomerCreateRequestType:
+      type: string
+      enum:
+      - ORGANIZATION
+      - INDIVIDUAL
+      description: The type of customer entity.
+      title: CustomerCreateRequestType
+    PaymentScheduleOneOff:
+      type: object
+      properties:
+        charge:
+          $ref: '#/components/schemas/Charge'
+      title: PaymentScheduleOneOff
+    Period:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/PeriodType'
+        value:
+          type:
+          - integer
+          - 'null'
+      title: Period
+    Customer:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        parent_customer_id:
+          type:
+          - string
+          - 'null'
+          description: The parent of the customer. Only returned when there is a single parent.
+        parent_customer_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: A list of parents of the customer. Will also be returned if there is a single parent.
+        reference:
+          type: string
+          description: A custom reference assigned to the customer.
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/CustomerStatus'
+          - type: 'null'
+        timezone:
+          type:
+          - string
+          - 'null'
+        type:
+          $ref: '#/components/schemas/CustomerType'
+          description: The type of customer entity.
+        email:
+          type: string
+          description: The email of the customer.
+        notification_preferences:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/NotificationPreference'
+          description: Notification preferences for customer-related communications.
+        locale:
+          type:
+          - string
+          - 'null'
+          description: The locale of the customer. Format is language-country (like en-US).
+        individual:
+          $ref: '#/components/schemas/Individual'
+          description: Additional description of the individual customer type.
+        organization:
+          $ref: '#/components/schemas/Organization'
+          description: Additional description of the organization customer type.
+        custom_fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomFieldValue'
+        processing_only:
+          type:
+          - boolean
+          - 'null'
+        pricing_plan_subscription_selector:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelector'
+          description: Settings to influence dynamically the subscription to use for the ingest data.
+        linked_integrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/LinkedIntegration'
+        roles:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomerRolesItems'
+        seller_details:
+          $ref: '#/components/schemas/CustomerSellerDetails'
+      title: Customer
+    PaymentScheduleDunning:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+      title: PaymentScheduleDunning
+    CustomerType:
+      type: string
+      enum:
+      - ORGANIZATION
+      - INDIVIDUAL
+      description: The type of customer entity.
+      title: CustomerType
+    IntervalInstallment:
+      type: object
+      properties:
+        start_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        period:
+          $ref: '#/components/schemas/Period'
+        charges:
+          type: array
+          items:
+            $ref: '#/components/schemas/Charge'
+      title: IntervalInstallment
+    Organization:
+      type: object
+      properties:
+        legal_name:
+          type: string
+        tax_id:
+          type:
+          - string
+          - 'null'
+          description: Tax Id used for tax purposes of the organization
+        tax_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaxId'
+          description: Tax Ids used for tax purposes of the organization
+        registration_number:
+          type:
+          - string
+          - 'null'
+        tax_exempt:
+          type:
+          - boolean
+          - 'null'
+        tax_exempt_note:
+          type:
+          - string
+          - 'null'
+        registered_address:
+          $ref: '#/components/schemas/Address'
+        tax_registrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/TaxRegistration'
+          description: Extra tax registrations for the customer
+      title: Organization
+    Amount:
+      type: object
+      properties:
+        quantity:
+          type: string
+        currency:
+          $ref: '#/components/schemas/AmountCurrency'
+      title: Amount
+    SellerDetails:
+      type: object
+      properties:
+        seller_customer_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOMER
+      title: SellerDetails
+    PaymentScheduleOneOffUpdateRequest:
+      type: object
+      properties:
+        charge:
+          $ref: '#/components/schemas/Charge'
+      title: PaymentScheduleOneOffUpdateRequest
+    PaymentScheduleUpdateRequestStatus:
+      type: string
+      enum:
+      - ACTIVE
+      - PAUSED
+      - CANCELLED
+      - DONE
+      title: PaymentScheduleUpdateRequestStatus
+    PaymentScheduleInstallmentsUpdateRequestVariant:
+      type: string
+      enum:
+      - INTERVAL
+      - FIXED
+      title: PaymentScheduleInstallmentsUpdateRequestVariant
+    PaymentMethodCard:
+      type: object
+      properties:
+        brand:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentMethodCardBrand'
+          - type: 'null'
+        name:
+          type:
+          - string
+          - 'null'
+        expiry_date:
+          $ref: '#/components/schemas/ExpiryDate'
+        last_four_digits:
+          type:
+          - string
+          - 'null'
+        country:
+          type:
+          - string
+          - 'null'
+      title: PaymentMethodCard
+    IntegrationDetails:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+        payment_gateway_variant:
+          $ref: '#/components/schemas/IntegrationDetailsPaymentGatewayVariant'
+        adyen:
+          $ref: '#/components/schemas/AdyenIntegrationDetails'
+        stripe:
+          $ref: '#/components/schemas/StripeIntegrationDetails'
+      title: IntegrationDetails
+    CustomerCreateRequestRolesItems:
+      type: string
+      enum:
+      - DEFAULT
+      - NON_PROCESSING
+      - SELF_BILLING
+      - SELLER
+      - PROCESSING_ONLY
+      title: CustomerCreateRequestRolesItems
+    TaxIdType:
+      type: string
+      enum:
+      - GENERIC_TAX_ID
+      - AU_GST
+      - CA_GST_HST
+      - CA_PST
+      - CA_PST_BC
+      - CA_PST_MB
+      - CA_PST_SK
+      - CA_QST
+      description: Optional tax id type, indicates which type of tax the number is for
+      title: TaxIdType
+    PaymentMethodUpdateRequestStatus:
+      type: string
+      enum:
+      - SETUP
+      - ACTIVE
+      - INACTIVE
+      - ARCHIVED
+      title: PaymentMethodUpdateRequestStatus
+    PaymentMethodDirectDebitCountry:
+      type: string
+      enum:
+      - AD
+      - AE
+      - AF
+      - AG
+      - AI
+      - AL
+      - AM
+      - AO
+      - AQ
+      - AR
+      - AS
+      - AT
+      - AU
+      - AW
+      - AX
+      - AZ
+      - BA
+      - BB
+      - BD
+      - BE
+      - BF
+      - BG
+      - BH
+      - BI
+      - BJ
+      - BL
+      - BM
+      - BN
+      - BO
+      - BQ
+      - BR
+      - BS
+      - BT
+      - BV
+      - BW
+      - BY
+      - BZ
+      - CA
+      - CC
+      - CD
+      - CF
+      - CG
+      - CH
+      - CI
+      - CK
+      - CL
+      - CM
+      - CN
+      - CO
+      - CR
+      - CU
+      - CV
+      - CW
+      - CX
+      - CY
+      - CZ
+      - DE
+      - DJ
+      - DK
+      - DM
+      - DO
+      - DZ
+      - EC
+      - EE
+      - EG
+      - EH
+      - ER
+      - ES
+      - ET
+      - FI
+      - FJ
+      - FK
+      - FM
+      - FO
+      - FR
+      - GA
+      - GB
+      - GD
+      - GE
+      - GF
+      - GG
+      - GH
+      - GI
+      - GL
+      - GM
+      - GN
+      - GP
+      - GQ
+      - GR
+      - GS
+      - GT
+      - GU
+      - GW
+      - GY
+      - HK
+      - HM
+      - HN
+      - HR
+      - HT
+      - HU
+      - ID
+      - IE
+      - IL
+      - IM
+      - IN
+      - IO
+      - IQ
+      - IR
+      - IS
+      - IT
+      - JE
+      - JM
+      - JO
+      - JP
+      - KE
+      - KG
+      - KH
+      - KI
+      - KM
+      - KN
+      - KP
+      - KR
+      - KW
+      - KY
+      - KZ
+      - LA
+      - LB
+      - LC
+      - LI
+      - LK
+      - LR
+      - LS
+      - LT
+      - LU
+      - LV
+      - LY
+      - MA
+      - MC
+      - MD
+      - ME
+      - MF
+      - MG
+      - MH
+      - MK
+      - ML
+      - MM
+      - MN
+      - MO
+      - MP
+      - MQ
+      - MR
+      - MS
+      - MT
+      - MU
+      - MV
+      - MW
+      - MX
+      - MY
+      - MZ
+      - NA
+      - NC
+      - NE
+      - NF
+      - NG
+      - NI
+      - NL
+      - 'NO'
+      - NP
+      - NR
+      - NU
+      - NZ
+      - OM
+      - PA
+      - PE
+      - PF
+      - PG
+      - PH
+      - PK
+      - PL
+      - PM
+      - PN
+      - PR
+      - PS
+      - PT
+      - PW
+      - PY
+      - QA
+      - RE
+      - RO
+      - RS
+      - RU
+      - RW
+      - SA
+      - SB
+      - SC
+      - SD
+      - SE
+      - SG
+      - SH
+      - SI
+      - SJ
+      - SK
+      - SL
+      - SM
+      - SN
+      - SO
+      - SR
+      - SS
+      - ST
+      - SV
+      - SX
+      - SY
+      - SZ
+      - TC
+      - TD
+      - TF
+      - TG
+      - TH
+      - TJ
+      - TK
+      - TL
+      - TM
+      - TN
+      - TO
+      - TR
+      - TT
+      - TV
+      - TW
+      - TZ
+      - UA
+      - UG
+      - US
+      - UY
+      - UZ
+      - VA
+      - VC
+      - VE
+      - VG
+      - VI
+      - VN
+      - VU
+      - WF
+      - WS
+      - YE
+      - YT
+      - ZA
+      - ZM
+      - ZW
+      title: PaymentMethodDirectDebitCountry
+    PaymentScheduleRecurring:
+      type: object
+      properties:
+        charge:
+          $ref: '#/components/schemas/Charge'
+        start_at:
+          type: string
+          format: date-time
+        end_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        period:
+          $ref: '#/components/schemas/Period'
+      title: PaymentScheduleRecurring
+    PricingPlanSubscriptionSelectorDataField:
+      type: string
+      enum:
+      - BILLING_ENTITY_REGISTERED_ADDRESS_COUNTRY
+      - PRICING_PLAN_REFERENCE
+      title: PricingPlanSubscriptionSelectorDataField
+    SellerDetailsUpdateRequest:
+      type: object
+      properties:
+        seller_customer_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOMER
+      title: SellerDetailsUpdateRequest
+    Name:
+      type: object
+      properties:
+        first_name:
+          type:
+          - string
+          - 'null'
+        last_name:
+          type:
+          - string
+          - 'null'
+        infix:
+          type:
+          - string
+          - 'null'
+      title: Name
     TaxRegistration:
       type: object
       properties:
@@ -3361,6 +2096,493 @@ components:
           $ref: '#/components/schemas/Address'
           description: The address of this tax registration, if different from the billing entity. Currently, only the address will be used for tax calculations
       title: TaxRegistration
+    StripeIntegrationDetails:
+      type: object
+      properties:
+        payment_method_id:
+          type: string
+      title: StripeIntegrationDetails
+    ExpiryDate:
+      type: object
+      properties:
+        expiry_month:
+          type: integer
+        expiry_year:
+          type: integer
+      title: ExpiryDate
+    PaymentScheduleOneOffCreateRequest:
+      type: object
+      properties:
+        charge:
+          $ref: '#/components/schemas/Charge'
+      title: PaymentScheduleOneOffCreateRequest
+    PricingPlanSubscriptionSelectorFallback:
+      type: string
+      enum:
+      - LATEST
+      - NONE
+      description: The fallback logic what to do when no subscription is found. By default it is LATEST
+      title: PricingPlanSubscriptionSelectorFallback
+    PaymentMethodType:
+      type: string
+      enum:
+      - CARD
+      - ONLINE_BANKING
+      - BUY_NOW_PAY_LATER
+      - DIRECT_DEBIT
+      - DIGITAL_WALLET
+      - UNKNOWN
+      title: PaymentMethodType
+    PaymentRequestCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        payment_schedule_id:
+          type:
+          - string
+          - 'null'
+          description: The id of the payment schedule
+        customer_id:
+          type:
+          - string
+          - 'null'
+          description: The id of the customer
+        customer:
+          oneOf:
+          - $ref: '#/components/schemas/Customer'
+          - type: 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentRequestCreateRequestStatus'
+          - type: 'null'
+          description: The status of the payment request
+        created_at:
+          type:
+          - string
+          - 'null'
+          description: The moment the payment request was created
+        execute_at:
+          type:
+          - string
+          - 'null'
+          description: The moment the payment request must be executed
+        index:
+          type:
+          - integer
+          - 'null'
+          description: The index of the payment request of the payment schedule
+        amount:
+          oneOf:
+          - $ref: '#/components/schemas/Amount'
+          - type: 'null'
+          description: The amount of the payment request
+      title: PaymentRequestCreateRequest
+    CustomerUpdateRequestRolesItems:
+      type: string
+      enum:
+      - DEFAULT
+      - NON_PROCESSING
+      - SELF_BILLING
+      - SELLER
+      - PROCESSING_ONLY
+      title: CustomerUpdateRequestRolesItems
+    PaymentScheduleCreateRequestType:
+      type: string
+      enum:
+      - INSTALLMENTS
+      - ONE_OFF
+      - RECURRING
+      title: PaymentScheduleCreateRequestType
+    PaymentMethodFallbackCreateRequest:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        payment_method_ids:
+          type: array
+          items:
+            type: string
+      title: PaymentMethodFallbackCreateRequest
+    PricingPlanSubscriptionSelectorFilter:
+      type: object
+      properties:
+        field:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFilterField'
+        type:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFilterType'
+        value:
+          type: string
+      title: PricingPlanSubscriptionSelectorFilter
+    PaymentSchedule:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        updated_at:
+          type:
+          - string
+          - 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentScheduleStatus'
+          - type: 'null'
+        customer_id:
+          type: string
+          description: Resource ID of type CUSTOMER
+        customer:
+          oneOf:
+          - $ref: '#/components/schemas/Customer'
+          - type: 'null'
+        reference:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        statement_descriptor:
+          type:
+          - string
+          - 'null'
+        payment_method_id:
+          type: string
+          description: Resource ID of type PAYMENT_METHOD
+        payment_method:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentMethod'
+          - type: 'null'
+        billing_entity_id:
+          type: string
+          description: Resource ID of type BILLING_ENTITY
+        dunning:
+          $ref: '#/components/schemas/PaymentScheduleDunning'
+        payment_method_fallback:
+          $ref: '#/components/schemas/PaymentMethodFallback'
+        type:
+          $ref: '#/components/schemas/PaymentScheduleType'
+        installments:
+          $ref: '#/components/schemas/PaymentScheduleInstallments'
+        recurring:
+          $ref: '#/components/schemas/PaymentScheduleRecurring'
+        one_off:
+          $ref: '#/components/schemas/PaymentScheduleOneOff'
+        seller_details:
+          $ref: '#/components/schemas/SellerDetails'
+      title: PaymentSchedule
+    PaymentScheduleResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentSchedule'
+        page:
+          type:
+          - integer
+          - 'null'
+        limit:
+          type:
+          - integer
+          - 'null'
+        total_number_of_pages:
+          type:
+          - integer
+          - 'null'
+        links:
+          $ref: '#/components/schemas/PaginationLinks'
+      required:
+      - data
+      title: PaymentScheduleResponseWrapper
+    PricingPlanSubscriptionSelectorData:
+      type: object
+      properties:
+        field:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorDataField'
+        value:
+          type: string
+      title: PricingPlanSubscriptionSelectorData
+    CustomerUpdateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        parent_customer_id:
+          type:
+          - string
+          - 'null'
+          description: The parent of the customer. Only returned when there is a single parent.
+        parent_customer_ids:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: A list of parents of the customer. Will also be returned if there is a single parent.
+        reference:
+          type: string
+          description: A custom reference assigned to the customer.
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/CustomerUpdateRequestStatus'
+          - type: 'null'
+        timezone:
+          type:
+          - string
+          - 'null'
+        type:
+          $ref: '#/components/schemas/CustomerUpdateRequestType'
+          description: The type of customer entity.
+        email:
+          type: string
+          description: The email of the customer.
+        notification_preferences:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/NotificationPreference'
+          description: Notification preferences for customer-related communications.
+        locale:
+          type:
+          - string
+          - 'null'
+          description: The locale of the customer. Format is language-country (like en-US).
+        individual:
+          $ref: '#/components/schemas/Individual'
+          description: Additional description of the individual customer type.
+        organization:
+          $ref: '#/components/schemas/Organization'
+          description: Additional description of the organization customer type.
+        custom_fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomFieldValue'
+        processing_only:
+          type:
+          - boolean
+          - 'null'
+        pricing_plan_subscription_selector:
+          $ref: '#/components/schemas/PricingPlanSubscriptionSelector'
+          description: Settings to influence dynamically the subscription to use for the ingest data.
+        linked_integrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/LinkedIntegration'
+        roles:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomerUpdateRequestRolesItems'
+        seller_details:
+          $ref: '#/components/schemas/CustomerSellerDetails'
+      title: CustomerUpdateRequest
+    TaxIdValidation:
+      type: object
+      properties:
+        id:
+          type: string
+        validation_date:
+          type: string
+        source:
+          type: string
+        valid:
+          $ref: '#/components/schemas/TaxIdValidationValid'
+        message:
+          type:
+          - string
+          - 'null'
+      title: TaxIdValidation
+    PaymentScheduleInstallmentsUpdateRequest:
+      type: object
+      properties:
+        total_amount:
+          $ref: '#/components/schemas/Amount'
+        variant:
+          $ref: '#/components/schemas/PaymentScheduleInstallmentsUpdateRequestVariant'
+        number_of_installments:
+          type: integer
+        interval:
+          $ref: '#/components/schemas/IntervalInstallment'
+        fixed:
+          $ref: '#/components/schemas/FixedInstallment'
+      title: PaymentScheduleInstallmentsUpdateRequest
+    PaymentMethodDirectDebit:
+      type: object
+      properties:
+        variant:
+          type:
+          - string
+          - 'null'
+        owner_name:
+          type:
+          - string
+          - 'null'
+        iban:
+          type:
+          - string
+          - 'null'
+        bic:
+          type:
+          - string
+          - 'null'
+        country:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentMethodDirectDebitCountry'
+          - type: 'null'
+      title: PaymentMethodDirectDebit
+    SellerDetailsCreateRequest:
+      type: object
+      properties:
+        seller_customer_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOMER
+      title: SellerDetailsCreateRequest
+    CustomerUpdateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      - CLOSED
+      title: CustomerUpdateRequestStatus
+    PaymentScheduleCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        updated_at:
+          type:
+          - string
+          - 'null'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentScheduleCreateRequestStatus'
+          - type: 'null'
+        customer_id:
+          type: string
+          description: Resource ID of type CUSTOMER
+        customer:
+          oneOf:
+          - $ref: '#/components/schemas/CustomerCreateRequest'
+          - type: 'null'
+        reference:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        statement_descriptor:
+          type:
+          - string
+          - 'null'
+        payment_method_id:
+          type: string
+          description: Resource ID of type PAYMENT_METHOD
+        payment_method:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentMethodCreateRequest'
+          - type: 'null'
+        billing_entity_id:
+          type: string
+          description: Resource ID of type BILLING_ENTITY
+        dunning:
+          $ref: '#/components/schemas/PaymentScheduleDunningCreateRequest'
+        payment_method_fallback:
+          $ref: '#/components/schemas/PaymentMethodFallbackCreateRequest'
+        type:
+          $ref: '#/components/schemas/PaymentScheduleCreateRequestType'
+        installments:
+          $ref: '#/components/schemas/PaymentScheduleInstallmentsCreateRequest'
+        recurring:
+          $ref: '#/components/schemas/PaymentScheduleRecurringCreateRequest'
+        one_off:
+          $ref: '#/components/schemas/PaymentScheduleOneOffCreateRequest'
+        seller_details:
+          $ref: '#/components/schemas/SellerDetailsCreateRequest'
+      required:
+      - customer_id
+      - reference
+      - payment_method_id
+      - billing_entity_id
+      - type
+      title: PaymentScheduleCreateRequest
+    PaymentMethodOnlineBanking:
+      type: object
+      properties:
+        variant:
+          type:
+          - string
+          - 'null'
+        owner_name:
+          type:
+          - string
+          - 'null'
+        iban:
+          type:
+          - string
+          - 'null'
+        bic:
+          type:
+          - string
+          - 'null'
+        country:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentMethodOnlineBankingCountry'
+          - type: 'null'
+      title: PaymentMethodOnlineBanking
+    CustomerCreateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      - CLOSED
+      title: CustomerCreateRequestStatus
     PaymentScheduleStatus:
       type: string
       enum:
@@ -3369,35 +2591,259 @@ components:
       - CANCELLED
       - DONE
       title: PaymentScheduleStatus
-    TaxIdType:
+    PaymentMethodCreateRequestType:
       type: string
       enum:
-      - GENERIC_TAX_ID
-      - AU_GST
-      - CA_GST_HST
-      - CA_PST
-      - CA_PST_BC
-      - CA_PST_MB
-      - CA_PST_SK
-      - CA_QST
-      description: Optional tax id type, indicates which type of tax the number is for
-      title: TaxIdType
-    PricingPlanSubscriptionSelectorRuleType:
+      - CARD
+      - ONLINE_BANKING
+      - BUY_NOW_PAY_LATER
+      - DIRECT_DEBIT
+      - DIGITAL_WALLET
+      - UNKNOWN
+      title: PaymentMethodCreateRequestType
+    PaymentMethodFallback:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        payment_method_ids:
+          type: array
+          items:
+            type: string
+      title: PaymentMethodFallback
+    NotificationChannel:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/NotificationChannelType'
+          description: The channel type to use.
+        enabled:
+          type:
+          - boolean
+          - 'null'
+          description: Whether the channel is enabled for the notification type.
+      title: NotificationChannel
+    NotificationPreference:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/NotificationPreferenceType'
+          description: The notification type to configure.
+        channels:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/NotificationChannel'
+          description: The channels for this notification type.
+      title: NotificationPreference
+    PaymentScheduleInstallmentsCreateRequest:
+      type: object
+      properties:
+        total_amount:
+          $ref: '#/components/schemas/Amount'
+        variant:
+          $ref: '#/components/schemas/PaymentScheduleInstallmentsCreateRequestVariant'
+        number_of_installments:
+          type: integer
+        interval:
+          $ref: '#/components/schemas/IntervalInstallment'
+        fixed:
+          $ref: '#/components/schemas/FixedInstallment'
+      title: PaymentScheduleInstallmentsCreateRequest
+    AdyenIntegrationDetails:
+      type: object
+      properties:
+        recurring_detail_reference:
+          type: string
+      title: AdyenIntegrationDetails
+    PaymentScheduleRecurringUpdateRequest:
+      type: object
+      properties:
+        charge:
+          $ref: '#/components/schemas/Charge'
+        start_at:
+          type: string
+          format: date-time
+        end_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        period:
+          $ref: '#/components/schemas/Period'
+      title: PaymentScheduleRecurringUpdateRequest
+    IntegrationDetailsPaymentGatewayVariant:
       type: string
       enum:
-      - EQUALS
-      - NOT_EQUALS
-      - IN
-      - NOT_IN
-      - GREATER_THAN
-      - GREATER_THAN_OR_EQUALS
-      - LESS_THAN
-      - LESS_THAN_OR_EQUALS
-      - EMPTY
-      - NOT_EMPTY
-      - CONTAINS
-      - NOT_CONTAINS
-      title: PricingPlanSubscriptionSelectorRuleType
+      - ADYEN
+      - STRIPE
+      title: IntegrationDetailsPaymentGatewayVariant
+    PaymentScheduleCreateRequestStatus:
+      type: string
+      enum:
+      - ACTIVE
+      - PAUSED
+      - CANCELLED
+      - DONE
+      title: PaymentScheduleCreateRequestStatus
+    PaymentScheduleInstallmentsVariant:
+      type: string
+      enum:
+      - INTERVAL
+      - FIXED
+      title: PaymentScheduleInstallmentsVariant
+    PaymentMethodUpdateRequestType:
+      type: string
+      enum:
+      - CARD
+      - ONLINE_BANKING
+      - BUY_NOW_PAY_LATER
+      - DIRECT_DEBIT
+      - DIGITAL_WALLET
+      - UNKNOWN
+      title: PaymentMethodUpdateRequestType
+    CustomerUpdateRequestType:
+      type: string
+      enum:
+      - ORGANIZATION
+      - INDIVIDUAL
+      description: The type of customer entity.
+      title: CustomerUpdateRequestType
+    TaxIdValidationValid:
+      type: string
+      enum:
+      - VALID
+      - NOT_VALID
+      - UNKNOWN
+      title: TaxIdValidationValid
+    FixedInstallment:
+      type: object
+      properties:
+        charges:
+          type: array
+          items:
+            $ref: '#/components/schemas/Charge'
+      title: FixedInstallment
+    PaymentScheduleInstallmentsCreateRequestVariant:
+      type: string
+      enum:
+      - INTERVAL
+      - FIXED
+      title: PaymentScheduleInstallmentsCreateRequestVariant
+    PaymentScheduleRecurringCreateRequest:
+      type: object
+      properties:
+        charge:
+          $ref: '#/components/schemas/Charge'
+        start_at:
+          type: string
+          format: date-time
+        end_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        period:
+          $ref: '#/components/schemas/Period'
+      title: PaymentScheduleRecurringCreateRequest
+    ApiErrorResourceType:
+      type: string
+      enum:
+      - CUSTOMER
+      - CUSTOM_FIELD
+      - PLATFORM
+      - PLATFORM_UPTODATE
+      - METER
+      - METER_VALUE
+      - METER_PROPERTY
+      - METER_VALUE_CALCULATION
+      - INGEST_DATA
+      - METER_DATA
+      - CHARGE_DATA
+      - PERSIST_DATA
+      - ADJUSTMENT_DATA
+      - PRODUCT_CATEGORY
+      - PRODUCT
+      - PRODUCT_ITEM
+      - PRICING
+      - PRICING_GROUP
+      - PRICING_ITEM
+      - PRICING_ITEM_CONFIG
+      - PRICING_PLAN_SUBSCRIPTION
+      - PRICING_PLAN_SUBSCRIPTION_GROUP
+      - PRICING_PLAN_SCHEDULE
+      - PRICING_PLAN
+      - PRICING_PLAN_VERSION
+      - QUOTE
+      - QUOTE_VERSION
+      - QUOTE_TEMPLATE
+      - API_KEY
+      - USER
+      - ROLE
+      - PROXY_USER
+      - EXTERNAL_CREDENTIALS
+      - TOKEN
+      - INVOICE
+      - E_INVOICE
+      - PDF
+      - BILLING_ENTITY
+      - FEATURE
+      - MEMBERSHIP
+      - PAYMENT
+      - PAYMENT_ACCEPTOR
+      - PAYMENT_METHOD
+      - PAYMENT_METHOD_OPTIONS
+      - PAYMENT_SCHEDULE
+      - PAYMENT_REQUEST
+      - INTEGRATION
+      - WEBHOOK
+      - FILE
+      - FILE_PROCESSING_SETTINGS
+      - TEAM
+      - DOWNLOAD_URL
+      - CSV_REPORT
+      - REPORT
+      - REPORT_GENERATE_REQUEST
+      - REPORT_CONFIGURATION
+      - REPORT_SUBSCRIPTION
+      - REPORT_DEFINITION
+      - ACCOUNT_GROUP
+      - ENTITY
+      - EVENT_TRACE
+      - EVENT_TRACE_LINK
+      - PRICING_CATEGORY
+      - CONTACT
+      - ALERT_RULE
+      - ALERT
+      - AUDIT_RECORD
+      - PORTAL_URL
+      - AUTHENTICATION_PROVIDER
+      - REPROCESS
+      - APPROVAL_POLICY
+      - APPROVAL_REQUEST
+      - BULK_ACTION
+      - COUPON
+      - PROMOTION_CODE
+      - WALLET
+      - WALLET_TYPE
+      - WALLET_GRANT
+      - WORKFLOW
+      - WORKFLOW_TRIGGER
+      - WORKFLOW_ACTION
+      - CREDIT_TYPE
+      - SIGNATURE_REQUEST
+      - ATTACHMENT
+      - DOCUMENT
+      title: ApiErrorResourceType
+    PaymentMethodCreateRequestStatus:
+      type: string
+      enum:
+      - SETUP
+      - ACTIVE
+      - INACTIVE
+      - ARCHIVED
+      title: PaymentMethodCreateRequestStatus
     Address:
       type: object
       properties:
@@ -3426,38 +2872,273 @@ components:
           - $ref: '#/components/schemas/AddressCountry'
           - type: 'null'
       title: Address
-    PricingPlanSubscriptionSelectorFilter:
+    PaymentRequestCreateRequestStatus:
+      type: string
+      enum:
+      - SCHEDULED
+      - IN_PROGRESS
+      - ON_HOLD
+      - FAILED
+      - DONE
+      - SKIPPED
+      description: The status of the payment request
+      title: PaymentRequestCreateRequestStatus
+    AmountCurrency:
+      type: string
+      enum:
+      - AED
+      - AFN
+      - ALL
+      - AMD
+      - ANG
+      - AOA
+      - ARS
+      - AUD
+      - AWG
+      - AZN
+      - BAM
+      - BBD
+      - BDT
+      - BGN
+      - BHD
+      - BIF
+      - BMD
+      - BND
+      - BOB
+      - BRL
+      - BSD
+      - BTN
+      - BWP
+      - BYN
+      - BZD
+      - CAD
+      - CDF
+      - CHF
+      - CLF
+      - CLP
+      - CNY
+      - COP
+      - CRC
+      - CUC
+      - CUP
+      - CVE
+      - CZK
+      - DJF
+      - DKK
+      - DOP
+      - DZD
+      - EGP
+      - ERN
+      - ETB
+      - EUR
+      - FJD
+      - FKP
+      - GBP
+      - GEL
+      - GHS
+      - GIP
+      - GMD
+      - GNF
+      - GTQ
+      - GYD
+      - HKD
+      - HNL
+      - HRK
+      - HTG
+      - HUF
+      - IDR
+      - ILS
+      - INR
+      - IQD
+      - IRR
+      - ISK
+      - JMD
+      - JOD
+      - JPY
+      - KES
+      - KGS
+      - KHR
+      - KMF
+      - KPW
+      - KRW
+      - KWD
+      - KYD
+      - KZT
+      - LAK
+      - LBP
+      - LKR
+      - LRD
+      - LSL
+      - LYD
+      - MAD
+      - MDL
+      - MGA
+      - MKD
+      - MMK
+      - MNT
+      - MOP
+      - MRO
+      - MRU
+      - MUR
+      - MVR
+      - MWK
+      - MXN
+      - MXV
+      - MYR
+      - MZN
+      - NAD
+      - NGN
+      - NIO
+      - NOK
+      - NPR
+      - NZD
+      - OMR
+      - PAB
+      - PEN
+      - PGK
+      - PHP
+      - PKR
+      - PLN
+      - PYG
+      - QAR
+      - RON
+      - RSD
+      - RUB
+      - RWF
+      - SAR
+      - SBD
+      - SCR
+      - SDG
+      - SEK
+      - SGD
+      - SHP
+      - SLE
+      - SOS
+      - SRD
+      - SSP
+      - STN
+      - SVC
+      - SYP
+      - SZL
+      - THB
+      - TJS
+      - TMT
+      - TND
+      - TOP
+      - TRY
+      - TTD
+      - TWD
+      - TZS
+      - UAH
+      - UGX
+      - USD
+      - USN
+      - UYI
+      - UYU
+      - UZS
+      - VEF
+      - VES
+      - VND
+      - VUV
+      - WST
+      - XAF
+      - XAG
+      - XAU
+      - XBA
+      - XBB
+      - XBC
+      - XBD
+      - XCD
+      - XDR
+      - XOF
+      - XPD
+      - XPF
+      - XPT
+      - XSU
+      - XTS
+      - XUA
+      - XXX
+      - YER
+      - ZAR
+      - ZMW
+      - ZWL
+      title: AmountCurrency
+    PaymentScheduleType:
+      type: string
+      enum:
+      - INSTALLMENTS
+      - ONE_OFF
+      - RECURRING
+      title: PaymentScheduleType
+    LinkedIntegration:
       type: object
       properties:
-        field:
-          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFilterField'
-        type:
-          $ref: '#/components/schemas/PricingPlanSubscriptionSelectorFilterType'
-        value:
+        id:
           type: string
-      title: PricingPlanSubscriptionSelectorFilter
-    PaymentScheduleDunning:
+        link_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/LinkDetail'
+      title: LinkedIntegration
+    PricingPlanSubscriptionSelectorRuleField:
+      type: string
+      enum:
+      - BILLING_ENTITY_REGISTERED_ADDRESS_COUNTRY
+      - PRICING_PLAN_REFERENCE
+      title: PricingPlanSubscriptionSelectorRuleField
+    PaymentMethodCardBrand:
+      type: string
+      enum:
+      - ACCEL
+      - AMERICAN_EXPRESS
+      - BANCONTACT
+      - CARNET
+      - CARTES_BANCAIRES
+      - DANKORT
+      - DINERS
+      - DISCOVER
+      - EFTPOS
+      - ELO
+      - GIROCARD
+      - HIPERCARD
+      - JCB
+      - MAESTRO
+      - MASTERCARD
+      - NYCE
+      - PULSE
+      - STAR
+      - UNION_PAY
+      - VISA
+      - V_PAY
+      title: PaymentMethodCardBrand
+    NotificationPreferenceType:
+      type: string
+      enum:
+      - INVOICE
+      description: The notification type to configure.
+      title: NotificationPreferenceType
+    PaymentScheduleDunningCreateRequest:
       type: object
       properties:
         enabled:
           type: boolean
-      title: PaymentScheduleDunning
-    Name:
-      type: object
-      properties:
-        first_name:
-          type:
-          - string
-          - 'null'
-        last_name:
-          type:
-          - string
-          - 'null'
-        infix:
-          type:
-          - string
-          - 'null'
-      title: Name
+      title: PaymentScheduleDunningCreateRequest
+    PricingPlanSubscriptionSelectorFilterType:
+      type: string
+      enum:
+      - EQUALS
+      - NOT_EQUALS
+      - IN
+      - NOT_IN
+      - GREATER_THAN
+      - GREATER_THAN_OR_EQUALS
+      - LESS_THAN
+      - LESS_THAN_OR_EQUALS
+      - EMPTY
+      - NOT_EMPTY
+      - CONTAINS
+      - NOT_CONTAINS
+      title: PricingPlanSubscriptionSelectorFilterType
     PricingPlanSubscriptionSelectorRule:
       type: object
       properties:
@@ -3466,29 +3147,348 @@ components:
         type:
           $ref: '#/components/schemas/PricingPlanSubscriptionSelectorRuleType'
       title: PricingPlanSubscriptionSelectorRule
-    ApiErrorType:
+    AddressCountry:
       type: string
       enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
-    CustomerCreateRequestType:
-      type: string
-      enum:
-      - ORGANIZATION
-      - INDIVIDUAL
-      description: The type of customer entity.
-      title: CustomerCreateRequestType
-    Period:
+      - AD
+      - AE
+      - AF
+      - AG
+      - AI
+      - AL
+      - AM
+      - AO
+      - AQ
+      - AR
+      - AS
+      - AT
+      - AU
+      - AW
+      - AX
+      - AZ
+      - BA
+      - BB
+      - BD
+      - BE
+      - BF
+      - BG
+      - BH
+      - BI
+      - BJ
+      - BL
+      - BM
+      - BN
+      - BO
+      - BQ
+      - BR
+      - BS
+      - BT
+      - BV
+      - BW
+      - BY
+      - BZ
+      - CA
+      - CC
+      - CD
+      - CF
+      - CG
+      - CH
+      - CI
+      - CK
+      - CL
+      - CM
+      - CN
+      - CO
+      - CR
+      - CU
+      - CV
+      - CW
+      - CX
+      - CY
+      - CZ
+      - DE
+      - DJ
+      - DK
+      - DM
+      - DO
+      - DZ
+      - EC
+      - EE
+      - EG
+      - EH
+      - ER
+      - ES
+      - ET
+      - FI
+      - FJ
+      - FK
+      - FM
+      - FO
+      - FR
+      - GA
+      - GB
+      - GD
+      - GE
+      - GF
+      - GG
+      - GH
+      - GI
+      - GL
+      - GM
+      - GN
+      - GP
+      - GQ
+      - GR
+      - GS
+      - GT
+      - GU
+      - GW
+      - GY
+      - HK
+      - HM
+      - HN
+      - HR
+      - HT
+      - HU
+      - ID
+      - IE
+      - IL
+      - IM
+      - IN
+      - IO
+      - IQ
+      - IR
+      - IS
+      - IT
+      - JE
+      - JM
+      - JO
+      - JP
+      - KE
+      - KG
+      - KH
+      - KI
+      - KM
+      - KN
+      - KP
+      - KR
+      - KW
+      - KY
+      - KZ
+      - LA
+      - LB
+      - LC
+      - LI
+      - LK
+      - LR
+      - LS
+      - LT
+      - LU
+      - LV
+      - LY
+      - MA
+      - MC
+      - MD
+      - ME
+      - MF
+      - MG
+      - MH
+      - MK
+      - ML
+      - MM
+      - MN
+      - MO
+      - MP
+      - MQ
+      - MR
+      - MS
+      - MT
+      - MU
+      - MV
+      - MW
+      - MX
+      - MY
+      - MZ
+      - NA
+      - NC
+      - NE
+      - NF
+      - NG
+      - NI
+      - NL
+      - 'NO'
+      - NP
+      - NR
+      - NU
+      - NZ
+      - OM
+      - PA
+      - PE
+      - PF
+      - PG
+      - PH
+      - PK
+      - PL
+      - PM
+      - PN
+      - PR
+      - PS
+      - PT
+      - PW
+      - PY
+      - QA
+      - RE
+      - RO
+      - RS
+      - RU
+      - RW
+      - SA
+      - SB
+      - SC
+      - SD
+      - SE
+      - SG
+      - SH
+      - SI
+      - SJ
+      - SK
+      - SL
+      - SM
+      - SN
+      - SO
+      - SR
+      - SS
+      - ST
+      - SV
+      - SX
+      - SY
+      - SZ
+      - TC
+      - TD
+      - TF
+      - TG
+      - TH
+      - TJ
+      - TK
+      - TL
+      - TM
+      - TN
+      - TO
+      - TR
+      - TT
+      - TV
+      - TW
+      - TZ
+      - UA
+      - UG
+      - US
+      - UY
+      - UZ
+      - VA
+      - VC
+      - VE
+      - VG
+      - VI
+      - VN
+      - VU
+      - WF
+      - WS
+      - YE
+      - YT
+      - ZA
+      - ZM
+      - ZW
+      title: AddressCountry
+    PaymentMethodBuyNowPayLater:
       type: object
       properties:
-        type:
-          $ref: '#/components/schemas/PeriodType'
-        value:
+        variant:
           type:
-          - integer
+          - string
           - 'null'
-      title: Period
+      title: PaymentMethodBuyNowPayLater
+    PaymentMethodUpdateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        updated_at:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentMethodUpdateRequestStatus'
+          - type: 'null'
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentMethodUpdateRequestType'
+          - type: 'null'
+        card:
+          $ref: '#/components/schemas/PaymentMethodCard'
+        online_banking:
+          $ref: '#/components/schemas/PaymentMethodOnlineBanking'
+        buy_now_pay_later:
+          $ref: '#/components/schemas/PaymentMethodBuyNowPayLater'
+        direct_debit:
+          $ref: '#/components/schemas/PaymentMethodDirectDebit'
+        digital_wallet:
+          $ref: '#/components/schemas/PaymentMethodDigitalWallet'
+        customer_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOMER
+        integration_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type INTEGRATION
+        integration_reference:
+          type:
+          - string
+          - 'null'
+        integration_details:
+          $ref: '#/components/schemas/IntegrationDetails'
+        billing_address:
+          $ref: '#/components/schemas/Address'
+        is_default:
+          type:
+          - boolean
+          - 'null'
+      title: PaymentMethodUpdateRequest
+    PaginationLinks:
+      type: object
+      properties:
+        first:
+          type:
+          - string
+          - 'null'
+        previous:
+          type:
+          - string
+          - 'null'
+        current:
+          type:
+          - string
+          - 'null'
+        next:
+          type:
+          - string
+          - 'null'
+      title: PaginationLinks
   securitySchemes:
     API-Key:
       type: apiKey

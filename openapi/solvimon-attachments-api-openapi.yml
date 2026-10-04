@@ -285,55 +285,65 @@ paths:
                 $ref: '#/components/schemas/ApiError'
 components:
   schemas:
-    ResourceIdentifierCreateRequestType:
-      type: string
-      enum:
-      - PLATFORM
-      - CUSTOMER
-      - BILLING_ENTITY
-      - METER
-      - METER_VALUE
-      - METER_PROPERTY
-      - METER_VALUE_CALCULATION
-      - PRODUCT
-      - PRODUCT_ITEM
-      - PRODUCT_CATEGORY
-      - PRICING
-      - PRICING_ITEM
-      - PRICING_ITEM_CONFIG
-      - PRICING_ITEM_SUMMARY
-      - METER_VALUE_CALCULATION_SUMMARY
-      - PRICING_PLAN
-      - PRICING_PLAN_VERSION
-      - PRICING_PLAN_SUBSCRIPTION
-      - PRICING_PLAN_SCHEDULE
-      - QUOTE
-      - QUOTE_VERSION
-      - CONTACT
-      - CUSTOM_FIELD
-      - REQUEST_REFERENCE
-      - METER_DATA
-      - CHARGE_DATA
-      - ADJUSTMENT_DATA
-      - PERSIST_DATA
-      - INVOICE
-      - INVOICE_PAYMENT_ATTEMPT
-      - PAYMENT_ACCEPTOR
-      - PAYMENT_SCHEDULE
-      - PAYMENT_REQUEST
-      - FEATURE
-      - ALERT_RULE
-      - ALERT
-      - USER
-      - MEMBERSHIP
-      - TEAM
-      - ENTITY
-      - ACCOUNT_GROUP
-      - AUDIT
-      - WEBHOOK
-      - REPORT_SUBSCRIPTION
-      - REPORT_CONFIGURATION
-      title: ResourceIdentifierCreateRequestType
+    AttachmentResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Attachment'
+      required:
+      - data
+      title: AttachmentResponseWrapper
+    ResourceIdentifierCreateRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ResourceIdentifierCreateRequestType'
+        id:
+          type: string
+      title: ResourceIdentifierCreateRequest
+    DocumentCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        name:
+          type: string
+          description: The name of the document.
+        description:
+          type:
+          - string
+          - 'null'
+          description: An optional description of the document.
+        content_type:
+          type: string
+          description: Content type of the file (e.g. application/pdf).
+        content:
+          type: string
+          description: The file content, BASE64 encoded. Max 10MB.
+        file_size:
+          type:
+          - integer
+          - 'null'
+          format: int64
+          description: The file size in bytes.
+        downloaded_at:
+          type:
+          - string
+          - 'null'
+          description: Timestamp of the most recent download.
+      title: DocumentCreateRequest
     Attachment:
       type: object
       properties:
@@ -361,14 +371,51 @@ components:
           $ref: '#/components/schemas/ResourceIdentifier'
           description: The resource to attach the document to.
       title: Attachment
-    ResourceIdentifierCreateRequest:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/ResourceIdentifierCreateRequestType'
-        id:
-          type: string
-      title: ResourceIdentifierCreateRequest
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
     ApiErrorResourceType:
       type: string
       enum:
@@ -484,6 +531,93 @@ components:
       - code
       - message
       title: ApiError
+    ResourceIdentifier:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ResourceIdentifierType'
+        id:
+          type: string
+      title: ResourceIdentifier
+    ResourceIdentifierCreateRequestType:
+      type: string
+      enum:
+      - PLATFORM
+      - CUSTOMER
+      - BILLING_ENTITY
+      - METER
+      - METER_VALUE
+      - METER_PROPERTY
+      - METER_VALUE_CALCULATION
+      - PRODUCT
+      - PRODUCT_ITEM
+      - PRODUCT_CATEGORY
+      - PRICING
+      - PRICING_ITEM
+      - PRICING_ITEM_CONFIG
+      - PRICING_ITEM_SUMMARY
+      - METER_VALUE_CALCULATION_SUMMARY
+      - PRICING_PLAN
+      - PRICING_PLAN_VERSION
+      - PRICING_PLAN_SUBSCRIPTION
+      - PRICING_PLAN_SCHEDULE
+      - QUOTE
+      - QUOTE_VERSION
+      - CONTACT
+      - CUSTOM_FIELD
+      - REQUEST_REFERENCE
+      - METER_DATA
+      - CHARGE_DATA
+      - ADJUSTMENT_DATA
+      - PERSIST_DATA
+      - INVOICE
+      - INVOICE_PAYMENT_ATTEMPT
+      - PAYMENT_ACCEPTOR
+      - PAYMENT_SCHEDULE
+      - PAYMENT_REQUEST
+      - FEATURE
+      - ALERT_RULE
+      - ALERT
+      - USER
+      - MEMBERSHIP
+      - TEAM
+      - ENTITY
+      - ACCOUNT_GROUP
+      - AUDIT
+      - WEBHOOK
+      - REPORT_SUBSCRIPTION
+      - REPORT_CONFIGURATION
+      title: ResourceIdentifierCreateRequestType
+    AttachmentCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        document_id:
+          type: string
+          description: The document ID to attach.
+        document:
+          oneOf:
+          - $ref: '#/components/schemas/DocumentCreateRequest'
+          - type: 'null'
+          description: The expanded document object.
+        resource:
+          $ref: '#/components/schemas/ResourceIdentifierCreateRequest'
+          description: The resource to attach the document to.
+      required:
+      - document_id
+      - resource
+      title: AttachmentCreateRequest
     ResourceIdentifierType:
       type: string
       enum:
@@ -533,55 +667,6 @@ components:
       - REPORT_SUBSCRIPTION
       - REPORT_CONFIGURATION
       title: ResourceIdentifierType
-    ApiErrorCode:
-      type: string
-      enum:
-      - RESOURCE_NOT_FOUND
-      - RESOURCES_NOT_FOUND
-      - UNABLE_TO_PROCESS_INSTRUCTIONS
-      - BAD_REQUEST
-      - UNSUPPORTED_MEDIA_TYPE
-      - RESOURCE_ALREADY_EXISTS
-      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
-      - COULD_NOT_CREATE_RESOURCE
-      - COULD_NOT_UPDATE_RESOURCE
-      - COULD_NOT_DELETE_RESOURCE
-      - MISSING_VERSION
-      - UNSUPPORTED_VERSION
-      - UNAUTHORISED
-      - CUSTOMER_NOT_FOUND
-      - PLATFORM_NOT_FOUND
-      - PRICING_PLAN_NOT_FOUND
-      - PRODUCT_NOT_FOUND
-      - PRODUCT_ITEM_NOT_FOUND
-      - PRICING_NOT_FOUND
-      - PRICING_ITEM_NOT_FOUND
-      - USER_NOT_FOUND
-      - METER_NOT_FOUND
-      - METER_VALUE_NOT_FOUND
-      - METER_PROPERTY_NOT_FOUND
-      - PRICING_ITEM_SUMMARIES_NOT_FOUND
-      - MISSING_ID
-      - INVALID_ID
-      - MISSING_REFERENCE
-      - MISSING_FIELD
-      - INVALID_FIELD
-      - INVALID_OPERATION
-      - INTERNAL_ERROR
-      - USER_NOT_ALLOWED
-      - IDEMPOTENCY_CHECK_FAILED
-      - INVALID_REQUEST
-      title: ApiErrorCode
-    AttachmentResponseWrapper:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Attachment'
-      required:
-      - data
-      title: AttachmentResponseWrapper
     Document:
       type: object
       properties:
@@ -623,91 +708,6 @@ components:
           - 'null'
           description: Timestamp of the most recent download.
       title: Document
-    AttachmentCreateRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        created_at:
-          type:
-          - string
-          - 'null'
-        document_id:
-          type: string
-          description: The document ID to attach.
-        document:
-          oneOf:
-          - $ref: '#/components/schemas/DocumentCreateRequest'
-          - type: 'null'
-          description: The expanded document object.
-        resource:
-          $ref: '#/components/schemas/ResourceIdentifierCreateRequest'
-          description: The resource to attach the document to.
-      required:
-      - document_id
-      - resource
-      title: AttachmentCreateRequest
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
-    ResourceIdentifier:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/ResourceIdentifierType'
-        id:
-          type: string
-      title: ResourceIdentifier
-    DocumentCreateRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        created_at:
-          type:
-          - string
-          - 'null'
-        name:
-          type: string
-          description: The name of the document.
-        description:
-          type:
-          - string
-          - 'null'
-          description: An optional description of the document.
-        content_type:
-          type: string
-          description: Content type of the file (e.g. application/pdf).
-        content:
-          type: string
-          description: The file content, BASE64 encoded. Max 10MB.
-        file_size:
-          type:
-          - integer
-          - 'null'
-          format: int64
-          description: The file size in bytes.
-        downloaded_at:
-          type:
-          - string
-          - 'null'
-          description: Timestamp of the most recent download.
-      title: DocumentCreateRequest
   securitySchemes:
     API-Key:
       type: apiKey

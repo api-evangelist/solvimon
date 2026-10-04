@@ -421,64 +421,100 @@ paths:
               $ref: '#/components/schemas/PaymentAcceptorUpdateRequest'
 components:
   schemas:
-    PaymentAcceptorUpdateRequestType:
+    PaymentAcceptorStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      title: PaymentAcceptorStatus
+    AccountNumberAndBic:
+      type: object
+      properties:
+        account_number:
+          type:
+          - string
+          - 'null'
+          description: A bank account number if IBAN is not used, e.g a USA or UK bank account number
+        bank_code:
+          type:
+          - string
+          - 'null'
+          description: A bank code that's used to identify the bank that this account belongs to
+        bic:
+          type:
+          - string
+          - 'null'
+          description: The ISO 9362 Business Identifier Code (BIC) of the bank account
+      title: AccountNumberAndBic
+    PaymentAcceptorCustomRedirectCreateRequest:
+      type: object
+      properties:
+        url:
+          type:
+          - string
+          - 'null'
+      title: PaymentAcceptorCustomRedirectCreateRequest
+    IntegrationLinkDetail:
+      type: object
+      properties:
+        base_url:
+          type: string
+        custom_field_reference:
+          type: string
+      title: IntegrationLinkDetail
+    PaymentAcceptorCreateRequestType:
       type: string
       enum:
       - BANK_ACCOUNT
       - PAYMENT_GATEWAY
       - CUSTOM_REDIRECT
-      title: PaymentAcceptorUpdateRequestType
-    PaymentGatewayPaymentAcceptorLink:
-      type: object
-      properties:
-        expiry_period:
-          $ref: '#/components/schemas/Period'
-      title: PaymentGatewayPaymentAcceptorLink
-    EInvoicingIntegration:
-      type: object
-      properties:
-        mandates:
-          type: array
-          items:
-            $ref: '#/components/schemas/EInvoicingMandate'
-          description: The mandates that are used for eInvoicing
-        processor:
-          $ref: '#/components/schemas/EInvoicingIntegrationProcessor'
-      title: EInvoicingIntegration
-    PaymentAcceptorPaymentMethodOptionsRequestCreateRequest:
-      type: object
-      properties:
-        customer_id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type CUSTOMER
-        pricing_plan_subscription_id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type PRICING_PLAN_SUBSCRIPTION
-        invoice_id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type INVOICE
-        amount:
-          $ref: '#/components/schemas/AmountCreateRequest'
-        country:
-          oneOf:
-          - $ref: '#/components/schemas/PaymentAcceptorPaymentMethodOptionsRequestCreateRequestCountry'
-          - type: 'null'
-        shopper_interaction:
-          $ref: '#/components/schemas/PaymentAcceptorPaymentMethodOptionsRequestCreateRequestShopperInteraction'
-      title: PaymentAcceptorPaymentMethodOptionsRequestCreateRequest
-    MailgunEmailProviderRegion:
+      title: PaymentAcceptorCreateRequestType
+    BankAccountAccountType:
       type: string
       enum:
-      - US
-      - EU
-      description: Mailgun region for the configured domain.
-      title: MailgunEmailProviderRegion
+      - CHECKING
+      - SAVINGS
+      description: The bank account type.
+      title: BankAccountAccountType
+    EInvoicingCondition:
+      type: object
+      properties:
+        field:
+          type: string
+          description: The field that holds the value to compare against
+        comparator_type:
+          $ref: '#/components/schemas/EInvoicingConditionComparatorType'
+        value:
+          type: string
+          description: Value to check the field against. If a Comparator such as 'IN' or 'CONTAINS' is used, this can be a comma separated list of values
+      title: EInvoicingCondition
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    DataExportIntegration:
+      type: object
+      properties:
+        variant:
+          $ref: '#/components/schemas/DataExportIntegrationVariant'
+          description: The variant of payment integration.
+        s3:
+          $ref: '#/components/schemas/S3'
+        bigquery:
+          $ref: '#/components/schemas/BigQuery'
+        gcs:
+          $ref: '#/components/schemas/Gcs'
+        snowflake:
+          $ref: '#/components/schemas/Snowflake'
+        transport_type:
+          type:
+          - string
+          - 'null'
+      title: DataExportIntegration
     PeriodType:
       type: string
       enum:
@@ -487,20 +523,6 @@ components:
       - MONTH
       - YEAR
       title: PeriodType
-    AdyenPaymentGatewayIntegrationEnvironment:
-      type: string
-      enum:
-      - LIVE
-      - TEST
-      title: AdyenPaymentGatewayIntegrationEnvironment
-    AmountCreateRequest:
-      type: object
-      properties:
-        quantity:
-          type: string
-        currency:
-          $ref: '#/components/schemas/AmountCreateRequestCurrency'
-      title: AmountCreateRequest
     BankAccountCreateRequest:
       type: object
       properties:
@@ -562,30 +584,7 @@ components:
         mx_local:
           $ref: '#/components/schemas/MXLocal'
       title: BankAccountCreateRequest
-    PaymentGatewayPaymentAcceptorCreateRequestCollectionType:
-      type: string
-      enum:
-      - LINK
-      title: PaymentGatewayPaymentAcceptorCreateRequestCollectionType
-    EInvoicingConditionGroup:
-      type: object
-      properties:
-        conditions:
-          type: array
-          items:
-            $ref: '#/components/schemas/EInvoicingCondition'
-          description: Conditions that determine whether this conditionGroup matches the invoice. All conditions need to match for the group to match
-      title: EInvoicingConditionGroup
-    CustomTaxCode:
-      type: object
-      properties:
-        field:
-          $ref: '#/components/schemas/CustomTaxCodeField'
-          description: The field to use a custom code for
-        value:
-          type: string
-      title: CustomTaxCode
-    PaymentAcceptorCreateRequest:
+    PaymentAcceptor:
       type: object
       properties:
         object_type:
@@ -618,141 +617,114 @@ components:
           - 'null'
         type:
           oneOf:
-          - $ref: '#/components/schemas/PaymentAcceptorCreateRequestType'
+          - $ref: '#/components/schemas/PaymentAcceptorType'
           - type: 'null'
         bank_account:
-          $ref: '#/components/schemas/BankAccountCreateRequest'
+          $ref: '#/components/schemas/BankAccount'
         payment_gateway:
-          $ref: '#/components/schemas/PaymentGatewayPaymentAcceptorCreateRequest'
+          $ref: '#/components/schemas/PaymentGatewayPaymentAcceptor'
         custom_redirect:
-          $ref: '#/components/schemas/PaymentAcceptorCustomRedirectCreateRequest'
+          $ref: '#/components/schemas/PaymentAcceptorCustomRedirect'
         status:
           oneOf:
-          - $ref: '#/components/schemas/PaymentAcceptorCreateRequestStatus'
+          - $ref: '#/components/schemas/PaymentAcceptorStatus'
           - type: 'null'
-      required:
-      - reference
-      - type
-      title: PaymentAcceptorCreateRequest
-    PaymentGatewayIntegration:
+      title: PaymentAcceptor
+    Integration:
       type: object
       properties:
-        variant:
-          $ref: '#/components/schemas/PaymentGatewayIntegrationVariant'
-          description: The variant of payment integration.
-        adyen:
-          $ref: '#/components/schemas/AdyenPaymentGatewayIntegration'
-        stripe:
-          $ref: '#/components/schemas/StripePaymentGatewayIntegration'
-      title: PaymentGatewayIntegration
-    BankAccountType:
-      type: string
-      enum:
-      - IBAN
-      - BIC_AND_ACCOUNT_NUMBER
-      - ACCOUNT_NUMBER_AND_BIC
-      - US_BANK_ACCOUNT
-      - US_LOCAL
-      - UK_LOCAL
-      - BR_LOCAL
-      - AR_LOCAL
-      - MX_LOCAL
-      description: Determines what fields should be present in the bank account node.
-      title: BankAccountType
-    UsLocalAccountType:
-      type: string
-      enum:
-      - CHECKING
-      - SAVINGS
-      description: The bank account type.
-      title: UsLocalAccountType
-    BankAccountCreateRequestAccountType:
-      type: string
-      enum:
-      - CHECKING
-      - SAVINGS
-      description: The bank account type.
-      title: BankAccountCreateRequestAccountType
-    UsernamePassword:
-      type: object
-      properties:
-        username:
-          type: string
-        password:
-          type: string
-      title: UsernamePassword
-    PaymentAcceptorCustomRedirectCreateRequest:
-      type: object
-      properties:
-        url:
+        object_type:
           type:
           - string
           - 'null'
-      title: PaymentAcceptorCustomRedirectCreateRequest
-    EInvoiceFileFormat:
-      type: object
-      properties:
-        type:
+        id:
           type:
           - string
           - 'null'
-          description: The format of the eInvoice that can be downloaded
+        reference:
+          type: string
+          description: A custom reference assigned to the integration.
+        name:
+          type: string
+          description: A custom name assigned to the integration.
         description:
-          type:
-          - string
-          - 'null'
-      title: EInvoiceFileFormat
-    AccountNumberAndBic:
-      type: object
-      properties:
-        account_number:
-          type:
-          - string
-          - 'null'
-          description: A bank account number if IBAN is not used, e.g a USA or UK bank account number
-        bank_code:
-          type:
-          - string
-          - 'null'
-          description: A bank code that's used to identify the bank that this account belongs to
-        bic:
-          type:
-          - string
-          - 'null'
-          description: The ISO 9362 Business Identifier Code (BIC) of the bank account
-      title: AccountNumberAndBic
-    PaymentAcceptorCustomRedirect:
-      type: object
-      properties:
-        url:
-          type:
-          - string
-          - 'null'
-      title: PaymentAcceptorCustomRedirect
-    USLocal:
-      type: object
-      properties:
-        account_number:
-          type:
-          - string
-          - 'null'
-          description: A bank account number if IBAN is not used, e.g a USA or UK bank account number
-        account_type:
+          type: string
+        status:
           oneOf:
-          - $ref: '#/components/schemas/UsLocalAccountType'
+          - $ref: '#/components/schemas/IntegrationStatus'
           - type: 'null'
-          description: The bank account type.
-        bank_code:
+          description: The status of the integration.
+        message:
           type:
           - string
           - 'null'
-          description: A bank code that's used to identify the bank that this account belongs to
-        routing_number:
+          description: The message associated with the status of the integration.
+        type:
+          $ref: '#/components/schemas/IntegrationType'
+          description: The type of integration.
+        authentication:
+          $ref: '#/components/schemas/AuthenticationSettings'
+          description: The authentication information used for the integration
+        payment_gateway:
+          $ref: '#/components/schemas/PaymentGatewayIntegration'
+        e_invoicing:
+          $ref: '#/components/schemas/EInvoicingIntegration'
+          description: Integration to do eInvoicing
+        data_export:
+          $ref: '#/components/schemas/DataExportIntegration'
+        tax_calculation:
+          $ref: '#/components/schemas/TaxCalculationIntegration'
+          description: Integration to calculate tax
+        linked_resources_configurations:
+          type: array
+          items:
+            $ref: '#/components/schemas/IntegrationLinkedResourceConfiguration'
+          description: Details from the resources configurations from Solvimon linked to external integration system
+        email_provider:
+          $ref: '#/components/schemas/EmailProviderIntegration'
+          description: Email provider integration settings. Applicable when the integration type is EMAIL_PROVIDER.
+      title: Integration
+    AdyenPaymentGatewayIntegration:
+      type: object
+      properties:
+        company_account:
+          type: string
+        environment:
+          $ref: '#/components/schemas/AdyenPaymentGatewayIntegrationEnvironment'
+        live_prefix:
+          type: string
+        merchant_accounts:
+          type: array
+          items:
+            type: string
+        public_key:
+          type: string
+        signing_secret:
+          type: string
+        ownership:
+          $ref: '#/components/schemas/AdyenPaymentGatewayIntegrationOwnership'
+        system_ownership_details:
+          $ref: '#/components/schemas/SystemOwnershipDetails'
+        balance_platform_details:
+          $ref: '#/components/schemas/BalancePlatformDetails'
+        legal_entity_manager_details:
+          $ref: '#/components/schemas/LegalEntityManagerDetails'
+        enabled_payment_methods:
           type:
-          - string
+          - array
           - 'null'
-          description: The 9-digit code that identifies a specific financial institution for transactions in the USA.
-      title: USLocal
+          items:
+            type: string
+      title: AdyenPaymentGatewayIntegration
+    CustomTaxCode:
+      type: object
+      properties:
+        field:
+          $ref: '#/components/schemas/CustomTaxCodeField'
+          description: The field to use a custom code for
+        value:
+          type: string
+      title: CustomTaxCode
     PaymentAcceptorPaymentMethodOptionsRequestCreateRequestCountry:
       type: string
       enum:
@@ -1005,101 +977,24 @@ components:
       - ZM
       - ZW
       title: PaymentAcceptorPaymentMethodOptionsRequestCreateRequestCountry
-    PaymentGatewayPaymentAcceptorCollectionType:
-      type: string
-      enum:
-      - LINK
-      title: PaymentGatewayPaymentAcceptorCollectionType
-    ApiError:
+    EmailProviderIntegration:
       type: object
       properties:
-        type:
-          $ref: '#/components/schemas/ApiErrorType'
-        code:
-          $ref: '#/components/schemas/ApiErrorCode'
-        field:
+        variant:
+          $ref: '#/components/schemas/EmailProviderIntegrationVariant'
+          description: The variant of email provider integration.
+        mailgun:
+          $ref: '#/components/schemas/MailgunEmailProvider'
+          description: Mailgun-specific provider settings. Applicable when variant is MAILGUN.
+        delivery_window:
+          $ref: '#/components/schemas/Period'
+          description: Optional delivery window configuration that limits when outbound emails may be sent.
+        use_localized_templates:
           type:
-          - string
+          - boolean
           - 'null'
-        message:
-          type: string
-        resource_id:
-          type:
-          - string
-          - 'null'
-        resource_type:
-          oneOf:
-          - $ref: '#/components/schemas/ApiErrorResourceType'
-          - type: 'null'
-      required:
-      - type
-      - code
-      - message
-      title: ApiError
-    BalancePlatformDetails:
-      type: object
-      properties:
-        account:
-          type: string
-        authentication:
-          $ref: '#/components/schemas/AuthenticationSettings'
-      title: BalancePlatformDetails
-    PaymentAcceptorResponseWrapper:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/PaymentAcceptor'
-      required:
-      - data
-      title: PaymentAcceptorResponseWrapper
-    PaymentAcceptor:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        billing_entity_id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type BILLING_ENTITY
-        customer_id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type CUSTOMER
-        reference:
-          type: string
-        name:
-          type:
-          - string
-          - 'null'
-        description:
-          type:
-          - string
-          - 'null'
-        type:
-          oneOf:
-          - $ref: '#/components/schemas/PaymentAcceptorType'
-          - type: 'null'
-        bank_account:
-          $ref: '#/components/schemas/BankAccount'
-        payment_gateway:
-          $ref: '#/components/schemas/PaymentGatewayPaymentAcceptor'
-        custom_redirect:
-          $ref: '#/components/schemas/PaymentAcceptorCustomRedirect'
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/PaymentAcceptorStatus'
-          - type: 'null'
-      title: PaymentAcceptor
+          description: Whether localized email templates should be selected based on customer or request locale when available.
+      title: EmailProviderIntegration
     SystemOwnershipDetails:
       type: object
       properties:
@@ -1112,38 +1007,79 @@ components:
         store_id:
           type: string
       title: SystemOwnershipDetails
-    AdyenPaymentGatewayIntegration:
+    PaymentGatewayPaymentAcceptorCreateRequest:
       type: object
       properties:
-        company_account:
+        integration_id:
           type: string
-        environment:
-          $ref: '#/components/schemas/AdyenPaymentGatewayIntegrationEnvironment'
-        live_prefix:
-          type: string
-        merchant_accounts:
-          type: array
-          items:
-            type: string
-        public_key:
-          type: string
-        signing_secret:
-          type: string
-        ownership:
-          $ref: '#/components/schemas/AdyenPaymentGatewayIntegrationOwnership'
-        system_ownership_details:
-          $ref: '#/components/schemas/SystemOwnershipDetails'
-        balance_platform_details:
-          $ref: '#/components/schemas/BalancePlatformDetails'
-        legal_entity_manager_details:
-          $ref: '#/components/schemas/LegalEntityManagerDetails'
-        enabled_payment_methods:
+          description: Resource ID of type INTEGRATION
+        integration:
+          oneOf:
+          - $ref: '#/components/schemas/Integration'
+          - type: 'null'
+        store_payment_method:
           type:
-          - array
+          - boolean
           - 'null'
-          items:
-            type: string
-      title: AdyenPaymentGatewayIntegration
+        auto_charge_payment_method:
+          type:
+          - boolean
+          - 'null'
+        collection_type:
+          $ref: '#/components/schemas/PaymentGatewayPaymentAcceptorCreateRequestCollectionType'
+        link:
+          $ref: '#/components/schemas/PaymentGatewayPaymentAcceptorLink'
+        adyen:
+          $ref: '#/components/schemas/PaymentGatewayPaymentAcceptorAdyen'
+      title: PaymentGatewayPaymentAcceptorCreateRequest
+    S3AuthenticationType:
+      type: string
+      enum:
+      - ACCESS_KEY_AND_SECRET
+      - IAM_ROLE
+      title: S3AuthenticationType
+    TaxCalculationIntegrationVariant:
+      type: string
+      enum:
+      - AVATAX
+      description: The variant that provides the tax calculation
+      title: TaxCalculationIntegrationVariant
+    PaymentGatewayPaymentAcceptorCollectionType:
+      type: string
+      enum:
+      - LINK
+      title: PaymentGatewayPaymentAcceptorCollectionType
+    PaymentAcceptorCreateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      title: PaymentAcceptorCreateRequestStatus
+    AuthenticationSettings:
+      type: object
+      properties:
+        api_key:
+          $ref: '#/components/schemas/AuthenticationSettingsApiKey'
+        client_credentials:
+          $ref: '#/components/schemas/ClientCredentials'
+        username_password:
+          $ref: '#/components/schemas/UsernamePassword'
+      title: AuthenticationSettings
+    UKLocal:
+      type: object
+      properties:
+        account_number:
+          type:
+          - string
+          - 'null'
+          description: A bank account number if IBAN is not used, e.g a USA or UK bank account number
+        sort_code:
+          type:
+          - string
+          - 'null'
+      title: UKLocal
     EInvoicingConditionComparatorType:
       type: string
       enum:
@@ -1160,102 +1096,26 @@ components:
       - CONTAINS
       - NOT_CONTAINS
       title: EInvoicingConditionComparatorType
-    MXLocal:
+    AmountCreateRequest:
       type: object
       properties:
-        clabe:
-          type:
-          - string
-          - 'null'
-          description: CLABE (Clave Bancaria Estandarizada) account identifier
-        account_number:
-          type:
-          - string
-          - 'null'
-          description: A bank account number if IBAN is not used
-        bic:
-          type:
-          - string
-          - 'null'
-          description: The ISO 9362 Business Identifier Code (BIC) of the bank account
-      title: MXLocal
-    AdyenAutoRescue:
-      type: object
-      properties:
-        enabled:
-          type:
-          - boolean
-          - 'null'
-        period:
-          $ref: '#/components/schemas/Period'
-      title: AdyenAutoRescue
-    LegalEntityManagerDetails:
-      type: object
-      properties:
-        authentication:
-          $ref: '#/components/schemas/AuthenticationSettings'
-      title: LegalEntityManagerDetails
-    EInvoicingCondition:
-      type: object
-      properties:
-        field:
+        quantity:
           type: string
-          description: The field that holds the value to compare against
-        comparator_type:
-          $ref: '#/components/schemas/EInvoicingConditionComparatorType'
-        value:
-          type: string
-          description: Value to check the field against. If a Comparator such as 'IN' or 'CONTAINS' is used, this can be a comma separated list of values
-      title: EInvoicingCondition
-    EInvoicingMapping:
+        currency:
+          $ref: '#/components/schemas/AmountCreateRequestCurrency'
+      title: AmountCreateRequest
+    AdyenIssuer:
       type: object
       properties:
-        target:
-          type: string
-          description: The target field for a UBL Invoice
-        source:
+        id:
           type:
           - string
           - 'null'
-          description: The source field from a Solvimon Invoice
-        description:
+        name:
           type:
           - string
           - 'null'
-          description: Optional description for the mapping
-      title: EInvoicingMapping
-    BRLocal:
-      type: object
-      properties:
-        branch:
-          type:
-          - string
-          - 'null'
-          description: Identifier of the bank branch (agência)
-        account_number:
-          type:
-          - string
-          - 'null'
-          description: A bank account number if IBAN is not used, in Brazil known as a conta
-        bic:
-          type:
-          - string
-          - 'null'
-          description: The ISO 9362 Business Identifier Code (BIC) of the bank account
-      title: BRLocal
-    UKLocal:
-      type: object
-      properties:
-        account_number:
-          type:
-          - string
-          - 'null'
-          description: A bank account number if IBAN is not used, e.g a USA or UK bank account number
-        sort_code:
-          type:
-          - string
-          - 'null'
-      title: UKLocal
+      title: AdyenIssuer
     ApiErrorCode:
       type: string
       enum:
@@ -1295,6 +1155,59 @@ components:
       - IDEMPOTENCY_CHECK_FAILED
       - INVALID_REQUEST
       title: ApiErrorCode
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    PaymentGatewayIntegration:
+      type: object
+      properties:
+        variant:
+          $ref: '#/components/schemas/PaymentGatewayIntegrationVariant'
+          description: The variant of payment integration.
+        adyen:
+          $ref: '#/components/schemas/AdyenPaymentGatewayIntegration'
+        stripe:
+          $ref: '#/components/schemas/StripePaymentGatewayIntegration'
+      title: PaymentGatewayIntegration
+    PaymentGatewayPaymentAcceptorAdyen:
+      type: object
+      properties:
+        auto_rescue:
+          $ref: '#/components/schemas/AdyenAutoRescue'
+        merchant_account:
+          type:
+          - string
+          - 'null'
+        allowed_payment_methods:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+      title: PaymentGatewayPaymentAcceptorAdyen
     EmailProviderIntegrationVariant:
       type: string
       enum:
@@ -1302,6 +1215,164 @@ components:
       - MAILGUN
       description: The variant of email provider integration.
       title: EmailProviderIntegrationVariant
+    MailgunEmailProvider:
+      type: object
+      properties:
+        domain:
+          type: string
+          description: Mailgun sending domain used for this email provider integration.
+        region:
+          oneOf:
+          - $ref: '#/components/schemas/MailgunEmailProviderRegion'
+          - type: 'null'
+          description: Mailgun region for the configured domain.
+        plan:
+          type:
+          - string
+          - 'null'
+          description: Optional Mailgun plan stored with the integration.
+      title: MailgunEmailProvider
+    Period:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/PeriodType'
+        value:
+          type:
+          - integer
+          - 'null'
+      title: Period
+    PaymentAcceptorUpdateRequestType:
+      type: string
+      enum:
+      - BANK_ACCOUNT
+      - PAYMENT_GATEWAY
+      - CUSTOM_REDIRECT
+      title: PaymentAcceptorUpdateRequestType
+    BankAccountCreateRequestType:
+      type: string
+      enum:
+      - IBAN
+      - BIC_AND_ACCOUNT_NUMBER
+      - ACCOUNT_NUMBER_AND_BIC
+      - US_BANK_ACCOUNT
+      - US_LOCAL
+      - UK_LOCAL
+      - BR_LOCAL
+      - AR_LOCAL
+      - MX_LOCAL
+      description: Determines what fields should be present in the bank account node.
+      title: BankAccountCreateRequestType
+    MailgunEmailProviderRegion:
+      type: string
+      enum:
+      - US
+      - EU
+      description: Mailgun region for the configured domain.
+      title: MailgunEmailProviderRegion
+    EInvoiceFileFormat:
+      type: object
+      properties:
+        type:
+          type:
+          - string
+          - 'null'
+          description: The format of the eInvoice that can be downloaded
+        description:
+          type:
+          - string
+          - 'null'
+      title: EInvoiceFileFormat
+    AvaTaxCalculationIntegration:
+      type: object
+      properties:
+        company_code:
+          type: string
+          description: Links a billing entity to a company in AvaTax
+      title: AvaTaxCalculationIntegration
+    BRLocal:
+      type: object
+      properties:
+        branch:
+          type:
+          - string
+          - 'null'
+          description: Identifier of the bank branch (agência)
+        account_number:
+          type:
+          - string
+          - 'null'
+          description: A bank account number if IBAN is not used, in Brazil known as a conta
+        bic:
+          type:
+          - string
+          - 'null'
+          description: The ISO 9362 Business Identifier Code (BIC) of the bank account
+      title: BRLocal
+    EInvoicingIntegrationProcessor:
+      type: string
+      enum:
+      - AVALARA
+      title: EInvoicingIntegrationProcessor
+    StripePaymentGatewayIntegration:
+      type: object
+      properties:
+        public_key:
+          type: string
+        signing_secret:
+          type:
+          - string
+          - 'null'
+      title: StripePaymentGatewayIntegration
+    PaymentGatewayIntegrationVariant:
+      type: string
+      enum:
+      - ADYEN
+      - STRIPE
+      description: The variant of payment integration.
+      title: PaymentGatewayIntegrationVariant
+    LegalEntityManagerDetails:
+      type: object
+      properties:
+        authentication:
+          $ref: '#/components/schemas/AuthenticationSettings'
+      title: LegalEntityManagerDetails
+    PaymentAcceptorType:
+      type: string
+      enum:
+      - BANK_ACCOUNT
+      - PAYMENT_GATEWAY
+      - CUSTOM_REDIRECT
+      title: PaymentAcceptorType
+    AuthenticationSettingsApiKey:
+      type: object
+      properties:
+        header:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+      title: AuthenticationSettingsApiKey
+    BankAccountCreateRequestAccountType:
+      type: string
+      enum:
+      - CHECKING
+      - SAVINGS
+      description: The bank account type.
+      title: BankAccountCreateRequestAccountType
+    PaymentAcceptorResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentAcceptor'
+      required:
+      - data
+      title: PaymentAcceptorResponseWrapper
     StripePaymentMethodOption:
       type: object
       properties:
@@ -1310,6 +1381,20 @@ components:
           - string
           - 'null'
       title: StripePaymentMethodOption
+    BalancePlatformDetails:
+      type: object
+      properties:
+        account:
+          type: string
+        authentication:
+          $ref: '#/components/schemas/AuthenticationSettings'
+      title: BalancePlatformDetails
+    PaymentGatewayPaymentAcceptorLink:
+      type: object
+      properties:
+        expiry_period:
+          $ref: '#/components/schemas/Period'
+      title: PaymentGatewayPaymentAcceptorLink
     TaxCalculationIntegration:
       type: object
       properties:
@@ -1331,30 +1416,683 @@ components:
           type: boolean
           description: Determines whether invoices will be sent to the tax integration, or just calculations
       title: TaxCalculationIntegration
-    Snowflake:
+    AmountCreateRequestCurrency:
+      type: string
+      enum:
+      - AED
+      - AFN
+      - ALL
+      - AMD
+      - ANG
+      - AOA
+      - ARS
+      - AUD
+      - AWG
+      - AZN
+      - BAM
+      - BBD
+      - BDT
+      - BGN
+      - BHD
+      - BIF
+      - BMD
+      - BND
+      - BOB
+      - BRL
+      - BSD
+      - BTN
+      - BWP
+      - BYN
+      - BZD
+      - CAD
+      - CDF
+      - CHF
+      - CLF
+      - CLP
+      - CNY
+      - COP
+      - CRC
+      - CUC
+      - CUP
+      - CVE
+      - CZK
+      - DJF
+      - DKK
+      - DOP
+      - DZD
+      - EGP
+      - ERN
+      - ETB
+      - EUR
+      - FJD
+      - FKP
+      - GBP
+      - GEL
+      - GHS
+      - GIP
+      - GMD
+      - GNF
+      - GTQ
+      - GYD
+      - HKD
+      - HNL
+      - HRK
+      - HTG
+      - HUF
+      - IDR
+      - ILS
+      - INR
+      - IQD
+      - IRR
+      - ISK
+      - JMD
+      - JOD
+      - JPY
+      - KES
+      - KGS
+      - KHR
+      - KMF
+      - KPW
+      - KRW
+      - KWD
+      - KYD
+      - KZT
+      - LAK
+      - LBP
+      - LKR
+      - LRD
+      - LSL
+      - LYD
+      - MAD
+      - MDL
+      - MGA
+      - MKD
+      - MMK
+      - MNT
+      - MOP
+      - MRO
+      - MRU
+      - MUR
+      - MVR
+      - MWK
+      - MXN
+      - MXV
+      - MYR
+      - MZN
+      - NAD
+      - NGN
+      - NIO
+      - NOK
+      - NPR
+      - NZD
+      - OMR
+      - PAB
+      - PEN
+      - PGK
+      - PHP
+      - PKR
+      - PLN
+      - PYG
+      - QAR
+      - RON
+      - RSD
+      - RUB
+      - RWF
+      - SAR
+      - SBD
+      - SCR
+      - SDG
+      - SEK
+      - SGD
+      - SHP
+      - SLE
+      - SOS
+      - SRD
+      - SSP
+      - STN
+      - SVC
+      - SYP
+      - SZL
+      - THB
+      - TJS
+      - TMT
+      - TND
+      - TOP
+      - TRY
+      - TTD
+      - TWD
+      - TZS
+      - UAH
+      - UGX
+      - USD
+      - USN
+      - UYI
+      - UYU
+      - UZS
+      - VEF
+      - VES
+      - VND
+      - VUV
+      - WST
+      - XAF
+      - XAG
+      - XAU
+      - XBA
+      - XBB
+      - XBC
+      - XBD
+      - XCD
+      - XDR
+      - XOF
+      - XPD
+      - XPF
+      - XPT
+      - XSU
+      - XTS
+      - XUA
+      - XXX
+      - YER
+      - ZAR
+      - ZMW
+      - ZWL
+      title: AmountCreateRequestCurrency
+    IntegrationLinkedResourceConfiguration:
       type: object
       properties:
-        host:
+        resource_type:
+          type: string
+        link_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/IntegrationLinkDetail'
+      title: IntegrationLinkedResourceConfiguration
+    EInvoicingMapping:
+      type: object
+      properties:
+        target:
+          type: string
+          description: The target field for a UBL Invoice
+        source:
           type:
           - string
           - 'null'
-        role:
+          description: The source field from a Solvimon Invoice
+        description:
           type:
           - string
           - 'null'
-        warehouse:
+          description: Optional description for the mapping
+      title: EInvoicingMapping
+    UsernamePassword:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      title: UsernamePassword
+    AdyenPaymentGatewayIntegrationOwnership:
+      type: string
+      enum:
+      - PLATFORM
+      - SYSTEM
+      title: AdyenPaymentGatewayIntegrationOwnership
+    S3:
+      type: object
+      properties:
+        bucket_name:
+          type: string
+        bucket_path:
+          type: string
+        bucket_region:
+          type: string
+        authentication_type:
+          oneOf:
+          - $ref: '#/components/schemas/S3AuthenticationType'
+          - type: 'null'
+        role_arn:
           type:
           - string
           - 'null'
-        database:
+        external_id:
           type:
           - string
           - 'null'
-        schema:
+      title: S3
+    MXLocal:
+      type: object
+      properties:
+        clabe:
           type:
           - string
           - 'null'
-      title: Snowflake
+          description: CLABE (Clave Bancaria Estandarizada) account identifier
+        account_number:
+          type:
+          - string
+          - 'null'
+          description: A bank account number if IBAN is not used
+        bic:
+          type:
+          - string
+          - 'null'
+          description: The ISO 9362 Business Identifier Code (BIC) of the bank account
+      title: MXLocal
+    BigQuery:
+      type: object
+      properties:
+        project_id:
+          type: string
+        dataset_id:
+          type: string
+        dataset_location:
+          type: string
+        gcs_bucket_name:
+          type: string
+        gcs_hmac_key_access_id:
+          type: string
+        gcs_hmac_key_secret:
+          type: string
+      title: BigQuery
+    BankAccountType:
+      type: string
+      enum:
+      - IBAN
+      - BIC_AND_ACCOUNT_NUMBER
+      - ACCOUNT_NUMBER_AND_BIC
+      - US_BANK_ACCOUNT
+      - US_LOCAL
+      - UK_LOCAL
+      - BR_LOCAL
+      - AR_LOCAL
+      - MX_LOCAL
+      description: Determines what fields should be present in the bank account node.
+      title: BankAccountType
+    PaymentAcceptorCustomRedirect:
+      type: object
+      properties:
+        url:
+          type:
+          - string
+          - 'null'
+      title: PaymentAcceptorCustomRedirect
+    PaymentGatewayPaymentAcceptorCreateRequestCollectionType:
+      type: string
+      enum:
+      - LINK
+      title: PaymentGatewayPaymentAcceptorCreateRequestCollectionType
+    USLocal:
+      type: object
+      properties:
+        account_number:
+          type:
+          - string
+          - 'null'
+          description: A bank account number if IBAN is not used, e.g a USA or UK bank account number
+        account_type:
+          oneOf:
+          - $ref: '#/components/schemas/UsLocalAccountType'
+          - type: 'null'
+          description: The bank account type.
+        bank_code:
+          type:
+          - string
+          - 'null'
+          description: A bank code that's used to identify the bank that this account belongs to
+        routing_number:
+          type:
+          - string
+          - 'null'
+          description: The 9-digit code that identifies a specific financial institution for transactions in the USA.
+      title: USLocal
+    DataExportIntegrationVariant:
+      type: string
+      enum:
+      - S3
+      - BIGQUERY
+      - GCS
+      - SNOWFLAKE
+      description: The variant of payment integration.
+      title: DataExportIntegrationVariant
+    AdyenPaymentGatewayIntegrationEnvironment:
+      type: string
+      enum:
+      - LIVE
+      - TEST
+      title: AdyenPaymentGatewayIntegrationEnvironment
+    EInvoicingMandate:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the mandate
+        country:
+          type:
+          - string
+          - 'null'
+          description: The country that this mandate belongs to
+        mappings:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/EInvoicingMapping'
+          description: The mappings that are used for this Mandate. If not provided, all mappings will be default. If provided, will be merged with defaults
+        condition_groups:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/EInvoicingConditionGroup'
+          description: The condition groups that are used for this mandate. If provided, no defaults will be used. The mandate applies if 1 conditionGroup applies
+        include_pdf_in_einvoice:
+          type:
+          - boolean
+          - 'null'
+          description: Whether the PDF should be included in the submitted eInvoice payload when supported
+        supported_file_formats:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/EInvoiceFileFormat'
+          description: The file formats in which eInvoices for this mandate can be downloaded
+      title: EInvoicingMandate
+    EInvoicingIntegration:
+      type: object
+      properties:
+        mandates:
+          type: array
+          items:
+            $ref: '#/components/schemas/EInvoicingMandate'
+          description: The mandates that are used for eInvoicing
+        processor:
+          $ref: '#/components/schemas/EInvoicingIntegrationProcessor'
+      title: EInvoicingIntegration
+    PaymentAcceptorPaymentMethodOptions:
+      type: object
+      properties:
+        payment_acceptor:
+          $ref: '#/components/schemas/PaymentAcceptor'
+        integration:
+          $ref: '#/components/schemas/Integration'
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentMethodOption'
+      title: PaymentAcceptorPaymentMethodOptions
+    UsLocalAccountType:
+      type: string
+      enum:
+      - CHECKING
+      - SAVINGS
+      description: The bank account type.
+      title: UsLocalAccountType
+    Gcs:
+      type: object
+      properties:
+        bucket_region:
+          type: string
+        bucket_name:
+          type: string
+        bucket_path:
+          type: string
+        flattening:
+          type: boolean
+      title: Gcs
+    EInvoicingConditionGroup:
+      type: object
+      properties:
+        conditions:
+          type: array
+          items:
+            $ref: '#/components/schemas/EInvoicingCondition'
+          description: Conditions that determine whether this conditionGroup matches the invoice. All conditions need to match for the group to match
+      title: EInvoicingConditionGroup
+    AdyenAutoRescue:
+      type: object
+      properties:
+        enabled:
+          type:
+          - boolean
+          - 'null'
+        period:
+          $ref: '#/components/schemas/Period'
+      title: AdyenAutoRescue
+    IntegrationType:
+      type: string
+      enum:
+      - PAYMENT_GATEWAY
+      - E_INVOICING
+      - TAX_CALCULATION
+      - DATA_EXPORT
+      - EMAIL_PROVIDER
+      description: The type of integration.
+      title: IntegrationType
+    ARLocal:
+      type: object
+      properties:
+        cbu:
+          type:
+          - string
+          - 'null'
+          description: CBU (Clave Bancaria Uniforme) account identifier
+        account_number:
+          type:
+          - string
+          - 'null'
+          description: A bank account number if IBAN is not used
+        bic:
+          type:
+          - string
+          - 'null'
+          description: The ISO 9362 Business Identifier Code (BIC) of the bank account
+      title: ARLocal
+    PaymentAcceptorPaymentMethodOptionsRequestCreateRequest:
+      type: object
+      properties:
+        customer_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOMER
+        pricing_plan_subscription_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type PRICING_PLAN_SUBSCRIPTION
+        invoice_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type INVOICE
+        amount:
+          $ref: '#/components/schemas/AmountCreateRequest'
+        country:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentAcceptorPaymentMethodOptionsRequestCreateRequestCountry'
+          - type: 'null'
+        shopper_interaction:
+          $ref: '#/components/schemas/PaymentAcceptorPaymentMethodOptionsRequestCreateRequestShopperInteraction'
+      title: PaymentAcceptorPaymentMethodOptionsRequestCreateRequest
+    ApiErrorResourceType:
+      type: string
+      enum:
+      - CUSTOMER
+      - CUSTOM_FIELD
+      - PLATFORM
+      - PLATFORM_UPTODATE
+      - METER
+      - METER_VALUE
+      - METER_PROPERTY
+      - METER_VALUE_CALCULATION
+      - INGEST_DATA
+      - METER_DATA
+      - CHARGE_DATA
+      - PERSIST_DATA
+      - ADJUSTMENT_DATA
+      - PRODUCT_CATEGORY
+      - PRODUCT
+      - PRODUCT_ITEM
+      - PRICING
+      - PRICING_GROUP
+      - PRICING_ITEM
+      - PRICING_ITEM_CONFIG
+      - PRICING_PLAN_SUBSCRIPTION
+      - PRICING_PLAN_SUBSCRIPTION_GROUP
+      - PRICING_PLAN_SCHEDULE
+      - PRICING_PLAN
+      - PRICING_PLAN_VERSION
+      - QUOTE
+      - QUOTE_VERSION
+      - QUOTE_TEMPLATE
+      - API_KEY
+      - USER
+      - ROLE
+      - PROXY_USER
+      - EXTERNAL_CREDENTIALS
+      - TOKEN
+      - INVOICE
+      - E_INVOICE
+      - PDF
+      - BILLING_ENTITY
+      - FEATURE
+      - MEMBERSHIP
+      - PAYMENT
+      - PAYMENT_ACCEPTOR
+      - PAYMENT_METHOD
+      - PAYMENT_METHOD_OPTIONS
+      - PAYMENT_SCHEDULE
+      - PAYMENT_REQUEST
+      - INTEGRATION
+      - WEBHOOK
+      - FILE
+      - FILE_PROCESSING_SETTINGS
+      - TEAM
+      - DOWNLOAD_URL
+      - CSV_REPORT
+      - REPORT
+      - REPORT_GENERATE_REQUEST
+      - REPORT_CONFIGURATION
+      - REPORT_SUBSCRIPTION
+      - REPORT_DEFINITION
+      - ACCOUNT_GROUP
+      - ENTITY
+      - EVENT_TRACE
+      - EVENT_TRACE_LINK
+      - PRICING_CATEGORY
+      - CONTACT
+      - ALERT_RULE
+      - ALERT
+      - AUDIT_RECORD
+      - PORTAL_URL
+      - AUTHENTICATION_PROVIDER
+      - REPROCESS
+      - APPROVAL_POLICY
+      - APPROVAL_REQUEST
+      - BULK_ACTION
+      - COUPON
+      - PROMOTION_CODE
+      - WALLET
+      - WALLET_TYPE
+      - WALLET_GRANT
+      - WORKFLOW
+      - WORKFLOW_TRIGGER
+      - WORKFLOW_ACTION
+      - CREDIT_TYPE
+      - SIGNATURE_REQUEST
+      - ATTACHMENT
+      - DOCUMENT
+      title: ApiErrorResourceType
+    Address:
+      type: object
+      properties:
+        line1:
+          type:
+          - string
+          - 'null'
+        line2:
+          type:
+          - string
+          - 'null'
+        city:
+          type:
+          - string
+          - 'null'
+        postal_code:
+          type:
+          - string
+          - 'null'
+        state:
+          type:
+          - string
+          - 'null'
+        country:
+          oneOf:
+          - $ref: '#/components/schemas/AddressCountry'
+          - type: 'null'
+      title: Address
+    CustomTaxCodeField:
+      type: string
+      enum:
+      - INVOICE_COMMITMENT
+      - PRODUCT_FALLBACK
+      description: The field to use a custom code for
+      title: CustomTaxCodeField
+    PaymentAcceptorUpdateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        billing_entity_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type BILLING_ENTITY
+        customer_id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOMER
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentAcceptorUpdateRequestType'
+          - type: 'null'
+        bank_account:
+          $ref: '#/components/schemas/BankAccount'
+        payment_gateway:
+          $ref: '#/components/schemas/PaymentGatewayPaymentAcceptor'
+        custom_redirect:
+          $ref: '#/components/schemas/PaymentAcceptorCustomRedirect'
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/PaymentAcceptorUpdateRequestStatus'
+          - type: 'null'
+      title: PaymentAcceptorUpdateRequest
+    PaymentAcceptorUpdateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      title: PaymentAcceptorUpdateRequestStatus
     BankAccount:
       type: object
       properties:
@@ -1416,22 +2154,37 @@ components:
         mx_local:
           $ref: '#/components/schemas/MXLocal'
       title: BankAccount
-    PaymentAcceptorType:
-      type: string
-      enum:
-      - BANK_ACCOUNT
-      - PAYMENT_GATEWAY
-      - CUSTOM_REDIRECT
-      title: PaymentAcceptorType
-    PaymentAcceptorCreateRequestStatus:
+    PaymentMethodOption:
+      type: object
+      properties:
+        name:
+          type: string
+        payment_method_variant:
+          type:
+          - string
+          - 'null'
+        payment_gateway_variant:
+          type:
+          - string
+          - 'null'
+        adyen:
+          $ref: '#/components/schemas/AdyenPaymentMethodOption'
+        stripe:
+          $ref: '#/components/schemas/StripePaymentMethodOption'
+      title: PaymentMethodOption
+    IntegrationStatus:
       type: string
       enum:
       - DRAFT
+      - PENDING
+      - TESTING
       - ACTIVE
-      - ARCHIVED
+      - ERROR
       - DEPRECATED
-      title: PaymentAcceptorCreateRequestStatus
-    PaymentAcceptorUpdateRequest:
+      - ARCHIVED
+      description: The status of the integration.
+      title: IntegrationStatus
+    PaymentAcceptorCreateRequest:
       type: object
       properties:
         object_type:
@@ -1464,56 +2217,71 @@ components:
           - 'null'
         type:
           oneOf:
-          - $ref: '#/components/schemas/PaymentAcceptorUpdateRequestType'
+          - $ref: '#/components/schemas/PaymentAcceptorCreateRequestType'
           - type: 'null'
         bank_account:
-          $ref: '#/components/schemas/BankAccount'
+          $ref: '#/components/schemas/BankAccountCreateRequest'
         payment_gateway:
-          $ref: '#/components/schemas/PaymentGatewayPaymentAcceptor'
+          $ref: '#/components/schemas/PaymentGatewayPaymentAcceptorCreateRequest'
         custom_redirect:
-          $ref: '#/components/schemas/PaymentAcceptorCustomRedirect'
+          $ref: '#/components/schemas/PaymentAcceptorCustomRedirectCreateRequest'
         status:
           oneOf:
-          - $ref: '#/components/schemas/PaymentAcceptorUpdateRequestStatus'
+          - $ref: '#/components/schemas/PaymentAcceptorCreateRequestStatus'
           - type: 'null'
-      title: PaymentAcceptorUpdateRequest
-    AvaTaxCalculationIntegration:
+      required:
+      - reference
+      - type
+      title: PaymentAcceptorCreateRequest
+    Snowflake:
       type: object
       properties:
-        company_code:
-          type: string
-          description: Links a billing entity to a company in AvaTax
-      title: AvaTaxCalculationIntegration
-    PaymentMethodOption:
-      type: object
-      properties:
-        name:
-          type: string
-        payment_method_variant:
+        host:
           type:
           - string
           - 'null'
-        payment_gateway_variant:
+        role:
           type:
           - string
           - 'null'
+        warehouse:
+          type:
+          - string
+          - 'null'
+        database:
+          type:
+          - string
+          - 'null'
+        schema:
+          type:
+          - string
+          - 'null'
+      title: Snowflake
+    PaymentGatewayPaymentAcceptor:
+      type: object
+      properties:
+        integration_id:
+          type: string
+          description: Resource ID of type INTEGRATION
+        integration:
+          oneOf:
+          - $ref: '#/components/schemas/Integration'
+          - type: 'null'
+        store_payment_method:
+          type:
+          - boolean
+          - 'null'
+        auto_charge_payment_method:
+          type:
+          - boolean
+          - 'null'
+        collection_type:
+          $ref: '#/components/schemas/PaymentGatewayPaymentAcceptorCollectionType'
+        link:
+          $ref: '#/components/schemas/PaymentGatewayPaymentAcceptorLink'
         adyen:
-          $ref: '#/components/schemas/AdyenPaymentMethodOption'
-        stripe:
-          $ref: '#/components/schemas/StripePaymentMethodOption'
-      title: PaymentMethodOption
-    PaymentGatewayIntegrationVariant:
-      type: string
-      enum:
-      - ADYEN
-      - STRIPE
-      description: The variant of payment integration.
-      title: PaymentGatewayIntegrationVariant
-    EInvoicingIntegrationProcessor:
-      type: string
-      enum:
-      - AVALARA
-      title: EInvoicingIntegrationProcessor
+          $ref: '#/components/schemas/PaymentGatewayPaymentAcceptorAdyen'
+      title: PaymentGatewayPaymentAcceptor
     AdyenPaymentMethodOption:
       type: object
       properties:
@@ -1552,246 +2320,6 @@ components:
           additionalProperties:
             type: string
       title: AdyenPaymentMethodOption
-    CustomTaxCodeField:
-      type: string
-      enum:
-      - INVOICE_COMMITMENT
-      - PRODUCT_FALLBACK
-      description: The field to use a custom code for
-      title: CustomTaxCodeField
-    PaymentGatewayPaymentAcceptor:
-      type: object
-      properties:
-        integration_id:
-          type: string
-          description: Resource ID of type INTEGRATION
-        integration:
-          oneOf:
-          - $ref: '#/components/schemas/Integration'
-          - type: 'null'
-        store_payment_method:
-          type:
-          - boolean
-          - 'null'
-        auto_charge_payment_method:
-          type:
-          - boolean
-          - 'null'
-        collection_type:
-          $ref: '#/components/schemas/PaymentGatewayPaymentAcceptorCollectionType'
-        link:
-          $ref: '#/components/schemas/PaymentGatewayPaymentAcceptorLink'
-        adyen:
-          $ref: '#/components/schemas/PaymentGatewayPaymentAcceptorAdyen'
-      title: PaymentGatewayPaymentAcceptor
-    StripePaymentGatewayIntegration:
-      type: object
-      properties:
-        public_key:
-          type: string
-        signing_secret:
-          type:
-          - string
-          - 'null'
-      title: StripePaymentGatewayIntegration
-    BankAccountAccountType:
-      type: string
-      enum:
-      - CHECKING
-      - SAVINGS
-      description: The bank account type.
-      title: BankAccountAccountType
-    PaymentAcceptorUpdateRequestStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - ARCHIVED
-      - DEPRECATED
-      title: PaymentAcceptorUpdateRequestStatus
-    EmailProviderIntegration:
-      type: object
-      properties:
-        variant:
-          $ref: '#/components/schemas/EmailProviderIntegrationVariant'
-          description: The variant of email provider integration.
-        mailgun:
-          $ref: '#/components/schemas/MailgunEmailProvider'
-          description: Mailgun-specific provider settings. Applicable when variant is MAILGUN.
-        delivery_window:
-          $ref: '#/components/schemas/Period'
-          description: Optional delivery window configuration that limits when outbound emails may be sent.
-        use_localized_templates:
-          type:
-          - boolean
-          - 'null'
-          description: Whether localized email templates should be selected based on customer or request locale when available.
-      title: EmailProviderIntegration
-    MailgunEmailProvider:
-      type: object
-      properties:
-        domain:
-          type: string
-          description: Mailgun sending domain used for this email provider integration.
-        region:
-          oneOf:
-          - $ref: '#/components/schemas/MailgunEmailProviderRegion'
-          - type: 'null'
-          description: Mailgun region for the configured domain.
-        plan:
-          type:
-          - string
-          - 'null'
-          description: Optional Mailgun plan stored with the integration.
-      title: MailgunEmailProvider
-    PaymentGatewayPaymentAcceptorCreateRequest:
-      type: object
-      properties:
-        integration_id:
-          type: string
-          description: Resource ID of type INTEGRATION
-        integration:
-          oneOf:
-          - $ref: '#/components/schemas/Integration'
-          - type: 'null'
-        store_payment_method:
-          type:
-          - boolean
-          - 'null'
-        auto_charge_payment_method:
-          type:
-          - boolean
-          - 'null'
-        collection_type:
-          $ref: '#/components/schemas/PaymentGatewayPaymentAcceptorCreateRequestCollectionType'
-        link:
-          $ref: '#/components/schemas/PaymentGatewayPaymentAcceptorLink'
-        adyen:
-          $ref: '#/components/schemas/PaymentGatewayPaymentAcceptorAdyen'
-      title: PaymentGatewayPaymentAcceptorCreateRequest
-    DataExportIntegration:
-      type: object
-      properties:
-        variant:
-          $ref: '#/components/schemas/DataExportIntegrationVariant'
-          description: The variant of payment integration.
-        s3:
-          $ref: '#/components/schemas/S3'
-        bigquery:
-          $ref: '#/components/schemas/BigQuery'
-        gcs:
-          $ref: '#/components/schemas/Gcs'
-        snowflake:
-          $ref: '#/components/schemas/Snowflake'
-        transport_type:
-          type:
-          - string
-          - 'null'
-      title: DataExportIntegration
-    ClientCredentials:
-      type: object
-      properties:
-        client_id:
-          type: string
-        client_secret:
-          type: string
-      title: ClientCredentials
-    Integration:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        reference:
-          type: string
-          description: A custom reference assigned to the integration.
-        name:
-          type: string
-          description: A custom name assigned to the integration.
-        description:
-          type: string
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/IntegrationStatus'
-          - type: 'null'
-          description: The status of the integration.
-        message:
-          type:
-          - string
-          - 'null'
-          description: The message associated with the status of the integration.
-        type:
-          $ref: '#/components/schemas/IntegrationType'
-          description: The type of integration.
-        authentication:
-          $ref: '#/components/schemas/AuthenticationSettings'
-          description: The authentication information used for the integration
-        payment_gateway:
-          $ref: '#/components/schemas/PaymentGatewayIntegration'
-        e_invoicing:
-          $ref: '#/components/schemas/EInvoicingIntegration'
-          description: Integration to do eInvoicing
-        data_export:
-          $ref: '#/components/schemas/DataExportIntegration'
-        tax_calculation:
-          $ref: '#/components/schemas/TaxCalculationIntegration'
-          description: Integration to calculate tax
-        linked_resources_configurations:
-          type: array
-          items:
-            $ref: '#/components/schemas/IntegrationLinkedResourceConfiguration'
-          description: Details from the resources configurations from Solvimon linked to external integration system
-        email_provider:
-          $ref: '#/components/schemas/EmailProviderIntegration'
-          description: Email provider integration settings. Applicable when the integration type is EMAIL_PROVIDER.
-      title: Integration
-    IntegrationLinkedResourceConfiguration:
-      type: object
-      properties:
-        resource_type:
-          type: string
-        link_details:
-          type: array
-          items:
-            $ref: '#/components/schemas/IntegrationLinkDetail'
-      title: IntegrationLinkedResourceConfiguration
-    AuthenticationSettings:
-      type: object
-      properties:
-        api_key:
-          $ref: '#/components/schemas/AuthenticationSettingsApiKey'
-        client_credentials:
-          $ref: '#/components/schemas/ClientCredentials'
-        username_password:
-          $ref: '#/components/schemas/UsernamePassword'
-      title: AuthenticationSettings
-    S3:
-      type: object
-      properties:
-        bucket_name:
-          type: string
-        bucket_path:
-          type: string
-        bucket_region:
-          type: string
-        authentication_type:
-          oneOf:
-          - $ref: '#/components/schemas/S3AuthenticationType'
-          - type: 'null'
-        role_arn:
-          type:
-          - string
-          - 'null'
-        external_id:
-          type:
-          - string
-          - 'null'
-      title: S3
     AddressCountry:
       type: string
       enum:
@@ -2044,44 +2572,14 @@ components:
       - ZM
       - ZW
       title: AddressCountry
-    EInvoicingMandate:
+    ClientCredentials:
       type: object
       properties:
-        name:
+        client_id:
           type: string
-          description: The name of the mandate
-        country:
-          type:
-          - string
-          - 'null'
-          description: The country that this mandate belongs to
-        mappings:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/EInvoicingMapping'
-          description: The mappings that are used for this Mandate. If not provided, all mappings will be default. If provided, will be merged with defaults
-        condition_groups:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/EInvoicingConditionGroup'
-          description: The condition groups that are used for this mandate. If provided, no defaults will be used. The mandate applies if 1 conditionGroup applies
-        include_pdf_in_einvoice:
-          type:
-          - boolean
-          - 'null'
-          description: Whether the PDF should be included in the submitted eInvoice payload when supported
-        supported_file_formats:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/EInvoiceFileFormat'
-          description: The file formats in which eInvoices for this mandate can be downloaded
-      title: EInvoicingMandate
+        client_secret:
+          type: string
+      title: ClientCredentials
     PaymentAcceptorPaymentMethodOptionsRequestCreateRequestShopperInteraction:
       type: string
       enum:
@@ -2090,504 +2588,6 @@ components:
       - MOTO
       - POS
       title: PaymentAcceptorPaymentMethodOptionsRequestCreateRequestShopperInteraction
-    PaymentGatewayPaymentAcceptorAdyen:
-      type: object
-      properties:
-        auto_rescue:
-          $ref: '#/components/schemas/AdyenAutoRescue'
-        merchant_account:
-          type:
-          - string
-          - 'null'
-        allowed_payment_methods:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-      title: PaymentGatewayPaymentAcceptorAdyen
-    BigQuery:
-      type: object
-      properties:
-        project_id:
-          type: string
-        dataset_id:
-          type: string
-        dataset_location:
-          type: string
-        gcs_bucket_name:
-          type: string
-        gcs_hmac_key_access_id:
-          type: string
-        gcs_hmac_key_secret:
-          type: string
-      title: BigQuery
-    IntegrationType:
-      type: string
-      enum:
-      - PAYMENT_GATEWAY
-      - E_INVOICING
-      - TAX_CALCULATION
-      - DATA_EXPORT
-      - EMAIL_PROVIDER
-      description: The type of integration.
-      title: IntegrationType
-    AmountCreateRequestCurrency:
-      type: string
-      enum:
-      - AED
-      - AFN
-      - ALL
-      - AMD
-      - ANG
-      - AOA
-      - ARS
-      - AUD
-      - AWG
-      - AZN
-      - BAM
-      - BBD
-      - BDT
-      - BGN
-      - BHD
-      - BIF
-      - BMD
-      - BND
-      - BOB
-      - BRL
-      - BSD
-      - BTN
-      - BWP
-      - BYN
-      - BZD
-      - CAD
-      - CDF
-      - CHF
-      - CLF
-      - CLP
-      - CNY
-      - COP
-      - CRC
-      - CUC
-      - CUP
-      - CVE
-      - CZK
-      - DJF
-      - DKK
-      - DOP
-      - DZD
-      - EGP
-      - ERN
-      - ETB
-      - EUR
-      - FJD
-      - FKP
-      - GBP
-      - GEL
-      - GHS
-      - GIP
-      - GMD
-      - GNF
-      - GTQ
-      - GYD
-      - HKD
-      - HNL
-      - HRK
-      - HTG
-      - HUF
-      - IDR
-      - ILS
-      - INR
-      - IQD
-      - IRR
-      - ISK
-      - JMD
-      - JOD
-      - JPY
-      - KES
-      - KGS
-      - KHR
-      - KMF
-      - KPW
-      - KRW
-      - KWD
-      - KYD
-      - KZT
-      - LAK
-      - LBP
-      - LKR
-      - LRD
-      - LSL
-      - LYD
-      - MAD
-      - MDL
-      - MGA
-      - MKD
-      - MMK
-      - MNT
-      - MOP
-      - MRO
-      - MRU
-      - MUR
-      - MVR
-      - MWK
-      - MXN
-      - MXV
-      - MYR
-      - MZN
-      - NAD
-      - NGN
-      - NIO
-      - NOK
-      - NPR
-      - NZD
-      - OMR
-      - PAB
-      - PEN
-      - PGK
-      - PHP
-      - PKR
-      - PLN
-      - PYG
-      - QAR
-      - RON
-      - RSD
-      - RUB
-      - RWF
-      - SAR
-      - SBD
-      - SCR
-      - SDG
-      - SEK
-      - SGD
-      - SHP
-      - SLE
-      - SOS
-      - SRD
-      - SSP
-      - STN
-      - SVC
-      - SYP
-      - SZL
-      - THB
-      - TJS
-      - TMT
-      - TND
-      - TOP
-      - TRY
-      - TTD
-      - TWD
-      - TZS
-      - UAH
-      - UGX
-      - USD
-      - USN
-      - UYI
-      - UYU
-      - UZS
-      - VEF
-      - VES
-      - VND
-      - VUV
-      - WST
-      - XAF
-      - XAG
-      - XAU
-      - XBA
-      - XBB
-      - XBC
-      - XBD
-      - XCD
-      - XDR
-      - XOF
-      - XPD
-      - XPF
-      - XPT
-      - XSU
-      - XTS
-      - XUA
-      - XXX
-      - YER
-      - ZAR
-      - ZMW
-      - ZWL
-      title: AmountCreateRequestCurrency
-    ApiErrorResourceType:
-      type: string
-      enum:
-      - CUSTOMER
-      - CUSTOM_FIELD
-      - PLATFORM
-      - PLATFORM_UPTODATE
-      - METER
-      - METER_VALUE
-      - METER_PROPERTY
-      - METER_VALUE_CALCULATION
-      - INGEST_DATA
-      - METER_DATA
-      - CHARGE_DATA
-      - PERSIST_DATA
-      - ADJUSTMENT_DATA
-      - PRODUCT_CATEGORY
-      - PRODUCT
-      - PRODUCT_ITEM
-      - PRICING
-      - PRICING_GROUP
-      - PRICING_ITEM
-      - PRICING_ITEM_CONFIG
-      - PRICING_PLAN_SUBSCRIPTION
-      - PRICING_PLAN_SUBSCRIPTION_GROUP
-      - PRICING_PLAN_SCHEDULE
-      - PRICING_PLAN
-      - PRICING_PLAN_VERSION
-      - QUOTE
-      - QUOTE_VERSION
-      - QUOTE_TEMPLATE
-      - API_KEY
-      - USER
-      - ROLE
-      - PROXY_USER
-      - EXTERNAL_CREDENTIALS
-      - TOKEN
-      - INVOICE
-      - E_INVOICE
-      - PDF
-      - BILLING_ENTITY
-      - FEATURE
-      - MEMBERSHIP
-      - PAYMENT
-      - PAYMENT_ACCEPTOR
-      - PAYMENT_METHOD
-      - PAYMENT_METHOD_OPTIONS
-      - PAYMENT_SCHEDULE
-      - PAYMENT_REQUEST
-      - INTEGRATION
-      - WEBHOOK
-      - FILE
-      - FILE_PROCESSING_SETTINGS
-      - TEAM
-      - DOWNLOAD_URL
-      - CSV_REPORT
-      - REPORT
-      - REPORT_GENERATE_REQUEST
-      - REPORT_CONFIGURATION
-      - REPORT_SUBSCRIPTION
-      - REPORT_DEFINITION
-      - ACCOUNT_GROUP
-      - ENTITY
-      - EVENT_TRACE
-      - EVENT_TRACE_LINK
-      - PRICING_CATEGORY
-      - CONTACT
-      - ALERT_RULE
-      - ALERT
-      - AUDIT_RECORD
-      - PORTAL_URL
-      - AUTHENTICATION_PROVIDER
-      - REPROCESS
-      - APPROVAL_POLICY
-      - APPROVAL_REQUEST
-      - BULK_ACTION
-      - COUPON
-      - PROMOTION_CODE
-      - WALLET
-      - WALLET_TYPE
-      - WALLET_GRANT
-      - WORKFLOW
-      - WORKFLOW_TRIGGER
-      - WORKFLOW_ACTION
-      - CREDIT_TYPE
-      - SIGNATURE_REQUEST
-      - ATTACHMENT
-      - DOCUMENT
-      title: ApiErrorResourceType
-    AuthenticationSettingsApiKey:
-      type: object
-      properties:
-        header:
-          type:
-          - string
-          - 'null'
-        value:
-          type:
-          - string
-          - 'null'
-      title: AuthenticationSettingsApiKey
-    Gcs:
-      type: object
-      properties:
-        bucket_region:
-          type: string
-        bucket_name:
-          type: string
-        bucket_path:
-          type: string
-        flattening:
-          type: boolean
-      title: Gcs
-    AdyenPaymentGatewayIntegrationOwnership:
-      type: string
-      enum:
-      - PLATFORM
-      - SYSTEM
-      title: AdyenPaymentGatewayIntegrationOwnership
-    PaymentAcceptorStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - ARCHIVED
-      - DEPRECATED
-      title: PaymentAcceptorStatus
-    BankAccountCreateRequestType:
-      type: string
-      enum:
-      - IBAN
-      - BIC_AND_ACCOUNT_NUMBER
-      - ACCOUNT_NUMBER_AND_BIC
-      - US_BANK_ACCOUNT
-      - US_LOCAL
-      - UK_LOCAL
-      - BR_LOCAL
-      - AR_LOCAL
-      - MX_LOCAL
-      description: Determines what fields should be present in the bank account node.
-      title: BankAccountCreateRequestType
-    IntegrationLinkDetail:
-      type: object
-      properties:
-        base_url:
-          type: string
-        custom_field_reference:
-          type: string
-      title: IntegrationLinkDetail
-    DataExportIntegrationVariant:
-      type: string
-      enum:
-      - S3
-      - BIGQUERY
-      - GCS
-      - SNOWFLAKE
-      description: The variant of payment integration.
-      title: DataExportIntegrationVariant
-    ARLocal:
-      type: object
-      properties:
-        cbu:
-          type:
-          - string
-          - 'null'
-          description: CBU (Clave Bancaria Uniforme) account identifier
-        account_number:
-          type:
-          - string
-          - 'null'
-          description: A bank account number if IBAN is not used
-        bic:
-          type:
-          - string
-          - 'null'
-          description: The ISO 9362 Business Identifier Code (BIC) of the bank account
-      title: ARLocal
-    S3AuthenticationType:
-      type: string
-      enum:
-      - ACCESS_KEY_AND_SECRET
-      - IAM_ROLE
-      title: S3AuthenticationType
-    Address:
-      type: object
-      properties:
-        line1:
-          type:
-          - string
-          - 'null'
-        line2:
-          type:
-          - string
-          - 'null'
-        city:
-          type:
-          - string
-          - 'null'
-        postal_code:
-          type:
-          - string
-          - 'null'
-        state:
-          type:
-          - string
-          - 'null'
-        country:
-          oneOf:
-          - $ref: '#/components/schemas/AddressCountry'
-          - type: 'null'
-      title: Address
-    TaxCalculationIntegrationVariant:
-      type: string
-      enum:
-      - AVATAX
-      description: The variant that provides the tax calculation
-      title: TaxCalculationIntegrationVariant
-    PaymentAcceptorCreateRequestType:
-      type: string
-      enum:
-      - BANK_ACCOUNT
-      - PAYMENT_GATEWAY
-      - CUSTOM_REDIRECT
-      title: PaymentAcceptorCreateRequestType
-    AdyenIssuer:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-        name:
-          type:
-          - string
-          - 'null'
-      title: AdyenIssuer
-    PaymentAcceptorPaymentMethodOptions:
-      type: object
-      properties:
-        payment_acceptor:
-          $ref: '#/components/schemas/PaymentAcceptor'
-        integration:
-          $ref: '#/components/schemas/Integration'
-        options:
-          type: array
-          items:
-            $ref: '#/components/schemas/PaymentMethodOption'
-      title: PaymentAcceptorPaymentMethodOptions
-    IntegrationStatus:
-      type: string
-      enum:
-      - DRAFT
-      - PENDING
-      - TESTING
-      - ACTIVE
-      - ERROR
-      - DEPRECATED
-      - ARCHIVED
-      description: The status of the integration.
-      title: IntegrationStatus
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
-    Period:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/PeriodType'
-        value:
-          type:
-          - integer
-          - 'null'
-      title: Period
   securitySchemes:
     API-Key:
       type: apiKey

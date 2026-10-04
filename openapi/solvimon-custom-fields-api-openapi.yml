@@ -391,129 +391,55 @@ paths:
               $ref: '#/components/schemas/CustomFieldUpdateRequest'
 components:
   schemas:
-    CustomField:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        reference:
-          type: string
-        name:
-          type:
-          - string
-          - 'null'
-        description:
-          type:
-          - string
-          - 'null'
-        resource_type:
-          $ref: '#/components/schemas/CustomFieldResourceType'
-        multiple_values:
-          type:
-          - boolean
-          - 'null'
-        unique_value:
-          type:
-          - boolean
-          - 'null'
-        copy_value_to_invoice:
-          type:
-          - boolean
-          - 'null'
-        integration_id:
-          type: string
-          description: The resource ID of the integration.
-        integration_reference:
-          type: string
-          description: The reference of the integration.
-        type:
-          oneOf:
-          - $ref: '#/components/schemas/CustomFieldType'
-          - type: 'null'
-        enum_values:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-      title: CustomField
-    CustomFieldCreateRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        reference:
-          type: string
-        name:
-          type:
-          - string
-          - 'null'
-        description:
-          type:
-          - string
-          - 'null'
-        resource_type:
-          $ref: '#/components/schemas/CustomFieldCreateRequestResourceType'
-        multiple_values:
-          type:
-          - boolean
-          - 'null'
-        unique_value:
-          type:
-          - boolean
-          - 'null'
-        copy_value_to_invoice:
-          type:
-          - boolean
-          - 'null'
-        integration_id:
-          type: string
-          description: The resource ID of the integration.
-        integration_reference:
-          type: string
-          description: The reference of the integration.
-        type:
-          oneOf:
-          - $ref: '#/components/schemas/CustomFieldCreateRequestType'
-          - type: 'null'
-        enum_values:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-      required:
-      - reference
-      - resource_type
-      title: CustomFieldCreateRequest
-    CustomFieldUpdateRequestType:
+    CustomFieldUpdateRequestResourceType:
       type: string
       enum:
-      - STRING
-      - NUMBER
-      - BOOLEAN
-      - ENUM
-      title: CustomFieldUpdateRequestType
-    CustomFieldType:
-      type: string
-      enum:
-      - STRING
-      - NUMBER
-      - BOOLEAN
-      - ENUM
-      title: CustomFieldType
+      - PLATFORM
+      - CUSTOMER
+      - BILLING_ENTITY
+      - METER
+      - METER_VALUE
+      - METER_PROPERTY
+      - METER_VALUE_CALCULATION
+      - PRODUCT
+      - PRODUCT_ITEM
+      - PRODUCT_CATEGORY
+      - PRICING
+      - PRICING_ITEM
+      - PRICING_ITEM_CONFIG
+      - PRICING_ITEM_SUMMARY
+      - METER_VALUE_CALCULATION_SUMMARY
+      - PRICING_PLAN
+      - PRICING_PLAN_VERSION
+      - PRICING_PLAN_SUBSCRIPTION
+      - PRICING_PLAN_SCHEDULE
+      - QUOTE
+      - QUOTE_VERSION
+      - CONTACT
+      - CUSTOM_FIELD
+      - REQUEST_REFERENCE
+      - METER_DATA
+      - CHARGE_DATA
+      - ADJUSTMENT_DATA
+      - PERSIST_DATA
+      - INVOICE
+      - INVOICE_PAYMENT_ATTEMPT
+      - PAYMENT_ACCEPTOR
+      - PAYMENT_SCHEDULE
+      - PAYMENT_REQUEST
+      - FEATURE
+      - ALERT_RULE
+      - ALERT
+      - USER
+      - MEMBERSHIP
+      - TEAM
+      - ENTITY
+      - ACCOUNT_GROUP
+      - AUDIT
+      - WEBHOOK
+      - REPORT_SUBSCRIPTION
+      - REPORT_CONFIGURATION
+      title: CustomFieldUpdateRequestResourceType
     CustomFieldResourceType:
       type: string
       enum:
@@ -563,6 +489,51 @@ components:
       - REPORT_SUBSCRIPTION
       - REPORT_CONFIGURATION
       title: CustomFieldResourceType
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
     ApiErrorResourceType:
       type: string
       enum:
@@ -678,6 +649,61 @@ components:
       - code
       - message
       title: ApiError
+    CustomFieldCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          $ref: '#/components/schemas/CustomFieldCreateRequestResourceType'
+        multiple_values:
+          type:
+          - boolean
+          - 'null'
+        unique_value:
+          type:
+          - boolean
+          - 'null'
+        copy_value_to_invoice:
+          type:
+          - boolean
+          - 'null'
+        integration_id:
+          type: string
+          description: The resource ID of the integration.
+        integration_reference:
+          type: string
+          description: The reference of the integration.
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/CustomFieldCreateRequestType'
+          - type: 'null'
+        enum_values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+      required:
+      - reference
+      - resource_type
+      title: CustomFieldCreateRequest
     CustomFieldCreateRequestResourceType:
       type: string
       enum:
@@ -727,51 +753,14 @@ components:
       - REPORT_SUBSCRIPTION
       - REPORT_CONFIGURATION
       title: CustomFieldCreateRequestResourceType
-    ApiErrorType:
+    CustomFieldCreateRequestType:
       type: string
       enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
-    ApiErrorCode:
-      type: string
-      enum:
-      - RESOURCE_NOT_FOUND
-      - RESOURCES_NOT_FOUND
-      - UNABLE_TO_PROCESS_INSTRUCTIONS
-      - BAD_REQUEST
-      - UNSUPPORTED_MEDIA_TYPE
-      - RESOURCE_ALREADY_EXISTS
-      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
-      - COULD_NOT_CREATE_RESOURCE
-      - COULD_NOT_UPDATE_RESOURCE
-      - COULD_NOT_DELETE_RESOURCE
-      - MISSING_VERSION
-      - UNSUPPORTED_VERSION
-      - UNAUTHORISED
-      - CUSTOMER_NOT_FOUND
-      - PLATFORM_NOT_FOUND
-      - PRICING_PLAN_NOT_FOUND
-      - PRODUCT_NOT_FOUND
-      - PRODUCT_ITEM_NOT_FOUND
-      - PRICING_NOT_FOUND
-      - PRICING_ITEM_NOT_FOUND
-      - USER_NOT_FOUND
-      - METER_NOT_FOUND
-      - METER_VALUE_NOT_FOUND
-      - METER_PROPERTY_NOT_FOUND
-      - PRICING_ITEM_SUMMARIES_NOT_FOUND
-      - MISSING_ID
-      - INVALID_ID
-      - MISSING_REFERENCE
-      - MISSING_FIELD
-      - INVALID_FIELD
-      - INVALID_OPERATION
-      - INTERNAL_ERROR
-      - USER_NOT_ALLOWED
-      - IDEMPOTENCY_CHECK_FAILED
-      - INVALID_REQUEST
-      title: ApiErrorCode
+      - STRING
+      - NUMBER
+      - BOOLEAN
+      - ENUM
+      title: CustomFieldCreateRequestType
     PaginationLinks:
       type: object
       properties:
@@ -792,6 +781,66 @@ components:
           - string
           - 'null'
       title: PaginationLinks
+    CustomField:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          $ref: '#/components/schemas/CustomFieldResourceType'
+        multiple_values:
+          type:
+          - boolean
+          - 'null'
+        unique_value:
+          type:
+          - boolean
+          - 'null'
+        copy_value_to_invoice:
+          type:
+          - boolean
+          - 'null'
+        integration_id:
+          type: string
+          description: The resource ID of the integration.
+        integration_reference:
+          type: string
+          description: The reference of the integration.
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/CustomFieldType'
+          - type: 'null'
+        enum_values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+      title: CustomField
+    CustomFieldType:
+      type: string
+      enum:
+      - STRING
+      - NUMBER
+      - BOOLEAN
+      - ENUM
+      title: CustomFieldType
     CustomFieldResponseWrapper:
       type: object
       properties:
@@ -817,63 +866,6 @@ components:
       - data
       - links
       title: CustomFieldResponseWrapper
-    CustomFieldUpdateRequestResourceType:
-      type: string
-      enum:
-      - PLATFORM
-      - CUSTOMER
-      - BILLING_ENTITY
-      - METER
-      - METER_VALUE
-      - METER_PROPERTY
-      - METER_VALUE_CALCULATION
-      - PRODUCT
-      - PRODUCT_ITEM
-      - PRODUCT_CATEGORY
-      - PRICING
-      - PRICING_ITEM
-      - PRICING_ITEM_CONFIG
-      - PRICING_ITEM_SUMMARY
-      - METER_VALUE_CALCULATION_SUMMARY
-      - PRICING_PLAN
-      - PRICING_PLAN_VERSION
-      - PRICING_PLAN_SUBSCRIPTION
-      - PRICING_PLAN_SCHEDULE
-      - QUOTE
-      - QUOTE_VERSION
-      - CONTACT
-      - CUSTOM_FIELD
-      - REQUEST_REFERENCE
-      - METER_DATA
-      - CHARGE_DATA
-      - ADJUSTMENT_DATA
-      - PERSIST_DATA
-      - INVOICE
-      - INVOICE_PAYMENT_ATTEMPT
-      - PAYMENT_ACCEPTOR
-      - PAYMENT_SCHEDULE
-      - PAYMENT_REQUEST
-      - FEATURE
-      - ALERT_RULE
-      - ALERT
-      - USER
-      - MEMBERSHIP
-      - TEAM
-      - ENTITY
-      - ACCOUNT_GROUP
-      - AUDIT
-      - WEBHOOK
-      - REPORT_SUBSCRIPTION
-      - REPORT_CONFIGURATION
-      title: CustomFieldUpdateRequestResourceType
-    CustomFieldCreateRequestType:
-      type: string
-      enum:
-      - STRING
-      - NUMBER
-      - BOOLEAN
-      - ENUM
-      title: CustomFieldCreateRequestType
     CustomFieldUpdateRequest:
       type: object
       properties:
@@ -926,6 +918,14 @@ components:
           items:
             type: string
       title: CustomFieldUpdateRequest
+    CustomFieldUpdateRequestType:
+      type: string
+      enum:
+      - STRING
+      - NUMBER
+      - BOOLEAN
+      - ENUM
+      title: CustomFieldUpdateRequestType
   securitySchemes:
     API-Key:
       type: apiKey
