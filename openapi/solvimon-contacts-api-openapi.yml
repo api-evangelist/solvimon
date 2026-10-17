@@ -442,148 +442,56 @@ paths:
               $ref: '#/components/schemas/ContactUpdateRequest'
 components:
   schemas:
-    Contact:
+    CustomFieldValueCreateRequest:
       type: object
       properties:
-        object_type:
-          type:
-          - string
-          - 'null'
         id:
           type:
           - string
           - 'null'
+          description: Resource ID of type CUSTOM_FIELD
         reference:
-          type: string
-          description: A custom reference assigned to the contact.
-        customer_id:
-          type: string
-          description: The ID of the customer.
-        name:
-          $ref: '#/components/schemas/Name'
-          description: A custom name assigned to the contact.
-        email:
-          type: string
-          description: The email of the contact.
-        notification_preferences:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+        values:
           type:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/NotificationPreference'
-          description: Notification preferences for contact-related communications.
-        custom_fields:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CustomFieldValue'
-        linked_integrations:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/LinkedIntegration'
-      title: Contact
-    IntegrationDetailsPaymentGatewayVariant:
-      type: string
-      enum:
-      - ADYEN
-      - STRIPE
-      title: IntegrationDetailsPaymentGatewayVariant
-    Name:
-      type: object
-      properties:
-        first_name:
-          type:
-          - string
-          - 'null'
-        last_name:
-          type:
-          - string
-          - 'null'
-        infix:
-          type:
-          - string
-          - 'null'
-      title: Name
-    StripeIntegrationDetails:
-      type: object
-      properties:
-        payment_method_id:
-          type: string
-      title: StripeIntegrationDetails
-    NotificationChannelType:
-      type: string
-      enum:
-      - EMAIL
-      description: The channel type to use.
-      title: NotificationChannelType
-    ApiErrorCode:
-      type: string
-      enum:
-      - RESOURCE_NOT_FOUND
-      - RESOURCES_NOT_FOUND
-      - UNABLE_TO_PROCESS_INSTRUCTIONS
-      - BAD_REQUEST
-      - UNSUPPORTED_MEDIA_TYPE
-      - RESOURCE_ALREADY_EXISTS
-      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
-      - COULD_NOT_CREATE_RESOURCE
-      - COULD_NOT_UPDATE_RESOURCE
-      - COULD_NOT_DELETE_RESOURCE
-      - MISSING_VERSION
-      - UNSUPPORTED_VERSION
-      - UNAUTHORISED
-      - CUSTOMER_NOT_FOUND
-      - PLATFORM_NOT_FOUND
-      - PRICING_PLAN_NOT_FOUND
-      - PRODUCT_NOT_FOUND
-      - PRODUCT_ITEM_NOT_FOUND
-      - PRICING_NOT_FOUND
-      - PRICING_ITEM_NOT_FOUND
-      - USER_NOT_FOUND
-      - METER_NOT_FOUND
-      - METER_VALUE_NOT_FOUND
-      - METER_PROPERTY_NOT_FOUND
-      - PRICING_ITEM_SUMMARIES_NOT_FOUND
-      - MISSING_ID
-      - INVALID_ID
-      - MISSING_REFERENCE
-      - MISSING_FIELD
-      - INVALID_FIELD
-      - INVALID_OPERATION
-      - INTERNAL_ERROR
-      - USER_NOT_ALLOWED
-      - IDEMPOTENCY_CHECK_FAILED
-      - INVALID_REQUEST
-      title: ApiErrorCode
-    ApiError:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/ApiErrorType'
-        code:
-          $ref: '#/components/schemas/ApiErrorCode'
-        field:
-          type:
-          - string
-          - 'null'
-        message:
-          type: string
-        resource_id:
-          type:
-          - string
-          - 'null'
-        resource_type:
+            type: string
+        integration_details:
           oneOf:
-          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - $ref: '#/components/schemas/IntegrationDetails'
           - type: 'null'
-      required:
-      - type
-      - code
-      - message
-      title: ApiError
+        integration_id:
+          type: string
+          description: The resource ID of the integration linked to the custom field
+      title: CustomFieldValueCreateRequest
+    LinkedIntegration:
+      type: object
+      properties:
+        id:
+          type: string
+        link_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/LinkDetail'
+      title: LinkedIntegration
+    LinkedIntegrationUpdateRequest:
+      type: object
+      properties:
+        id:
+          type: string
+        link_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/LinkDetail'
+      title: LinkedIntegrationUpdateRequest
     CustomFieldValue:
       type: object
       properties:
@@ -614,18 +522,162 @@ components:
           type: string
           description: The resource ID of the integration linked to the custom field
       title: CustomFieldValue
-    LinkDetail:
+    NotificationPreferenceType:
+      type: string
+      enum:
+      - INVOICE
+      description: The notification type to configure.
+      title: NotificationPreferenceType
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    IntegrationDetailsPaymentGatewayVariant:
+      type: string
+      enum:
+      - ADYEN
+      - STRIPE
+      title: IntegrationDetailsPaymentGatewayVariant
+    AdyenIntegrationDetails:
       type: object
       properties:
-        url:
+        recurring_detail_reference:
+          type: string
+      title: AdyenIntegrationDetails
+    ContactCreateRequest:
+      type: object
+      properties:
+        object_type:
           type:
           - string
           - 'null'
-        custom_field_name:
+        id:
           type:
           - string
           - 'null'
-      title: LinkDetail
+        reference:
+          type: string
+          description: A custom reference assigned to the contact.
+        customer_id:
+          type: string
+          description: The ID of the customer.
+        name:
+          $ref: '#/components/schemas/NameCreateRequest'
+          description: A custom name assigned to the contact.
+        email:
+          type: string
+          description: The email of the contact.
+        notification_preferences:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/NotificationPreferenceCreateRequest'
+          description: Notification preferences for contact-related communications.
+        custom_fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomFieldValueCreateRequest'
+        linked_integrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/LinkedIntegrationCreateRequest'
+      required:
+      - reference
+      - customer_id
+      title: ContactCreateRequest
+    CustomFieldValueUpdateRequest:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: Resource ID of type CUSTOM_FIELD
+        reference:
+          type:
+          - string
+          - 'null'
+        value:
+          type:
+          - string
+          - 'null'
+        values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        integration_details:
+          oneOf:
+          - $ref: '#/components/schemas/IntegrationDetails'
+          - type: 'null'
+        integration_id:
+          type: string
+          description: The resource ID of the integration linked to the custom field
+      title: CustomFieldValueUpdateRequest
+    NotificationPreferenceCreateRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/NotificationPreferenceCreateRequestType'
+          description: The notification type to configure.
+        channels:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/NotificationChannel'
+          description: The channels for this notification type.
+      title: NotificationPreferenceCreateRequest
+    Name:
+      type: object
+      properties:
+        first_name:
+          type:
+          - string
+          - 'null'
+        last_name:
+          type:
+          - string
+          - 'null'
+        infix:
+          type:
+          - string
+          - 'null'
+      title: Name
+    StripeIntegrationDetails:
+      type: object
+      properties:
+        payment_method_id:
+          type: string
+      title: StripeIntegrationDetails
+    PaginationLinks:
+      type: object
+      properties:
+        first:
+          type:
+          - string
+          - 'null'
+        previous:
+          type:
+          - string
+          - 'null'
+        current:
+          type:
+          - string
+          - 'null'
+        next:
+          type:
+          - string
+          - 'null'
+      title: PaginationLinks
     ContactUpdateRequest:
       type: object
       properties:
@@ -669,12 +721,135 @@ components:
           items:
             $ref: '#/components/schemas/LinkedIntegrationUpdateRequest'
       title: ContactUpdateRequest
-    ApiErrorType:
+    NameUpdateRequest:
+      type: object
+      properties:
+        first_name:
+          type:
+          - string
+          - 'null'
+        last_name:
+          type:
+          - string
+          - 'null'
+        infix:
+          type:
+          - string
+          - 'null'
+      title: NameUpdateRequest
+    LinkedIntegrationCreateRequest:
+      type: object
+      properties:
+        id:
+          type: string
+        link_details:
+          type: array
+          items:
+            $ref: '#/components/schemas/LinkDetail'
+      title: LinkedIntegrationCreateRequest
+    ApiErrorCode:
       type: string
       enum:
-      - API_ERROR
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
       - INVALID_REQUEST
-      title: ApiErrorType
+      title: ApiErrorCode
+    NotificationPreferenceUpdateRequest:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/NotificationPreferenceUpdateRequestType'
+          description: The notification type to configure.
+        channels:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/NotificationChannel'
+          description: The channels for this notification type.
+      title: NotificationPreferenceUpdateRequest
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
+    NotificationPreferenceCreateRequestType:
+      type: string
+      enum:
+      - INVOICE
+      description: The notification type to configure.
+      title: NotificationPreferenceCreateRequestType
+    NotificationPreferenceUpdateRequestType:
+      type: string
+      enum:
+      - INVOICE
+      description: The notification type to configure.
+      title: NotificationPreferenceUpdateRequestType
+    NotificationChannel:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/NotificationChannelType'
+          description: The channel type to use.
+        enabled:
+          type:
+          - boolean
+          - 'null'
+          description: Whether the channel is enabled for the notification type.
+      title: NotificationChannel
     ApiErrorResourceType:
       type: string
       enum:
@@ -764,20 +939,67 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
-    NotificationPreferenceUpdateRequest:
+    IntegrationDetails:
       type: object
       properties:
-        type:
-          $ref: '#/components/schemas/NotificationPreferenceUpdateRequestType'
-          description: The notification type to configure.
-        channels:
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type:
+          - string
+          - 'null'
+        payment_gateway_variant:
+          $ref: '#/components/schemas/IntegrationDetailsPaymentGatewayVariant'
+        adyen:
+          $ref: '#/components/schemas/AdyenIntegrationDetails'
+        stripe:
+          $ref: '#/components/schemas/StripeIntegrationDetails'
+      title: IntegrationDetails
+    Contact:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+          description: A custom reference assigned to the contact.
+        customer_id:
+          type: string
+          description: The ID of the customer.
+        name:
+          $ref: '#/components/schemas/Name'
+          description: A custom name assigned to the contact.
+        email:
+          type: string
+          description: The email of the contact.
+        notification_preferences:
           type:
           - array
           - 'null'
           items:
-            $ref: '#/components/schemas/NotificationChannel'
-          description: The channels for this notification type.
-      title: NotificationPreferenceUpdateRequest
+            $ref: '#/components/schemas/NotificationPreference'
+          description: Notification preferences for contact-related communications.
+        custom_fields:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/CustomFieldValue'
+        linked_integrations:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/LinkedIntegration'
+      title: Contact
     ContactResponseWrapper:
       type: object
       properties:
@@ -802,194 +1024,24 @@ components:
       required:
       - data
       title: ContactResponseWrapper
-    LinkedIntegrationCreateRequest:
-      type: object
-      properties:
-        id:
-          type: string
-        link_details:
-          type: array
-          items:
-            $ref: '#/components/schemas/LinkDetail'
-      title: LinkedIntegrationCreateRequest
-    NotificationPreferenceUpdateRequestType:
+    NotificationChannelType:
       type: string
       enum:
-      - INVOICE
-      description: The notification type to configure.
-      title: NotificationPreferenceUpdateRequestType
-    NotificationPreferenceCreateRequest:
+      - EMAIL
+      description: The channel type to use.
+      title: NotificationChannelType
+    LinkDetail:
       type: object
       properties:
-        type:
-          $ref: '#/components/schemas/NotificationPreferenceCreateRequestType'
-          description: The notification type to configure.
-        channels:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/NotificationChannel'
-          description: The channels for this notification type.
-      title: NotificationPreferenceCreateRequest
-    NotificationPreferenceCreateRequestType:
-      type: string
-      enum:
-      - INVOICE
-      description: The notification type to configure.
-      title: NotificationPreferenceCreateRequestType
-    LinkedIntegration:
-      type: object
-      properties:
-        id:
-          type: string
-        link_details:
-          type: array
-          items:
-            $ref: '#/components/schemas/LinkDetail'
-      title: LinkedIntegration
-    LinkedIntegrationUpdateRequest:
-      type: object
-      properties:
-        id:
-          type: string
-        link_details:
-          type: array
-          items:
-            $ref: '#/components/schemas/LinkDetail'
-      title: LinkedIntegrationUpdateRequest
-    CustomFieldValueCreateRequest:
-      type: object
-      properties:
-        id:
+        url:
           type:
           - string
           - 'null'
-          description: Resource ID of type CUSTOM_FIELD
-        reference:
+        custom_field_name:
           type:
           - string
           - 'null'
-        value:
-          type:
-          - string
-          - 'null'
-        values:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-        integration_details:
-          oneOf:
-          - $ref: '#/components/schemas/IntegrationDetails'
-          - type: 'null'
-        integration_id:
-          type: string
-          description: The resource ID of the integration linked to the custom field
-      title: CustomFieldValueCreateRequest
-    NotificationPreferenceType:
-      type: string
-      enum:
-      - INVOICE
-      description: The notification type to configure.
-      title: NotificationPreferenceType
-    IntegrationDetails:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-        reference:
-          type:
-          - string
-          - 'null'
-        payment_gateway_variant:
-          $ref: '#/components/schemas/IntegrationDetailsPaymentGatewayVariant'
-        adyen:
-          $ref: '#/components/schemas/AdyenIntegrationDetails'
-        stripe:
-          $ref: '#/components/schemas/StripeIntegrationDetails'
-      title: IntegrationDetails
-    CustomFieldValueUpdateRequest:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: Resource ID of type CUSTOM_FIELD
-        reference:
-          type:
-          - string
-          - 'null'
-        value:
-          type:
-          - string
-          - 'null'
-        values:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-        integration_details:
-          oneOf:
-          - $ref: '#/components/schemas/IntegrationDetails'
-          - type: 'null'
-        integration_id:
-          type: string
-          description: The resource ID of the integration linked to the custom field
-      title: CustomFieldValueUpdateRequest
-    NotificationChannel:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/NotificationChannelType'
-          description: The channel type to use.
-        enabled:
-          type:
-          - boolean
-          - 'null'
-          description: Whether the channel is enabled for the notification type.
-      title: NotificationChannel
-    PaginationLinks:
-      type: object
-      properties:
-        first:
-          type:
-          - string
-          - 'null'
-        previous:
-          type:
-          - string
-          - 'null'
-        current:
-          type:
-          - string
-          - 'null'
-        next:
-          type:
-          - string
-          - 'null'
-      title: PaginationLinks
-    NameUpdateRequest:
-      type: object
-      properties:
-        first_name:
-          type:
-          - string
-          - 'null'
-        last_name:
-          type:
-          - string
-          - 'null'
-        infix:
-          type:
-          - string
-          - 'null'
-      title: NameUpdateRequest
+      title: LinkDetail
     NameCreateRequest:
       type: object
       properties:
@@ -1020,58 +1072,6 @@ components:
             $ref: '#/components/schemas/NotificationChannel'
           description: The channels for this notification type.
       title: NotificationPreference
-    ContactCreateRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        reference:
-          type: string
-          description: A custom reference assigned to the contact.
-        customer_id:
-          type: string
-          description: The ID of the customer.
-        name:
-          $ref: '#/components/schemas/NameCreateRequest'
-          description: A custom name assigned to the contact.
-        email:
-          type: string
-          description: The email of the contact.
-        notification_preferences:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/NotificationPreferenceCreateRequest'
-          description: Notification preferences for contact-related communications.
-        custom_fields:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/CustomFieldValueCreateRequest'
-        linked_integrations:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/LinkedIntegrationCreateRequest'
-      required:
-      - reference
-      - customer_id
-      title: ContactCreateRequest
-    AdyenIntegrationDetails:
-      type: object
-      properties:
-        recurring_detail_reference:
-          type: string
-      title: AdyenIntegrationDetails
   securitySchemes:
     API-Key:
       type: apiKey

@@ -351,16 +351,7 @@ paths:
               $ref: '#/components/schemas/MeterPropertyUpdateRequest'
 components:
   schemas:
-    MeterPropertyStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - ARCHIVED
-      - DEPRECATED
-      description: The status of the meter property indicating the activity and the ability to update properties.
-      title: MeterPropertyStatus
-    MeterPropertyCreateRequest:
+    MeterProperty:
       type: object
       properties:
         object_type:
@@ -382,11 +373,11 @@ components:
           - string
           - 'null'
         status:
-          $ref: '#/components/schemas/MeterPropertyCreateRequestStatus'
+          $ref: '#/components/schemas/MeterPropertyStatus'
           description: The status of the meter property indicating the activity and the ability to update properties.
         type:
           oneOf:
-          - $ref: '#/components/schemas/MeterPropertyCreateRequestType'
+          - $ref: '#/components/schemas/MeterPropertyType'
           - type: 'null'
           description: The type of the meter property.
         enum_values:
@@ -396,56 +387,69 @@ components:
           items:
             type: string
           description: The list of available ENUM values.
-      required:
-      - reference
-      - name
-      - type
-      title: MeterPropertyCreateRequest
-    ApiErrorCode:
+      title: MeterProperty
+    MeterPropertyType:
       type: string
       enum:
-      - RESOURCE_NOT_FOUND
-      - RESOURCES_NOT_FOUND
-      - UNABLE_TO_PROCESS_INSTRUCTIONS
-      - BAD_REQUEST
-      - UNSUPPORTED_MEDIA_TYPE
-      - RESOURCE_ALREADY_EXISTS
-      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
-      - COULD_NOT_CREATE_RESOURCE
-      - COULD_NOT_UPDATE_RESOURCE
-      - COULD_NOT_DELETE_RESOURCE
-      - MISSING_VERSION
-      - UNSUPPORTED_VERSION
-      - UNAUTHORISED
-      - CUSTOMER_NOT_FOUND
-      - PLATFORM_NOT_FOUND
-      - PRICING_PLAN_NOT_FOUND
-      - PRODUCT_NOT_FOUND
-      - PRODUCT_ITEM_NOT_FOUND
-      - PRICING_NOT_FOUND
-      - PRICING_ITEM_NOT_FOUND
-      - USER_NOT_FOUND
-      - METER_NOT_FOUND
-      - METER_VALUE_NOT_FOUND
-      - METER_PROPERTY_NOT_FOUND
-      - PRICING_ITEM_SUMMARIES_NOT_FOUND
-      - MISSING_ID
-      - INVALID_ID
-      - MISSING_REFERENCE
-      - MISSING_FIELD
-      - INVALID_FIELD
-      - INVALID_OPERATION
-      - INTERNAL_ERROR
-      - USER_NOT_ALLOWED
-      - IDEMPOTENCY_CHECK_FAILED
-      - INVALID_REQUEST
-      title: ApiErrorCode
-    ApiErrorType:
+      - NUMBER
+      - ENUM
+      - STRING
+      description: The type of the meter property.
+      title: MeterPropertyType
+    MeterPropertyUpdateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        status:
+          $ref: '#/components/schemas/MeterPropertyUpdateRequestStatus'
+          description: The status of the meter property indicating the activity and the ability to update properties.
+        type:
+          oneOf:
+          - $ref: '#/components/schemas/MeterPropertyUpdateRequestType'
+          - type: 'null'
+          description: The type of the meter property.
+        enum_values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+          description: The list of available ENUM values.
+      title: MeterPropertyUpdateRequest
+    MeterPropertyUpdateRequestStatus:
       type: string
       enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the meter property indicating the activity and the ability to update properties.
+      title: MeterPropertyUpdateRequestStatus
+    MeterPropertyUpdateRequestType:
+      type: string
+      enum:
+      - NUMBER
+      - ENUM
+      - STRING
+      description: The type of the meter property.
+      title: MeterPropertyUpdateRequestType
     ApiErrorResourceType:
       type: string
       enum:
@@ -535,7 +539,82 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
-    MeterProperty:
+    MeterPropertyCreateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the meter property indicating the activity and the ability to update properties.
+      title: MeterPropertyCreateRequestStatus
+    MeterPropertyResponseWrapper:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/MeterProperty'
+      required:
+      - data
+      title: MeterPropertyResponseWrapper
+    MeterPropertyStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - ARCHIVED
+      - DEPRECATED
+      description: The status of the meter property indicating the activity and the ability to update properties.
+      title: MeterPropertyStatus
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    MeterPropertyCreateRequestType:
+      type: string
+      enum:
+      - NUMBER
+      - ENUM
+      - STRING
+      description: The type of the meter property.
+      title: MeterPropertyCreateRequestType
+    MeterPropertyCreateRequest:
       type: object
       properties:
         object_type:
@@ -557,11 +636,11 @@ components:
           - string
           - 'null'
         status:
-          $ref: '#/components/schemas/MeterPropertyStatus'
+          $ref: '#/components/schemas/MeterPropertyCreateRequestStatus'
           description: The status of the meter property indicating the activity and the ability to update properties.
         type:
           oneOf:
-          - $ref: '#/components/schemas/MeterPropertyType'
+          - $ref: '#/components/schemas/MeterPropertyCreateRequestType'
           - type: 'null'
           description: The type of the meter property.
         enum_values:
@@ -571,7 +650,17 @@ components:
           items:
             type: string
           description: The list of available ENUM values.
-      title: MeterProperty
+      required:
+      - reference
+      - name
+      - type
+      title: MeterPropertyCreateRequest
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
     ApiError:
       type: object
       properties:
@@ -598,95 +687,6 @@ components:
       - code
       - message
       title: ApiError
-    MeterPropertyUpdateRequestStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - ARCHIVED
-      - DEPRECATED
-      description: The status of the meter property indicating the activity and the ability to update properties.
-      title: MeterPropertyUpdateRequestStatus
-    MeterPropertyCreateRequestType:
-      type: string
-      enum:
-      - NUMBER
-      - ENUM
-      - STRING
-      description: The type of the meter property.
-      title: MeterPropertyCreateRequestType
-    MeterPropertyUpdateRequestType:
-      type: string
-      enum:
-      - NUMBER
-      - ENUM
-      - STRING
-      description: The type of the meter property.
-      title: MeterPropertyUpdateRequestType
-    MeterPropertyCreateRequestStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - ARCHIVED
-      - DEPRECATED
-      description: The status of the meter property indicating the activity and the ability to update properties.
-      title: MeterPropertyCreateRequestStatus
-    MeterPropertyResponseWrapper:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/MeterProperty'
-      required:
-      - data
-      title: MeterPropertyResponseWrapper
-    MeterPropertyType:
-      type: string
-      enum:
-      - NUMBER
-      - ENUM
-      - STRING
-      description: The type of the meter property.
-      title: MeterPropertyType
-    MeterPropertyUpdateRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        reference:
-          type: string
-        name:
-          type:
-          - string
-          - 'null'
-        description:
-          type:
-          - string
-          - 'null'
-        status:
-          $ref: '#/components/schemas/MeterPropertyUpdateRequestStatus'
-          description: The status of the meter property indicating the activity and the ability to update properties.
-        type:
-          oneOf:
-          - $ref: '#/components/schemas/MeterPropertyUpdateRequestType'
-          - type: 'null'
-          description: The type of the meter property.
-        enum_values:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-          description: The list of available ENUM values.
-      title: MeterPropertyUpdateRequest
   securitySchemes:
     API-Key:
       type: apiKey

@@ -265,92 +265,6 @@ paths:
                 $ref: '#/components/schemas/ApiError'
 components:
   schemas:
-    DocumentCreateRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        created_at:
-          type:
-          - string
-          - 'null'
-        name:
-          type: string
-          description: The name of the document.
-        description:
-          type:
-          - string
-          - 'null'
-          description: An optional description of the document.
-        content_type:
-          type: string
-          description: Content type of the file (e.g. application/pdf).
-        content:
-          type: string
-          description: The file content, BASE64 encoded. Max 10MB.
-        file_size:
-          type:
-          - integer
-          - 'null'
-          format: int64
-          description: The file size in bytes.
-        downloaded_at:
-          type:
-          - string
-          - 'null'
-          description: Timestamp of the most recent download.
-      title: DocumentCreateRequest
-    ApiErrorCode:
-      type: string
-      enum:
-      - RESOURCE_NOT_FOUND
-      - RESOURCES_NOT_FOUND
-      - UNABLE_TO_PROCESS_INSTRUCTIONS
-      - BAD_REQUEST
-      - UNSUPPORTED_MEDIA_TYPE
-      - RESOURCE_ALREADY_EXISTS
-      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
-      - COULD_NOT_CREATE_RESOURCE
-      - COULD_NOT_UPDATE_RESOURCE
-      - COULD_NOT_DELETE_RESOURCE
-      - MISSING_VERSION
-      - UNSUPPORTED_VERSION
-      - UNAUTHORISED
-      - CUSTOMER_NOT_FOUND
-      - PLATFORM_NOT_FOUND
-      - PRICING_PLAN_NOT_FOUND
-      - PRODUCT_NOT_FOUND
-      - PRODUCT_ITEM_NOT_FOUND
-      - PRICING_NOT_FOUND
-      - PRICING_ITEM_NOT_FOUND
-      - USER_NOT_FOUND
-      - METER_NOT_FOUND
-      - METER_VALUE_NOT_FOUND
-      - METER_PROPERTY_NOT_FOUND
-      - PRICING_ITEM_SUMMARIES_NOT_FOUND
-      - MISSING_ID
-      - INVALID_ID
-      - MISSING_REFERENCE
-      - MISSING_FIELD
-      - INVALID_FIELD
-      - INVALID_OPERATION
-      - INTERNAL_ERROR
-      - USER_NOT_ALLOWED
-      - IDEMPOTENCY_CHECK_FAILED
-      - INVALID_REQUEST
-      title: ApiErrorCode
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
     ApiErrorResourceType:
       type: string
       enum:
@@ -440,40 +354,102 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
-    ApiError:
+    DocumentCreateRequest:
       type: object
       properties:
-        type:
-          $ref: '#/components/schemas/ApiErrorType'
-        code:
-          $ref: '#/components/schemas/ApiErrorCode'
-        field:
+        object_type:
           type:
           - string
           - 'null'
-        message:
-          type: string
-        resource_id:
-          type:
-          - string
-          - 'null'
-        resource_type:
-          oneOf:
-          - $ref: '#/components/schemas/ApiErrorResourceType'
-          - type: 'null'
-      required:
-      - type
-      - code
-      - message
-      title: ApiError
-    ResourceIdentifier:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/ResourceIdentifierType'
         id:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type:
+          - string
+          - 'null'
+        name:
           type: string
-      title: ResourceIdentifier
+          description: The name of the document.
+        description:
+          type:
+          - string
+          - 'null'
+          description: An optional description of the document.
+        content_type:
+          type: string
+          description: Content type of the file (e.g. application/pdf).
+        content:
+          type: string
+          description: The file content, BASE64 encoded. Max 10MB.
+        file_size:
+          type:
+          - integer
+          - 'null'
+          format: int64
+          description: The file size in bytes.
+        downloaded_at:
+          type:
+          - string
+          - 'null'
+          description: Timestamp of the most recent download.
+      title: DocumentCreateRequest
+    DownloadUrl:
+      type: object
+      properties:
+        resource:
+          oneOf:
+          - $ref: '#/components/schemas/ResourceIdentifier'
+          - type: 'null'
+        expire_at:
+          type:
+          - string
+          - 'null'
+        url:
+          type:
+          - string
+          - 'null'
+      title: DownloadUrl
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
     ResourceIdentifierType:
       type: string
       enum:
@@ -523,22 +499,6 @@ components:
       - REPORT_SUBSCRIPTION
       - REPORT_CONFIGURATION
       title: ResourceIdentifierType
-    DownloadUrl:
-      type: object
-      properties:
-        resource:
-          oneOf:
-          - $ref: '#/components/schemas/ResourceIdentifier'
-          - type: 'null'
-        expire_at:
-          type:
-          - string
-          - 'null'
-        url:
-          type:
-          - string
-          - 'null'
-      title: DownloadUrl
     Document:
       type: object
       properties:
@@ -580,6 +540,46 @@ components:
           - 'null'
           description: Timestamp of the most recent download.
       title: Document
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    ResourceIdentifier:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ResourceIdentifierType'
+        id:
+          type: string
+      title: ResourceIdentifier
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
   securitySchemes:
     API-Key:
       type: apiKey

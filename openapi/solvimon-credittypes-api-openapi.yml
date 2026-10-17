@@ -556,6 +556,44 @@ paths:
                 $ref: '#/components/schemas/ApiError'
 components:
   schemas:
+    CreditTypeUpdateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - INACTIVE
+      - DEPRECATED
+      - ARCHIVED
+      title: CreditTypeUpdateRequestStatus
+    CreditTypeCreateRequestStatus:
+      type: string
+      enum:
+      - DRAFT
+      - ACTIVE
+      - INACTIVE
+      - DEPRECATED
+      - ARCHIVED
+      title: CreditTypeCreateRequestStatus
+    PaginationLinks:
+      type: object
+      properties:
+        first:
+          type:
+          - string
+          - 'null'
+        previous:
+          type:
+          - string
+          - 'null'
+        current:
+          type:
+          - string
+          - 'null'
+        next:
+          type:
+          - string
+          - 'null'
+      title: PaginationLinks
     CreditTypeResponseWrapper:
       type: object
       properties:
@@ -581,104 +619,6 @@ components:
       - data
       - links
       title: CreditTypeResponseWrapper
-    CreditTypeStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - INACTIVE
-      - DEPRECATED
-      - ARCHIVED
-      title: CreditTypeStatus
-    UnitName:
-      type: object
-      properties:
-        singular:
-          type: string
-        plural:
-          type:
-          - string
-          - 'null'
-      title: UnitName
-    CreditTypeUpdateRequest:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        id:
-          type:
-          - string
-          - 'null'
-        reference:
-          type: string
-        status:
-          oneOf:
-          - $ref: '#/components/schemas/CreditTypeUpdateRequestStatus'
-          - type: 'null'
-        name:
-          type: string
-        description:
-          type:
-          - string
-          - 'null'
-        unit_name:
-          $ref: '#/components/schemas/UnitName'
-        created_at:
-          type:
-          - string
-          - 'null'
-        updated_at:
-          type:
-          - string
-          - 'null'
-      title: CreditTypeUpdateRequest
-    ApiErrorCode:
-      type: string
-      enum:
-      - RESOURCE_NOT_FOUND
-      - RESOURCES_NOT_FOUND
-      - UNABLE_TO_PROCESS_INSTRUCTIONS
-      - BAD_REQUEST
-      - UNSUPPORTED_MEDIA_TYPE
-      - RESOURCE_ALREADY_EXISTS
-      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
-      - COULD_NOT_CREATE_RESOURCE
-      - COULD_NOT_UPDATE_RESOURCE
-      - COULD_NOT_DELETE_RESOURCE
-      - MISSING_VERSION
-      - UNSUPPORTED_VERSION
-      - UNAUTHORISED
-      - CUSTOMER_NOT_FOUND
-      - PLATFORM_NOT_FOUND
-      - PRICING_PLAN_NOT_FOUND
-      - PRODUCT_NOT_FOUND
-      - PRODUCT_ITEM_NOT_FOUND
-      - PRICING_NOT_FOUND
-      - PRICING_ITEM_NOT_FOUND
-      - USER_NOT_FOUND
-      - METER_NOT_FOUND
-      - METER_VALUE_NOT_FOUND
-      - METER_PROPERTY_NOT_FOUND
-      - PRICING_ITEM_SUMMARIES_NOT_FOUND
-      - MISSING_ID
-      - INVALID_ID
-      - MISSING_REFERENCE
-      - MISSING_FIELD
-      - INVALID_FIELD
-      - INVALID_OPERATION
-      - INTERNAL_ERROR
-      - USER_NOT_ALLOWED
-      - IDEMPOTENCY_CHECK_FAILED
-      - INVALID_REQUEST
-      title: ApiErrorCode
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
     ApiErrorResourceType:
       type: string
       enum:
@@ -768,33 +708,7 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
-    ApiError:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/ApiErrorType'
-        code:
-          $ref: '#/components/schemas/ApiErrorCode'
-        field:
-          type:
-          - string
-          - 'null'
-        message:
-          type: string
-        resource_id:
-          type:
-          - string
-          - 'null'
-        resource_type:
-          oneOf:
-          - $ref: '#/components/schemas/ApiErrorResourceType'
-          - type: 'null'
-      required:
-      - type
-      - code
-      - message
-      title: ApiError
-    CreditTypeUpdateRequestStatus:
+    CreditTypeStatus:
       type: string
       enum:
       - DRAFT
@@ -802,8 +716,8 @@ components:
       - INACTIVE
       - DEPRECATED
       - ARCHIVED
-      title: CreditTypeUpdateRequestStatus
-    CreditTypeCreateRequest:
+      title: CreditTypeStatus
+    CreditTypeUpdateRequest:
       type: object
       properties:
         object_type:
@@ -818,7 +732,7 @@ components:
           type: string
         status:
           oneOf:
-          - $ref: '#/components/schemas/CreditTypeCreateRequestStatus'
+          - $ref: '#/components/schemas/CreditTypeUpdateRequestStatus'
           - type: 'null'
         name:
           type: string
@@ -836,36 +750,7 @@ components:
           type:
           - string
           - 'null'
-      title: CreditTypeCreateRequest
-    PaginationLinks:
-      type: object
-      properties:
-        first:
-          type:
-          - string
-          - 'null'
-        previous:
-          type:
-          - string
-          - 'null'
-        current:
-          type:
-          - string
-          - 'null'
-        next:
-          type:
-          - string
-          - 'null'
-      title: PaginationLinks
-    CreditTypeCreateRequestStatus:
-      type: string
-      enum:
-      - DRAFT
-      - ACTIVE
-      - INACTIVE
-      - DEPRECATED
-      - ARCHIVED
-      title: CreditTypeCreateRequestStatus
+      title: CreditTypeUpdateRequest
     CreditType:
       type: object
       properties:
@@ -900,6 +785,121 @@ components:
           - string
           - 'null'
       title: CreditType
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
+    CreditTypeCreateRequest:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        id:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+        status:
+          oneOf:
+          - $ref: '#/components/schemas/CreditTypeCreateRequestStatus'
+          - type: 'null'
+        name:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        unit_name:
+          $ref: '#/components/schemas/UnitName'
+        created_at:
+          type:
+          - string
+          - 'null'
+        updated_at:
+          type:
+          - string
+          - 'null'
+      title: CreditTypeCreateRequest
+    UnitName:
+      type: object
+      properties:
+        singular:
+          type: string
+        plural:
+          type:
+          - string
+          - 'null'
+      title: UnitName
+    ApiError:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ApiErrorType'
+        code:
+          $ref: '#/components/schemas/ApiErrorCode'
+        field:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+        resource_id:
+          type:
+          - string
+          - 'null'
+        resource_type:
+          oneOf:
+          - $ref: '#/components/schemas/ApiErrorResourceType'
+          - type: 'null'
+      required:
+      - type
+      - code
+      - message
+      title: ApiError
   securitySchemes:
     API-Key:
       type: apiKey

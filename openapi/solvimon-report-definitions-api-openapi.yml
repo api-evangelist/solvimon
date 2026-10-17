@@ -86,6 +86,40 @@ paths:
                 $ref: '#/components/schemas/ApiError'
 components:
   schemas:
+    ReportParameterName:
+      type: string
+      enum:
+      - report_date
+      - from_date
+      - to_date
+      - updated_to_final_from_date
+      - updated_to_final_to_date
+      - meter
+      - meter_id
+      - customer_id
+      - invoice_id
+      - statuses
+      title: ReportParameterName
+    PaginationLinks:
+      type: object
+      properties:
+        first:
+          type:
+          - string
+          - 'null'
+        previous:
+          type:
+          - string
+          - 'null'
+        current:
+          type:
+          - string
+          - 'null'
+        next:
+          type:
+          - string
+          - 'null'
+      title: PaginationLinks
     ReportDefinitionResponseWrapper:
       type: object
       properties:
@@ -117,51 +151,90 @@ components:
       - INVOICE
       - PLATFORM
       title: ReportDefinitionCategory
-    ApiErrorCode:
+    ReportDefinition:
+      type: object
+      properties:
+        object_type:
+          type:
+          - string
+          - 'null'
+        report_code:
+          $ref: '#/components/schemas/ReportDefinitionReportCode'
+        category:
+          oneOf:
+          - $ref: '#/components/schemas/ReportDefinitionCategory'
+          - type: 'null'
+        name:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        file_name_format:
+          type:
+          - string
+          - 'null'
+        run_types:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        target_resource_types:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        columns:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ReportColumn'
+        one_off_parameters:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ReportParameter'
+        scheduled_parameters:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ReportParameter'
+        trigger_parameters:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ReportParameter'
+      title: ReportDefinition
+    ReportDefinitionReportCode:
       type: string
       enum:
-      - RESOURCE_NOT_FOUND
-      - RESOURCES_NOT_FOUND
-      - UNABLE_TO_PROCESS_INSTRUCTIONS
-      - BAD_REQUEST
-      - UNSUPPORTED_MEDIA_TYPE
-      - RESOURCE_ALREADY_EXISTS
-      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
-      - COULD_NOT_CREATE_RESOURCE
-      - COULD_NOT_UPDATE_RESOURCE
-      - COULD_NOT_DELETE_RESOURCE
-      - MISSING_VERSION
-      - UNSUPPORTED_VERSION
-      - UNAUTHORISED
-      - CUSTOMER_NOT_FOUND
-      - PLATFORM_NOT_FOUND
-      - PRICING_PLAN_NOT_FOUND
-      - PRODUCT_NOT_FOUND
-      - PRODUCT_ITEM_NOT_FOUND
-      - PRICING_NOT_FOUND
-      - PRICING_ITEM_NOT_FOUND
-      - USER_NOT_FOUND
-      - METER_NOT_FOUND
-      - METER_VALUE_NOT_FOUND
-      - METER_PROPERTY_NOT_FOUND
-      - PRICING_ITEM_SUMMARIES_NOT_FOUND
-      - MISSING_ID
-      - INVALID_ID
-      - MISSING_REFERENCE
-      - MISSING_FIELD
-      - INVALID_FIELD
-      - INVALID_OPERATION
-      - INTERNAL_ERROR
-      - USER_NOT_ALLOWED
-      - IDEMPOTENCY_CHECK_FAILED
-      - INVALID_REQUEST
-      title: ApiErrorCode
-    ApiErrorType:
-      type: string
-      enum:
-      - API_ERROR
-      - INVALID_REQUEST
-      title: ApiErrorType
+      - INVOICE
+      - INVOICE_USAGE
+      - INVOICE_HEADER
+      - INVOICE_LINE
+      - INVOICE_TAX
+      - INVOICE_COMMITMENT
+      - CHILD_PARENT_BREAKDOWN
+      - CHILD_PARENT_BREAKDOWN_PLATFORM
+      - NOT_MATCHED_METER_DATA
+      - DUPLICATE_METER_DATA
+      - METERING
+      - CUSTOMER
+      - PRODUCT
+      - PRICING_PLAN_SUBSCRIPTION
+      - PAYMENT
+      - PRICING
+      - REVENUE_RECOGNITION
+      - CLAUSES
+      title: ReportDefinitionReportCode
     ApiErrorResourceType:
       type: string
       enum:
@@ -251,6 +324,91 @@ components:
       - ATTACHMENT
       - DOCUMENT
       title: ApiErrorResourceType
+    ReportColumn:
+      type: object
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+        order:
+          type:
+          - integer
+          - 'null'
+        default:
+          type:
+          - boolean
+          - 'null'
+        optional:
+          type:
+          - boolean
+          - 'null'
+      title: ReportColumn
+    ReportParameter:
+      type: object
+      properties:
+        name:
+          $ref: '#/components/schemas/ReportParameterName'
+        type:
+          $ref: '#/components/schemas/ReportParameterType'
+        required:
+          type: boolean
+      title: ReportParameter
+    ApiErrorCode:
+      type: string
+      enum:
+      - RESOURCE_NOT_FOUND
+      - RESOURCES_NOT_FOUND
+      - UNABLE_TO_PROCESS_INSTRUCTIONS
+      - BAD_REQUEST
+      - UNSUPPORTED_MEDIA_TYPE
+      - RESOURCE_ALREADY_EXISTS
+      - CUSTOM_FIELD_VALUE_ALREADY_EXISTS
+      - COULD_NOT_CREATE_RESOURCE
+      - COULD_NOT_UPDATE_RESOURCE
+      - COULD_NOT_DELETE_RESOURCE
+      - MISSING_VERSION
+      - UNSUPPORTED_VERSION
+      - UNAUTHORISED
+      - CUSTOMER_NOT_FOUND
+      - PLATFORM_NOT_FOUND
+      - PRICING_PLAN_NOT_FOUND
+      - PRODUCT_NOT_FOUND
+      - PRODUCT_ITEM_NOT_FOUND
+      - PRICING_NOT_FOUND
+      - PRICING_ITEM_NOT_FOUND
+      - USER_NOT_FOUND
+      - METER_NOT_FOUND
+      - METER_VALUE_NOT_FOUND
+      - METER_PROPERTY_NOT_FOUND
+      - PRICING_ITEM_SUMMARIES_NOT_FOUND
+      - MISSING_ID
+      - INVALID_ID
+      - MISSING_REFERENCE
+      - MISSING_FIELD
+      - INVALID_FIELD
+      - INVALID_OPERATION
+      - INTERNAL_ERROR
+      - USER_NOT_ALLOWED
+      - IDEMPOTENCY_CHECK_FAILED
+      - INVALID_REQUEST
+      title: ApiErrorCode
+    ReportParameterType:
+      type: string
+      enum:
+      - CUSTOMER_ID
+      - INVOICE_ID
+      - METER_ID
+      - LOCALE_DATE
+      - TIMESTAMP
+      - INVOICE_STATUSES
+      title: ReportParameterType
+    ApiErrorType:
+      type: string
+      enum:
+      - API_ERROR
+      - INVALID_REQUEST
+      title: ApiErrorType
     ApiError:
       type: object
       properties:
@@ -277,164 +435,6 @@ components:
       - code
       - message
       title: ApiError
-    ReportParameterType:
-      type: string
-      enum:
-      - CUSTOMER_ID
-      - INVOICE_ID
-      - METER_ID
-      - LOCALE_DATE
-      - TIMESTAMP
-      - INVOICE_STATUSES
-      title: ReportParameterType
-    PaginationLinks:
-      type: object
-      properties:
-        first:
-          type:
-          - string
-          - 'null'
-        previous:
-          type:
-          - string
-          - 'null'
-        current:
-          type:
-          - string
-          - 'null'
-        next:
-          type:
-          - string
-          - 'null'
-      title: PaginationLinks
-    ReportColumn:
-      type: object
-      properties:
-        name:
-          type:
-          - string
-          - 'null'
-        order:
-          type:
-          - integer
-          - 'null'
-        default:
-          type:
-          - boolean
-          - 'null'
-        optional:
-          type:
-          - boolean
-          - 'null'
-      title: ReportColumn
-    ReportDefinitionReportCode:
-      type: string
-      enum:
-      - INVOICE
-      - INVOICE_USAGE
-      - INVOICE_HEADER
-      - INVOICE_LINE
-      - INVOICE_TAX
-      - INVOICE_COMMITMENT
-      - CHILD_PARENT_BREAKDOWN
-      - CHILD_PARENT_BREAKDOWN_PLATFORM
-      - NOT_MATCHED_METER_DATA
-      - DUPLICATE_METER_DATA
-      - METERING
-      - CUSTOMER
-      - PRODUCT
-      - PRICING_PLAN_SUBSCRIPTION
-      - PAYMENT
-      - PRICING
-      - REVENUE_RECOGNITION
-      - CLAUSES
-      title: ReportDefinitionReportCode
-    ReportParameter:
-      type: object
-      properties:
-        name:
-          $ref: '#/components/schemas/ReportParameterName'
-        type:
-          $ref: '#/components/schemas/ReportParameterType'
-        required:
-          type: boolean
-      title: ReportParameter
-    ReportParameterName:
-      type: string
-      enum:
-      - report_date
-      - from_date
-      - to_date
-      - updated_to_final_from_date
-      - updated_to_final_to_date
-      - meter
-      - meter_id
-      - customer_id
-      - invoice_id
-      - statuses
-      title: ReportParameterName
-    ReportDefinition:
-      type: object
-      properties:
-        object_type:
-          type:
-          - string
-          - 'null'
-        report_code:
-          $ref: '#/components/schemas/ReportDefinitionReportCode'
-        category:
-          oneOf:
-          - $ref: '#/components/schemas/ReportDefinitionCategory'
-          - type: 'null'
-        name:
-          type:
-          - string
-          - 'null'
-        description:
-          type:
-          - string
-          - 'null'
-        file_name_format:
-          type:
-          - string
-          - 'null'
-        run_types:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-        target_resource_types:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-        columns:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ReportColumn'
-        one_off_parameters:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ReportParameter'
-        scheduled_parameters:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ReportParameter'
-        trigger_parameters:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ReportParameter'
-      title: ReportDefinition
   securitySchemes:
     API-Key:
       type: apiKey
